@@ -1,0 +1,26 @@
+{
+	auto_https off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+http://{$WEB_DOMAIN} {
+	encode zstd gzip
+	@api path /api/* /storage/*
+	handle @api {
+		reverse_proxy backend:3001
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}
+http://{$ADMIN_DOMAIN} {
+	encode zstd gzip
+	@api path /api/* /storage/*
+	handle @api {
+		reverse_proxy backend:3001
+	}
+	handle {
+		reverse_proxy admin:80
+	}
+}

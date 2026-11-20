@@ -59,3 +59,10 @@ Xem `.env.production.example` (có chú thích). Biến `NEXT_PUBLIC_*` được
 ## Đã kiểm và chưa kiểm
 - Đã kiểm trên máy dev (không dùng Docker): build backend ra 3 file (`main`, `migrate`, `seed`); chạy `migrate` + `seed` (chạy lại seed không nhân đôi dữ liệu) rồi chạy API ở `NODE_ENV=production`; lệnh `pnpm deploy --legacy` dùng trong Dockerfile cho ra bản backend chạy được; build web dạng `standalone`, chạy `node server.js` — trang, proxy `/api`, ảnh, manifest và service worker hoạt động; build admin; `docker compose config` hợp lệ.
 - **Chưa kiểm:** `docker build` các ảnh thật và `docker compose up` (Docker Desktop trên máy dev chưa chạy), Caddy cấp chứng chỉ thật, gửi SMS thật. Lần đầu triển khai nên chạy thử trên máy chủ thử hoặc subdomain thử trước.
+
+## Máy chủ đã có nginx giữ cổng 80/443 (dùng chung nhiều site)
+Dùng thêm file `docker-compose.behind-nginx.yml` + `deploy/Caddyfile.behind-nginx`: Caddy chỉ nghe `127.0.0.1:3095` (HTTP), nginx của máy chủ làm proxy tới cổng này (đặt `X-Forwarded-Proto`) và cấp chứng chỉ bằng certbot:
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml -f docker-compose.behind-nginx.yml up -d --build
+```
+Đã triển khai thử theo cách này ngày 20/11/2026 (không dùng OTP dev ở production; nếu bật OTP dev tạm thời phải giới hạn IP ở nginx). Build trong Docker cần `allowBuilds` trong `pnpm-workspace.yaml` (pnpm 12); trên máy ít RAM dùng `COMPOSE_PARALLEL_LIMIT=1`.

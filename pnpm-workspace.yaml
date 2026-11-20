@@ -9,3 +9,12 @@ onlyBuiltDependencies:
   - "@embedded-postgres/linux-x64"
   - "@embedded-postgres/darwin-arm64"
   - "@embedded-postgres/darwin-x64"
+allowBuilds:
+  esbuild: true
+  sharp: true
+  "@swc/core": true
+  "@embedded-postgres/windows-x64": true
+  "@embedded-postgres/linux-x64": true
+  "@embedded-postgres/darwin-arm64": true
+  "@embedded-postgres/darwin-x64": true
+  core-js: false
