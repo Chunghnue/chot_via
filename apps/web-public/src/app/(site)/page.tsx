@@ -1,0 +1,53 @@
+'use client';
+
+import { useGetHomeQuery } from '@chot-via/api-client';
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { useTranslations } from 'use-intl';
+import { ActionCards, HomeHero } from '@/components/home/hero';
+import { FeedList, HomeFeedFilters, HomeSortControl } from '@/components/post/feed';
+import { QuickWishCard } from '@/components/rail/quick-wish-card';
+import { ChallengeCard } from '@/components/rail/side-cards';
+import { WeeklyBoard } from '@/components/rail/weekly-board';
+import { selectFeedFilters } from '@/features/feed/feedSlice';
+import { deviceClass, track } from '@/lib/analytics';
+import { useRequireMember } from '@/lib/use-member';
+import { useAppSelector } from '@/store/hooks';
+
+/**
+ * Trang chủ theo thiết kế: Phố 3D (nút Xin vía nổi bật nhất) → 4 thẻ hành động → Bảng tin cộng đồng 2 cột.
+ * Menu trái và cột phải (Xin vía nhanh · Thử thách tuần · Bảng xếp hạng) do khung trang cung cấp.
+ */
+export default function HomePage() {
+  const t = useTranslations('home');
+  const { data: home } = useGetHomeQuery();
+  const filters = useAppSelector(selectFeedFilters);
+  const { isMember } = useRequireMember();
+
+  useEffect(() => { track('home_view', { member: isMember, device: deviceClass() }); }, [isMember]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <HomeHero home={home} />
+        <ActionCards actions={home?.layout.actions ?? []} />
+      </div>
+      {/* RESP-01: cột phải của desktop/iPad ngang được đưa vào luồng trang ở iPad dọc và điện thoại để chức năng không bị mất. */}
+      <div className="grid gap-4 md:grid-cols-2 lg:hidden">
+        <QuickWishCard />
+        <ChallengeCard />
+        <div className="md:col-span-2"><WeeklyBoard variant="rail" /></div>
+      </div>
+      <section className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none" aria-labelledby="feed-title">
+        <div className="flex items-center gap-2 xl:border-b-2 xl:border-primary/20 xl:pb-0">
+          <img src="/images/logo-co.webp" alt="" aria-hidden className="size-9 object-contain xl:size-8" draggable={false} />
+          <h2 id="feed-title" className="font-display text-[1.5rem] font-extrabold leading-none text-primary-strong xl:border-b-[3px] xl:border-primary xl:pb-1.5 xl:text-2xl">{t('feedTitle')}</h2>
+          <HomeSortControl variant="icon" />
+        </div>
+        <HomeFeedFilters />
+        <FeedList variant="compact" query={{ type: filters.type, sort: filters.sort, pinned: 'first', ...(filters.role ? { role: filters.role } : {}) }} infinite={false} />
+        <Link href="/bang-tin" className="self-center rounded-full bg-primary-soft px-6 py-2.5 text-sm font-bold text-primary-strong">{t('seeFullFeed')} →</Link>
+      </section>
+    </div>
+  );
+}

@@ -1,0 +1,33 @@
+{
+  "name": "chot-via",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev:backend": "pnpm --filter @chot-via/backend dev",
+    "dev:web": "pnpm --filter @chot-via/web-public dev",
+    "dev:admin": "pnpm --filter @chot-via/web-admin dev",
+    "db:embedded": "pnpm --filter @chot-via/backend db:embedded",
+    "db:migrate": "pnpm --filter @chot-via/backend db:migrate",
+    "db:seed": "pnpm --filter @chot-via/backend db:seed",
+    "db:seed:home": "pnpm --filter @chot-via/backend db:seed:home",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:all": "vitest run && playwright test && playwright test -c playwright.prod.config.ts",
+    "test:e2e:prod": "playwright test -c playwright.prod.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "jsdom": "^31.0.1",
+    "playwright-core": "^1.65.1",
+    "vitest": "^5.1.1"
+  }
+}

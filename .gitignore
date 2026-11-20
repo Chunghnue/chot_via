@@ -1,0 +1,26 @@
+node_modules
+dist
+.next
+.env
+.env.*
+!.env.example
+storage
+.embedded-pg
+*.tsbuildinfo
+.turbo
+playwright-report
+.shots
+scripts-shot.mjs
+scripts-admin-shot.mjs
+scripts-flow.mjs
+
+# Tệp tạm / sao lưu / nguồn gốc lớn, không đưa lên git
+_backup
+_shots
+test-results
+zip
+.next-e2e
+.next-prod
+storage-test
+apps/backend/storage-test
+*.log

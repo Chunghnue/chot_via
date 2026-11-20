@@ -1,0 +1,9 @@
+{
+  "too_small": "Giá trị quá ngắn hoặc quá nhỏ (tối thiểu {min}).",
+  "too_big": "Giá trị quá dài hoặc quá lớn (tối đa {max}).",
+  "invalid_string": "Định dạng chưa hợp lệ.",
+  "invalid_type": "Vui lòng nhập giá trị hợp lệ.",
+  "invalid_enum_value": "Lựa chọn chưa hợp lệ.",
+  "invalid": "Giá trị chưa hợp lệ.",
+  "required": "Trường này là bắt buộc."
+}

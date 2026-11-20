@@ -1,0 +1,45 @@
+{
+  "title": {
+    "today": "Xin vía hôm nay",
+    "morning": "Xin vía sáng nay",
+    "afternoon": "Xin vía chiều nay",
+    "evening": "Xin vía tối nay"
+  },
+  "cta": {
+    "today": "Nhận vía ngay",
+    "morning": "Nhận vía sáng nay",
+    "afternoon": "Nhận vía chiều nay",
+    "evening": "Nhận vía tối nay"
+  },
+  "slot": {
+    "today": "Hôm nay",
+    "morning": "Sáng nay",
+    "afternoon": "Chiều nay",
+    "evening": "Tối nay"
+  },
+  "intro": "Chạm nút bên dưới để nhận vía từ Thần Tài.",
+  "received": "Thần Tài đã cho vía!",
+  "deityName": "Thần Tài",
+  "count": "Bạn đã xin vía {count} lần hôm nay",
+  "history": "Lịch sử xin vía hôm nay",
+  "again": "Xin vía tiếp",
+  "suggest": "Gửi vía cho cửa hàng khác trong Phố 3D",
+  "goStreet": "Ghé Phố 3D",
+  "offlineBadge": "Lời chúc dự phòng",
+  "offlineNote": "Chưa có kết nối nên lời chúc chưa được ghi nhận trên hệ thống.",
+  "offlineFallback": "Thần Tài chúc bạn một ngày thật nhiều năng lượng và may mắn!",
+  "pointEarned": "+1 điểm vía",
+  "waiting": "Thần Tài đang chuẩn bị vía…",
+  "quickTitle": "Xin vía nhanh",
+  "quickHint": "Đông khách – Nổ đơn – Chốt deal – Tăng doanh thu!",
+  "closeAria": "Đóng cửa sổ xin vía",
+  "types": {
+    "title": "Chọn lời chúc vía",
+    "stickers": "Chọn biểu tượng"
+  },
+  "ready": "Thần Tài đã sẵn sàng cho vía!",
+  "bullet1": "Đông khách – Nổ đơn",
+  "bullet2": "Chốt deal – Tăng doanh thu",
+  "bullet3": "Công việc hanh thông – Thu nhập tốt",
+  "received2": "Đã nhận vía!"
+}

@@ -1,0 +1,102 @@
+# Triển khai thật: docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+# Chỉ Caddy mở cổng 80/443; database, Redis và các dịch vụ khác chỉ nằm trong mạng nội bộ.
+name: chotvia
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chotvia
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Đặt POSTGRES_PASSWORD trong .env.production}
+      POSTGRES_DB: chotvia
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chotvia -d chotvia"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis_data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Chạy một lần mỗi lần cập nhật: tạo/cập nhật bảng rồi nạp danh mục khởi tạo (bỏ qua nếu đã có dữ liệu).
+  migrate:
+    build: { context: ., dockerfile: deploy/Dockerfile.backend }
+    restart: "no"
+    command: ["sh", "-c", "node dist/migrate.js && node dist/seed.js"]
+    env_file: .env.production
+    environment:
+      DATABASE_URL: postgres://chotvia:${POSTGRES_PASSWORD}@postgres:5432/chotvia
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  backend:
+    build: { context: ., dockerfile: deploy/Dockerfile.backend }
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      DATABASE_URL: postgres://chotvia:${POSTGRES_PASSWORD}@postgres:5432/chotvia
+      REDIS_URL: redis://redis:6379
+      COOKIE_SECURE: "true"
+      STORAGE_LOCAL_DIR: /data/storage
+      PUBLIC_WEB_URL: https://${WEB_DOMAIN}
+      PUBLIC_API_URL: https://${WEB_DOMAIN}
+    volumes: ["uploads:/data/storage"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/api/v1/catalog"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+      args:
+        BACKEND_URL: http://backend:3001
+        NEXT_PUBLIC_POSTHOG_KEY: ${NEXT_PUBLIC_POSTHOG_KEY:-}
+        NEXT_PUBLIC_POSTHOG_HOST: ${NEXT_PUBLIC_POSTHOG_HOST:-https://eu.i.posthog.com}
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}
+    restart: unless-stopped
+    depends_on:
+      backend: { condition: service_healthy }
+
+  admin:
+    build: { context: ., dockerfile: deploy/Dockerfile.admin }
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      WEB_DOMAIN: ${WEB_DOMAIN:?Đặt WEB_DOMAIN trong .env.production}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN:?Đặt ADMIN_DOMAIN trong .env.production}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [web, admin, backend]
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:
+  caddy_data:
+  caddy_config:

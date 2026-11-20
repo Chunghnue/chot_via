@@ -1,0 +1,73 @@
+{
+  "heroTitle": "Phố Chốt Vía 3D",
+  "heroSubtitle": "Ghé phố – Gửi vía – Nhận vía",
+  "cta": "Xin vía ngay",
+  "showcaseCafeSign": "Quán Cafe",
+  "showcaseFashionSign": "Shop Thời Trang",
+  "showcaseRestaurantSign": "Nhà hàng",
+  "showcaseMinimartSign": "Minimart",
+  "showcaseSaleSign": "Văn phòng Sale",
+  "ctaHint": "Thần Tài đã sẵn sàng trao vía may mắn cho bạn!",
+  "tour": "Tham quan Phố 3D",
+  "actions": {
+    "story": {
+      "title": "Kể khổ",
+      "desc": "Chuyện dở khóc dở cười khi bán hàng, đi làm, chạy KPI…"
+    },
+    "wish": {
+      "title": "Xin vía",
+      "desc": "Gửi lời chúc may mắn, xin vía chốt đơn, đông khách, đạt KPI!"
+    },
+    "brag": {
+      "desc": "Chia sẻ doanh thu, số đơn, chốt hợp đồng và thành tích hôm nay!"
+    },
+    "bragOwner": "Khoe doanh thu",
+    "bragSale": "Khoe deal",
+    "bragGeneric": "Khoe thành tích",
+    "label": "Hành động chính"
+  },
+  "quick": {
+    "events": "Thử thách",
+    "street": "Phố 3D",
+    "leaderboard": "Bảng xếp hạng",
+    "community": "Cộng đồng"
+  },
+  "feedTitle": "Bảng tin cộng đồng",
+  "seeFullFeed": "Xem toàn bộ bảng tin",
+  "rail": {
+    "challenge": "Thử thách tuần",
+    "activity": "Hoạt động mới",
+    "hotTopics": "Chủ đề hot",
+    "noActivity": "Chưa có hoạt động nào."
+  },
+  "activity": {
+    "place_wished": "{actor} vừa gửi vía cho {place}",
+    "post_published": "{actor} vừa đăng một bài mới"
+  },
+  "heroAlt": "Phố Chốt Vía 3D với Thần Tài và các cửa hàng",
+  "cards": {
+    "street": {
+      "title": "Ghé phố 3D",
+      "desc": "Khám phá cửa hàng"
+    },
+    "story": {
+      "title": "Kể khổ",
+      "desc": "Giải tỏa áp lực"
+    },
+    "brag": {
+      "title": "Khoe doanh thu / Deal",
+      "desc": "Chia sẻ thành công"
+    },
+    "events": {
+      "title": "Sự kiện",
+      "desc": "Thử thách – Nhận quà"
+    }
+  },
+  "hot": "Đang hot",
+  "challengeSub": "Hoàn thành {target} nhiệm vụ để nhận quà hấp dẫn!",
+  "viaUnit": "vía",
+  "shopStrip": "Cửa hàng trên phố",
+  "visit3d": "Ghé phố 3D",
+  "backToImage": "Về ảnh phố",
+  "installApp": "Cài ứng dụng"
+}

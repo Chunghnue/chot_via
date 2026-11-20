@@ -1,0 +1,80 @@
+import { parseApiError, useGetCatalogQuery, useLogoutMutation, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
+import { Button, Card, CloverMark, FieldError, Input, Label, useCodeMessage } from '@chot-via/ui';
+import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslations } from 'use-intl';
+
+export function LoginPage() {
+  const t = useTranslations('admin.login');
+  const message = useCodeMessage();
+  const { data: catalog } = useGetCatalogQuery();
+  const [requestOtp, { isLoading: sending }] = useRequestOtpMutation();
+  const [verifyOtp, { isLoading: verifying }] = useVerifyOtpMutation();
+  const [phone, setPhone] = useState<string | null>(null);
+  const [resendAt, setResendAt] = useState(0);
+  const [now, setNow] = useState(Date.now());
+  const [error, setError] = useState<string | null>(null);
+  const phoneForm = useForm<OtpRequestBody>({ resolver: zodResolver(OtpRequestBodySchema), defaultValues: { phone: '' } });
+  const codeForm = useForm<OtpVerifyBody>({ resolver: zodResolver(OtpVerifyBodySchema), defaultValues: { phone: '', code: '' } });
+
+  useEffect(() => {
+    if (resendAt <= Date.now()) return;
+    const id = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(id);
+  }, [resendAt]);
+  const left = Math.max(0, Math.ceil((resendAt - now) / 1000));
+
+  const send = async (v: OtpRequestBody): Promise<void> => {
+    setError(null);
+    try {
+      const r = await requestOtp(v).unwrap();
+      setPhone(v.phone);
+      codeForm.reset({ phone: v.phone, code: '' });
+      setNow(Date.now());
+      setResendAt(Date.now() + r.resendAfterSec * 1000);
+    } catch (e) { const i = parseApiError(e); setError(message(i.code, i.params)); }
+  };
+  const verify = async (v: OtpVerifyBody): Promise<void> => {
+    setError(null);
+    try { await verifyOtp(v).unwrap(); } catch (e) { const i = parseApiError(e); setError(message(i.code, i.params)); }
+  };
+
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-linear-to-b from-primary-soft to-app p-4">
+      <Card className="w-full max-w-md p-6 sm:p-8">
+        <div className="mb-4 flex items-center gap-3"><CloverMark className="size-12" /><div><h1 className="font-display text-2xl font-extrabold text-primary-strong">{t('title')}</h1><p className="text-sm text-ink-muted">{t('subtitle')}</p></div></div>
+        {phone === null ? (
+          <form onSubmit={phoneForm.handleSubmit(send)} className="flex flex-col gap-3" noValidate>
+            <div><Label htmlFor="phone">{t('phone')}</Label><Input id="phone" type="tel" inputMode="tel" autoComplete="tel" {...phoneForm.register('phone')} /></div>
+            <FieldError message={error ?? undefined} />
+            <Button type="submit" size="lg" loading={sending}>{t('sendOtp')}</Button>
+          </form>
+        ) : (
+          <form onSubmit={codeForm.handleSubmit(verify)} className="flex flex-col gap-3" noValidate>
+            <Label htmlFor="otp">{t('otp')}</Label>
+            <Input id="otp" inputMode="numeric" maxLength={6} autoComplete="one-time-code" className="text-center font-display text-2xl tracking-[0.5em]" {...codeForm.register('code')} />
+            {catalog?.devOtpHint ? <p className="rounded-xl bg-warning-soft px-3 py-2 text-xs font-semibold text-warning">{t('devHint', { code: catalog.devOtpHint })}</p> : null}
+            <FieldError message={error ?? undefined} />
+            <Button type="submit" size="lg" loading={verifying}>{t('verify')}</Button>
+            <div className="flex justify-between text-sm">
+              <button type="button" className="font-semibold text-primary-strong disabled:text-ink-subtle" disabled={left > 0 || sending} onClick={() => void send({ phone })}>{left > 0 ? t('resendIn', { seconds: left }) : t('resend')}</button>
+              <button type="button" className="text-ink-muted" onClick={() => { setPhone(null); setError(null); }}>{t('changePhone')}</button>
+            </div>
+          </form>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+export function NoAccess() {
+  const t = useTranslations('admin.login');
+  const [logout] = useLogoutMutation();
+  return (
+    <div className="flex min-h-dvh items-center justify-center p-4">
+      <Card className="flex max-w-md flex-col items-center gap-4 p-8 text-center"><span aria-hidden className="text-5xl">🔒</span><p className="text-ink-muted">{t('noAccess')}</p><Button onClick={() => void logout()}>{t('logout')}</Button></Card>
+    </div>
+  );
+}

@@ -1,0 +1,215 @@
+/*
+ * DESIGN TOKENS — NGUỒN DUY NHẤT của màu sắc, font, bo góc, bóng đổ, chuyển động.
+ * Cấu trúc chuẩn Tailwind v4 (@theme). Component chỉ dùng class như bg-primary, text-ink, bg-wish…
+ * Cấm viết mã màu (#hex, rgb, bg-[#...]) ở bất kỳ nơi nào khác.
+ *
+ * LƯU Ý: bảng màu dưới đây là GIÁ TRỊ TẠM để chạy giao diện. Khi đội thiết kế gửi bảng HEX chính thức,
+ * chỉ cần thay giá trị trong file này (CTA Xin vía luôn là đỏ cam — token `wish`).
+ */
+@import "@fontsource/baloo-2/700.css";
+@import "@fontsource/baloo-2/800.css";
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/be-vietnam-pro/700.css";
+
+@theme static {
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Baloo 2", "Be Vietnam Pro", system-ui, sans-serif;
+
+  /* Thương hiệu */
+  --color-primary: #147A40;
+  --color-primary-strong: #0D5D31;
+  --color-primary-soft: #DDF6E7;
+  --color-primary-bright: #22A24E; /* đầu sáng của nút chính dạng chuyển sắc (nút Đăng nhập ở header) */
+  --color-on-primary: #FFFFFF;
+
+  /* CTA Xin vía: đỏ cam, dùng cho MỌI nút Xin vía */
+  --color-wish: #CB3710;
+  --color-wish-strong: #A92A0B;
+  --color-wish-soft: #FFE6DB;
+  --color-on-wish: #FFFFFF;
+
+  --color-gold: #F5BB31;
+  --color-gold-strong: #845106;
+  --color-gold-soft: #FFF2CB;
+  --color-on-gold: #422705;
+
+  /* Loại bài */
+  --color-story: #6635B5;
+  --color-story-soft: #F0E9FC;
+  --color-brag: #A33C0B;
+  --color-brag-soft: #FFF0DF;
+  --color-deal: #B5204F;
+  --color-deal-soft: #FCE6ED;
+
+  /* Nhãn vai trò */
+  --color-role-owner: #854D0E;
+  --color-role-owner-soft: #FFF2CD;
+  --color-role-sale: #5930A6;
+  --color-role-sale-soft: #EFE7FC;
+
+  /* Nền, bề mặt, chữ */
+  --color-app: #EEF9F2;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F3F7F4;
+  --color-search-bg: #EAF1F5;
+  --color-border: #D6E5DB;
+  --color-ink: #17291F;
+  --color-ink-muted: #43584B;
+  --color-ink-subtle: #52675A;
+  --color-overlay: rgb(10 20 14 / 0.55);
+
+  /* Trạng thái */
+  --color-success: #126E3B;
+  --color-success-soft: #DCF5E6;
+  --color-warning: #875108;
+  --color-warning-soft: #FFF1CA;
+  --color-danger: #AD2431;
+  --color-danger-soft: #FDE8EB;
+  --color-info: #2353A4;
+  --color-info-soft: #E7F0FE;
+
+  /* Cảnh Phố 3D (đọc bằng JS qua packages/scene-3d/useSceneColors) */
+  --color-scene-sky: #bfe8ff;
+  --color-scene-ground: #bfe3a8;
+  --color-scene-road: #8b9099;
+  --color-scene-sidewalk: #ecdfc6;
+  --color-scene-tree: #3f9d4a;
+  --color-scene-trunk: #8a5a2b;
+  --color-scene-lamp: #fde68a;
+  --color-scene-plaza: #f3e6c8;
+  --color-scene-deity-hat: #c81e1e;
+  --color-scene-deity-robe: #e63946;
+  --color-scene-deity-gold: #fbbf24;
+  --color-scene-deity-skin: #ffd9b3;
+  --color-scene-deity-robe-dark: #b3121f;
+  --color-scene-deity-cheek: #ff9aa2;
+  --color-scene-deity-beard: #1f1a17;
+  --color-scene-deity-mouth: #8b1d2c;
+  --color-scene-deity-gem: #22c55e;
+  --color-scene-tile-a: #f6ead2;
+  --color-scene-tile-b: #e4c89a;
+  --color-scene-tile-ring: #d4a85f;
+  --color-scene-grass: #86c96a;
+  --color-scene-leaf-light: #62c15c;
+  --color-scene-leaf-dark: #2f8f46;
+  --color-scene-blossom: #ffb7cb;
+  --color-scene-blossom-dark: #f58fb0;
+  --color-scene-far-a: #cddcec;
+  --color-scene-far-b: #b9cde3;
+  --color-scene-far-c: #dce8f3;
+  --color-scene-balloon: #ef4444;
+  --color-scene-balloon-stripe: #fde68a;
+  --color-scene-person-a: #2563eb;
+  --color-scene-person-b: #f59e0b;
+  --color-scene-person-c: #10b981;
+  --color-scene-person-d: #a855f7;
+  --color-scene-person-skin: #f2c7a0;
+  --color-scene-person-hair: #3b2a20;
+  --color-scene-bench: #9a6a3a;
+  --color-scene-metal: #3f3f46;
+  --color-scene-coin: #fcd34d;
+  --color-scene-star: #fff3b0;
+  --color-cafe-wood: #8a4b25;
+  --color-cafe-wood-dark: #5e3216;
+  --color-cafe-wall: #f7e6c8;
+  --color-cafe-brick: #c9824f;
+  --color-cafe-awning-a: #d62828;
+  --color-cafe-awning-b: #fff7ed;
+  --color-cafe-glow: #ffd27a;
+  --color-cafe-sign: #6b3a1c;
+  --color-cafe-sign-trim: #e9b04a;
+  --color-cafe-cup: #fffaf0;
+  --color-cafe-coffee: #6f4220;
+  --color-cafe-chair: #b5651d;
+  --color-cafe-table: #ecd2a8;
+  --color-cafe-pot: #b45309;
+  --color-cafe-board: #2f3a36;
+  --color-cafe-parasol: #f97316;
+  --color-shopm-fashion-wall: #fbe1ec;
+  --color-shopm-fashion-awning-a: #ec4899;
+  --color-shopm-fashion-awning-b: #fff7ed;
+  --color-shopm-fashion-sign: #be185d;
+  --color-shopm-fashion-accent: #f9a8d4;
+  --color-shopm-restaurant-wall: #ffe9d2;
+  --color-shopm-restaurant-awning-a: #dc2626;
+  --color-shopm-restaurant-awning-b: #fff7ed;
+  --color-shopm-restaurant-sign: #9f1239;
+  --color-shopm-restaurant-accent: #fbbf24;
+  --color-shopm-minimart-wall: #e6f6e8;
+  --color-shopm-minimart-awning-a: #16a34a;
+  --color-shopm-minimart-awning-b: #fff7ed;
+  --color-shopm-minimart-sign: #15803d;
+  --color-shopm-minimart-accent: #bbf7d0;
+  --color-shopm-sale-wall: #3b6fd8;
+  --color-shopm-sale-awning-a: #1d4ed8;
+  --color-shopm-sale-awning-b: #dbeafe;
+  --color-shopm-sale-sign: #1e40af;
+  --color-shopm-sale-accent: #93c5fd;
+  --color-shopm-glass: #bfe6ff;
+  --color-shopm-mannequin: #f3e8ff;
+  --color-shopm-crate: #c68642;
+  --color-shopm-fruit-a: #ef4444;
+  --color-shopm-fruit-b: #f59e0b;
+  --color-shopm-fruit-c: #84cc16;
+  --color-shopm-desk: #f1f5f9;
+  --color-shopm-screen: #38bdf8;
+  --color-shopm-white: #ffffff;
+  --color-shop-cafe: #a16207;
+  --color-shop-fashion: #db2777;
+  --color-shop-minimart: #2563eb;
+  --color-shop-restaurant: #dc2626;
+  --color-shop-retail: #0d9488;
+  --color-shop-sale-office: #4f46e5;
+  --color-shop-generic: #64748b;
+  --color-shop-wall: #fff7ed;
+  --color-shop-glass: #bae6fd;
+
+  /* Bo góc, bóng đổ */
+  --radius-card: 1.25rem;
+  --radius-sheet: 1.75rem;
+  --shadow-card: 0 4px 16px rgb(20 35 26 / 0.08);
+  --shadow-cta: 0 8px 24px rgb(242 80 26 / 0.45);
+  --shadow-pop: 0 18px 48px rgb(20 35 26 / 0.28);
+
+  /* Mốc màn hình: sm 640 · md 768 (iPad dọc) · lg 1024 (iPad ngang) · xl 1280 (desktop) · 2xl 1536 · 3xl 1920 · 4xl 2560 */
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 160rem;
+
+  /* Chuyển động (tự tắt khi người dùng bật giảm chuyển động) */
+  --animate-fade-in: fade-in 180ms ease-out;
+  --animate-pop-in: pop-in 240ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  --animate-sheet-up: sheet-up 280ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  --animate-float: float 3.2s ease-in-out infinite;
+  --animate-glow: glow 2.2s ease-in-out infinite;
+  --animate-coin: coin-fall 1.8s ease-in forwards;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pop-in { from { opacity: 0; scale: 0.92; } to { opacity: 1; scale: 1; } }
+  @keyframes sheet-up { from { opacity: 0.6; translate: 0 40px; } to { opacity: 1; translate: 0 0; } }
+  @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+  @keyframes glow { 0%, 100% { box-shadow: 0 6px 18px rgb(242 80 26 / 0.35); } 50% { box-shadow: 0 10px 34px rgb(242 80 26 / 0.65); } }
+  @keyframes coin-fall { 0% { opacity: 0; translate: 0 -30px; rotate: 0deg; } 15% { opacity: 1; } 100% { opacity: 0; translate: var(--coin-x, 0px) 180px; rotate: 540deg; } }
+  @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+}
+
+@layer base {
+  html { background: var(--color-app); -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; }
+  body { @apply bg-app text-ink font-sans antialiased; min-height: 100dvh; }
+  h1, h2, h3 { @apply font-display; }
+  :focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+  button, [role="button"], a { touch-action: manipulation; }
+}
+
+@utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+@utility pt-safe { padding-top: env(safe-area-inset-top); }
+@utility scrollbar-none { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+@utility text-title { color: var(--color-on-primary); -webkit-text-stroke: 0.16em var(--color-primary-strong); paint-order: stroke fill; text-shadow: 0 0.07em 0 var(--color-primary-strong); }
+@utility text-title-light { color: var(--color-primary); -webkit-text-stroke: 0.2em var(--color-surface); paint-order: stroke fill; filter: drop-shadow(0 0 0.025em var(--color-primary-strong)) drop-shadow(0 0.06em 0 var(--color-primary-strong)) drop-shadow(0 0.1em 0.08em rgb(0 0 0 / 0.25)); }
+@utility text-outline { -webkit-text-stroke: 0.04em var(--color-primary-strong); paint-order: stroke fill; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

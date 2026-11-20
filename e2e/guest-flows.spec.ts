@@ -1,0 +1,100 @@
+import { expect, test } from '@playwright/test';
+import { expectNoHorizontalScroll, loginPhoneField, shown } from './support';
+
+test.describe('khách: vào là xin vía được ngay', () => {
+  test('trang chủ không có màn đăng nhập chặn; nút hero hiện tiêu đề "Xin vía hôm nay" (lần đầu)', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Xin vía hôm nay/ }).first()).toBeVisible();
+    await expect(shown(page, 'Phố Chốt Vía 3D')).toBeVisible();
+  });
+
+  test('xin vía Thần Tài: popup → nhận vía → "Đã nhận vía!" và liên kết sang Phố 3D, không đòi đăng nhập', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: /Xin vía hôm nay/ }).first().click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByText('Thần Tài đã sẵn sàng cho vía!')).toBeVisible();
+    await dialog.getByRole('button', { name: /Nhận vía/ }).click();
+    await expect(dialog.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'Đã nhận vía!' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: /Gửi vía cho cửa hàng khác trong Phố 3D/ })).toBeVisible();
+    await expect(dialog.getByText(/lịch sử/i)).toHaveCount(0);
+    await dialog.getByRole('button', { name: 'Đã nhận vía!' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('sau lần xin vía đầu, nút hero đổi sang tiêu đề theo buổi (sáng/chiều/tối nay)', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: /Xin vía hôm nay/ }).first().click();
+    await page.getByRole('dialog').getByRole('button', { name: /Nhận vía/ }).click();
+    await page.getByRole('button', { name: 'Đã nhận vía!' }).click();
+    await expect(page.getByRole('button', { name: /Xin vía (sáng|chiều|tối) nay/ }).first()).toBeVisible();
+  });
+
+  test('chạm cửa hàng trong cảnh phố → chi tiết → gửi vía → nhận phản hồi tự động có nhãn', async ({ page }) => {
+    await page.goto('/pho-3d', { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: /Mở Quán Cafe An Nhiên/ }).first().click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByText('Quán Cafe An Nhiên').first()).toBeVisible();
+    await dialog.getByRole('button', { name: /Gửi vía/ }).first().click();
+    await dialog.getByRole('button', { name: /Đông khách/ }).click();
+    await dialog.getByRole('button', { name: 'Gửi vía ngay' }).click();
+    await expect(dialog.getByText('Phản hồi tự động').first()).toBeVisible();
+  });
+
+  test('bảng xếp hạng: 3 tab, Cửa hàng/Sale theo số vía, Cộng đồng theo điểm', async ({ page }) => {
+    await page.goto('/bang-xep-hang', { waitUntil: 'networkidle' });
+    await expect(page.getByRole('tab', { name: 'Cửa hàng' })).toHaveCount(1);
+    await expect(page.getByRole('tab', { name: 'Cửa hàng' })).toBeVisible();
+    await expect(shown(page, 'Quán Cafe An Nhiên')).toBeVisible();
+    await page.getByRole('tab', { name: 'Sale' }).click();
+    await expect(shown(page, /Team Sale|Văn phòng Sale/)).toBeVisible();
+    await page.getByRole('tab', { name: 'Cộng đồng' }).click();
+    await expect(shown(page, 'TOP THÀNH VIÊN CHỐT VÍA')).toBeVisible();
+    await expectNoHorizontalScroll(page);
+  });
+
+  test('trang cửa hàng: 4 tab, nút nổi, "Xin vía cho quán"; thích cần đăng nhập đúng lúc', async ({ page }) => {
+    await page.goto('/diem/quan-cafe-an-nhien', { waitUntil: 'networkidle' });
+    for (const tab of ['Bảng tin', 'Giới thiệu', 'Hình ảnh', 'Thành tích']) await expect(page.getByRole('tab', { name: tab })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Xin vía cho quán' })).toBeVisible();
+    await page.getByRole('button', { name: /^Thích/ }).click();
+    await expect(loginPhoneField(page)).toBeVisible();
+    await expect(page.getByRole('dialog')).toContainText('Đăng nhập để thích điểm này');
+  });
+
+  test('Sự kiện & Thử thách: không có tab Quà tặng, không có điểm thưởng', async ({ page }) => {
+    await page.goto('/su-kien', { waitUntil: 'networkidle' });
+    await expect(page.getByRole('tab', { name: 'Thử thách' })).toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Sự kiện' })).toBeVisible();
+    await expect(page.getByText(/Quà tặng|điểm vía thưởng|\+\d+ điểm/)).toHaveCount(0);
+  });
+});
+
+test.describe('bảng tin & nội dung', () => {
+  test('trang chủ: 4 bài ghim xếp đầu theo thiết kế, không có chữ AIBAT/Video', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const text = await page.locator('main').innerText();
+    for (const name of ['Lan Anh', 'Tuấn Anh', 'Đặng Văn Nam', 'Thu Hương']) expect(text).toContain(name);
+    expect(text.indexOf('Lan Anh')).toBeLessThan(text.indexOf('Lan Sale') === -1 ? Infinity : text.indexOf('Lan Sale'));
+    expect(text).not.toContain('AIBAT');
+    expect(text).not.toMatch(/\bVideo\b/);
+  });
+
+  test('Kể khổ: banner, thanh lọc, 4 bài đầu đúng thứ tự "Hot nhất"', async ({ page }) => {
+    await page.goto('/bang-tin?type=story', { waitUntil: 'networkidle' });
+    for (const f of ['Hot nhất', 'Mới nhất', 'Ảnh', 'Bình chọn']) await expect(page.getByRole('button', { name: new RegExp(f) }).first()).toBeVisible();
+    await expect(shown(page, 'Chủ đề')).toBeVisible();
+    const text = await page.locator('main').innerText();
+    const order = ['Lan Sale', 'Quán Cà Phê Xinh', 'Mr. Đức', 'Nhà Hàng Sông Xanh'].map((n) => text.indexOf(n));
+    expect(order.every((i) => i >= 0)).toBe(true);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  test('lọc bài có ảnh chỉ còn bài có ảnh', async ({ page }) => {
+    await page.goto('/bang-tin?type=story', { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Ảnh', exact: true }).click();
+    await expect(shown(page, /Khách xem 3 lần/)).toBeVisible();
+    await expect(page.getByText('Tuần này gọi 80 khách')).toHaveCount(0);
+  });
+});

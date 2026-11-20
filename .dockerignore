@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+.next
+**/.next
+**/dist
+.embedded-pg
+.git
+docs/reference
+apps/backend/storage
+apps/backend/storage-test
+e2e
+test-results
+playwright-report
+.env
+.env.*
+!.env.production.example

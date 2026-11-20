@@ -1,0 +1,32 @@
+{
+  "title": "Phố Chốt Vía 3D",
+  "searchPlaceholder": "Tìm cửa hàng, văn phòng sale…",
+  "tabs": {
+    "walk": "Ghé phố",
+    "friends": "Bạn bè",
+    "top": "Top cửa hàng"
+  },
+  "random": "Ghé ngẫu nhiên",
+  "all": "Tất cả",
+  "list": "Danh sách",
+  "hint": "Vuốt để khám phá, chạm vào cửa hàng để ghé thăm và gửi vía!",
+  "empty": "Không tìm thấy điểm nào phù hợp.",
+  "friendsLogin": "Đăng nhập để xem những điểm bạn đang theo dõi.",
+  "friendsEmpty": "Bạn chưa theo dõi điểm nào.",
+  "deity": "Thần Tài",
+  "deityHint": "Chạm để xin vía từ Thần Tài",
+  "wishCount": "{count} vía",
+  "open": "Mở {place}",
+  "kindFilter": "Loại điểm",
+  "demo": "Mẫu demo",
+  "deityCta": "Xin vía Thần Tài",
+  "scene": {
+    "reset": "Đặt lại góc nhìn",
+    "rotate": "Tự xoay",
+    "soundOn": "Âm thanh bật",
+    "soundOff": "Âm thanh tắt",
+    "hint": "Kéo để xoay · Cuộn để zoom · Chạm cửa hàng",
+    "view3d": "Xem 3D",
+    "viewImage": "Xem ảnh phố"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "title": "Cá nhân",
+  "edit": "Chỉnh sửa hồ sơ",
+  "displayName": "Tên hiển thị",
+  "role": "Vai trò kinh doanh",
+  "roleNone": "Chưa chọn",
+  "province": "Tỉnh / thành",
+  "bio": "Giới thiệu ngắn",
+  "avatar": "Ảnh đại diện",
+  "changeAvatar": "Đổi ảnh",
+  "saved": "Đã cập nhật hồ sơ.",
+  "stats": {
+    "posts": "Bài đăng",
+    "followers": "Người theo dõi",
+    "following": "Đang theo dõi",
+    "points": "Điểm vía"
+  },
+  "levelLine": "Cấp {name}",
+  "noLevel": "Chưa có cấp độ",
+  "badges": "Huy hiệu cộng đồng",
+  "noBadges": "Chưa có huy hiệu nào.",
+  "rank": "Hạng {rank} trên bảng xếp hạng",
+  "unranked": "Chưa có trong TOP {count}",
+  "wishStats": "Đã xin vía {deity} lần • Gửi vía {place} lần",
+  "myPosts": "Bài viết của tôi",
+  "shortcuts": "Lối tắt",
+  "loginPrompt": "Đăng nhập để xem hồ sơ, điểm vía, huy hiệu và quản lý cửa hàng 3D của bạn.",
+  "follow": "Theo dõi",
+  "unfollow": "Bỏ theo dõi",
+  "blockUser": "Chặn người này",
+  "unblockUser": "Bỏ chặn",
+  "memberSince": "Tham gia từ {date}",
+  "notFound": "Không tìm thấy thành viên này.",
+  "followersCount": "{count} người theo dõi",
+  "savedEmpty": "Bạn chưa lưu bài viết nào.",
+  "reportsTitle": "Báo cáo của tôi",
+  "reportsEmpty": "Bạn chưa gửi báo cáo nào.",
+  "reportState": {
+    "pending": "Đang chờ xử lý",
+    "resolved": "Đã xử lý",
+    "dismissed": "Không vi phạm"
+  },
+  "reportTarget": {
+    "post": "Bài viết",
+    "comment": "Bình luận",
+    "place": "Cửa hàng / văn phòng"
+  },
+  "settingsTitle": "Cài đặt tài khoản",
+  "phone": "Số điện thoại",
+  "logoutConfirm": "Bạn muốn đăng xuất?",
+  "tiles": {
+    "myPlaces": "Cửa hàng 3D của tôi",
+    "posts": "Bài đăng",
+    "achievements": "Thành tích",
+    "favorites": "Yêu thích"
+  },
+  "menu": {
+    "missions": "Nhiệm vụ & Sự kiện",
+    "leaderboard": "Bảng xếp hạng",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất",
+    "notifications": "Thông báo",
+    "reports": "Báo cáo của tôi"
+  },
+  "pointsLine": "{count} điểm vía"
+}

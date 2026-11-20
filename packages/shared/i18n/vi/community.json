@@ -1,0 +1,78 @@
+{
+  "leaderboard": {
+    "title": "TOP THÀNH VIÊN CHỐT VÍA",
+    "subtitle": "Xếp hạng theo điểm vía tích lũy",
+    "seeAll": "Xem toàn bộ TOP {count} thành viên",
+    "collapse": "Thu gọn",
+    "empty": "Chưa có thành viên nào trên bảng xếp hạng.",
+    "you": "Bạn",
+    "yourRank": "Hạng của bạn: {rank}",
+    "notInTop": "Bạn chưa vào TOP {count}",
+    "points": "{points} điểm",
+    "rule": "Mỗi lần xin vía hoặc gửi vía thành công = 1 điểm vía (dành cho thành viên đã đăng nhập).",
+    "guestHint": "Đăng nhập để tích điểm vía và có tên trên bảng xếp hạng.",
+    "rankAria": "Hạng {rank}",
+    "weeklyTitle": "Bảng xếp hạng (Tuần)",
+    "pageTitle": "Bảng xếp hạng",
+    "tabs": {
+      "store": "Cửa hàng",
+      "sale": "Sale",
+      "community": "Cộng đồng"
+    },
+    "viaCount": "{count} vía",
+    "seeFull": "Xem bảng xếp hạng đầy đủ",
+    "weekHint": "Tính theo số vía nhận trong tuần, làm mới vào thứ Hai 00:00 (giờ Việt Nam).",
+    "emptyWeek": "Tuần này chưa có lượt gửi vía nào.",
+    "top1": "Hạng 1"
+  },
+  "events": {
+    "title": "Sự kiện – Thử thách",
+    "tabs": {
+      "challenge": "Thử thách",
+      "events": "Sự kiện"
+    },
+    "missionsTitle": "Nhiệm vụ",
+    "daily": "Hằng ngày",
+    "weekly": "Hằng tuần",
+    "progress": "{done}/{target}",
+    "completed": "Hoàn thành",
+    "noPointsNote": "Nhiệm vụ chỉ ghi nhận tiến độ hoạt động, không cộng thêm điểm.",
+    "challengeEnds": "Kết thúc {date}",
+    "noChallenge": "Hiện chưa có thử thách nào.",
+    "noMissions": "Hiện chưa có nhiệm vụ nào.",
+    "noEvents": "Hiện chưa có sự kiện nào.",
+    "loginToTrack": "Đăng nhập để theo dõi tiến độ của bạn.",
+    "eventTime": "{from} – {to}",
+    "scopeCommunity": "Cả cộng đồng cùng tham gia",
+    "scopePersonal": "Thử thách cá nhân",
+    "challengeTitle": "Thử thách tuần",
+    "missionsList": "Nhiệm vụ",
+    "joinNow": "Tham gia ngay",
+    "todo": "Chưa hoàn thành"
+  },
+  "notifications": {
+    "title": "Thông báo",
+    "markAll": "Đánh dấu đã đọc",
+    "empty": "Bạn chưa có thông báo nào.",
+    "place_wished": "{sender} vừa gửi vía {wishType} cho {place}",
+    "post_commented": "{actor} đã bình luận bài viết của bạn",
+    "post_reacted": "{actor} đã thả cảm xúc vào bài viết của bạn",
+    "new_follower": "{actor} đã theo dõi bạn",
+    "post_removed": "Một bài viết của bạn đã bị gỡ do vi phạm nội quy",
+    "report_resolved": "Báo cáo của bạn về {target} đã được xử lý",
+    "targets": {
+      "post": "bài viết",
+      "comment": "bình luận",
+      "place": "điểm"
+    }
+  },
+  "search": {
+    "title": "Tìm kiếm",
+    "placeholder": "Tìm bài viết, cửa hàng, thành viên…",
+    "posts": "Bài viết",
+    "places": "Cửa hàng & văn phòng",
+    "users": "Thành viên",
+    "empty": "Không có kết quả phù hợp.",
+    "hint": "Nhập từ khóa để bắt đầu tìm kiếm."
+  }
+}

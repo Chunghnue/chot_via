@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+FROM node:24-alpine AS build
+RUN npm install -g pnpm@12.18.0
+WORKDIR /repo
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc tsconfig.base.json ./
+COPY apps/web-admin/package.json apps/web-admin/
+COPY packages/shared/package.json packages/shared/
+COPY packages/api-client/package.json packages/api-client/
+COPY packages/ui/package.json packages/ui/
+COPY packages/scene-3d/package.json packages/scene-3d/
+RUN pnpm install --frozen-lockfile --filter @chot-via/web-admin...
+COPY packages packages
+COPY apps/web-admin apps/web-admin
+RUN pnpm --filter @chot-via/web-admin build
+
+# Web admin là file tĩnh; /api và /storage do Caddy chuyển tới backend.
+FROM caddy:2-alpine AS run
+COPY --from=build /repo/apps/web-admin/dist /srv
+COPY deploy/Caddyfile.admin /etc/caddy/Caddyfile
+EXPOSE 80

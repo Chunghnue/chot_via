@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "types": ["node"],
+    "lib": ["ES2023"],
+    "jsx": "preserve"
+  },
+  "include": ["src", "scripts", "drizzle.config.ts"]
+}

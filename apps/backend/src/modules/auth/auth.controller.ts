@@ -1,0 +1,118 @@
+import { Body, Controller, Get, Inject, Param, Post, Query, Req, Res } from '@nestjs/common';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import {
+  OAuthCallbackQuerySchema, OAuthParamSchema, OAuthStartQuerySchema, OtpRequestBodySchema, OtpVerifyBodySchema, type OAuthProvider,
+  type OtpRequestBody, type OtpVerifyBody,
+} from '@chot-via/shared';
+import { z } from 'zod';
+import { Ctx, type RequestContext } from '../../common/access';
+import { ok } from '../../common/api';
+import { DomainError } from '../../common/domain-error';
+import { ZodPipe } from '../../common/zod.pipe';
+import { env } from '../../config/env';
+import { AuthService, type SessionResult } from './auth.service';
+import { OAuthService } from './oauth.service';
+
+const REFRESH_COOKIE = 'cv_rt';
+const REFRESH_PATH = '/api/v1/auth';
+const CSRF_HEADER = 'x-requested-with';
+const CSRF_VALUE = 'chotvia';
+
+function setRefreshCookie(reply: FastifyReply, token: string): void {
+  void reply.setCookie(REFRESH_COOKIE, token, {
+    httpOnly: true, sameSite: 'lax', secure: env.COOKIE_SECURE, path: REFRESH_PATH, maxAge: env.REFRESH_TOKEN_TTL_DAYS * 86_400,
+  });
+}
+
+/** Refresh/logout dựa vào cookie nên bắt buộc header tùy biến (trình duyệt không cho form chéo trang gửi) để chống CSRF. */
+function assertCsrf(req: FastifyRequest): void {
+  if (req.headers[CSRF_HEADER] !== CSRF_VALUE) throw new DomainError('AUTH_CSRF_FAILED');
+}
+
+const CallbackBody = z.object({ code: z.string().optional(), state: z.string().optional(), error: z.string().optional(), user: z.string().optional() });
+
+@Controller('auth')
+export class AuthController {
+  constructor(
+    @Inject(AuthService) private readonly auth: AuthService,
+    @Inject(OAuthService) private readonly oauth: OAuthService,
+  ) {}
+
+  @Post('otp/request')
+  async requestOtp(@Ctx() ctx: RequestContext, @Body(new ZodPipe(OtpRequestBodySchema)) body: OtpRequestBody) {
+    return ok('OTP_SENT', await this.auth.requestOtp(body, ctx.ip));
+  }
+
+  @Post('otp/verify')
+  async verifyOtp(@Res({ passthrough: true }) reply: FastifyReply, @Body(new ZodPipe(OtpVerifyBodySchema)) body: OtpVerifyBody) {
+    const result = await this.auth.verifyOtp(body);
+    setRefreshCookie(reply, result.refreshToken);
+    return ok('LOGIN_SUCCESS', result.session);
+  }
+
+  @Post('refresh')
+  async refresh(@Req() req: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    assertCsrf(req);
+    const raw = req.cookies[REFRESH_COOKIE];
+    if (!raw) throw new DomainError('AUTH_REQUIRED');
+    const result = await this.auth.refresh(raw);
+    setRefreshCookie(reply, result.refreshToken);
+    return ok('OK', result.session);
+  }
+
+  /** Khôi phục phiên khi tải trang: luôn trả 200 (data=null nếu khách) để không sinh lỗi 401 gây nhiễu. */
+  @Post('session')
+  async session(@Req() req: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    assertCsrf(req);
+    const raw = req.cookies[REFRESH_COOKIE];
+    if (!raw) return ok('OK', null);
+    try {
+      const result = await this.auth.refresh(raw);
+      setRefreshCookie(reply, result.refreshToken);
+      return ok('OK', result.session);
+    } catch {
+      void reply.clearCookie(REFRESH_COOKIE, { path: REFRESH_PATH });
+      return ok('OK', null);
+    }
+  }
+
+  @Post('logout')
+  async logout(@Req() req: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    assertCsrf(req);
+    const raw = req.cookies[REFRESH_COOKIE];
+    if (raw) await this.auth.logout(raw);
+    void reply.clearCookie(REFRESH_COOKIE, { path: REFRESH_PATH });
+    return ok('LOGOUT_SUCCESS', { ok: true as const });
+  }
+
+  @Get('oauth/:provider/start')
+  async oauthStart(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string }) {
+    const state = await this.oauth.signState(params.provider, this.oauth.safeReturnTo(query.returnTo));
+    return reply.redirect(await this.oauth.authorizeUrl(params.provider, state));
+  }
+
+  @Get('oauth/:provider/callback')
+  oauthCallbackGet(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthCallbackQuerySchema)) query: z.infer<typeof CallbackBody>) {
+    return this.finishOAuth(reply, params.provider, query);
+  }
+
+  /** Apple dùng response_mode=form_post nên gọi lại bằng POST. */
+  @Post('oauth/:provider/callback')
+  oauthCallbackPost(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Body(new ZodPipe(CallbackBody)) body: z.infer<typeof CallbackBody>) {
+    return this.finishOAuth(reply, params.provider, body);
+  }
+
+  private async finishOAuth(reply: FastifyReply, provider: OAuthProvider, input: z.infer<typeof CallbackBody>): Promise<void> {
+    const returnTo = await this.oauth.readState(input.state, provider);
+    const target = (flag: string): string => `${env.PUBLIC_WEB_URL}${returnTo}${returnTo.includes('?') ? '&' : '?'}${flag}`;
+    if (!input.code || input.error) return reply.redirect(target('login=failed'));
+    try {
+      const profile = await this.oauth.exchange(provider, input.code, input.user);
+      const result: SessionResult = await this.auth.loginWithIdentity(provider, profile.providerUserId, profile.name, profile.avatarUrl);
+      setRefreshCookie(reply, result.refreshToken);
+      return reply.redirect(target('login=ok'));
+    } catch {
+      return reply.redirect(target('login=failed'));
+    }
+  }
+}

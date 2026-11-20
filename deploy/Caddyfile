@@ -1,0 +1,22 @@
+# Caddy tự lấy và gia hạn chứng chỉ HTTPS (Let's Encrypt) cho hai tên miền trong .env.production.
+{$WEB_DOMAIN} {
+	encode zstd gzip
+	@api path /api/* /storage/*
+	handle @api {
+		reverse_proxy backend:3001
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}
+
+{$ADMIN_DOMAIN} {
+	encode zstd gzip
+	@api path /api/* /storage/*
+	handle @api {
+		reverse_proxy backend:3001
+	}
+	handle {
+		reverse_proxy admin:80
+	}
+}

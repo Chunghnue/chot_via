@@ -1,0 +1,31 @@
+# syntax=docker/dockerfile:1
+FROM node:24-alpine AS build
+RUN npm install -g pnpm@12.18.0
+WORKDIR /repo
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc tsconfig.base.json ./
+COPY apps/web-public/package.json apps/web-public/
+COPY packages/shared/package.json packages/shared/
+COPY packages/api-client/package.json packages/api-client/
+COPY packages/ui/package.json packages/ui/
+COPY packages/scene-3d/package.json packages/scene-3d/
+RUN pnpm install --frozen-lockfile --filter @chot-via/web-public...
+COPY packages packages
+COPY apps/web-public apps/web-public
+# Các biến NEXT_PUBLIC_* được đưa vào mã lúc build.
+ARG BACKEND_URL=http://backend:3001
+ARG NEXT_PUBLIC_POSTHOG_KEY=
+ARG NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+ENV NEXT_OUTPUT=standalone NEXT_TELEMETRY_DISABLED=1 BACKEND_URL=$BACKEND_URL \
+    NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
+RUN pnpm --filter @chot-via/web-public build
+
+FROM node:24-alpine AS run
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
+WORKDIR /app
+COPY --from=build /repo/apps/web-public/.next/standalone ./
+COPY --from=build /repo/apps/web-public/.next/static ./apps/web-public/.next/static
+COPY --from=build /repo/apps/web-public/public ./apps/web-public/public
+USER node
+EXPOSE 3000
+CMD ["node", "apps/web-public/server.js"]
