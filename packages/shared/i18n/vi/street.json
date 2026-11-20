@@ -28,5 +28,65 @@
     "hint": "Kéo để xoay · Cuộn để zoom · Chạm cửa hàng",
     "view3d": "Xem 3D",
     "viewImage": "Xem ảnh phố"
+  },
+  "hud": {
+    "wishersBadge": "{count} lượt xin vía",
+    "bubbleWish": "{count} vía",
+    "dpad": {
+      "left": "Xoay sang trái",
+      "right": "Xoay sang phải",
+      "up": "Nâng góc nhìn",
+      "down": "Hạ góc nhìn",
+      "label": "Điều khiển góc nhìn"
+    },
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "toggle3d": "Chuyển 2D / 3D",
+    "tiles": {
+      "story": "Kể khổ",
+      "brag": "Khoe doanh thu",
+      "send": "Gửi vía",
+      "receive": "Nhận vía",
+      "create": "Tạo cửa hàng 3D",
+      "rank": "Bảng xếp hạng",
+      "challenge": "Thử thách"
+    },
+    "shop": {
+      "wishes": "{count} vía",
+      "visits": "{count} lượt ghé",
+      "send": "Gửi vía cho quán",
+      "follow": "Theo dõi",
+      "followed": "Đã theo dõi",
+      "more": "Xem cửa hàng",
+      "demo": "Mẫu demo"
+    },
+    "deityCard": {
+      "title": "Thần Tài trao vía!",
+      "text": "Chúc bạn\nChốt nhiều deal\nDoanh thu bứt phá\nKhách hàng bền lâu!",
+      "cta": "Nhận vía ngay"
+    },
+    "daily": {
+      "title": "Ghé phố hôm nay",
+      "claim": "Nhận quà",
+      "map": "Bản đồ phố",
+      "empty": "Chưa có nhiệm vụ"
+    },
+    "cards": {
+      "feed": "Bảng tin cộng đồng",
+      "all": "Tất cả",
+      "story": "Kể khổ",
+      "brag": "Khoe doanh thu",
+      "empty": "Chưa có bài viết",
+      "profile": "Cá nhân",
+      "points": "điểm vía",
+      "posts": "bài viết",
+      "followers": "người theo dõi",
+      "guest": "Đăng nhập để xem điểm vía và bài viết của bạn.",
+      "login": "Đăng nhập / Đăng ký",
+      "settings": "Cài đặt"
+    },
+    "listTitle": "Danh sách cửa hàng"
   }
 }

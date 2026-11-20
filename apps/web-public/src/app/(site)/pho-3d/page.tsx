@@ -4,11 +4,12 @@ import { selectIsMember, useGetCatalogQuery, useGetHomeQuery, useGetPlacesQuery,
 import { Button, Chip, EmptyState, Skeleton, Tabs, cn } from '@chot-via/ui';
 import { Dices, List, Search } from 'lucide-react';
 import { DEFAULT_HOME_CONFIG } from '@chot-via/shared';
-import { GlbStreetView } from '@chot-via/scene-3d';
-import { useEffect, useMemo, useState } from 'react';
+import { GlbStreetView, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShopLabelStrip, StreetStage } from '@/components/home/street-stage';
 import { PlaceGrid } from '@/components/place/place-list';
+import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls, StreetTiles } from '@/components/street/street-hud';
 import { useGlbLabels, useStreetLabels } from '@/components/place/use-street-labels';
 import { categoryChanged, placeFocused, searchChanged, selectStreet, tabChanged, type StreetTab } from '@/features/street/streetSlice';
 import { placeSheetOpened, wishDialogToggled, loginRequested } from '@/features/ui/uiSlice';
@@ -36,6 +37,19 @@ export default function StreetPage() {
   const [text, setText] = useState(street.search);
   const [showList, setShowList] = useState(false);
   const [fetchRandom] = useLazyGetRandomPlaceQuery();
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [command, setCommand] = useState<CameraCommand | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const sendCommand = useCallback((kind: CameraCommandKind): void => setCommand((c) => ({ id: (c?.id ?? 0) + 1, kind })), []);
+  useEffect(() => {
+    const onChange = (): void => setFullscreen(document.fullscreenElement !== null);
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+  const toggleFullscreen = (): void => {
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void stageRef.current?.requestFullscreen?.().catch(() => undefined);
+  };
 
   useEffect(() => {
     const id = window.setTimeout(() => dispatch(searchChanged(text.trim())), 300);
@@ -48,6 +62,11 @@ export default function StreetPage() {
     ...(street.search ? { search: street.search } : {}), ...(street.categoryId ? { categoryId: street.categoryId } : {}),
   }, { skip });
   const places = useMemo(() => data?.items ?? [], [data]);
+  const featured = useMemo(() => {
+    const chosen = places.find((p) => p.id === street.selectedId);
+    return chosen ?? places.reduce<(typeof places)[number] | null>((best, p) => (best === null || p.wishCount > best.wishCount ? p : best), null);
+  }, [places, street.selectedId]);
+  const mapPoints = useMemo(() => (home?.layout.street ?? []).map((s) => ({ x: s.position.x, z: s.position.z })), [home]);
   const filtering = street.search !== '' || street.categoryId !== null || street.tab !== 'walk';
 
   const visibleIds = useMemo(() => (filtering ? new Set(places.map((p) => p.id)) : null), [filtering, places]);
@@ -88,16 +107,16 @@ export default function StreetPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_20rem] 3xl:grid-cols-[minmax(0,1fr)_24rem]">
-        <div className="relative min-w-0">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_21rem] 3xl:grid-cols-[minmax(0,1fr)_24rem]">
+        <div className="relative flex min-w-0 flex-col xl:col-start-1 xl:row-start-1">
           {skip ? <EmptyState icon="👥" title={t('friendsLogin')} /> : isFetching && !data ? <Skeleton className="h-[60dvh]" /> : places.length === 0 ? <EmptyState icon="🔎" title={street.tab === 'friends' ? t('friendsEmpty') : t('empty')} /> : (
-            <div className="min-w-0 overflow-hidden rounded-sheet bg-surface-muted shadow-card">
+            <div className="flex min-w-0 flex-col overflow-hidden rounded-sheet bg-surface-muted shadow-card xl:flex-1">
               <ShopLabelStrip places={places} labels={labels} onSelectPlace={select} className="border-b border-border/60" />
-            <div className="relative aspect-[10/9] w-full overflow-hidden bg-surface-muted sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.2/1] xl:aspect-[2.5/1]">
+            <div ref={stageRef} className="relative aspect-[10/9] w-full overflow-hidden bg-surface-muted sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.2/1] xl:aspect-auto xl:min-h-[34rem] xl:flex-1">
               {mode === '3d' && home ? (
                 <GlbStreetView
                   className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={home.layout.street} labels={glbLabels}
-                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} onSelectPlace={select} onSelectDeity={() => dispatch(wishDialogToggled(true))}
+                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} onSelectPlace={select} onSelectDeity={() => dispatch(wishDialogToggled(true))}
                   fallback={imageStage}
                 />
               ) : imageStage}
@@ -111,7 +130,10 @@ export default function StreetPage() {
               <Button type="button" variant="soft" size="sm" aria-pressed={mode === '3d'} onClick={() => setMode((m) => (m === '3d' ? 'image' : '3d'))} className="absolute left-3 top-3 z-10 shadow-card">
                 {mode === '3d' ? th('backToImage') : t('scene.view3d')}
               </Button>
-              <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%]">
+              <StreetBadges wishesTotal={home?.stats.wishesTotal ?? null} place={featured} />
+              <StreetControls is3d={mode === '3d'} fullscreen={fullscreen} onToggle3d={() => setMode((m) => (m === '3d' ? 'image' : '3d'))} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
+              <StreetTiles onSend={() => void random()} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
                 <Button variant="wish" size="lg" className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishDialogToggled(true))}>
                   <span aria-hidden>🙏</span>{tw(`title.${titleCode}`)}
                 </Button>
@@ -121,7 +143,14 @@ export default function StreetPage() {
           )}
           <p className="mx-auto mt-2 w-fit max-w-full rounded-full bg-surface px-4 py-1 text-center text-xs font-semibold text-ink-muted shadow-card">{t('hint')}</p>
         </div>
-        <div className="flex flex-col gap-2 lg:max-h-[calc(100dvh-21rem)] lg:overflow-y-auto">
+        <aside className="hidden flex-col gap-3 xl:col-start-2 xl:row-start-1 xl:flex" aria-label={t('title')}>
+          <ShopPanel place={featured} onOpen={select} />
+          <DeityPanel />
+          <DailyPanel points={mapPoints} />
+        </aside>
+        <div className="hidden xl:col-span-2 xl:row-start-2 xl:block"><StreetBottomCards /></div>
+        <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1 lg:max-h-[calc(100dvh-21rem)] lg:overflow-y-auto xl:col-span-2 xl:col-start-1 xl:row-start-3 xl:max-h-none xl:overflow-visible">
+          <h2 className="hidden font-display text-xl font-extrabold text-ink xl:block">{t('hud.listTitle')}</h2>
           <Button variant="outline" size="sm" className="lg:hidden" onClick={() => setShowList((v) => !v)}><List className="size-4" aria-hidden />{t('list')} ({places.length})</Button>
           <div className={cn(showList ? 'block' : 'hidden', 'lg:block')}><PlaceGrid places={places} onSelect={select} /></div>
         </div>

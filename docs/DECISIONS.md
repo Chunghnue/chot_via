@@ -84,3 +84,12 @@ Giới hạn ký tự (Kể khổ/Khoe 500, bình luận 300, lời chúc gửi 
 - Desktop (xl) dùng bố cục 3 cột: trái (Thần Tài, thử thách, tạo cửa hàng), giữa (bảng tin 1 cột), phải (BXH tuần, sự kiện, cộng đồng). Sidebar trái và rail phải mặc định ẩn ở trang chủ.
 - Quy tắc điểm giữ nguyên: chỉ +1 điểm từ lời chúc; nhiệm vụ/thử thách không cộng điểm (không hiện +50/+30 như ảnh).
 - Giới hạn độ giống 3D: model GLB màu đỉnh đơn giản nên chỉ giống tương đối với ảnh hero. iPad ngang với sidebar ~12 mục chưa làm.
+
+## Phố 3D, iPad ngang và bộ đồ trang trí (bản hoàn thiện 2)
+- Trang `/pho-3d` từ 1280px theo ảnh "Phố Chốt Vía 3D Rực Rỡ": joystick xoay/nâng góc nhìn, nút 3D · toàn màn hình · phóng to · thu nhỏ, huy hiệu "N lượt xin vía" (số `wishesTotal` thật, không dùng số trong ảnh), bong bóng cửa hàng nhiều vía nhất, hàng 7 ô lối tắt, cột phải 3 khối (thẻ cửa hàng, Thần Tài trao vía, Ghé phố hôm nay) và hàng 5 thẻ dưới (Bảng tin, Thử thách tuần, BXH tuần, Sự kiện nổi bật, Cá nhân). Danh sách cửa hàng chuyển xuống dưới cùng, nên tìm kiếm/lọc vẫn đủ. Dưới 1280px giữ bố cục cũ.
+- "Ghé phố hôm nay" lấy tiến độ từ nhiệm vụ thật, bản đồ thu nhỏ vẽ từ vị trí ô cửa hàng trong cấu hình; nút "Nhận quà" chỉ dẫn sang trang Sự kiện, không cộng điểm (giữ quy tắc #18).
+- Lệnh camera (joystick, zoom) đi qua prop `command` của `GlbStreetView`; không đổi dữ liệu.
+- iPad ngang (1024–1279px) trang chủ: menu trái 12 mục + thẻ "Tạo cửa hàng 3D" (ảnh b), header chỉ còn logo, ô tìm kiếm rộng, chuông, đăng nhập. Gửi vía - Nhận vía → `/pho-3d`; Thử thách → `/su-kien`; Khoe doanh thu / Deal → `/bang-tin?type=brag`; Xin vía Thần Tài mở hộp xin vía; Đăng bài mở soạn bài.
+- Đồ trang trí 3D (`packages/scene-3d/src/decor.tsx`): cổng chào, cầu cảnh, chòi nghỉ, cây mai, bụi cây, bồn hoa, đá cảnh, đèn lồng, cờ phướn, quầy sự kiện, bàn ghế ngoài trời; dựng bằng hình khối, màu lấy từ token `--color-scene-*` trong theme.css. Điện thoại (chất lượng thấp) chỉ vẽ cổng chào.
+- Thần Tài luân phiên 3 tư thế mỗi 6 giây (Xin vía cuộn giấy, Phát lộc đồng tiền, Chúc mừng thỏi vàng và nhún nhảy) bằng đạo cụ trên cùng một mô hình, không có clip animation trong GLB.
+- Giới hạn: nguồn hiện có là GLB màu đỉnh; chất lượng PBR, tóc, mặt, vải như poster cần người làm 3D hoặc file GLB có texture. Ba ảnh "Rực Rỡ" và poster AIBAT là concept, không dùng làm texture.

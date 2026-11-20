@@ -24,15 +24,26 @@ test.describe('khung điều hướng theo kích thước (RESP-01)', () => {
       expect(labels.map((l) => l.replace(/[^\p{L}\p{N}\s]/gu, '').trim())).toEqual(['Trang chủ', 'Phố 3D', 'Đăng bài', 'Sự kiện', 'BXH', 'Cá nhân']);
     } else {
       await expect(bottom).toBeHidden();
-      const nav = page.locator('header nav').first();
-      await expect(nav).toBeVisible();
-      expect(await nav.innerText()).not.toContain('Khám phá');
-      expect(viewport?.width).toBeGreaterThanOrEqual(768);
+      const w = viewport?.width ?? 0;
+      expect(w).toBeGreaterThanOrEqual(768);
+      if (w >= 1024 && w < 1280) {
+        // iPad ngang (ảnh b): menu trái 12 mục thay cho menu trên
+        const side = page.getByRole('navigation', { name: 'Menu chính' });
+        await expect(side).toBeVisible();
+        const text = await side.innerText();
+        for (const label of ['Trang chủ', 'Ghé phố 3D', 'Bảng tin chung', 'Đăng bài', 'Kể khổ', 'Khoe doanh thu / Deal', 'Xin vía Thần Tài', 'Gửi vía - Nhận vía', 'Thử thách', 'Bảng xếp hạng', 'Tạo cửa hàng 3D', 'Cá nhân']) expect(text).toContain(label);
+      } else {
+        const nav = page.locator('header nav').first();
+        await expect(nav).toBeVisible();
+        expect(await nav.innerText()).not.toContain('Khám phá');
+      }
     }
   });
 
-  test('menu trên không có "Khám phá" và có Bảng tin', async ({ page, isMobile }) => {
+  test('menu trên không có "Khám phá" và có Bảng tin', async ({ page, isMobile, viewport }) => {
     test.skip(isMobile === true, 'điện thoại dùng thanh dưới');
+    const w = viewport?.width ?? 0;
+    test.skip(w >= 1024 && w < 1280, 'iPad ngang dùng menu trái (ảnh b), đã kiểm ở test trên');
     await page.goto('/', { waitUntil: 'networkidle' });
     const text = await page.getByRole('banner').first().innerText();
     expect(text).toContain('Bảng tin');
@@ -92,9 +103,14 @@ test.describe('header iPad ngang (ảnh thiết kế #15)', () => {
     const w = viewport?.width ?? 0;
     test.skip(w < 1024, 'chỉ áp dụng từ iPad ngang');
     await page.goto('/', { waitUntil: 'networkidle' });
-    const nav = await page.locator('header nav').first().boundingBox();
     const search = await page.getByRole('search').boundingBox();
-    expect(nav && search && search.x >= nav.x + nav.width - 1).toBe(true);
+    if (w < 1280) {
+      // iPad ngang (ảnh b): không có menu trên, ô tìm kiếm rộng cạnh logo
+      expect(search && search.width > 300).toBe(true);
+    } else {
+      const nav = await page.locator('header nav').first().boundingBox();
+      expect(nav && search && search.x >= nav.x + nav.width - 1).toBe(true);
+    }
     const icon = await page.getByRole('search').locator('svg').boundingBox();
     expect(icon && search && icon.x > search.x + search.width / 2).toBe(true);
     if (w >= 1100) await expect(page.getByRole('banner').first().getByRole('button', { name: 'Đăng nhập / Đăng ký' })).toBeVisible();

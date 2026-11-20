@@ -146,14 +146,14 @@ export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) 
   const role = user?.memberRole ?? null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
-  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4';
+  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4 md:max-xl:gap-1.5 md:max-xl:rounded-3xl md:max-xl:p-1.5 md:max-xl:pr-2';
 
   const inner = (a: HomeActionDto, title: string) => (
     <>
-      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className="size-11 shrink-0 object-contain md:size-10" draggable={false} /> : null}
+      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className="size-11 shrink-0 object-contain md:size-10 md:max-xl:size-8" draggable={false} /> : null}
       <span className="flex min-w-0 flex-col leading-tight">
         <span className="font-display text-[0.72rem] font-extrabold leading-tight text-ink sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]">{title}</span>
-        {a.subLabel ? <span className="hidden text-xs font-medium leading-tight text-ink-muted @min-[56rem]:block md:max-xl:block">{a.subLabel}</span> : null}
+        {a.subLabel ? <span className="hidden text-xs font-medium leading-tight text-ink-muted @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]">{a.subLabel}</span> : null}
       </span>
     </>
   );

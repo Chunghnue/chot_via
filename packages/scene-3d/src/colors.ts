@@ -7,6 +7,7 @@ export interface SceneColors {
   shopCafe: string; shopFashion: string; shopMinimart: string; shopRestaurant: string; shopRetail: string; shopSaleOffice: string; shopGeneric: string;
   gold: string; wish: string; primary: string; surface: string; ink: string; onWish: string;
   grass: string; tileA: string; tileB: string; tileRing: string; personA: string; personB: string; personC: string; personD: string; personSkin: string; personHair: string; coin: string;
+  leafLight: string; leafDark: string; blossom: string; blossomDark: string; bench: string; metal: string; red: string; stripe: string; stone: string; water: string; mai: string;
 }
 
 /** Màu cảnh 3D đọc từ token trong theme.css (một nguồn duy nhất), không viết cứng trong mã. */
@@ -23,6 +24,8 @@ export function useSceneColors(): SceneColors {
       gold: c('gold'), wish: c('wish'), primary: c('primary'), surface: c('surface'), ink: c('ink'), onWish: c('on-wish'),
       grass: c('scene-grass'), tileA: c('scene-tile-a'), tileB: c('scene-tile-b'), tileRing: c('scene-tile-ring'),
       personA: c('scene-person-a'), personB: c('scene-person-b'), personC: c('scene-person-c'), personD: c('scene-person-d'), personSkin: c('scene-person-skin'), personHair: c('scene-person-hair'), coin: c('scene-coin'),
+      leafLight: c('scene-leaf-light'), leafDark: c('scene-leaf-dark'), blossom: c('scene-blossom'), blossomDark: c('scene-blossom-dark'), bench: c('scene-bench'), metal: c('scene-metal'),
+      red: c('scene-balloon'), stripe: c('scene-balloon-stripe'), stone: c('scene-stone'), water: c('scene-water'), mai: c('scene-mai'),
     };
   }, []);
 }

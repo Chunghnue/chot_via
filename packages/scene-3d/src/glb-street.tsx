@@ -4,14 +4,20 @@ import { Suspense, useEffect, useMemo, useRef, useState, type ComponentRef, type
 import { CanvasTexture, Color, InstancedMesh, MathUtils, Mesh, MeshStandardMaterial, Object3D, TOUCH, Vector3, type Group } from 'three';
 import type { HomeConfig, StreetSlotDto } from '@chot-via/shared';
 import { useSceneColors, type SceneColors } from './colors';
+import { Decor } from './decor';
 
 export type GlbQuality = 'high' | 'mid' | 'low';
 type Lod = 'high' | 'mid' | 'low';
 type ControlsRef = ComponentRef<typeof OrbitControls>;
 
+export type CameraCommandKind = 'left' | 'right' | 'up' | 'down' | 'in' | 'out';
+export interface CameraCommand { id: number; kind: CameraCommandKind }
+
 export interface GlbStreetLabels { deity: string; reset: string; soundOn: string; soundOff: string; rotate: string; hint: string }
 
 export interface GlbStreetProps {
+  /** Lệnh điều khiển camera từ nút bấm (joystick, phóng to/thu nhỏ). Mỗi lệnh mới có `id` tăng dần. */
+  command?: CameraCommand | null;
   config: Pick<HomeConfig, 'camera' | 'deityGlbUrl' | 'deityScale' | 'streetGlbUrl' | 'props' | 'pedestrians' | 'sparkles'>;
   slots: readonly StreetSlotDto[];
   quality: GlbQuality;
@@ -168,10 +174,19 @@ function Label({ text, position, bg, fg, size = 1 }: { text: string; position: [
 function Deity({ url, scale, label, shadows, reducedMotion, ringColor, colors, onSelect }: { url: string; scale: number; label: string; shadows: boolean; reducedMotion: boolean; ringColor: string; colors: SceneColors; onSelect: () => void }) {
   const body = useRef<Group>(null);
   const ring = useRef<Mesh>(null);
+  const ingot = useRef<Group>(null);
+  const coin = useRef<Group>(null);
+  const scroll = useRef<Group>(null);
   useFrame(({ clock }) => {
     if (reducedMotion) return;
     const t = clock.elapsedTime;
-    if (body.current) { body.current.position.y = Math.sin(t * 1.6) * 0.08; body.current.rotation.y = Math.sin(t * 0.45) * 0.06; }
+    // 3 tư thế luân phiên mỗi 6 giây: Xin vía (cuộn giấy) → Phát lộc (đồng tiền vàng) → Chúc mừng (thỏi vàng, nhún nhảy).
+    const pose = Math.floor(t / 6) % 3;
+    if (scroll.current) scroll.current.visible = pose === 0;
+    if (coin.current) { coin.current.visible = pose === 1; coin.current.rotation.y = t * 1.5; }
+    if (ingot.current) ingot.current.visible = pose === 2;
+    const jump = pose === 2 ? Math.abs(Math.sin(t * 3)) * 0.22 : 0;
+    if (body.current) { body.current.position.y = Math.sin(t * 1.6) * 0.08 + jump; body.current.rotation.y = Math.sin(t * 0.45) * 0.06; body.current.rotation.z = pose === 1 ? Math.sin(t * 2.2) * 0.05 : 0; }
     if (ring.current) ring.current.scale.setScalar(1 + Math.sin(t * 2) * 0.03);
   });
   return (
@@ -181,7 +196,14 @@ function Deity({ url, scale, label, shadows, reducedMotion, ringColor, colors, o
       onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}
     >
       <mesh ref={ring} position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[5.1, 5.5, 64]} /><meshBasicMaterial color={ringColor} /></mesh>
-      <group ref={body}><SwapModel url={url} scale={scale} shadows={shadows} /></group>
+      <group ref={body}>
+        <SwapModel url={url} scale={scale} shadows={shadows} />
+        <group position={[1.7 * scale, 1.9 * scale, 1.1 * scale]}>
+          <group ref={scroll} visible><mesh><boxGeometry args={[0.7 * scale, 1.3 * scale, 0.06 * scale]} /><meshStandardMaterial color={colors.deityRobe} /></mesh><mesh position={[0, 0, 0.04 * scale]}><boxGeometry args={[0.5 * scale, 1.1 * scale, 0.02 * scale]} /><meshStandardMaterial color={colors.deityGold} /></mesh></group>
+          <group ref={coin} visible={false}><mesh rotation={[Math.PI / 2, 0, 0]}><cylinderGeometry args={[0.55 * scale, 0.55 * scale, 0.1 * scale, 20]} /><meshStandardMaterial color={colors.coin} /></mesh><mesh rotation={[Math.PI / 2, 0, 0]}><boxGeometry args={[0.22 * scale, 0.14 * scale, 0.22 * scale]} /><meshStandardMaterial color={colors.deityRobe} /></mesh></group>
+          <group ref={ingot} visible={false}><mesh scale={[1.4, 0.7, 0.8]}><sphereGeometry args={[0.4 * scale, 12, 8]} /><meshStandardMaterial color={colors.deityGold} /></mesh></group>
+        </group>
+      </group>
       <pointLight position={[0, 4.5, 3]} intensity={18} color={ringColor} distance={16} />
       <Label text={label} position={[0, 3.53 * scale + 0.9, 0]} bg={colors.wish} fg={colors.onWish} size={1.2} />
     </group>
@@ -290,7 +312,7 @@ function FrameDriver({ maxFps, active }: { maxFps: number; active: boolean }) {
 }
 
 /** Đặt lại góc nhìn khi `resetTick` đổi; bay camera tới cửa hàng đang chọn. */
-function CameraRig({ config, resetTick, goal, controls }: { config: GlbStreetProps['config']['camera']; resetTick: number; goal: { x: number; z: number } | null; controls: React.RefObject<ControlsRef | null> }) {
+function CameraRig({ config, resetTick, goal, controls, command }: { config: GlbStreetProps['config']['camera']; resetTick: number; goal: { x: number; z: number } | null; controls: React.RefObject<ControlsRef | null>; command: CameraCommand | null }) {
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
   useEffect(() => {
@@ -299,6 +321,24 @@ function CameraRig({ config, resetTick, goal, controls }: { config: GlbStreetPro
     if (c) { c.target.set(0, config.targetY, config.targetZ); c.update(); }
     invalidate();
   }, [resetTick, camera, config.height, config.distance, config.targetY, config.targetZ, controls, invalidate]);
+  useEffect(() => {
+    const c = controls.current;
+    if (!c || !command) return;
+    const turn = 0.3;
+    switch (command.kind) {
+      case 'left': c.setAzimuthalAngle(c.getAzimuthalAngle() - turn); break;
+      case 'right': c.setAzimuthalAngle(c.getAzimuthalAngle() + turn); break;
+      case 'up': c.setPolarAngle(c.getPolarAngle() - 0.12); break;
+      case 'down': c.setPolarAngle(c.getPolarAngle() + 0.12); break;
+      case 'in': case 'out': {
+        const k = command.kind === 'in' ? 0.82 : 1.22;
+        camera.position.sub(c.target).multiplyScalar(k).add(c.target);
+        break;
+      }
+    }
+    c.update();
+    invalidate();
+  }, [command, camera, controls, invalidate]);
   useFrame(() => {
     const c = controls.current;
     if (!c || !goal) return;
@@ -309,7 +349,7 @@ function CameraRig({ config, resetTick, goal, controls }: { config: GlbStreetPro
 }
 
 function Scene({ props }: { props: GlbStreetProps }): ReactNode {
-  const { config, slots, quality, selectedPlaceId, visiblePlaceIds, onSelectPlace, onSelectDeity, deityLabel, reducedMotion, resetTick, autoRotate } = props;
+  const { config, slots, quality, selectedPlaceId, visiblePlaceIds, onSelectPlace, onSelectDeity, deityLabel, reducedMotion, resetTick, autoRotate, command } = props;
   const colors = useSceneColors();
   const controls = useRef<ControlsRef>(null);
   const cam = config.camera;
@@ -339,6 +379,7 @@ function Scene({ props }: { props: GlbStreetProps }): ReactNode {
             />
           ))}
           <Props items={config.props} shadows={false} />
+          <Decor colors={colors} quality={quality} />
           {config.sparkles ? <Sparkles color={colors.coin} reducedMotion={reducedMotion} /> : null}
           {Array.from({ length: walkers }, (_, i) => <Walker key={i} index={i} colors={colors} reducedMotion={reducedMotion} />)}
         </>
@@ -349,7 +390,7 @@ function Scene({ props }: { props: GlbStreetProps }): ReactNode {
         minPolarAngle={MathUtils.clamp(cam.minPolarDeg, 5, 85) * RAD} maxPolarAngle={MathUtils.clamp(cam.maxPolarDeg, 20, 89) * RAD}
         touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }} target={[0, cam.targetY, cam.targetZ]}
       />
-      <CameraRig config={cam} resetTick={resetTick} goal={goal} controls={controls} />
+      <CameraRig config={cam} resetTick={resetTick} goal={goal} controls={controls} command={command ?? null} />
     </>
   );
 }

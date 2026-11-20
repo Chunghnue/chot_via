@@ -31,5 +31,11 @@
   "post": "Đăng bài",
   "leaderboardAbbr": "BXH",
   "streetVisit": "Ghé phố",
-  "challenge": "Thử thách"
+  "challenge": "Thử thách",
+  "tabletStreet": "Ghé phố 3D",
+  "tabletFeed": "Bảng tin chung",
+  "tabletWish": "Xin vía Thần Tài",
+  "tabletSendReceive": "Gửi vía - Nhận vía",
+  "tabletCreateStore": "Tạo cửa hàng 3D",
+  "tabletMenu": "Menu chính"
 }
