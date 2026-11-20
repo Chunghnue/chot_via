@@ -66,6 +66,16 @@ if ((hasLinks?.n ?? 0) === 0) {
   ]);
 }
 
+// Mạng xã hội: liên kết mẫu '#' (bấm không phản ứng). Admin thay bằng địa chỉ thật ở menu "Liên kết chân trang"; chỉ thêm khi nhóm này chưa có.
+const [hasSocial] = await db.select({ n: count() }).from(homeFooterLinks).where(eq(homeFooterLinks.groupName, 'Mạng xã hội'));
+if ((hasSocial?.n ?? 0) === 0) {
+  await db.insert(homeFooterLinks).values([
+    { groupName: 'Mạng xã hội', label: 'Facebook', href: '#', sortOrder: 0 },
+    { groupName: 'Mạng xã hội', label: 'Zalo', href: '#', sortOrder: 1 },
+    { groupName: 'Mạng xã hội', label: 'TikTok', href: '#', sortOrder: 2 },
+  ]);
+}
+
 // Bố cục phố: hai hàng cửa hàng đối mặt đường, Thần Tài ở giữa (gốc toạ độ). Vùng bấm theo % khung ảnh pho-3d-hero.png (0 = không có trên ảnh).
 // Cafe và Văn phòng Sale ở gần (z=4), thời trang và Minimart ở giữa, Nhà hàng và Nhà thuốc ở xa. Hàng trái xoay +90°, hàng phải -90° để mặt tiền hướng ra đường.
 const SLOTS: { label: string; model: SceneModelKey; img: [number, number, number, number]; x: number; z: number; rot: number }[] = [

@@ -71,12 +71,16 @@ export function HomeFooter() {
             <div className="flex flex-col items-center gap-1 rounded-2xl bg-surface px-3 py-2 shadow-card">
               <p className="text-xs font-semibold text-ink">{t('shareApp')}</p>
               <div className="flex items-center gap-2">
-                {social.map((s) => (
-                  <a key={s.href + s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                    className="grid size-9 place-items-center rounded-full bg-primary-soft text-primary-strong transition hover:bg-primary hover:text-on-primary">
-                    <SocialIcon label={s.label} />
-                  </a>
-                ))}
+                {social.map((s) => {
+                  const cls = 'grid size-9 place-items-center rounded-full bg-primary-soft text-primary-strong transition hover:bg-primary hover:text-on-primary';
+                  // Liên kết mẫu '#': chưa có địa chỉ thật nên bấm không phản ứng gì.
+                  if (s.href === '#') return <button key={s.label} type="button" aria-label={s.label} className={cls}><SocialIcon label={s.label} /></button>;
+                  return (
+                    <a key={s.href + s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className={cls}>
+                      <SocialIcon label={s.label} />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           ) : null}
