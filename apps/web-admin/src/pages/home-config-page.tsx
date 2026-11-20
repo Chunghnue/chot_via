@@ -62,14 +62,19 @@ function PropsEditor({ form }: { form: UseFormReturn<HomeConfig> }) {
   );
 }
 
+/** Chỉ dựng form khi đã có dữ liệu: useForm khởi tạo ngay với giá trị đầy đủ (tránh lần render đầu có field.value rỗng làm trắng trang). */
 export function HomeConfigPage() {
+  const { data } = useAdminHomeConfigQuery();
+  if (!data) return <Skeleton className="h-64" />;
+  return <HomeConfigForm data={data} />;
+}
+
+function HomeConfigForm({ data }: { data: HomeConfig }) {
   const t = useTranslations('admin.homeConfig');
   const tc = useTranslations('admin.common');
   const toastApi = useApiToast();
-  const { data } = useAdminHomeConfigQuery();
   const [save, { isLoading }] = useAdminHomeConfigSaveMutation();
-  const form = useForm<HomeConfig>({ resolver: zodResolver(HomeConfigSchema), values: data });
-  if (!data) return <Skeleton className="h-64" />;
+  const form = useForm<HomeConfig>({ resolver: zodResolver(HomeConfigSchema), defaultValues: data, values: data });
 
   const submit = form.handleSubmit(async (values) => {
     try { await save(values).unwrap(); toast.success(t('saved')); } catch (e) { toastApi.error(e); }

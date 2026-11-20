@@ -17,6 +17,11 @@ test.describe('web admin', () => {
     await page.goto('http://localhost:5273/catalog/hot-topics', { waitUntil: 'networkidle' });
     await expect(page.getByText('Làm sale có nên nghỉ Tết sớm?')).toBeVisible();
 
+    // Mở thẳng /home-config: form chỉ dựng khi đã có dữ liệu, không trắng trang (field.value.join trên undefined).
+    await page.goto('http://localhost:5273/home-config', { waitUntil: 'networkidle' });
+    await expect(page.getByRole('heading', { name: 'Trang chủ (hero)' })).toBeVisible();
+    await expect(page.locator('#signLines')).toHaveValue('Chúc may mắn\nChốt đơn thần tốc\nDoanh thu bùng nổ');
+
     await page.goto('http://localhost:5273/settings', { waitUntil: 'networkidle' });
     const toggle = page.getByRole('switch', { name: /Hiện dữ liệu mẫu/ });
     await expect(toggle).toBeVisible();
