@@ -75,5 +75,12 @@ Giới hạn ký tự (Kể khổ/Khoe 500, bình luận 300, lời chúc gửi 
 - Hiệu năng: `frameloop="demand"`, giới hạn FPS (30 trên điện thoại), dừng khi tab ẩn hoặc cảnh ra khỏi màn hình, LOD theo khoảng cách, đổ bóng chỉ ở chất lượng cao.
 - Nhãn cửa hàng vẽ bằng sprite (canvas), không dùng `Html` của drei vì gây lỗi React "unmount a root while rendering".
 - Nhà thuốc (`pharmacy`) là loại model mới; seed phiên bản 2 (`home_seed_version`) đặt lại vị trí ô cửa hàng một lần.
-- Admin (Trang chủ → hero) có trình sửa vật trang trí, số người đi bộ, tia sáng, camera targetY/targetZ và xem trước cảnh 3D theo giá trị đang sửa (nạp lười vì kéo theo three.js).
-- `shadows="percentage"` thay `PCFSoftShadowMap` (đã bị three gỡ). Cảnh báo `THREE.Clock deprecated` đến từ react-three-fiber, chờ bản mới.
+- Chưa làm: trình sửa vật trang trí/camera bằng giao diện trong admin (hiện sửa qua JSON cấu hình), xem trước 3D trong admin.
+
+## Trang chủ theo 3 ảnh chuẩn (bản cập nhật)
+- Thanh điều hướng dưới (mobile) đổi thành 6 mục: Trang chủ, Phố 3D, nút (+) Đăng bài, Sự kiện, BXH, Cá nhân (thay quyết định #1 ngày 19/11).
+- Hàng hành động theo thiết bị: thêm cột `sort_tablet`, `sort_desktop` (migration 0005), seed v3 (`home_seed_version`), admin chỉnh được thứ tự từng thiết bị.
+- Footer: nhóm "Mạng xã hội" (facebook/zalo/tiktok/other) với liên kết do admin nhập.
+- Desktop (xl) dùng bố cục 3 cột: trái (Thần Tài, thử thách, tạo cửa hàng), giữa (bảng tin 1 cột), phải (BXH tuần, sự kiện, cộng đồng). Sidebar trái và rail phải mặc định ẩn ở trang chủ.
+- Quy tắc điểm giữ nguyên: chỉ +1 điểm từ lời chúc; nhiệm vụ/thử thách không cộng điểm (không hiện +50/+30 như ảnh).
+- Giới hạn độ giống 3D: model GLB màu đỉnh đơn giản nên chỉ giống tương đối với ảnh hero. iPad ngang với sidebar ~12 mục chưa làm.

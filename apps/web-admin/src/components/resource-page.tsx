@@ -14,7 +14,7 @@ export interface SelectOption { value: string; label: string }
 export interface FieldDef<I extends FieldValues> {
   name: Path<I>;
   label: string;
-  kind: 'text' | 'textarea' | 'number' | 'switch' | 'select' | 'nullableText' | 'nullableSelect' | 'datetime' | 'image' | 'tags' | 'asset';
+  kind: 'text' | 'textarea' | 'number' | 'nullableNumber' | 'switch' | 'select' | 'nullableText' | 'nullableSelect' | 'datetime' | 'image' | 'tags' | 'asset';
   options?: SelectOption[];
 }
 
@@ -147,6 +147,7 @@ export function ResourcePage<Item extends { id: string }, I extends FieldValues>
                     {f.kind === 'nullableText' ? <Controller control={form.control} name={f.name} render={({ field }) => <Input id={f.name} value={text(field.value)} onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)} />} /> : null}
                     {f.kind === 'textarea' ? <Textarea id={f.name} {...form.register(f.name)} /> : null}
                     {f.kind === 'number' ? <Input id={f.name} type="number" {...form.register(f.name, { valueAsNumber: true })} /> : null}
+                    {f.kind === 'nullableNumber' ? <Input id={f.name} type="number" {...form.register(f.name, { setValueAs: (v: unknown) => (v === '' || v === null || v === undefined ? null : Number(v)) })} /> : null}
                     {f.kind === 'select' ? <Select id={f.name} {...form.register(f.name)}>{f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select> : null}
                     {f.kind === 'nullableSelect' ? (
                       <Controller control={form.control} name={f.name} render={({ field }) => (

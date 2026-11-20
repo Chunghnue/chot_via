@@ -259,7 +259,9 @@
       "posZ": "Vị trí sâu (m)",
       "rotationDeg": "Xoay (độ)",
       "uploadFile": "Tải file lên",
-      "noPlace": "— Chưa liên kết —"
+      "noPlace": "— Chưa liên kết —",
+      "sortTablet": "Thứ tự trên iPad (trống = như mặc định)",
+      "sortDesktop": "Thứ tự trên máy tính (trống = như mặc định)"
     },
     "options": {
       "templateSource": {

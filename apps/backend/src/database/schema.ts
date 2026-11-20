@@ -409,6 +409,9 @@ export const homeActions = pgTable('home_actions', {
   showTablet: boolean('show_tablet').notNull().default(true),
   showDesktop: boolean('show_desktop').notNull().default(true),
   sortOrder: integer('sort_order').notNull().default(0),
+  /** Thứ tự riêng trên iPad / máy tính (trống = theo sortOrder): thiết kế mỗi cỡ màn xếp nút khác nhau. */
+  sortTablet: integer('sort_tablet'),
+  sortDesktop: integer('sort_desktop'),
   active: boolean('active').notNull().default(true),
 });
 

@@ -15,13 +15,13 @@ test.describe('responsive: không tràn ngang trên mọi trang chính', () => {
 });
 
 test.describe('khung điều hướng theo kích thước (RESP-01)', () => {
-  test('điện thoại: thanh dưới có Xin vía ở giữa; từ iPad dọc: menu trên, không có thanh dưới', async ({ page, isMobile, viewport }) => {
+  test('điện thoại: thanh dưới 6 mục có nút (+) Đăng bài ở giữa; từ iPad dọc: menu trên, không có thanh dưới', async ({ page, isMobile, viewport }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const bottom = page.locator('nav[aria-label="Điều hướng chính"].fixed');
     if (isMobile) {
       await expect(bottom).toBeVisible();
       const labels = await bottom.locator('a, button').allInnerTexts();
-      expect(labels.map((l) => l.replace(/[^\p{L}\p{N}\s]/gu, '').trim())).toEqual(['Trang chủ', 'Bảng tin', 'Xin vía', 'Phố 3D', 'Cá nhân']);
+      expect(labels.map((l) => l.replace(/[^\p{L}\p{N}\s]/gu, '').trim())).toEqual(['Trang chủ', 'Phố 3D', 'Đăng bài', 'Sự kiện', 'BXH', 'Cá nhân']);
     } else {
       await expect(bottom).toBeHidden();
       const nav = page.locator('header nav').first();
@@ -74,9 +74,9 @@ test.describe('nhãn cửa hàng trong cảnh phố theo thiết bị (RESP-01)'
 });
 
 test.describe('header iPad ngang (ảnh thiết kế #15)', () => {
-  test('từ 1024 đến 1279px: ô tìm kiếm nằm bên phải menu, kính lúp ở cuối ô; nút "Đăng nhập / Đăng ký" từ 1100px', async ({ page, viewport }) => {
+  test('từ 1024px (iPad ngang và desktop theo ảnh mới): ô tìm kiếm nằm bên phải menu, kính lúp ở cuối ô; nút "Đăng nhập / Đăng ký" từ 1100px', async ({ page, viewport }) => {
     const w = viewport?.width ?? 0;
-    test.skip(w < 1024 || w >= 1280, 'chỉ áp dụng cho iPad ngang');
+    test.skip(w < 1024, 'chỉ áp dụng từ iPad ngang');
     await page.goto('/', { waitUntil: 'networkidle' });
     const nav = await page.locator('header nav').first().boundingBox();
     const search = await page.getByRole('search').boundingBox();
@@ -84,14 +84,6 @@ test.describe('header iPad ngang (ảnh thiết kế #15)', () => {
     const icon = await page.getByRole('search').locator('svg').boundingBox();
     expect(icon && search && icon.x > search.x + search.width / 2).toBe(true);
     if (w >= 1100) await expect(page.getByRole('banner').first().getByRole('button', { name: 'Đăng nhập / Đăng ký' })).toBeVisible();
-  });
-
-  test('từ 1280px (desktop): kính lúp ở đầu ô tìm kiếm', async ({ page, viewport }) => {
-    test.skip((viewport?.width ?? 0) < 1280, 'chỉ áp dụng cho desktop');
-    await page.goto('/', { waitUntil: 'networkidle' });
-    const search = await page.getByRole('search').boundingBox();
-    const icon = await page.getByRole('search').locator('svg').boundingBox();
-    expect(icon && search && icon.x < search.x + search.width / 2).toBe(true);
   });
 });
 

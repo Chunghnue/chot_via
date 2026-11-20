@@ -1,15 +1,18 @@
 'use client';
 
 import { cn } from '@chot-via/ui';
-import { MessageCircle, Store, UserRound, Home } from 'lucide-react';
+import { BarChart3, CalendarDays, Home, Plus, Store, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'use-intl';
-import { wishDialogToggled } from '@/features/ui/uiSlice';
+import { composerOpened } from '@/features/composer/composerSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { isActivePath } from './header';
 
-/** Thanh điều hướng dưới (điện thoại): nút giữa luôn là Xin vía (quyết định #8). */
+/**
+ * Thanh điều hướng dưới (điện thoại, theo ảnh thiết kế mới): Trang chủ · Phố 3D · (+) Đăng bài · Sự kiện · BXH · Cá nhân.
+ * Nút Xin vía vẫn nổi bật nhất ở hero và thẻ "Xin vía Thần Tài" (quyết định ngày 20/11 thay cho quyết định #1 ngày 19/11).
+ */
 export function BottomNav() {
   const t = useTranslations('nav');
   const pathname = usePathname();
@@ -22,17 +25,18 @@ export function BottomNav() {
   );
   return (
     <nav aria-label={t('mainMenu')} className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-safe backdrop-blur md:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-5 items-end">
+      <div className="mx-auto grid max-w-lg grid-cols-6 items-end">
         {item('/', t('home'), <Home className="size-6" aria-hidden />)}
-        {item('/bang-tin', t('feed'), <MessageCircle className="size-6" aria-hidden />)}
+        {item('/pho-3d', t('street'), <Store className="size-6" aria-hidden />)}
         <div className="flex justify-center">
-          <button type="button" onClick={() => dispatch(wishDialogToggled(true))} aria-label={t('wish')}
-            className="-mt-7 flex size-[4.5rem] flex-col items-center justify-center gap-0.5 rounded-full border-4 border-surface bg-linear-to-b from-wish to-wish-strong text-on-wish shadow-cta animate-glow active:scale-95">
-            <span aria-hidden className="text-2xl leading-none">🙏</span>
-            <span className="text-[0.7rem] font-extrabold">{t('wish')}</span>
+          <button type="button" onClick={() => dispatch(composerOpened(undefined))} aria-label={t('post')}
+            className="-mt-6 flex flex-col items-center gap-0.5 text-[0.7rem] font-semibold text-ink-muted active:scale-95">
+            <span className="flex size-14 items-center justify-center rounded-full border-4 border-surface bg-linear-to-b from-gold to-wish text-on-wish shadow-cta"><Plus className="size-8" strokeWidth={3} aria-hidden /></span>
+            <span>{t('post')}</span>
           </button>
         </div>
-        {item('/pho-3d', t('street'), <Store className="size-6" aria-hidden />)}
+        {item('/su-kien', t('eventsShort'), <CalendarDays className="size-6" aria-hidden />)}
+        {item('/bang-xep-hang', t('leaderboardAbbr'), <BarChart3 className="size-6" aria-hidden />)}
         {item('/ca-nhan', t('profile'), <UserRound className="size-6" aria-hidden />)}
       </div>
     </nav>

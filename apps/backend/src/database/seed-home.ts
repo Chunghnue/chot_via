@@ -6,7 +6,9 @@ import { appSettings, homeActions, homeFooterLinks, placeCategories, places, sce
 const { db, close } = createDb();
 
 /** Dữ liệu trang chủ theo thiết kế: file 3D (GLB v2, 3 mức chi tiết), hàng nút hành động, chân trang, các ô cửa hàng trên phố. Chạy lại nhiều lần vẫn an toàn. */
-const SEED_VERSION = 2;
+const SEED_VERSION = 3;
+/** Bản đặt lại tỉ lệ model và vị trí ô cửa hàng (v2); bản 3 chỉ thêm hàng nút theo 3 ảnh mới nên không đụng bố cục phố đã chỉnh. */
+const LAYOUT_VERSION = 2;
 const [versionRow] = await db.select().from(appSettings).where(eq(appSettings.key, 'home_seed_version')).limit(1);
 const storedVersion = typeof versionRow?.value === 'object' && versionRow.value !== null && 'v' in versionRow.value && typeof versionRow.value.v === 'number' ? versionRow.value.v : 0;
 
@@ -31,22 +33,28 @@ if (pharmacyScene && pharmacyCat) {
 
 for (const [model, file] of Object.entries(GLB)) {
   const base = `/3d/models/${file}`;
-  const set = { glbUrl: `${base}.glb`, glbLod1Url: `${base}_lod1.glb`, glbLod2Url: `${base}_lod2.glb`, ...(storedVersion < SEED_VERSION ? { modelScale: SHOP_SCALE } : {}) };
+  const set = { glbUrl: `${base}.glb`, glbLod1Url: `${base}_lod1.glb`, glbLod2Url: `${base}_lod2.glb`, ...(storedVersion < LAYOUT_VERSION ? { modelScale: SHOP_SCALE } : {}) };
   await db.update(sceneTemplates).set(set).where(eq(sceneTemplates.modelKey, model as SceneModelKey));
 }
 
-const [hasActions] = await db.select({ n: count() }).from(homeActions);
-if ((hasActions?.n ?? 0) === 0) {
-  const a = (code: string, label: string, subLabel: string, icon: string, kind: HomeActionKind, href: string | null, tablet = true, sortOrder = 0) =>
-    ({ code, label, subLabel, iconUrl: `/images/${icon}.webp`, kind, href, showMobile: true, showTablet: tablet, showDesktop: true, sortOrder });
-  await db.insert(homeActions).values([
-    a('story', 'Kể khổ', 'Giải tỏa áp lực', 'ic-laugh', 'story', null, true, 0),
-    a('brag', 'Khoe doanh thu / Deal', 'Chia sẻ thành công', 'ic-money-bag', 'brag', null, true, 1),
-    a('send_wish', 'Gửi vía', 'Ghé cửa hàng', 'ic-home', 'link', '/pho-3d', true, 2),
-    a('get_wish', 'Nhận vía', 'Xin vía Thần Tài', 'ic-pray', 'wish', null, true, 3),
-    a('challenge', 'Thử thách', 'Nhận quà hấp dẫn', 'ic-trophy', 'link', '/su-kien', true, 4),
-    a('create_store', 'Tạo cửa hàng 3D', 'Cửa hàng của bạn', 'ic-gift', 'link', '/tao-diem', false, 5),
-  ]);
+// Hàng nút theo 3 ảnh thiết kế: điện thoại 6 nút, iPad 5 nút, máy tính 6 nút; mỗi cỡ màn xếp thứ tự riêng.
+// Chỉ ghi đè khi chưa có hoặc bản seed cũ (< 3); sau đó admin sửa thoải mái ở "Nút hành động trang chủ".
+const ACTIONS: { code: string; label: string; subLabel: string; icon: string; kind: HomeActionKind; href: string | null; m: boolean; t: boolean; d: boolean; order: number; tablet: number | null; desktop: number | null }[] = [
+  { code: 'visit_street', label: 'Ghé phố 3D', subLabel: 'Khám phá cửa hàng', icon: 'ic-home', kind: 'link', href: '/pho-3d', m: true, t: true, d: false, order: 0, tablet: 0, desktop: null },
+  { code: 'send_wish', label: 'Gửi vía', subLabel: 'Lan tỏa may mắn', icon: 'ic-gift', kind: 'link', href: '/pho-3d', m: true, t: true, d: true, order: 1, tablet: 3, desktop: 2 },
+  { code: 'get_wish', label: 'Nhận vía', subLabel: 'Đón lộc Thần Tài', icon: 'ic-pray', kind: 'wish', href: null, m: true, t: false, d: true, order: 2, tablet: null, desktop: 3 },
+  { code: 'story', label: 'Kể khổ', subLabel: 'Giải tỏa áp lực', icon: 'ic-laugh', kind: 'story', href: null, m: true, t: true, d: true, order: 3, tablet: 1, desktop: 0 },
+  { code: 'brag', label: 'Khoe doanh thu / Deal', subLabel: 'Chia sẻ thành công', icon: 'ic-money-bag', kind: 'brag', href: null, m: true, t: true, d: true, order: 4, tablet: 2, desktop: 1 },
+  { code: 'challenge', label: 'Thử thách', subLabel: 'Nhận quà hấp dẫn', icon: 'ic-trophy', kind: 'link', href: '/su-kien', m: false, t: false, d: true, order: 5, tablet: null, desktop: 4 },
+  { code: 'create_store', label: 'Tạo cửa hàng 3D', subLabel: 'Cửa hàng của riêng bạn', icon: 'ic-home', kind: 'link', href: '/tao-diem', m: true, t: true, d: true, order: 6, tablet: 4, desktop: 5 },
+];
+if (storedVersion < SEED_VERSION) {
+  for (const x of ACTIONS) {
+    const v = { label: x.label, subLabel: x.subLabel, iconUrl: `/images/${x.icon}.webp`, kind: x.kind, href: x.href, showMobile: x.m, showTablet: x.t, showDesktop: x.d, sortOrder: x.order, sortTablet: x.tablet, sortDesktop: x.desktop };
+    const [found] = await db.select({ id: homeActions.id }).from(homeActions).where(eq(homeActions.code, x.code)).limit(1);
+    if (found) await db.update(homeActions).set(v).where(eq(homeActions.id, found.id));
+    else await db.insert(homeActions).values({ code: x.code, ...v });
+  }
 }
 
 const [hasLinks] = await db.select({ n: count() }).from(homeFooterLinks);
@@ -77,7 +85,7 @@ for (const [i, s] of SLOTS.entries()) {
   const values = { label: s.label, placeId: placeRows.find((p) => p.sceneTemplateId === scene.id)?.id ?? null, sceneTemplateId: scene.id, imageX: s.img[0], imageY: s.img[1], imageW: s.img[2], imageH: s.img[3], posX: s.x, posZ: s.z, rotationDeg: s.rot, sortOrder: i };
   const found = existingSlots.find((x) => x.label === s.label);
   if (!found) await db.insert(streetSlots).values(values);
-  else if (storedVersion < SEED_VERSION) await db.update(streetSlots).set({ posX: s.x, posZ: s.z, rotationDeg: s.rot, sortOrder: i }).where(eq(streetSlots.id, found.id));
+  else if (storedVersion < LAYOUT_VERSION) await db.update(streetSlots).set({ posX: s.x, posZ: s.z, rotationDeg: s.rot, sortOrder: i }).where(eq(streetSlots.id, found.id));
 }
 
 await db.insert(appSettings).values({ key: 'home_seed_version', value: { v: SEED_VERSION } }).onConflictDoUpdate({ target: appSettings.key, set: { value: { v: SEED_VERSION }, updatedAt: new Date() } });

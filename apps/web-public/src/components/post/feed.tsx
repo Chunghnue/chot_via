@@ -135,7 +135,7 @@ export function FeedList({ query, infinite = true, pageSize = 10, variant = 'def
   if (!data || data.items.length === 0) return <EmptyState icon="📝" title={query.sort === 'following' ? t('emptyFollowing') : t('empty')} />;
 
   return (
-    <div className={variant !== 'default' ? 'grid w-full grid-cols-1 items-start gap-3 min-[900px]:grid-cols-2' : 'flex w-full flex-col gap-3 3xl:mx-auto 3xl:max-w-3xl'}>
+    <div className={variant !== 'default' ? 'grid w-full grid-cols-1 items-start gap-3 min-[900px]:grid-cols-2 xl:grid-cols-1 3xl:grid-cols-2' : 'flex w-full flex-col gap-3 3xl:mx-auto 3xl:max-w-3xl'}>
       {data.items.map((post) => <PostCard key={post.id} post={post} variant={variant} />)}
       {infinite ? <div ref={sentinel} aria-hidden /> : null}
       {hasMore && infinite ? <Button variant="outline" loading={isFetching} onClick={loadMore}>{t('loadMore')}</Button> : null}

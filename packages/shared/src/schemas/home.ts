@@ -47,7 +47,9 @@ const code = z.string().trim().min(2).max(40).regex(/^[a-z0-9_]+$/, 'invalid_str
 export const HomeActionInputSchema = z.object({
   code, label: z.string().trim().min(2).max(40), subLabel: z.string().trim().max(60),
   iconUrl: z.string().trim().max(500).nullable(), kind: z.enum(HOME_ACTION_KINDS), href: z.string().trim().max(200).nullable(),
-  showMobile: z.boolean(), showTablet: z.boolean(), showDesktop: z.boolean(), sortOrder: z.number().int(), active: z.boolean(),
+  showMobile: z.boolean(), showTablet: z.boolean(), showDesktop: z.boolean(), sortOrder: z.number().int(),
+  /** Thứ tự riêng trên iPad / máy tính (null = theo sortOrder). */
+  sortTablet: z.number().int().nullable(), sortDesktop: z.number().int().nullable(), active: z.boolean(),
 });
 export type HomeActionInput = z.infer<typeof HomeActionInputSchema>;
 
@@ -67,7 +69,7 @@ export const StreetSlotInputSchema = z.object({
 });
 export type StreetSlotInput = z.infer<typeof StreetSlotInputSchema>;
 
-export const HomeActionDtoSchema = HomeActionInputSchema.pick({ code: true, label: true, subLabel: true, iconUrl: true, kind: true, href: true, showMobile: true, showTablet: true, showDesktop: true });
+export const HomeActionDtoSchema = HomeActionInputSchema.pick({ code: true, label: true, subLabel: true, iconUrl: true, kind: true, href: true, showMobile: true, showTablet: true, showDesktop: true, sortTablet: true, sortDesktop: true });
 export type HomeActionDto = z.infer<typeof HomeActionDtoSchema>;
 export const FooterLinkDtoSchema = FooterLinkInputSchema.pick({ groupName: true, label: true, href: true });
 export type FooterLinkDto = z.infer<typeof FooterLinkDtoSchema>;

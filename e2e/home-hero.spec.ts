@@ -2,14 +2,19 @@ import { expect, test } from '@playwright/test';
 import { expectNoHorizontalScroll } from './support';
 
 test.describe('trang chủ theo thiết kế: hero ảnh phố, hàng nút, chân trang', () => {
-  test('hàng nút hành động: điện thoại và máy tính 6 nút, iPad 5 nút (ẩn "Tạo cửa hàng 3D")', async ({ page, viewport }) => {
+  test('hàng nút hành động theo 3 ảnh: điện thoại 6 nút, iPad 5 nút, máy tính 6 nút', async ({ page, viewport }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
     const width = viewport?.width ?? 0;
     const ipad = width >= 768 && width < 1280;
     const buttons = row.locator('a:visible, button:visible');
     await expect(buttons).toHaveCount(ipad ? 5 : 6);
-    for (const name of [/Kể khổ/, /Khoe doanh thu|Khoe deal/, /Gửi vía/, /Nhận vía/, /Thử thách/]) await expect(row.getByText(name).first()).toBeVisible();
+    const names = width < 768
+      ? [/Ghé phố/, /Gửi vía/, /Nhận vía/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
+      : ipad
+        ? [/Ghé phố 3D/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Gửi vía/, /Tạo cửa hàng 3D/]
+        : [/Kể khổ/, /Khoe doanh thu|Khoe deal/, /Gửi vía/, /Nhận vía/, /Thử thách/, /Tạo cửa hàng 3D/];
+    for (const name of names) await expect(row.getByText(name).first()).toBeVisible();
     await expectNoHorizontalScroll(page);
   });
 

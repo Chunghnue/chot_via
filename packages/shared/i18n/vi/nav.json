@@ -27,5 +27,9 @@
   "eventsShort": "Sự kiện",
   "leaderboardShort": "Xếp hạng",
   "createStoreTitleLine1": "Tạo cửa hàng 3D",
-  "createStoreTitleLine2": "Của riêng bạn"
+  "createStoreTitleLine2": "Của riêng bạn",
+  "post": "Đăng bài",
+  "leaderboardAbbr": "BXH",
+  "streetVisit": "Ghé phố",
+  "challenge": "Thử thách"
 }

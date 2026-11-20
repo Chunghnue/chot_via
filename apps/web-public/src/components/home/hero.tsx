@@ -145,18 +145,19 @@ export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) 
   const user = useCurrentUser();
   const role = user?.memberRole ?? null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
-  const vars = { '--cm': Math.min(3, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
-  const base = 'flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4';
+  const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
+  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4';
 
   const inner = (a: HomeActionDto, title: string) => (
     <>
-      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className="size-9 shrink-0 object-contain md:size-10" draggable={false} /> : null}
+      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className="size-11 shrink-0 object-contain md:size-10" draggable={false} /> : null}
       <span className="flex min-w-0 flex-col leading-tight">
-        <span className="font-display text-[0.7rem] font-extrabold leading-tight text-ink sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]">{title}</span>
-        {a.subLabel ? <span className="hidden text-xs font-medium leading-tight text-ink-muted @min-[56rem]:block">{a.subLabel}</span> : null}
+        <span className="font-display text-[0.72rem] font-extrabold leading-tight text-ink sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]">{title}</span>
+        {a.subLabel ? <span className="hidden text-xs font-medium leading-tight text-ink-muted @min-[56rem]:block md:max-xl:block">{a.subLabel}</span> : null}
       </span>
     </>
   );
+  const orderStyle = (a: HomeActionDto, index: number): React.CSSProperties => ({ '--om': index, '--ot': a.sortTablet ?? index, '--od': a.sortDesktop ?? index } as React.CSSProperties);
 
   return (
     <div className="@container relative z-10 -mt-5 md:-mt-8 xl:-mt-9">
@@ -164,13 +165,14 @@ export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) 
         aria-label={t('actions.label')} style={vars}
         className="grid grid-cols-[repeat(var(--cm),minmax(0,1fr))] gap-2 px-2 sm:px-4 md:grid-cols-[repeat(var(--ct),minmax(0,1fr))] md:gap-3 md:px-5 xl:grid-cols-[repeat(var(--cd),minmax(0,1fr))] xl:gap-3 xl:px-6 @max-[56rem]:xl:grid-cols-3"
       >
-        {actions.map((a) => {
+        {actions.map((a, index) => {
           const cls = cn(base, deviceClass(a));
+          const style = orderStyle(a, index);
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
-          if (a.kind === 'story') return <button key={a.code} type="button" className={cls} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
-          if (a.kind === 'brag') return <button key={a.code} type="button" className={cls} onClick={() => dispatch(composerOpened(role ? { kind: 'brag', role } : { kind: 'brag' }))}>{inner(a, title)}</button>;
-          if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} onClick={() => dispatch(wishDialogToggled(true))}>{inner(a, title)}</button>;
-          return <Link key={a.code} href={a.href ?? '/'} className={cls}>{inner(a, title)}</Link>;
+          if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
+          if (a.kind === 'brag') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened(role ? { kind: 'brag', role } : { kind: 'brag' }))}>{inner(a, title)}</button>;
+          if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(wishDialogToggled(true))}>{inner(a, title)}</button>;
+          return <Link key={a.code} href={a.href ?? '/'} className={cls} style={style}>{inner(a, title)}</Link>;
         })}
       </nav>
     </div>

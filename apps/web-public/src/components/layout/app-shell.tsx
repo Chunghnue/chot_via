@@ -26,21 +26,23 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const t = useTranslations('common');
   const wide = pathname.startsWith('/pho-3d');
+  const home = pathname === '/';
   return (
     <div className="min-h-dvh">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2">{t('skipToContent')}</a>
       <Header />
       <div className={cn(
         'mx-auto grid w-full max-w-[1800px] gap-5 px-3 pb-28 pt-4 sm:px-4 md:pb-10 lg:gap-5 lg:px-4 3xl:max-w-[2200px]',
-        wide ? 'xl:grid-cols-[15.25rem_minmax(0,1fr)] 3xl:grid-cols-[17rem_minmax(0,1fr)]'
+        home ? 'lg:grid-cols-[minmax(0,1fr)_17.5rem] xl:grid-cols-[minmax(0,1fr)] 3xl:grid-cols-[minmax(0,1fr)]'
+          : wide ? 'xl:grid-cols-[15.25rem_minmax(0,1fr)] 3xl:grid-cols-[17rem_minmax(0,1fr)]'
           : 'lg:grid-cols-[minmax(0,1fr)_17.5rem] xl:grid-cols-[15.25rem_minmax(0,1fr)_18rem] 3xl:grid-cols-[17rem_minmax(0,1fr)_22rem]',
       )}>
-        <aside className="hidden xl:block">
+        <aside className={cn('hidden xl:block', home && 'xl:hidden')}>
           <div className="sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto scrollbar-none"><Suspense><SideNav /></Suspense></div>
         </aside>
         <main id="main" className="min-w-0">{children}</main>
         {wide ? null : (
-          <aside className="hidden lg:block">
+          <aside className={cn('hidden lg:block', home && 'xl:hidden')}>
             <div className="sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto scrollbar-none"><Suspense><RailSwitch /></Suspense></div>
           </aside>
         )}

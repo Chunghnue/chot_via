@@ -11,8 +11,9 @@ describe('trang chủ: bố cục do admin nhập', () => {
     expect(r.status).toBe(200);
     const { layout } = r.data;
     expect(layout.config.heroImageUrl).toBe(DEFAULT_HOME_CONFIG.heroImageUrl);
-    expect(layout.actions.map((a) => a.code)).toEqual(['story', 'brag', 'send_wish', 'get_wish', 'challenge', 'create_store']);
-    expect(layout.actions.find((a) => a.code === 'create_store')?.showTablet).toBe(false);
+    expect(layout.actions.map((a) => a.code)).toEqual(['visit_street', 'send_wish', 'get_wish', 'story', 'brag', 'challenge', 'create_store']);
+    expect(layout.actions.find((a) => a.code === 'challenge')?.showTablet).toBe(false);
+    expect(layout.actions.find((a) => a.code === 'story')?.sortDesktop).toBe(0);
     expect(layout.footerLinks.length).toBeGreaterThan(0);
     const cafe = layout.street.find((s) => s.modelKey === 'cafe');
     expect(cafe?.glb).toEqual({ high: '/3d/models/cafe.glb', lod1: '/3d/models/cafe_lod1.glb', lod2: '/3d/models/cafe_lod2.glb' });
@@ -49,7 +50,7 @@ describe('trang chủ: bố cục do admin nhập', () => {
 
   it('nút hành động: thêm, ẩn trên iPad, xuất hiện ở trang chủ, xóa', async () => {
     const a = await adminLogin();
-    const body = { code: 'thu_nghiem', label: 'Nút thử', subLabel: '', iconUrl: null, kind: 'link', href: '/bang-tin', showMobile: true, showTablet: false, showDesktop: true, sortOrder: 99, active: true };
+    const body = { code: 'thu_nghiem', label: 'Nút thử', subLabel: '', iconUrl: null, kind: 'link', href: '/bang-tin', showMobile: true, showTablet: false, showDesktop: true, sortOrder: 99, sortTablet: null, sortDesktop: null, active: true };
     const c = await post<Item>('/admin/catalog/home-actions', body, { token: a.token });
     expect(c.status).toBeLessThan(300);
     const found = (await get<{ layout: HomeLayout }>('/home')).data.layout.actions.find((x) => x.code === 'thu_nghiem');

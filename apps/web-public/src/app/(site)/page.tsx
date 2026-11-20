@@ -5,14 +5,18 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useTranslations } from 'use-intl';
 import { ActionCards, HomeHero } from '@/components/home/hero';
-import { FeedList, HomeFeedFilters, HomeSortControl } from '@/components/post/feed';
+import { ComposeBar, FeedList, HomeFeedFilters, HomeSortControl } from '@/components/post/feed';
+import { composerOpened } from '@/features/composer/composerSlice';
+import { CommunityCard, ChallengeTasks, CreateStoreCard, DeityBanner, FeaturedEventCard, MobileShortcutCards } from '@/components/home/home-extras';
 import { QuickWishCard } from '@/components/rail/quick-wish-card';
 import { ChallengeCard } from '@/components/rail/side-cards';
 import { WeeklyBoard } from '@/components/rail/weekly-board';
 import { selectFeedFilters } from '@/features/feed/feedSlice';
 import { deviceClass, track } from '@/lib/analytics';
+import { Button } from '@chot-via/ui';
+import { Pencil } from 'lucide-react';
 import { useRequireMember } from '@/lib/use-member';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 /**
  * Trang chủ theo thiết kế: Phố 3D (nút Xin vía nổi bật nhất) → 4 thẻ hành động → Bảng tin cộng đồng 2 cột.
@@ -23,8 +27,24 @@ export default function HomePage() {
   const { data: home } = useGetHomeQuery();
   const filters = useAppSelector(selectFeedFilters);
   const { isMember } = useRequireMember();
+  const dispatch = useAppDispatch();
 
   useEffect(() => { track('home_view', { member: isMember, device: deviceClass() }); }, [isMember]);
+
+  const feedSection = (
+    <section className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none" aria-labelledby="feed-title">
+      <div className="flex items-center gap-2 xl:border-b-2 xl:border-primary/20 xl:pb-0">
+        <img src="/images/logo-co.webp" alt="" aria-hidden className="size-8 shrink-0 object-contain xl:size-8" draggable={false} />
+        <h2 id="feed-title" className="whitespace-nowrap font-display text-[1.15rem] sm:text-[1.5rem] font-extrabold leading-none text-primary-strong xl:border-b-[3px] xl:border-primary xl:pb-1.5 xl:text-2xl">{t('feedTitle')}</h2>
+        <HomeSortControl variant="icon" />
+        <Button type="button" size="sm" className="ml-auto shrink-0 md:hidden" onClick={() => dispatch(composerOpened(undefined))}><Pencil className="size-4" aria-hidden />{t('extras.postNow')}</Button>
+      </div>
+      <div className="hidden xl:block"><ComposeBar /></div>
+      <HomeFeedFilters />
+      <FeedList variant="compact" query={{ type: filters.type, sort: filters.sort, pinned: 'first', ...(filters.role ? { role: filters.role } : {}) }} infinite={false} />
+      <Link href="/bang-tin" className="self-center rounded-full bg-primary-soft px-6 py-2.5 text-sm font-bold text-primary-strong">{t('seeFullFeed')} →</Link>
+    </section>
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -32,22 +52,29 @@ export default function HomePage() {
         <HomeHero home={home} />
         <ActionCards actions={home?.layout.actions ?? []} />
       </div>
-      {/* RESP-01: cột phải của desktop/iPad ngang được đưa vào luồng trang ở iPad dọc và điện thoại để chức năng không bị mất. */}
-      <div className="grid gap-4 md:grid-cols-2 lg:hidden">
+      {/* Điện thoại (ảnh thiết kế mobile): banner Xin vía Thần Tài ngay dưới hàng nút. */}
+      <div className="md:hidden"><DeityBanner /></div>
+      {/* iPad dọc: cột phải của desktop/iPad ngang được đưa vào luồng trang để chức năng không bị mất (RESP-01). */}
+      <div className="hidden gap-4 md:grid md:grid-cols-2 lg:hidden">
         <QuickWishCard />
         <ChallengeCard />
         <div className="md:col-span-2"><WeeklyBoard variant="rail" /></div>
       </div>
-      <section className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none" aria-labelledby="feed-title">
-        <div className="flex items-center gap-2 xl:border-b-2 xl:border-primary/20 xl:pb-0">
-          <img src="/images/logo-co.webp" alt="" aria-hidden className="size-9 object-contain xl:size-8" draggable={false} />
-          <h2 id="feed-title" className="font-display text-[1.5rem] font-extrabold leading-none text-primary-strong xl:border-b-[3px] xl:border-primary xl:pb-1.5 xl:text-2xl">{t('feedTitle')}</h2>
-          <HomeSortControl variant="icon" />
+      {/* Máy tính (ảnh thiết kế desktop): 3 cột dưới hero — Xin vía Thần Tài · Thử thách · Tạo cửa hàng | Bảng tin | Xếp hạng · Sự kiện · Cộng đồng. */}
+      <div className="xl:grid xl:grid-cols-[16.5rem_minmax(0,1fr)_17rem] xl:items-start xl:gap-5 3xl:grid-cols-[19rem_minmax(0,1fr)_20rem]">
+        <div className="hidden flex-col gap-4 xl:flex">
+          <DeityBanner compact />
+          <ChallengeTasks />
+          <CreateStoreCard />
         </div>
-        <HomeFeedFilters />
-        <FeedList variant="compact" query={{ type: filters.type, sort: filters.sort, pinned: 'first', ...(filters.role ? { role: filters.role } : {}) }} infinite={false} />
-        <Link href="/bang-tin" className="self-center rounded-full bg-primary-soft px-6 py-2.5 text-sm font-bold text-primary-strong">{t('seeFullFeed')} →</Link>
-      </section>
+        {feedSection}
+        <div className="hidden flex-col gap-4 xl:flex">
+          <WeeklyBoard variant="rail" />
+          <FeaturedEventCard />
+          <CommunityCard />
+        </div>
+      </div>
+      <MobileShortcutCards />
     </div>
   );
 }

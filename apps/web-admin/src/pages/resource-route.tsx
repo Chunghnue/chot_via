@@ -219,11 +219,11 @@ function HomeActionsPage() {
   const to = useTranslations('admin.resources.options');
   return <ResourcePage config={{
     title: t('nav.homeActions'), schema: HomeActionInputSchema,
-    defaults: { code: '', label: '', subLabel: '', iconUrl: null, kind: 'link', href: null, showMobile: true, showTablet: true, showDesktop: true, sortOrder: 0, active: true }, toInput: ({ id: _id, ...rest }) => rest,
+    defaults: { code: '', label: '', subLabel: '', iconUrl: null, kind: 'link', href: null, showMobile: true, showTablet: true, showDesktop: true, sortOrder: 0, sortTablet: null, sortDesktop: null, active: true }, toInput: ({ id: _id, ...rest }) => rest,
     fields: [{ name: 'code', label: tf('code'), kind: 'text' }, { name: 'label', label: tf('label'), kind: 'text' }, { name: 'subLabel', label: tf('subLabel'), kind: 'text' }, { name: 'iconUrl', label: tf('iconUrl'), kind: 'asset' },
       { name: 'kind', label: tf('action'), kind: 'select', options: options(HOME_ACTION_KINDS, (k) => to(`homeActionKind.${k}`)) }, { name: 'href', label: tf('href'), kind: 'nullableText' },
       { name: 'showMobile', label: tf('showMobile'), kind: 'switch' }, { name: 'showTablet', label: tf('showTablet'), kind: 'switch' }, { name: 'showDesktop', label: tf('showDesktop'), kind: 'switch' },
-      { name: 'sortOrder', label: tf('sortOrder'), kind: 'number' }, { name: 'active', label: tf('active'), kind: 'switch' }],
+      { name: 'sortOrder', label: tf('sortOrder'), kind: 'number' }, { name: 'sortTablet', label: tf('sortTablet'), kind: 'nullableNumber' }, { name: 'sortDesktop', label: tf('sortDesktop'), kind: 'nullableNumber' }, { name: 'active', label: tf('active'), kind: 'switch' }],
     columns: [{ header: tf('sortOrder'), cell: (i) => i.sortOrder }, { header: tf('label'), cell: (i) => <b>{i.label}</b> }, { header: tf('action'), cell: (i) => to(`homeActionKind.${i.kind}`) }, { header: tf('href'), cell: (i) => i.href ?? '—' }, { header: tf('active'), cell: (i) => <ActiveBadge active={i.active} /> }],
     useList: () => { const q = useHomeActionsListQuery(); return { data: q.data, isLoading: q.isLoading }; }, useCreate: useHomeActionsCreateMutation, useUpdate: useHomeActionsUpdateMutation, useRemove: useHomeActionsRemoveMutation,
   }} />;

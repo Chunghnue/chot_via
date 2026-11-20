@@ -53,15 +53,15 @@ export function Header() {
           <span className="hidden xl:block"><Logo markSrc="/images/logo-co.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
         </Link>
 
-        <form onSubmit={submitSearch} role="search" className="order-3 hidden w-[20%] min-w-[9rem] max-w-[35rem] shrink-0 lg:block xl:order-none xl:ml-4 xl:w-[20%] min-[1440px]:w-[23%] 2xl:ml-14 2xl:w-[27.5%]">
+        <form onSubmit={submitSearch} role="search" className="order-3 hidden w-[20%] min-w-[9rem] max-w-[35rem] shrink-0 lg:block xl:w-[22%] min-[1440px]:w-[24%]">
           <label className="relative block">
             <span className="sr-only">{tc('search')}</span>
-            <Search className="pointer-events-none absolute right-4 top-1/2 size-[1.15rem] -translate-y-1/2 text-ink xl:left-4 xl:right-auto xl:size-5" aria-hidden />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('search')} className="h-10 w-full rounded-full border border-transparent bg-search-bg py-0 pl-4 pr-11 text-sm xl:h-11 xl:pl-12 xl:pr-4 xl:text-[0.95rem] text-ellipsis text-ink outline-none placeholder:text-ink-muted focus:border-primary focus:bg-surface" />
+            <Search className="pointer-events-none absolute right-4 top-1/2 size-[1.15rem] -translate-y-1/2 text-ink" aria-hidden />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('search')} className="h-10 w-full rounded-full border border-transparent bg-search-bg py-0 pl-4 pr-11 text-sm xl:h-11 xl:text-[0.95rem] text-ellipsis text-ink outline-none placeholder:text-ink-muted focus:border-primary focus:bg-surface" />
           </label>
         </form>
 
-        <nav aria-label={t('mainMenu')} className="order-2 hidden flex-1 items-stretch justify-center gap-1 self-stretch md:flex xl:order-none xl:gap-1 2xl:gap-3">
+        <nav aria-label={t('mainMenu')} className="order-2 hidden flex-1 items-stretch justify-center gap-1 self-stretch md:flex xl:gap-1 2xl:gap-3">
           {TOP_NAV.map((item) => {
             const active = isActivePath(pathname, item.href);
             return (
@@ -83,7 +83,7 @@ export function Header() {
           })}
         </nav>
 
-        <div className="order-4 ml-auto flex items-center gap-2 md:ml-0 lg:gap-3 xl:order-none">
+        <div className="order-4 ml-auto flex items-center gap-2 md:ml-0 lg:gap-3">
           <Link href="/tim-kiem" aria-label={tc('search')} className={cn(buttonClass({ variant: 'ghost', size: 'icon' }), 'lg:hidden')}>
             <Search className="size-5" aria-hidden />
           </Link>
