@@ -269,6 +269,9 @@ importers:
       '@chot-via/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@chot-via/scene-3d':
+        specifier: workspace:*
+        version: link:../../packages/scene-3d
       '@chot-via/shared':
         specifier: workspace:*
         version: link:../../packages/shared

@@ -360,7 +360,7 @@ export default function GlbStreet(props: GlbStreetProps) {
   return (
     <div className={className} style={{ touchAction: 'none' }}>
       <Canvas
-        frameloop="demand" shadows={quality === 'high'} dpr={quality === 'low' ? [1, 1.35] : [1, 1.75]}
+        frameloop="demand" shadows={quality === 'high' ? 'percentage' : false} dpr={quality === 'low' ? [1, 1.35] : [1, 1.75]}
         camera={{ position: [0, cam.height, cam.targetZ + cam.distance], fov: cam.fov, near: 0.1, far: 220 }}
         gl={{ antialias: quality !== 'low', powerPreference: quality === 'low' ? 'low-power' : 'high-performance' }}
         onCreated={({ gl }) => { gl.toneMappingExposure = 1.2; }}
