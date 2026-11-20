@@ -35,7 +35,7 @@ export default function HomePage() {
     <section className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none" aria-labelledby="feed-title">
       <div className="flex items-center gap-2 xl:border-b-2 xl:border-primary/20 xl:pb-0">
         <img src="/images/logo-co.webp" alt="" aria-hidden className="size-8 shrink-0 object-contain xl:size-8" draggable={false} />
-        <h2 id="feed-title" className="whitespace-nowrap font-display text-[1.15rem] sm:text-[1.5rem] font-extrabold leading-none text-primary-strong xl:border-b-[3px] xl:border-primary xl:pb-1.5 xl:text-2xl">{t('feedTitle')}</h2>
+        <h2 id="feed-title" className="min-w-0 truncate font-display text-[1.05rem] sm:text-[1.5rem] font-extrabold leading-none text-primary-strong xl:border-b-[3px] xl:border-primary xl:pb-1.5 xl:text-2xl">{t('feedTitle')}</h2>
         <HomeSortControl variant="icon" />
         <Button type="button" size="sm" className="ml-auto shrink-0 md:hidden" onClick={() => dispatch(composerOpened(undefined))}><Pencil className="size-4" aria-hidden />{t('extras.postNow')}</Button>
       </div>

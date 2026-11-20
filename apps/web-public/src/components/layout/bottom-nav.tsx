@@ -19,20 +19,20 @@ export function BottomNav() {
   const dispatch = useAppDispatch();
   const item = (href: string, label: string, icon: React.ReactNode) => (
     <Link href={href} aria-current={isActivePath(pathname, href) ? 'page' : undefined}
-      className={cn('flex flex-col items-center gap-0.5 py-2 text-[0.7rem] font-semibold text-ink-muted', isActivePath(pathname, href) && 'text-primary-strong')}>
-      {icon}<span>{label}</span>
+      className={cn('flex min-w-0 flex-col items-center gap-0.5 py-2 text-[0.7rem] font-semibold text-ink-muted', isActivePath(pathname, href) && 'text-primary-strong')}>
+      {icon}<span className="max-w-full truncate">{label}</span>
     </Link>
   );
   return (
     <nav aria-label={t('mainMenu')} className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-safe backdrop-blur md:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-6 items-end">
+      <div className="mx-auto grid max-w-lg grid-cols-[repeat(6,minmax(0,1fr))] items-end">
         {item('/', t('home'), <Home className="size-6" aria-hidden />)}
         {item('/pho-3d', t('street'), <Store className="size-6" aria-hidden />)}
-        <div className="flex justify-center">
+        <div className="flex min-w-0 justify-center">
           <button type="button" onClick={() => dispatch(composerOpened(undefined))} aria-label={t('post')}
             className="-mt-6 flex flex-col items-center gap-0.5 text-[0.7rem] font-semibold text-ink-muted active:scale-95">
             <span className="flex size-14 items-center justify-center rounded-full border-4 border-surface bg-linear-to-b from-gold to-wish text-on-wish shadow-cta"><Plus className="size-8" strokeWidth={3} aria-hidden /></span>
-            <span>{t('post')}</span>
+            <span className="max-w-full truncate">{t('post')}</span>
           </button>
         </div>
         {item('/su-kien', t('eventsShort'), <CalendarDays className="size-6" aria-hidden />)}

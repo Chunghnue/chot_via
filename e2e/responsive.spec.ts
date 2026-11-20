@@ -42,9 +42,23 @@ test.describe('khung điều hướng theo kích thước (RESP-01)', () => {
 
   test('các khối cột phải vẫn có mặt ở mọi kích thước (không mất chức năng)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    await expect(shown(page, 'Xin vía nhanh')).toBeVisible();
-    await expect(shown(page, 'Thử thách tuần')).toBeVisible();
-    await expect(shown(page, 'Bảng xếp hạng (Tuần)')).toBeVisible();
+    const width = page.viewportSize()?.width ?? 0;
+    if (width < 768) {
+      // điện thoại (ảnh c): thẻ Thần Tài + 3 thẻ lối tắt thay cho cột phải
+      await expect(shown(page, 'Xin vía Thần Tài')).toBeVisible();
+      await expect(shown(page, 'Thử thách tuần')).toBeVisible();
+      await expect(shown(page, 'Bảng xếp hạng')).toBeVisible();
+      await expect(shown(page, 'Tạo cửa hàng 3D')).toBeVisible();
+    } else if (width >= 1280 && width < 2200) {
+      // máy tính (ảnh a): 3 cột — trái Thần Tài/thử thách/tạo cửa hàng, phải BXH tuần
+      await expect(shown(page, 'Xin vía Thần Tài')).toBeVisible();
+      await expect(shown(page, 'Thử thách tuần')).toBeVisible();
+      await expect(shown(page, 'Bảng xếp hạng (Tuần)')).toBeVisible();
+    } else {
+      await expect(shown(page, 'Xin vía nhanh')).toBeVisible();
+      await expect(shown(page, 'Thử thách tuần')).toBeVisible();
+      await expect(shown(page, 'Bảng xếp hạng (Tuần)')).toBeVisible();
+    }
     await page.goto('/bang-tin?type=story', { waitUntil: 'networkidle' });
     await expect(shown(page, 'Chủ đề hot')).toBeVisible();
     await expect(shown(page, 'Bình chọn vui')).toBeVisible();
