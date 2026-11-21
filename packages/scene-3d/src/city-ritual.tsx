@@ -70,8 +70,10 @@ function OwnShop({ ritual, spot, colors, alphaCover, start }: { ritual: RitualSc
 }
 
 /** Cánh cửa gỗ ở mặt tiền: rung theo tiếng gõ rồi mở ra, ánh sáng vàng tràn ra ngoài. */
-function ShopDoor({ spot, colors, start }: { spot: Spot; colors: SceneColors; start: Start }) {
-  const B = RITUAL_BEATS.invoke;
+/** Lịch của cánh cửa: mở trong [openFrom, openTo], nếu có `closeFrom/closeTo` thì đóng lại; `knocks` là các lần gõ cửa; `seconds` là lúc cả cảnh kết thúc. */
+interface DoorPlan { openFrom: number; openTo: number; closeFrom?: number; closeTo?: number; knocks: readonly number[]; seconds: number }
+
+function ShopDoor({ spot, colors, start, plan }: { spot: Spot; colors: SceneColors; start: Start; plan: DoorPlan }) {
   const s = spot.width / 7.2;
   const doorW = 1.5 * s;
   const doorH = 2.7 * s;
@@ -82,10 +84,12 @@ function ShopDoor({ spot, colors, start }: { spot: Spot; colors: SceneColors; st
   useFaceCamera(billboard, 1);
   useFrame(({ clock }) => {
     const a = ageOf(start, clock.elapsedTime);
-    if (room.current) room.current.visible = a > 0.35 && a < B.seconds - 0.4;
-    const open = smooth((a - B.open) / 1.5);
+    if (room.current) room.current.visible = a > 0.35 && a < plan.seconds - 0.4;
+    const opened = smooth((a - plan.openFrom) / (plan.openTo - plan.openFrom));
+    const closed = plan.closeFrom === undefined || plan.closeTo === undefined ? 0 : smooth((a - plan.closeFrom) / (plan.closeTo - plan.closeFrom));
+    const open = opened * (1 - closed);
     let shake = 0;
-    for (const k of B.knocks) { const d = a - k; if (d >= 0 && d < 0.2) shake += Math.sin(d * 70) * 0.05 * (1 - d / 0.2); }
+    for (const k of plan.knocks) { const d = a - k; if (d >= 0 && d < 0.2) shake += Math.sin(d * 70) * 0.05 * (1 - d / 0.2); }
     if (leaf.current) leaf.current.rotation.y = -open * 1.75 + shake;
     const m = spill.current;
     if (m) {
@@ -335,14 +339,15 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
   const bustH = 1.4;
   const bustW = bustH * aspectOf(tex);
   const baseZ = spot.z + 4.2;
-  /** Người bước ra từ hông cửa hàng (mép phải), đi tiến ra trước cửa rồi mới đi đi lại lại. */
-  const startX = spot.x + spot.width * 0.5;
-  const startZ = spot.z + 0.9;
-  const personZ = (a: number): number => MathUtils.lerp(startZ, baseZ, smooth(a / 1.8));
+  /** Người bước ra từ cửa chính của cửa hàng (cửa mở ra rồi mới thấy người), đi tiến ra trước cửa rồi mới đi đi lại lại. */
+  const startX = spot.x;
+  const startZ = spot.z + 0.4;
+  const out = (a: number): number => smooth((a - B.enter - 0.4) / 2.2);
+  const personZ = (a: number): number => MathUtils.lerp(startZ, baseZ, out(a));
   useFaceCamera(face, 1);
 
   const pace = (a: number): number => spot.x + 1.6 + 2.4 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter));
-  const personX = (a: number): number => MathUtils.lerp(startX, pace(a), smooth(a / 1.8));
+  const personX = (a: number): number => MathUtils.lerp(startX, pace(a), out(a));
   const burned = (a: number): number => clamp01((a - B.ignite) / (B.ash - B.ignite));
 
   useFrame(({ clock }) => {
@@ -351,7 +356,7 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
     const dirx = Math.cos(0.8 * (Math.min(a, B.ash) - B.enter)) >= 0 ? 1 : -1;
     const x = personX(a);
     const swing = walking ? Math.sin(a * 7) * 0.55 : 0;
-    if (root.current) { root.current.position.set(x, 0, personZ(a)); root.current.scale.setScalar(PERSON_SCALE); }
+    if (root.current) { root.current.position.set(x, 0, personZ(a)); root.current.scale.setScalar(PERSON_SCALE * (0.5 + 0.5 * out(a))); root.current.visible = a > B.enter + 0.5; }
     if (legL.current) legL.current.rotation.x = swing;
     if (legR.current) legR.current.rotation.x = -swing;
     if (face.current) {
@@ -486,12 +491,17 @@ function RitualActors({ ritual, slots, colors, alphaCover, start, onStart }: { r
       {spot.own ? <OwnShop ritual={ritual} spot={spot} colors={colors} alphaCover={alphaCover} start={start} /> : null}
       {ritual.kind === 'invoke' ? (
         <>
-          <ShopDoor spot={spot} colors={colors} start={start} />
+          <ShopDoor spot={spot} colors={colors} start={start} plan={{ openFrom: RITUAL_BEATS.invoke.open, openTo: RITUAL_BEATS.invoke.open + 1.5, knocks: RITUAL_BEATS.invoke.knocks, seconds: RITUAL_SECONDS.invoke }} />
           <InvokeDeity spot={spot} colors={colors} start={start} />
           <InvokeCoins spot={spot} start={start} alphaCover={alphaCover} />
           <ThrowFlashes spot={spot} start={start} colors={colors} />
         </>
-      ) : <BurnActors spot={spot} colors={colors} start={start} alphaCover={alphaCover} />}
+      ) : (
+        <>
+          <ShopDoor spot={spot} colors={colors} start={start} plan={{ openFrom: 0.5, openTo: 1.2, closeFrom: 2.8, closeTo: 3.5, knocks: [], seconds: RITUAL_SECONDS.burn }} />
+          <BurnActors spot={spot} colors={colors} start={start} alphaCover={alphaCover} />
+        </>
+      )}
     </>
   );
 }
