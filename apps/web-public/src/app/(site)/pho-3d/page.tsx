@@ -11,6 +11,7 @@ import { ShopLabelStrip, StreetStage } from '@/components/home/street-stage';
 import { PlaceGrid } from '@/components/place/place-list';
 import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls, StreetTiles } from '@/components/street/street-hud';
 import { useStreetLabels } from '@/components/place/use-street-labels';
+import { useRitualScene } from '@/features/ritual/use-ritual-scene';
 import { categoryChanged, placeFocused, searchChanged, selectStreet, tabChanged, type StreetTab } from '@/features/street/streetSlice';
 import { placeSheetOpened, selectWishRequest, wishRequested, loginRequested } from '@/features/ui/uiSlice';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
@@ -29,6 +30,7 @@ export default function StreetPage() {
   const street = useAppSelector(selectStreet);
   const isMember = useAppSelector(selectIsMember);
   const wishRequest = useAppSelector(selectWishRequest);
+  const ritualScene = useRitualScene();
   const labels = useStreetLabels();
   const { data: home } = useGetHomeQuery();
   const toast = useApiToast();
@@ -115,7 +117,7 @@ export default function StreetPage() {
               {home ? (
                 <CityView
                   className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={home.layout.street} fitHalfWidth={16}
-                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} burstTick={wishRequest} onSelectPlace={select} onSelectDeity={() => dispatch(wishRequested())}
+                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={select} onSelectDeity={() => dispatch(wishRequested())}
                   fallback={imageStage}
                 />
               ) : imageStage}
@@ -126,7 +128,7 @@ export default function StreetPage() {
               </div>
               <StreetBadges wishesTotal={home?.stats.wishesTotal ?? null} place={featured} />
               <StreetControls fullscreen={fullscreen} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
-              <StreetTiles onSend={() => void random()} />
+              <StreetTiles />
               <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
                 <Button variant="wish" size="lg" className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
                   <span aria-hidden>🙏</span>{tw(`title.${titleCode}`)}

@@ -38,7 +38,7 @@ function rainStyle(left: number, delay: number, x: number): CssVars {
 }
 
 /** Vía nổ: đồng xu và tia sáng bắn ra từ giữa màn hình cùng cơn mưa đồng xu; tắt hoàn toàn khi người dùng bật giảm chuyển động. */
-function Burst() {
+export function Burst() {
   return (
     <div className="pointer-events-none fixed inset-0 z-60 overflow-hidden motion-reduce:hidden" aria-hidden data-testid="wish-burst">
       <div className="absolute left-1/2 top-[42%]">

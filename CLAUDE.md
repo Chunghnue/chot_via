@@ -46,6 +46,7 @@ Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900
 10. Làm **đúng như thiết kế** (`docs/DESIGN-REFERENCE.md`); khi thiết kế mâu thuẫn quyết định đã chốt thì theo quyết định và nêu rõ chỗ lệch cho chủ dự án.
 
 ## Điều dễ nhầm
+- **Đốt vía / Thỉnh Thần Tài** (hai nút chỉ hiện khi đăng nhập, thay "Gửi vía / Nhận vía"): nghi lễ 3D cho cửa hàng của chính mình (10 / 20 giây), chưa có cửa hàng thì dẫn đi tạo; không cộng điểm, không giới hạn lượt, không lưu database (xem `docs/DECISIONS.md`).
 - Nút "Xin vía" luôn màu đỏ cam; tiêu đề nút đổi theo `useWishTitle()` (hôm nay → sáng/chiều/tối theo giờ Việt Nam) ở mọi kích thước.
 - Menu: Trang chủ · Phố 3D · Bảng tin · Bảng xếp hạng · Sự kiện (không có "Khám phá"). Thanh dưới điện thoại: Trang chủ · Bảng tin · **Xin vía** · Phố 3D · Cá nhân.
 - Bảng xếp hạng: tab Cửa hàng/Sale = số vía nhận trong tuần (thứ Hai 00:00 giờ VN); tab Cộng đồng = điểm thành viên (tối đa 100, mặc định hiện 5).

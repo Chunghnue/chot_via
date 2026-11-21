@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Phố 3D theo ảnh thiết kế (máy tính)', () => {
-  test('máy tính: joystick, nút phóng to/thu nhỏ, 7 ô lối tắt, 3 khối bên phải và hàng 5 thẻ dưới', async ({ page, viewport }) => {
+  test('máy tính: joystick, nút phóng to/thu nhỏ, ô lối tắt (khách không thấy Đốt vía / Thỉnh Thần Tài), 3 khối bên phải và hàng 5 thẻ dưới', async ({ page, viewport }) => {
     const w = viewport?.width ?? 0;
     test.skip(w < 1280, 'bố cục này chỉ áp dụng từ 1280px');
     await page.goto('/pho-3d', { waitUntil: 'networkidle' });
     await expect(page.getByRole('group', { name: 'Điều khiển góc nhìn' })).toBeVisible();
     for (const name of ['Phóng to', 'Thu nhỏ', 'Toàn màn hình']) await expect(page.getByRole('button', { name })).toBeVisible();
-    for (const name of ['Kể khổ', 'Khoe doanh thu', 'Gửi vía', 'Nhận vía']) await expect(page.getByRole('button', { name }).first()).toBeVisible();
+    for (const name of ['Kể khổ', 'Khoe doanh thu']) await expect(page.getByRole('button', { name }).first()).toBeVisible();
     for (const name of ['Tạo cửa hàng 3D', 'Bảng xếp hạng', 'Thử thách']) await expect(page.getByRole('link', { name }).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Thần Tài trao vía!' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Ghé phố hôm nay' })).toBeVisible();

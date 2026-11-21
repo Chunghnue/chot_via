@@ -18,7 +18,7 @@ export type PlaceStatus = (typeof PLACE_STATUSES)[number];
 export const SCENE_MODEL_KEYS = ['cafe', 'fashion', 'minimart', 'restaurant', 'pharmacy', 'retail', 'sale_office', 'generic'] as const;
 export type SceneModelKey = (typeof SCENE_MODEL_KEYS)[number];
 
-export const HOME_ACTION_KINDS = ['wish', 'story', 'brag', 'link'] as const;
+export const HOME_ACTION_KINDS = ['wish', 'story', 'brag', 'link', 'burn', 'invoke'] as const;
 export type HomeActionKind = (typeof HOME_ACTION_KINDS)[number];
 
 export const POST_TYPES = ['story', 'achievement', 'wish_share'] as const;

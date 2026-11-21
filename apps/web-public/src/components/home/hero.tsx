@@ -9,10 +9,12 @@ import { useCallback, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { useStreetLabels } from '@/components/place/use-street-labels';
 import { composerOpened } from '@/features/composer/composerSlice';
+import { useRitual } from '@/features/ritual/use-ritual';
+import { useRitualScene } from '@/features/ritual/use-ritual-scene';
 import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
-import { useCurrentUser } from '@/lib/use-member';
+import { useCurrentUser, useRequireMember } from '@/lib/use-member';
 
 /** Tỉ lệ ảnh phố thiết kế (pho-3d-hero.png): vùng bấm tính theo % khung ảnh nên luôn khớp dù khung hero bị cắt ở các cỡ màn khác nhau. */
 const HERO_IMAGE_RATIO = 1672 / 941;
@@ -43,6 +45,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   const { titleCode } = useWishTitle();
   const capability = useSceneCapability();
   const wishRequest = useAppSelector(selectWishRequest);
+  const ritualScene = useRitualScene();
   const [command, setCommand] = useState<CameraCommand | null>(null);
   const send = useCallback((kind: CameraCommandKind): void => setCommand((c) => ({ id: (c?.id ?? 0) + 1, kind })), []);
   const config = home?.layout.config ?? DEFAULT_HOME_CONFIG;
@@ -67,7 +70,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   return (
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
-        <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
+        <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
           <h1 className="font-display text-[clamp(1.1rem,5.6cqw,5.2rem)] font-extrabold leading-none text-title-light md:text-title md:text-[clamp(1.9rem,5.6cqw,5.2rem)]">{config.heroTitle}</h1>
           <p className="rounded-full border-2 border-surface bg-gold px-[1.2cqw] py-[0.2cqw] text-[clamp(0.55rem,1.65cqw,1.4rem)] font-bold text-on-gold shadow-card md:border-0 md:px-[1.6cqw] md:py-[0.2cqw] md:text-[clamp(0.7rem,1.7cqw,1.4rem)]">{config.heroSubtitle}</p>
@@ -143,11 +146,15 @@ function deviceClass(a: HomeActionDto): string {
  * Hàng nút hành động dưới hero (Kể khổ · Khoe doanh thu / Deal · Gửi vía · Nhận vía · Thử thách · Tạo cửa hàng 3D): nội dung và thiết bị hiển thị do admin cấu hình.
  * Số cột bằng số nút hiển thị trên từng loại thiết bị; khi cột giữa của máy tính hẹp (< 56rem) thì xuống 3 cột × 2 hàng để chữ không bị bóp.
  */
-export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) {
+export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[] }) {
   const t = useTranslations('home');
   const dispatch = useAppDispatch();
   const user = useCurrentUser();
+  const { isMember } = useRequireMember();
+  const { request } = useRitual();
   const role = user?.memberRole ?? null;
+  // Đốt vía và Thỉnh Thần Tài chỉ hiện khi đã đăng nhập (làm cho cửa hàng của chính mình).
+  const actions = all.filter((a) => isMember || (a.kind !== 'burn' && a.kind !== 'invoke'));
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
   const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4 md:max-xl:gap-1.5 md:max-xl:rounded-3xl md:max-xl:p-1.5 md:max-xl:pr-2';
@@ -175,6 +182,7 @@ export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) 
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
           if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
           if (a.kind === 'brag') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened(role ? { kind: 'brag', role } : { kind: 'brag' }))}>{inner(a, title)}</button>;
+          if (a.kind === 'burn' || a.kind === 'invoke') return <button key={a.code} type="button" className={cls} style={style} data-testid={`action-${a.kind}`} onClick={() => void request(a.kind === 'burn' ? 'burn' : 'invoke')}>{inner(a, title)}</button>;
           if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(wishRequested())}>{inner(a, title)}</button>;
           return <Link key={a.code} href={a.href ?? '/'} className={cls} style={style}>{inner(a, title)}</Link>;
         })}

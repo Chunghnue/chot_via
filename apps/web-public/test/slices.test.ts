@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { composerClosed, composerOpened, composerSlice, draftChanged, kindChosen, stepChanged } from '../src/features/composer/composerSlice';
 import { feedSlice, feedSortChanged, feedTypeChanged } from '../src/features/feed/feedSlice';
-import { loginRequested, uiSlice, wishRequested } from '../src/features/ui/uiSlice';
+import { loginRequested, ritualAsked, ritualEnded, ritualOfferClosed, ritualOffered, ritualPlaying, ritualStarted, uiSlice, wishRequested } from '../src/features/ui/uiSlice';
 import { currentCleared, wishRecorded, wishSlice, wishSynced, type WishEntry } from '../src/features/wish/wishSlice';
 
 const entry = (at: string, titleCode: WishEntry['titleCode'] = 'today', offline = false): WishEntry => ({ at, titleCode, templateId: 't1', offline });
@@ -95,6 +95,38 @@ describe('feed / ui slice', () => {
     expect(s.wishRequest).toBe(1);
     s = uiSlice.reducer(s, { type: wishRequested.type, payload: 13_001 });
     expect(s.wishRequest).toBe(2);
+  });
+
+  it('nghi lễ: chưa có cửa hàng thì nhớ việc đang chờ, tạo xong hiện hộp mời, bắt đầu thì dọn hộp và chạy một lượt', () => {
+    const target = { placeId: 'p1', title: 'Quán Cafe', modelKey: 'cafe' } as const;
+    let s = uiSlice.reducer(undefined, ritualAsked('burn'));
+    expect(s.ritualPending).toBe('burn');
+    s = uiSlice.reducer(s, ritualOffered(target));
+    expect(s.ritualOffer).toEqual(target);
+    s = uiSlice.reducer(s, ritualStarted({ kind: 'burn', ...target }));
+    expect(s.ritual).toMatchObject({ kind: 'burn', placeId: 'p1', tick: 1, startedAt: null });
+    expect(s.ritualOffer).toBeNull();
+    expect(s.ritualPending).toBeNull();
+    // đang chạy dở thì bấm tiếp bị bỏ qua
+    expect(uiSlice.reducer(s, ritualStarted({ kind: 'invoke', ...target })).ritual?.kind).toBe('burn');
+    // cảnh báo bắt đầu: chỉ nhận đúng lượt và chỉ một lần
+    s = uiSlice.reducer(s, { type: ritualPlaying.type, payload: { tick: 99, at: 5 } });
+    expect(s.ritual?.startedAt).toBeNull();
+    s = uiSlice.reducer(s, { type: ritualPlaying.type, payload: { tick: 1, at: 5 } });
+    s = uiSlice.reducer(s, { type: ritualPlaying.type, payload: { tick: 1, at: 9 } });
+    expect(s.ritual?.startedAt).toBe(5);
+    // hết giờ: chạy lại được, không giới hạn số lần, tick tăng
+    s = uiSlice.reducer(s, ritualEnded());
+    s = uiSlice.reducer(s, ritualStarted({ kind: 'invoke', ...target }));
+    expect(s.ritual).toMatchObject({ kind: 'invoke', tick: 2 });
+  });
+
+  it('nghi lễ: đóng hộp mời thì bỏ luôn việc đang chờ', () => {
+    let s = uiSlice.reducer(undefined, ritualAsked('invoke'));
+    s = uiSlice.reducer(s, ritualOffered({ placeId: 'p1', title: 'Quán', modelKey: 'cafe' }));
+    s = uiSlice.reducer(s, ritualOfferClosed());
+    expect(s.ritualOffer).toBeNull();
+    expect(s.ritualPending).toBeNull();
   });
 
   it('yêu cầu đăng nhập theo hành động', () => {

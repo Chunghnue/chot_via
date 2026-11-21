@@ -6,3 +6,4 @@ export { default as ShowcaseScene, type ShowcaseSceneProps } from './showcase-sc
 export { GlbStreetView, playChime, type GlbStreetViewProps } from './glb-street-view';
 export type { GlbStreetLabels, CameraCommand, CameraCommandKind } from './glb-street';
 export { CityView, type CityViewProps } from './city-view';
+export { RITUAL_BEATS, RITUAL_SECONDS, type RitualKind, type RitualScene } from './ritual';

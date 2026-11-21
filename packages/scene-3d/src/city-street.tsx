@@ -3,14 +3,17 @@ import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { Suspense, useEffect, useMemo, useRef, useState, type ComponentRef, type ReactNode, type RefObject } from 'react';
 import {
   AdditiveBlending, BackSide, CanvasTexture, Color, DoubleSide, MathUtils, MirroredRepeatWrapping, SRGBColorSpace, TOUCH,
-  Vector3, type Group, type Points, type Texture,
+  type Group, type Points,
 } from 'three';
 import type { HomeConfig, StreetSlotDto } from '@chot-via/shared';
 import { SHOP_IMAGES } from '@chot-via/ui';
+import { aspectOf, glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
+import { RitualStage, ritualSpot } from './city-ritual';
 import { CITY_DECOR, CITY_GLB_OVERRIDES, CITY_IMAGES, CITY_LAMPS, SHOP_WIDTH, spreadShopX, type DecorItem } from './city-assets';
 import { useSceneColors, type SceneColors } from './colors';
 import { Model, type CameraCommand, type GlbQuality } from './glb-street';
 import { Label } from './label';
+import type { RitualScene } from './ritual';
 
 type ControlsRef = ComponentRef<typeof OrbitControls>;
 
@@ -29,6 +32,10 @@ export interface CityStreetProps {
   autoRotate: boolean;
   /** Tăng giá trị để Thần Tài "nổ vía": đồng xu bắn tung ra từ Thần Tài và Thần Tài nhún lên. */
   burstTick?: number | undefined;
+  /** Nghi lễ đang chạy (Thỉnh Thần Tài / Đốt vía) ở cửa hàng của người dùng; null/bỏ trống = không có. */
+  ritual?: RitualScene | null | undefined;
+  /** Gọi một lần khi cảnh nghi lễ thực sự bắt đầu chạy (sau khi tải xong hình), kèm `tick` của nghi lễ. */
+  onRitualStart?: ((tick: number) => void) | undefined;
   /** Nửa bề ngang (mét) luôn phải thấy được; bỏ trống thì tự chọn theo tỉ lệ khung (khung hẹp chỉ cần thấy phần giữa). */
   fitHalfWidth?: number | undefined;
   selectedPlaceId?: string | null | undefined;
@@ -44,104 +51,6 @@ const RAD = Math.PI / 180;
 const FIT_HALF_WIDTH_NARROW = 9.5;
 const FIT_HALF_WIDTH_WIDE = 15;
 const POSE_SECONDS = 6;
-
-/* ---------- Texture dùng chung ---------- */
-
-let glowCache: CanvasTexture | null = null;
-/** Vệt sáng/đốm mềm hình tròn (chỉ là mặt nạ alpha, màu do vật liệu quyết định). */
-function glowTexture(): CanvasTexture {
-  if (glowCache) return glowCache;
-  const cv = document.createElement('canvas');
-  cv.width = 128; cv.height = 128;
-  const g = cv.getContext('2d');
-  if (g) {
-    const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grad.addColorStop(0, 'rgba(255,255,255,1)');
-    grad.addColorStop(0.35, 'rgba(255,255,255,0.45)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = grad;
-    g.fillRect(0, 0, 128, 128);
-  }
-  glowCache = new CanvasTexture(cv);
-  return glowCache;
-}
-
-function useSprite(src: string): Texture {
-  const tex = useTexture(src);
-  useMemo(() => { tex.colorSpace = SRGBColorSpace; tex.anisotropy = 8; }, [tex]);
-  return tex;
-}
-
-function aspectOf(tex: Texture): number {
-  const img: unknown = tex.image;
-  if (img instanceof HTMLImageElement && img.naturalHeight > 0) return img.naturalWidth / img.naturalHeight;
-  if (typeof ImageBitmap !== 'undefined' && img instanceof ImageBitmap && img.height > 0) return img.width / img.height;
-  return 1;
-}
-
-const forward = new Vector3();
-
-/**
- * Hình đứng xoay quanh trục dọc để hướng về camera (một phần `face` ∈ 0..1).
- * `screen = true` thì song song với màn hình (không méo khi ở lệch tâm), dùng cho bảng chữ cần thẳng.
- */
-function useFaceCamera(ref: RefObject<Group | null>, face: number, screen = false): void {
-  useFrame(({ camera }) => {
-    const g = ref.current;
-    if (!g || face === 0) return;
-    if (screen) {
-      camera.getWorldDirection(forward);
-      g.rotation.y = Math.atan2(-forward.x, -forward.z) * face;
-      return;
-    }
-    const wp = g.parent?.position;
-    const px = wp ? wp.x : 0;
-    const pz = wp ? wp.z : 0;
-    g.rotation.y = Math.atan2(camera.position.x - px, camera.position.z - pz) * face;
-  });
-}
-
-/* ---------- Thành phần cảnh ---------- */
-
-function Shadow({ size, opacity, color }: { size: number; opacity: number; color: string }) {
-  return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0.2]} scale={[1, 0.5, 1]} renderOrder={1}>
-      <planeGeometry args={[size, size]} />
-      <meshBasicMaterial map={glowTexture()} color={color} transparent opacity={opacity} depthWrite={false} toneMapped={false} />
-    </mesh>
-  );
-}
-
-interface SpriteProps {
-  src: string; width: number; x: number; z: number; y?: number; face?: number; flip?: boolean; shadow?: number; shadowColor: string;
-  alphaCover: boolean; opacity?: number; children?: ReactNode;
-  onClick?: (() => void) | undefined; onHover?: ((over: boolean) => void) | undefined;
-}
-
-/** Một món đồ (cây, ghế, cửa hàng…) là ảnh tách nền đặt đứng trên mặt đường. */
-function Sprite({ src, width, x, z, y = 0, face = 1, flip = false, shadow = 0, shadowColor, alphaCover, opacity = 1, children, onClick, onHover }: SpriteProps) {
-  const tex = useSprite(src);
-  const height = width / aspectOf(tex);
-  const ref = useRef<Group>(null);
-  useFaceCamera(ref, face);
-  return (
-    <group position={[x, y, z]}>
-      {shadow > 0 ? <Shadow size={width * 1.1} opacity={shadow} color={shadowColor} /> : null}
-      <group ref={ref}>
-        <mesh
-          position={[0, height / 2, 0]} scale={[flip ? -1 : 1, 1, 1]}
-          onClick={onClick ? (e: ThreeEvent<MouseEvent>) => { if (e.delta > 8) return; e.stopPropagation(); onClick(); } : undefined}
-          onPointerOver={onHover ? (e) => { e.stopPropagation(); onHover(true); } : undefined}
-          onPointerOut={onHover ? () => { onHover(false); } : undefined}
-        >
-          <planeGeometry args={[width, height]} />
-          <meshBasicMaterial map={tex} transparent={opacity < 1} opacity={opacity} alphaTest={0.4} alphaToCoverage={alphaCover} side={DoubleSide} toneMapped={false} />
-        </mesh>
-        {children}
-      </group>
-    </group>
-  );
-}
 
 /** Nền trời và thành phố xa bọc kín một vòng 360°: ảnh panorama lát đối xứng hai lần quanh vòng nên không lộ mép. */
 function Backdrop() {
@@ -224,7 +133,7 @@ function CityShop({ slot, selected, enabled, colors, alphaCover, onSelect }: Sho
   );
 }
 
-function CityDeity({ colors, reducedMotion, burstTick, onSelect }: { colors: SceneColors; reducedMotion: boolean; burstTick: number; onSelect: () => void }) {
+function CityDeity({ colors, reducedMotion, burstTick, away, onSelect }: { colors: SceneColors; reducedMotion: boolean; burstTick: number; away: boolean; onSelect: () => void }) {
   const textures = useTexture([...CITY_IMAGES.deityPoses]);
   useMemo(() => { textures.forEach((t) => { t.colorSpace = SRGBColorSpace; t.anisotropy = 8; }); }, [textures]);
   const float = useRef<Group>(null);
@@ -261,7 +170,7 @@ function CityDeity({ colors, reducedMotion, burstTick, onSelect }: { colors: Sce
       <mesh position={[0, 0.17, 0]}><cylinderGeometry args={[4.5, 4.8, 0.34, 48]} /><meshStandardMaterial color={colors.deityGold} metalness={0.5} roughness={0.35} emissive={colors.deityGold} emissiveIntensity={0.25} /></mesh>
       <mesh position={[0, 0.5, 0]}><cylinderGeometry args={[3.8, 4.1, 0.32, 48]} /><meshStandardMaterial color={colors.deityRobe} roughness={0.5} emissive={colors.deityRobe} emissiveIntensity={0.15} /></mesh>
       <mesh position={[0, 0.82, 0]}><cylinderGeometry args={[3.1, 3.4, 0.32, 48]} /><meshStandardMaterial color={colors.deityGold} metalness={0.5} roughness={0.35} emissive={colors.deityGold} emissiveIntensity={0.25} /></mesh>
-      <group ref={float} position={[0, baseY, 0]}>
+      <group ref={float} position={[0, baseY, 0]} visible={!away}>
         {glb ? (
           <group onClick={hit.onClick} onPointerOver={hit.onPointerOver} onPointerOut={hit.onPointerOut}>
             <Suspense fallback={null}><Model url={glb.url} scale={glb.scale} /></Suspense>
@@ -523,7 +432,7 @@ function fitDistance(cam: CityStreetProps['config']['camera'], aspect: number, f
 }
 
 /** Đặt camera theo khung hình, xử lý nút điều khiển (đi tới/lui, xoay, phóng to/thu nhỏ) và bay tới cửa hàng đang chọn. */
-function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }: { config: CityStreetProps['config']['camera']; fitHalfWidth: number | undefined; resetTick: number; goal: { x: number; z: number } | null; controls: RefObject<ControlsRef | null>; command: CameraCommand | null }) {
+function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }: { config: CityStreetProps['config']['camera']; fitHalfWidth: number | undefined; resetTick: number; goal: { x: number; z: number; ratio: number } | null; controls: RefObject<ControlsRef | null>; command: CameraCommand | null }) {
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
   const size = useThree((s) => s.size);
@@ -560,10 +469,16 @@ function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }:
     c.update();
     invalidate();
   }, [command, camera, controls, invalidate]);
+  const shifted = useRef(false);
   useFrame(() => {
     const c = controls.current;
-    if (!c || !goal) return;
-    c.target.x = MathUtils.lerp(c.target.x, goal.x * 0.3, 0.06);
+    if (!c) return;
+    if (goal) { shifted.current = goal.ratio > 0.3; c.target.x = MathUtils.lerp(c.target.x, goal.x * goal.ratio, 0.06); return; }
+    // Nghi lễ vừa xong: nhẹ nhàng đưa camera về giữa phố.
+    if (shifted.current) {
+      c.target.x = MathUtils.lerp(c.target.x, 0, 0.08);
+      if (Math.abs(c.target.x) < 0.02) { c.target.x = 0; shifted.current = false; }
+    }
   });
   return null;
 }
@@ -589,10 +504,14 @@ function Scene({ props }: { props: CityStreetProps }): ReactNode {
   const cam = config.camera;
   const alphaCover = quality !== 'low';
   const sky = useMemo(() => new Color(colors.sky), [colors.sky]);
+  const ritual = props.ritual ?? null;
+  const ritualOn = ritual !== null && !reducedMotion;
   const goal = useMemo(() => {
+    // Đang có nghi lễ: camera nghiêng về phía cửa hàng của người dùng để thấy rõ cả Thần Tài lẫn cửa hàng.
+    if (ritual) { const spot = ritualSpot(ritual, slots); return { x: spot.x, z: spot.z, ratio: 0.6 }; }
     const s = slots.find((x) => x.placeId !== null && x.placeId === selectedPlaceId);
-    return s ? { x: s.position.x, z: s.position.z } : null;
-  }, [slots, selectedPlaceId]);
+    return s ? { x: s.position.x, z: s.position.z, ratio: 0.3 } : null;
+  }, [slots, selectedPlaceId, ritual]);
   const walkers = quality === 'low' ? Math.min(config.pedestrians, 6) : config.pedestrians;
   const decor: readonly DecorItem[] = quality === 'low' ? CITY_DECOR.filter((_, i) => i % 3 !== 1) : CITY_DECOR;
   return (
@@ -617,8 +536,9 @@ function Scene({ props }: { props: CityStreetProps }): ReactNode {
           onSelect={onSelectPlace}
         />
       ))}
-      <Suspense fallback={null}><CityDeity colors={colors} reducedMotion={reducedMotion} burstTick={props.burstTick ?? 0} onSelect={onSelectDeity} />
+      <Suspense fallback={null}><CityDeity colors={colors} reducedMotion={reducedMotion} burstTick={props.burstTick ?? 0} away={ritualOn && props.ritual?.kind === 'invoke'} onSelect={onSelectDeity} />
         <CoinShower tick={props.burstTick ?? 0} reducedMotion={reducedMotion} alphaCover={alphaCover} /></Suspense>
+      {ritualOn && ritual ? <RitualStage key={ritual.tick} ritual={ritual} slots={slots} colors={colors} alphaCover={alphaCover} onStart={props.onRitualStart} /> : null}
       <CitySign lines={config.signLines} colors={colors} />
       {config.sparkles ? (
         <Suspense fallback={null}>{Array.from({ length: quality === 'low' ? 4 : 8 }, (_, i) => <FloatingCoin key={i} index={i} reducedMotion={reducedMotion} alphaCover={alphaCover} />)}</Suspense>

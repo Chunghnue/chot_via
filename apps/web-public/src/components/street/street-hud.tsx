@@ -10,6 +10,7 @@ import { useTranslations } from 'use-intl';
 import { ChallengeTasks, FeaturedEventCard } from '@/components/home/home-extras';
 import { WeeklyBoard } from '@/components/rail/weekly-board';
 import { composerOpened } from '@/features/composer/composerSlice';
+import { useRitual } from '@/features/ritual/use-ritual';
 import { loginRequested, wishRequested } from '@/features/ui/uiSlice';
 import { useMounted } from '@/lib/use-mounted';
 import { useCurrentUser, useRequireMember } from '@/lib/use-member';
@@ -57,18 +58,20 @@ export function StreetControls({ fullscreen, onFullscreen, onCommand }: { fullsc
   );
 }
 
-/** Hàng 7 ô lối tắt nằm đáy cảnh phố (máy tính): Kể khổ · Khoe doanh thu · Gửi vía · Nhận vía · Tạo cửa hàng 3D · BXH · Thử thách. */
-export function StreetTiles({ onSend }: { onSend: () => void }) {
+/** Hàng ô lối tắt nằm đáy cảnh phố (máy tính): Kể khổ · Khoe doanh thu · Đốt vía · Thỉnh Thần Tài (hai ô này chỉ hiện khi đã đăng nhập) · Tạo cửa hàng 3D · BXH · Thử thách. */
+export function StreetTiles() {
   const t = useTranslations('street.hud.tiles');
   const dispatch = useAppDispatch();
+  const { isMember } = useRequireMember();
+  const { request } = useRitual();
   const tile = 'flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl bg-surface/95 px-2 py-2 text-center text-sm font-bold text-ink shadow-card transition hover:-translate-y-0.5 active:scale-95';
   const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 object-contain" draggable={false} />;
   return (
     <div className="absolute inset-x-4 bottom-3 z-10 hidden gap-2 xl:flex">
       <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{img('/images/ic-laugh.webp')}<span className="truncate">{t('story')}</span></button>
       <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>{img('/images/ic-trophy.webp')}<span className="truncate">{t('brag')}</span></button>
-      <button type="button" className={tile} onClick={onSend}>{img('/images/ic-gift.webp')}<span className="truncate">{t('send')}</span></button>
-      <button type="button" className={tile} onClick={() => dispatch(wishRequested())}>{img('/images/ic-pray.webp')}<span className="truncate">{t('receive')}</span></button>
+      {isMember ? <button type="button" className={tile} onClick={() => void request('burn')}>{img('/images/ic-fire.webp')}<span className="truncate">{t('send')}</span></button> : null}
+      {isMember ? <button type="button" className={tile} onClick={() => void request('invoke')}>{img('/images/ic-pray.webp')}<span className="truncate">{t('receive')}</span></button> : null}
       <Link href="/tao-diem" className={tile}>{img('/images/ic-home.webp')}<span className="truncate">{t('create')}</span></Link>
       <Link href="/bang-xep-hang" className={tile}>{img('/images/ic-crown.webp')}<span className="truncate">{t('rank')}</span></Link>
       <Link href="/su-kien" className={tile}>{img('/images/ic-medal-1.webp')}<span className="truncate">{t('challenge')}</span></Link>

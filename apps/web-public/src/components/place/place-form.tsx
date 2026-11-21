@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation';
 import type { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'use-intl';
+import { ritualOffered } from '@/features/ui/uiSlice';
 import { useApiToast } from '@/lib/use-api-toast';
+import { useAppDispatch } from '@/store/hooks';
 
 type PlaceFormInput = z.input<typeof PlaceInputSchema>;
 
@@ -18,6 +20,7 @@ export function PlaceForm({ place }: { place?: PlaceDetail }) {
   const tk = useTranslations('place.kind');
   const validation = useValidationMessage();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const toastApi = useApiToast();
   const { data: catalog } = useGetCatalogQuery();
   const [create, { isLoading: creating }] = useCreatePlaceMutation();
@@ -44,7 +47,7 @@ export function PlaceForm({ place }: { place?: PlaceDetail }) {
     const body: PlaceInput = { ...values, tagline: values.tagline?.trim() || null, description: values.description?.trim() || null, province: values.province?.trim() || null };
     try {
       if (place) { await update({ id: place.id, body }).unwrap(); toast.success(t('saved')); }
-      else { const created = await create(body).unwrap(); toast.success(t('created')); router.push(`/diem/${created.slug}/cai-dat`); }
+      else { const created = await create(body).unwrap(); toast.success(t('created')); dispatch(ritualOffered({ placeId: created.id, title: created.title, modelKey: created.modelKey })); router.push(`/diem/${created.slug}/cai-dat`); }
     } catch (e) { toastApi.error(e); }
   });
 

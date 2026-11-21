@@ -320,7 +320,9 @@
         "wish": "Mở hộp Xin vía",
         "story": "Mở khung Kể khổ",
         "brag": "Mở khung Khoe doanh thu / Deal",
-        "link": "Mở đường dẫn"
+        "link": "Mở đường dẫn",
+        "burn": "Đốt vía (cần đăng nhập, chạy cảnh ở cửa hàng của bạn)",
+        "invoke": "Thỉnh Thần Tài (cần đăng nhập, chạy cảnh ở cửa hàng của bạn)"
       }
     },
     "pending": "Chờ duyệt bảng điểm chính thức từ chủ dự án — chưa có giá trị mặc định.",

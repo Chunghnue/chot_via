@@ -2,18 +2,20 @@ import { expect, test } from '@playwright/test';
 import { expectNoHorizontalScroll } from './support';
 
 test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, chân trang', () => {
-  test('hàng nút hành động theo 3 ảnh: điện thoại 6 nút, iPad 5 nút, máy tính 6 nút', async ({ page, viewport }) => {
+  test('hàng nút hành động của khách: Đốt vía và Thỉnh Thần Tài chỉ hiện khi đăng nhập nên còn 4 nút ở mọi cỡ màn', async ({ page, viewport }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
     const width = viewport?.width ?? 0;
     const ipad = width >= 768 && width < 1280;
     const buttons = row.locator('a:visible, button:visible');
-    await expect(buttons).toHaveCount(ipad ? 5 : 6);
+    await expect(buttons).toHaveCount(4);
+    await expect(page.getByTestId('action-burn')).toHaveCount(0);
+    await expect(page.getByTestId('action-invoke')).toHaveCount(0);
     const names = width < 768
-      ? [/Ghé phố/, /Gửi vía/, /Nhận vía/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
+      ? [/Ghé phố/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
       : ipad
-        ? [/Ghé phố 3D/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Gửi vía/, /Tạo cửa hàng 3D/]
-        : [/Kể khổ/, /Khoe doanh thu|Khoe deal/, /Gửi vía/, /Nhận vía/, /Thử thách/, /Tạo cửa hàng 3D/];
+        ? [/Ghé phố 3D/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
+        : [/Kể khổ/, /Khoe doanh thu|Khoe deal/, /Thử thách/, /Tạo cửa hàng 3D/];
     for (const name of names) await expect(row.getByText(name).first()).toBeVisible();
     await expectNoHorizontalScroll(page);
   });

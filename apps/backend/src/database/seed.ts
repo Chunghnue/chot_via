@@ -1,14 +1,19 @@
-import { count } from 'drizzle-orm';
+import { and, count, eq } from 'drizzle-orm';
 import { DEFAULT_SETTINGS, normalizeVnPhone, vnWeekStart, type AnimationKey, type IconKey, type MemberRole, type PlaceKind, type SceneModelKey, type TimeBucket } from '@chot-via/shared';
 import { env } from '../config/env';
 import { createDb } from './database';
 import {
-  appSettings, badges, challenges, levels, missions, placeCategories, places, sceneTemplates, users, wishStickers, wishTemplates, wishTypes,
+  appSettings, badges, challenges, homeActions, levels, missions, placeCategories, places, sceneTemplates, users, wishStickers, wishTemplates, wishTypes,
 } from './schema';
 
 const { db, close } = createDb();
 
 /** Dữ liệu khởi tạo: danh mục, mẫu lời chúc, cửa hàng DEMO do admin tạo (không có doanh thu/giao dịch thật). */
+// Đổi hai nút hành động cũ "Gửi vía" / "Nhận vía" ở trang chủ thành "Đốt vía" / "Thỉnh Thần Tài" (chỉ sửa dữ liệu, không đổi cấu trúc bảng; chạy lại nhiều lần vẫn an toàn,
+// và không đụng tới nút nào admin đã tự đổi sang kiểu khác).
+await db.update(homeActions).set({ label: 'Đốt vía', subLabel: 'Xua vía dữ, đón lộc', iconUrl: '/images/ic-fire.webp', kind: 'burn', href: null }).where(and(eq(homeActions.code, 'send_wish'), eq(homeActions.kind, 'link')));
+await db.update(homeActions).set({ label: 'Thỉnh Thần Tài', subLabel: 'Thần Tài đến cửa hàng', kind: 'invoke', href: null }).where(and(eq(homeActions.code, 'get_wish'), eq(homeActions.kind, 'wish')));
+
 const [existing] = await db.select({ n: count() }).from(wishTypes);
 if ((existing?.n ?? 0) > 0) {
   console.log('Đã có dữ liệu khởi tạo, bỏ qua.');

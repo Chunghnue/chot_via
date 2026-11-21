@@ -42,5 +42,52 @@
   "bullet1": "Đông khách – Nổ đơn",
   "bullet2": "Chốt deal – Tăng doanh thu",
   "bullet3": "Công việc hanh thông – Thu nhập tốt",
-  "received2": "Đã nhận vía!"
+  "received2": "Đã nhận vía!",
+  "ritual": {
+    "burn": "Đốt vía",
+    "invoke": "Thỉnh Thần Tài",
+    "needStore": "Bạn cần có cửa hàng 3D trước. Tạo xong là bắt đầu ngay!",
+    "readyTitle": "Cửa hàng của bạn đã sẵn sàng!",
+    "readyHint": "Chọn một nghi lễ để mang vía may mắn đến {place}.",
+    "invokeCta": "Thỉnh Thần Tài đến cửa hàng",
+    "burnCta": "Đốt vía cho cửa hàng",
+    "later": "Để sau",
+    "closeAria": "Đóng cửa sổ nghi lễ",
+    "card": {
+      "invoke": "Thần Tài đã ghé {place}!",
+      "burn": "Đã đốt vía cho {place}!"
+    },
+    "caption": {
+      "invoke": {
+        "start": "Thần Tài rời bệ, nhảy xuống phố…",
+        "run": "Thần Tài đang chạy tới cửa hàng của bạn!",
+        "knock": "Cốc cốc cốc… Thần Tài gõ cửa!",
+        "open": "Cửa mở rồi, ánh sáng vàng tràn ra!",
+        "greet": "Thần Tài chúc mừng cửa hàng đại cát đại lợi!",
+        "throw": "Vàng văng tung toé khắp cửa hàng!",
+        "back": "Thần Tài quay về bệ, lộc ở lại với bạn."
+      },
+      "burn": {
+        "start": "Có người mang giấy đốt vía tới trước cửa hàng…",
+        "burning": "Lửa và khói đang xua vía dữ, vía xui…",
+        "ash": "Giấy cháy hết, vía dữ đã tan, lộc vào cửa!"
+      }
+    },
+    "blessings": {
+      "invoke": {
+        "n0": "Thần Tài gõ cửa, vàng vào nhà: {place} buôn may bán đắt, khách đông như hội!",
+        "n1": "Cửa mở đón lộc: {place} chốt đơn thần tốc, doanh thu bứt phá!",
+        "n2": "Tiền vào như nước, khách đến như mây: chúc {place} tài lộc đầy kho!",
+        "n3": "Thần Tài ghé thăm {place}: năm nay làm đâu thắng đó, deal nào cũng chốt!",
+        "n4": "Vàng rơi đầy cửa: {place} đại cát đại lợi, vạn sự hanh thông!"
+      },
+      "burn": {
+        "n0": "Lửa đốt vía dữ, khói xua điều xui: {place} buôn bán thuận lợi, may mắn bền lâu!",
+        "n1": "Giấy cháy, vía xấu tan: {place} sạch xui, đón lộc, khách đông!",
+        "n2": "Khói bay xua vía dữ, vía tốt vào cửa: chúc {place} đông khách, nổ đơn!",
+        "n3": "Đốt vía xong là hết hạn xui: {place} chốt deal đều tay, doanh thu tăng đều!",
+        "n4": "Lửa hồng đón may: {place} hết điều xui, mở hàng là có lộc!"
+      }
+    }
+  }
 }

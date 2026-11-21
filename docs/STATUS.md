@@ -31,3 +31,7 @@ Khóa dịch vụ thật (SMS, OAuth, R2, Turnstile, PostHog, Sentry) và máy c
 - Còn lại: viết/chạy lại test (e2e cũ có thể còn tìm nút "Ghé phố 3D"/"Về ảnh phố"); đo FPS và dung lượng tải trên điện thoại, iPad thật; kiểm 2K/4K; ảnh nguồn nhỏ nên Nhà thuốc và đồ trang trí hơi mềm; xóa `GlbStreetView` nếu admin không cần xem trước GLB nữa.
 - Xoay 360° (Cách A) xong: kéo/nút xoay đủ vòng, mọi hình luôn hướng về người xem; khung `CITY_GLB_OVERRIDES` sẵn để cắm model GLB thật (đã thử bằng Quán Cafe GLB cũ rồi trả về trống). Test e2e đã cập nhật theo luồng xin vía một chạm (thẻ lời chúc, khóa bấm đúp) và hero 3D; chạy lại toàn bộ sau khi làm 360°.
 
+
+## Đốt vía và Thỉnh Thần Tài (21/11/2026)
+- Xong: hai nút mới (chỉ khi đăng nhập) thay Gửi vía/Nhận vía; chưa có cửa hàng thì dẫn đi tạo, tạo xong hiện hộp nút nổi bật; cảnh Thỉnh Thần Tài 20 giây và Đốt vía 10 giây trong thành phố 3D ở trang chủ và Phố 3D; phụ đề, thẻ lời chúc; không đổi database, không cộng điểm, không giới hạn lượt. Test: Vitest (slice) + `e2e/ritual.spec.ts`.
+- Còn lại: kiểm tay trên điện thoại/iPad thật (hiệu năng cảnh 20 giây); ảnh/GLB riêng cho Thần Tài chạy, người đốt vía và cánh cửa nếu muốn đẹp hơn.

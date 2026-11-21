@@ -6,7 +6,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
+import { useRitual } from '@/features/ritual/use-ritual';
 import { wishRequested } from '@/features/ui/uiSlice';
+import { useRequireMember } from '@/lib/use-member';
 import { useAppDispatch } from '@/store/hooks';
 
 const icon = 'size-5 shrink-0';
@@ -17,6 +19,8 @@ export function TabletSideNav() {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const { isMember } = useRequireMember();
+  const { request } = useRitual();
   const link = (href: string, label: string, ic: React.ReactNode) => {
     const active = href === '/' && pathname === '/';
     return (
@@ -34,7 +38,8 @@ export function TabletSideNav() {
           {link('/bang-tin?type=story', t('story'), <Flame className={icon} aria-hidden />)}
           {link('/bang-tin?type=brag', t('brag'), <Handshake className={icon} aria-hidden />)}
           <button type="button" className={item} onClick={() => dispatch(wishRequested())}><Sparkles className={icon} aria-hidden />{t('tabletWish')}</button>
-          {link('/pho-3d', t('tabletSendReceive'), <Gift className={icon} aria-hidden />)}
+          {isMember ? <button type="button" className={item} onClick={() => void request('burn')}><Flame className={icon} aria-hidden />{t('tabletBurn')}</button> : null}
+          {isMember ? <button type="button" className={item} onClick={() => void request('invoke')}><Gift className={icon} aria-hidden />{t('tabletInvoke')}</button> : null}
           {link('/su-kien', t('challenge'), <Target className={icon} aria-hidden />)}
           {link('/bang-xep-hang', t('leaderboard'), <BarChart3 className={icon} aria-hidden />)}
           {link('/tao-diem', t('tabletCreateStore'), <Store className={icon} aria-hidden />)}
