@@ -256,8 +256,8 @@ function ThrowFlashes({ spot, start, colors }: { spot: Spot; start: Start; color
 
 /* ---------- Đốt vía ---------- */
 
-/** Người đốt vía được phóng to để nhìn rõ từ xa (ảnh gốc chỉ cao khoảng 1,4 m so với cửa hàng cao hơn 6 m). */
-const PERSON_SCALE = 1.9;
+/** Người đốt vía là một người nhỏ bước ra từ hông cửa hàng (ảnh gốc cao khoảng 1,4 m, cửa hàng cao hơn 6 m). */
+const PERSON_SCALE = 1.05;
 const PAPER_H = 1.1;
 const HAND_Y = 1.15;
 const SMOKE = 16;
@@ -265,7 +265,37 @@ const SMOKE_LIFE = 3.2;
 const EMBERS = 14;
 const BLESS = 22;
 
-/** Tờ giấy đốt vía vẽ bằng canvas: giấy vàng viền đỏ, chữ "VÍA". */
+/** Vẽ hình ngọn lửa (giọt nước nhọn đầu) vào canvas, tâm ở (cx, cy), cao `h`. */
+function drawFlame(g: CanvasRenderingContext2D, cx: number, cy: number, h: number): void {
+  const k = h / 140;
+  const x = (v: number): number => cx + (v - 64) * k;
+  const y = (v: number): number => cy + (v - 75) * k;
+  g.beginPath();
+  g.moveTo(x(64), y(8));
+  g.bezierCurveTo(x(70), y(40), x(108), y(62), x(100), y(106));
+  g.bezierCurveTo(x(96), y(140), x(32), y(140), x(28), y(106));
+  g.bezierCurveTo(x(24), y(80), x(48), y(70), x(52), y(44));
+  g.bezierCurveTo(x(58), y(56), x(62), y(40), x(64), y(8));
+  g.closePath();
+  g.fill();
+}
+
+/** Hình ngọn lửa trắng (màu do vật liệu quyết định) để xếp ba lớp đỏ – cam – vàng. */
+function useFlameTexture(): CanvasTexture | null {
+  const map = useMemo(() => {
+    const cv = document.createElement('canvas');
+    cv.width = 128; cv.height = 160;
+    const g = cv.getContext('2d');
+    if (!g) return null;
+    g.fillStyle = '#fff';
+    drawFlame(g, 64, 80, 150);
+    return new CanvasTexture(cv);
+  }, []);
+  useEffect(() => () => { map?.dispose(); }, [map]);
+  return map;
+}
+
+/** Tờ giấy đốt vía vẽ bằng canvas: giấy vàng viền đỏ, hình ngọn lửa và chữ "VÍA". */
 function usePaperTexture(colors: SceneColors): CanvasTexture | null {
   const map = useMemo(() => {
     const cv = document.createElement('canvas');
@@ -274,8 +304,9 @@ function usePaperTexture(colors: SceneColors): CanvasTexture | null {
     if (!g) return null;
     g.fillStyle = colors.gold; g.fillRect(0, 0, 128, 176);
     g.strokeStyle = colors.red; g.lineWidth = 8; g.strokeRect(8, 8, 112, 160);
-    g.fillStyle = colors.red; g.font = '800 44px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('VÍA', 64, 88);
+    g.fillStyle = colors.red; g.font = '800 34px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    drawFlame(g, 64, 66, 76);
+    g.fillText('VÍA', 64, 132);
     const tex = new CanvasTexture(cv);
     tex.colorSpace = SRGBColorSpace;
     return tex;
@@ -289,6 +320,7 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
   const B = RITUAL_BEATS.burn;
   const tex = useSprite(CITY_IMAGES.walkers[0]);
   const paper = usePaperTexture(colors);
+  const flameTex = useFlameTexture();
   const root = useRef<Group>(null);
   const face = useRef<Group>(null);
   const legL = useRef<Group>(null);
@@ -296,15 +328,21 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
   const hand = useRef<Group>(null);
   const sheet = useRef<Group>(null);
   const flames = useRef<(SpriteObject | null)[]>([]);
+  const glow = useRef<SpriteObject>(null);
   const embers = useRef<(SpriteObject | null)[]>([]);
   const smoke = useRef<(SpriteObject | null)[]>([]);
   const bless = useRef<(SpriteObject | null)[]>([]);
   const bustH = 1.4;
   const bustW = bustH * aspectOf(tex);
-  const baseZ = spot.z + 4.6;
+  const baseZ = spot.z + 4.2;
+  /** Người bước ra từ hông cửa hàng (mép phải), đi tiến ra trước cửa rồi mới đi đi lại lại. */
+  const startX = spot.x + spot.width * 0.5;
+  const startZ = spot.z + 0.9;
+  const personZ = (a: number): number => MathUtils.lerp(startZ, baseZ, smooth(a / 1.8));
   useFaceCamera(face, 1);
 
-  const personX = (a: number): number => spot.x + 2.6 + 2.6 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter)) + 6 * (1 - smooth(a));
+  const pace = (a: number): number => spot.x + 1.6 + 2.4 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter));
+  const personX = (a: number): number => MathUtils.lerp(startX, pace(a), smooth(a / 1.8));
   const burned = (a: number): number => clamp01((a - B.ignite) / (B.ash - B.ignite));
 
   useFrame(({ clock }) => {
@@ -313,7 +351,7 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
     const dirx = Math.cos(0.8 * (Math.min(a, B.ash) - B.enter)) >= 0 ? 1 : -1;
     const x = personX(a);
     const swing = walking ? Math.sin(a * 7) * 0.55 : 0;
-    if (root.current) { root.current.position.set(x, 0, baseZ); root.current.scale.setScalar(PERSON_SCALE); }
+    if (root.current) { root.current.position.set(x, 0, personZ(a)); root.current.scale.setScalar(PERSON_SCALE); }
     if (legL.current) legL.current.rotation.x = swing;
     if (legR.current) legR.current.rotation.x = -swing;
     if (face.current) {
@@ -331,17 +369,19 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
       if (!m) return;
       m.visible = lit > 0.01;
       const k = lit * (1 + 0.16 * Math.sin(a * 23 + i * 2) + 0.08 * Math.sin(a * 41 + i));
-      const size = [1.6, 1.12, 0.7][i] ?? 0.7;
-      m.position.set(0, flameY + 0.18 * (1 - i * 0.3), 0.05);
-      m.scale.set(size * k, size * 1.35 * k, 1);
+      const size = [0.62, 0.44, 0.28][i] ?? 0.3;
+      const h = size * 1.3 * k;
+      m.position.set(0, flameY + h * 0.42, 0.08 + i * 0.01);
+      m.scale.set(size * k, h, 1);
     });
+    if (glow.current) { glow.current.visible = lit > 0.01; glow.current.position.y = flameY + 0.25; }
     // Tàn lửa bay lên từ mép giấy
     embers.current.forEach((m, i) => {
       if (!m) return;
       const t = (a * 1.1 + hash(i, 5) * 2) % 1.4;
       m.visible = lit > 0.5 && walking;
-      m.position.set(x + (dirx * 0.5 + Math.sin(i * 7 + a * 3) * 0.3 * t) * PERSON_SCALE, (HAND_Y + flameY) * PERSON_SCALE + t * 1.4, baseZ + 0.3);
-      const s = 0.26 * (1 - t / 1.4);
+      m.position.set(x + (dirx * 0.5 + Math.sin(i * 7 + a * 3) * 0.3 * t) * PERSON_SCALE, (HAND_Y + flameY) * PERSON_SCALE + t * 1.1, personZ(a) + 0.3);
+      const s = 0.2 * (1 - t / 1.4);
       m.scale.set(s, s, 1);
     });
     // Khói: mỗi cụm sinh ra ở chỗ giấy lúc đó rồi bay lên, nở ra và nhạt dần
@@ -355,8 +395,8 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
       const ex = personX(born);
       const edir = Math.cos(0.8 * (Math.min(born, B.ash) - B.enter)) >= 0 ? 1 : -1;
       m.visible = true;
-      m.position.set(ex + edir * 0.5 * PERSON_SCALE + Math.sin(i * 1.7) * 0.5 * age, (HAND_Y + PAPER_H * (1 - burned(born))) * PERSON_SCALE + 0.3 + age * 1.1 + age * age * 0.3, baseZ + 0.4);
-      const s = 0.8 + age * 1.3;
+      m.position.set(ex + edir * 0.5 * PERSON_SCALE + Math.sin(i * 1.7) * 0.5 * age, (HAND_Y + PAPER_H * (1 - burned(born))) * PERSON_SCALE + 0.3 + age * 1.1 + age * age * 0.3, personZ(born) + 0.4);
+      const s = 0.45 + age * 0.9;
       m.scale.set(s, s, 1);
       m.material.opacity = 0.42 * (1 - age / SMOKE_LIFE);
     });
@@ -392,9 +432,12 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
             </group>
             {[colors.red, colors.wish, colors.gold].map((c, i) => (
               <sprite key={c + i} ref={(m) => { flames.current[i] = m; }} visible={false}>
-                <spriteMaterial map={glowTexture()} color={c} transparent blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
+                <spriteMaterial map={flameTex} color={c} transparent depthWrite={false} toneMapped={false} />
               </sprite>
             ))}
+            <sprite ref={glow} position={[0, PAPER_H * 0.9, 0.02]} scale={[2.2, 2.2, 1]} visible={false}>
+              <spriteMaterial map={glowTexture()} color={colors.wish} transparent opacity={0.35} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
+            </sprite>
           </group>
         </group>
       </group>

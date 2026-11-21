@@ -6,6 +6,8 @@ import { Link2, Music2, MonitorDown } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'use-intl';
+import { useShareTo } from '@/components/common/share-buttons';
+import type { ShareTarget } from '@/lib/share';
 
 interface InstallPromptEvent extends Event { prompt: () => Promise<void> }
 const isInstallPrompt = (e: Event): e is InstallPromptEvent => 'prompt' in e && typeof e.prompt === 'function';
@@ -13,7 +15,13 @@ const isInstallPrompt = (e: Event): e is InstallPromptEvent => 'prompt' in e && 
 /** Nhóm liên kết dành cho biểu tượng mạng xã hội (admin nhập: nhãn facebook / zalo / tiktok / khác = liên kết chung). */
 export const SOCIAL_GROUP = 'Mạng xã hội';
 
-function SocialIcon({ label }: { label: string }) {
+/** Mạng xã hội có thể chia sẻ tới từ nhãn liên kết (không phân biệt hoa thường). */
+function shareTarget(label: string): ShareTarget | null {
+  const key = label.trim().toLowerCase();
+  return key === 'facebook' || key === 'zalo' || key === 'tiktok' ? key : null;
+}
+
+export function SocialIcon({ label }: { label: string }) {
   const key = label.trim().toLowerCase();
   if (key === 'facebook') return <svg viewBox="0 0 24 24" className="size-5 fill-current" aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
   if (key === 'tiktok') return <Music2 className="size-5" aria-hidden />;
@@ -27,6 +35,7 @@ function SocialIcon({ label }: { label: string }) {
  */
 export function HomeFooter() {
   const t = useTranslations('home');
+  const shareTo = useShareTo();
   const tn = useTranslations('nav');
   const { data } = useGetHomeQuery();
   const [installEvent, setInstallEvent] = useState<InstallPromptEvent | null>(null);
@@ -73,8 +82,8 @@ export function HomeFooter() {
               <div className="flex items-center gap-2">
                 {social.map((s) => {
                   const cls = 'grid size-9 place-items-center rounded-full bg-primary-soft text-primary-strong transition hover:bg-primary hover:text-on-primary';
-                  // Liên kết mẫu '#': chưa có địa chỉ thật nên bấm không phản ứng gì.
-                  if (s.href === '#') return <button key={s.label} type="button" aria-label={s.label} className={cls}><SocialIcon label={s.label} /></button>;
+                  // Liên kết mẫu '#': chưa có địa chỉ thật thì bấm là chia sẻ Chốt Vía lên mạng đó (sao chép nội dung + mở cửa sổ chia sẻ).
+                  if (s.href === '#') return <button key={s.label} type="button" aria-label={s.label} className={cls} onClick={() => { const target = shareTarget(s.label); if (target) void shareTo(target, t('shareText')); }}><SocialIcon label={s.label} /></button>;
                   return (
                     <a key={s.href + s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className={cls}>
                       <SocialIcon label={s.label} />

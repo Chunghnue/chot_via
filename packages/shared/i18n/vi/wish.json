@@ -43,6 +43,21 @@
   "bullet2": "Chốt deal – Tăng doanh thu",
   "bullet3": "Công việc hanh thông – Thu nhập tốt",
   "received2": "Đã nhận vía!",
+  "share": {
+    "label": "Chia sẻ",
+    "aria": {
+      "facebook": "Chia sẻ lên Facebook",
+      "zalo": "Chia sẻ lên Zalo",
+      "tiktok": "Mở TikTok để dán lời chúc",
+      "system": "Chia sẻ bằng ứng dụng khác"
+    },
+    "copied": {
+      "facebook": "Đã sao chép lời chúc và link. Nếu Facebook chưa điền sẵn chữ, bạn dán vào nhé!",
+      "zalo": "Đã sao chép lời chúc và link. Nếu Zalo chưa điền sẵn chữ, bạn dán vào nhé!",
+      "tiktok": "Đã sao chép lời chúc và link. Mở TikTok rồi dán vào bài đăng của bạn nhé!"
+    },
+    "copyFailed": "Không sao chép được lời chúc, bạn hãy tự chép nhé."
+  },
   "ritual": {
     "burn": "Đốt vía",
     "invoke": "Thỉnh Thần Tài",
