@@ -1,4 +1,8 @@
-# CLAUDE.md — Chốt Vía
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+# Chốt Vía
 
 Cộng đồng giải trí cho chủ kinh doanh và nhân viên sale (Responsive Web + PWA, phạm vi P0 + P1). Cốt lõi: **Xin vía Thần Tài** (không cần đăng nhập), **Phố 3D** (ghé phố – gửi vía – nhận vía), **một bảng tin chung** (Kể khổ + Khoe doanh thu/Deal), bảng xếp hạng, thử thách, hồ sơ, tạo cửa hàng 3D. Không phải phần mềm quản lý bán hàng.
 
@@ -22,14 +26,15 @@ pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-vi
 |---|---|
 | Cài đặt | `pnpm install` |
 | Postgres nhúng (thay Docker; giữ cửa sổ mở) | `pnpm db:embedded` |
-| Migration / dữ liệu khởi tạo + mẫu | `pnpm db:migrate` · `pnpm db:seed` (seed chạy `seed.ts` rồi `seed-demo-content.ts`) |
+| Migration / dữ liệu khởi tạo + mẫu | `pnpm db:migrate` · `pnpm db:seed` (chạy lần lượt `seed.ts` → `seed-demo-content.ts` → `seed-home.ts`; chỉ dữ liệu trang chủ: `pnpm db:seed:home`) |
+| Sinh migration từ schema Drizzle | `pnpm --filter @chot-via/backend db:generate` (chỉ sau khi chủ dự án duyệt thay đổi DB, xem quy tắc 7) |
 | Chạy | `pnpm dev:backend` · `pnpm dev:web` · `pnpm dev:admin` |
 | Kiểm kiểu toàn bộ | `pnpm typecheck` (hoặc `pnpm --filter <gói> typecheck`) |
 | Test | `pnpm test` (Vitest) · `pnpm test:e2e` (Playwright) · `pnpm test:e2e:prod` (PWA/offline trên bản `next build`) · `pnpm test:all` |
 | Build | `pnpm build` |
 | Reset DB dev | `pnpm --filter @chot-via/backend db:reset` rồi migrate + seed |
 
-Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck`.
+`pnpm test` chạy Vitest theo projects (`packages/shared`, `apps/backend`, `apps/web-public`, mỗi nơi có `vitest.config.mts` riêng); Playwright có `e2e/global-setup.ts`/`global-teardown.ts`. Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck`.
 
 Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900000000`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
 
