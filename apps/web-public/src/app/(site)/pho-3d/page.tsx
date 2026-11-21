@@ -4,15 +4,15 @@ import { selectIsMember, useGetCatalogQuery, useGetHomeQuery, useGetPlacesQuery,
 import { Button, Chip, EmptyState, Skeleton, Tabs, cn } from '@chot-via/ui';
 import { Dices, List, Search } from 'lucide-react';
 import { DEFAULT_HOME_CONFIG } from '@chot-via/shared';
-import { GlbStreetView, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
+import { CityView, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShopLabelStrip, StreetStage } from '@/components/home/street-stage';
 import { PlaceGrid } from '@/components/place/place-list';
 import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls, StreetTiles } from '@/components/street/street-hud';
-import { useGlbLabels, useStreetLabels } from '@/components/place/use-street-labels';
+import { useStreetLabels } from '@/components/place/use-street-labels';
 import { categoryChanged, placeFocused, searchChanged, selectStreet, tabChanged, type StreetTab } from '@/features/street/streetSlice';
-import { placeSheetOpened, wishDialogToggled, loginRequested } from '@/features/ui/uiSlice';
+import { placeSheetOpened, selectWishRequest, wishRequested, loginRequested } from '@/features/ui/uiSlice';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { useApiToast } from '@/lib/use-api-toast';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -28,10 +28,9 @@ export default function StreetPage() {
   const dispatch = useAppDispatch();
   const street = useAppSelector(selectStreet);
   const isMember = useAppSelector(selectIsMember);
+  const wishRequest = useAppSelector(selectWishRequest);
   const labels = useStreetLabels();
-  const glbLabels = useGlbLabels();
   const { data: home } = useGetHomeQuery();
-  const [mode, setMode] = useState<'3d' | 'image'>('3d');
   const toast = useApiToast();
   const { data: catalog } = useGetCatalogQuery();
   const [text, setText] = useState(street.search);
@@ -78,7 +77,7 @@ export default function StreetPage() {
   const imageStage = (
     <StreetStage
       places={places} labels={labels} dimMissing={filtering} selectedId={street.selectedId}
-      onSelectPlace={select} onSelectDeity={() => dispatch(wishDialogToggled(true))}
+      onSelectPlace={select} onSelectDeity={() => dispatch(wishRequested())}
     >
       <p className="pointer-events-none absolute left-1/2 top-[5%] -translate-x-1/2 whitespace-nowrap rounded-full bg-surface px-[1.6cqw] py-[0.5cqw] text-[clamp(0.7rem,1.6cqw,1.3rem)] font-bold text-primary-strong shadow-card">{th('heroSubtitle')}</p>
     </StreetStage>
@@ -89,7 +88,7 @@ export default function StreetPage() {
       <div className="flex flex-col gap-2 rounded-card bg-surface p-3 shadow-card">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="mr-auto font-display text-2xl font-extrabold text-primary-strong">{t('title')}</h1>
-          <Button variant="wish" size="sm" onClick={() => dispatch(wishDialogToggled(true))}><span aria-hidden>🙏</span>{t('deity')}</Button>
+          <Button variant="wish" size="sm" onClick={() => dispatch(wishRequested())}><span aria-hidden>🙏</span>{t('deity')}</Button>
           <Button variant="soft" size="sm" onClick={() => void random()}><Dices className="size-4" aria-hidden />{t('random')}</Button>
         </div>
         <label className="relative block">
@@ -113,28 +112,23 @@ export default function StreetPage() {
             <div className="flex min-w-0 flex-col overflow-hidden rounded-sheet bg-surface-muted shadow-card xl:flex-1">
               <ShopLabelStrip places={places} labels={labels} onSelectPlace={select} className="border-b border-border/60" />
             <div ref={stageRef} className="relative aspect-[10/9] w-full overflow-hidden bg-surface-muted sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.2/1] xl:aspect-auto xl:min-h-[34rem] xl:flex-1">
-              {mode === '3d' && home ? (
-                <GlbStreetView
-                  className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={home.layout.street} labels={glbLabels}
-                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} onSelectPlace={select} onSelectDeity={() => dispatch(wishDialogToggled(true))}
+              {home ? (
+                <CityView
+                  className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={home.layout.street} fitHalfWidth={16}
+                  selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} burstTick={wishRequest} onSelectPlace={select} onSelectDeity={() => dispatch(wishRequested())}
                   fallback={imageStage}
                 />
               ) : imageStage}
-              {mode === '3d' ? (
-                <div className="absolute bottom-0 left-0 z-20">
-                  {places.map((p, i) => (
-                    <button key={p.id} type="button" onClick={() => select(p.id)} className="absolute bottom-0 size-1 opacity-0 focus:size-auto focus:opacity-100" style={{ left: `${i * 4}px` }}>{labels.open(p.title)}</button>
-                  ))}
-                </div>
-              ) : null}
-              <Button type="button" variant="soft" size="sm" aria-pressed={mode === '3d'} onClick={() => setMode((m) => (m === '3d' ? 'image' : '3d'))} className="absolute left-3 top-3 z-10 shadow-card">
-                {mode === '3d' ? th('backToImage') : t('scene.view3d')}
-              </Button>
+              <div className="absolute bottom-0 left-0 z-20">
+                {places.map((p, i) => (
+                  <button key={p.id} type="button" onClick={() => select(p.id)} className="absolute bottom-0 size-1 opacity-0 focus:size-auto focus:opacity-100" style={{ left: `${i * 4}px` }}>{labels.open(p.title)}</button>
+                ))}
+              </div>
               <StreetBadges wishesTotal={home?.stats.wishesTotal ?? null} place={featured} />
-              <StreetControls is3d={mode === '3d'} fullscreen={fullscreen} onToggle3d={() => setMode((m) => (m === '3d' ? 'image' : '3d'))} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
+              <StreetControls fullscreen={fullscreen} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
               <StreetTiles onSend={() => void random()} />
               <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
-                <Button variant="wish" size="lg" className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishDialogToggled(true))}>
+                <Button variant="wish" size="lg" className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
                   <span aria-hidden>🙏</span>{tw(`title.${titleCode}`)}
                 </Button>
               </div>

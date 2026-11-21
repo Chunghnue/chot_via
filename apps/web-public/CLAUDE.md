@@ -5,7 +5,7 @@ Next.js 16 (App Router, Turbopack), React 19, Redux Toolkit + RTK Query (qua `@c
 ## Cấu trúc `src/`
 - `app/layout.tsx`, `providers.tsx` (Redux + intl + toaster + bootstrap), `manifest.ts`, `(site)/…` các trang: `/` · `bang-tin` (Cộng đồng; `?type=story` = trang **Kể khổ**) · `pho-3d` · `diem/[slug]` (+`cai-dat`) · `bai/[id]` · `tim-kiem` · `ca-nhan` · `u/[id]` · `tao-diem` · `su-kien` · `bang-xep-hang` · `thong-bao` · `da-luu` · `bao-cao-cua-toi` · `cai-dat`.
 - `components/layout/` — `app-shell.tsx` (khung responsive + `RailSwitch` chọn cột phải theo trang), `header.tsx`, `side-nav.tsx`, `bottom-nav.tsx`, `nav-items.tsx`.
-- `components/home/` — `hero.tsx` (hero + 4 thẻ), `street-stage.tsx` (cảnh phố nhiều lớp dùng chung với `/pho-3d`).
+- `components/home/` — `hero.tsx` (hero = thành phố 3D `CityView` + hàng nút hành động), `street-stage.tsx` (cảnh phố nhiều lớp dùng chung với `/pho-3d`).
 - `components/post/` — `post-card.tsx` (biến thể `default | compact | wide`), `feed.tsx` (bộ lọc, `FeedList variant`), `post-content.tsx`.
 - `components/story/` — banner/bộ lọc Kể khổ, các khối cột phải (Chủ đề hot, Bình chọn vui, Top Kể Khổ tuần).
 - `components/rail/` — `right-rail.tsx` (3 biến thể home/story/default), `quick-wish-card.tsx`, `weekly-board.tsx`, `leaderboard.tsx`, `side-cards.tsx`.

@@ -5,7 +5,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'use-intl';
-import { wishDialogToggled } from '@/features/ui/uiSlice';
+import { wishRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { isActivePath } from './header';
 import { SIDE_NAV } from './nav-items';
@@ -36,7 +36,7 @@ export function SideNav() {
               {item.icon}{t(item.labelKey)}
             </Link>
           ))}
-          <button type="button" onClick={() => dispatch(wishDialogToggled(true))}
+          <button type="button" onClick={() => dispatch(wishRequested())}
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[0.95rem] font-semibold text-ink transition hover:bg-surface-muted">
             <span aria-hidden className="text-lg leading-none">🙏</span>{t('wish')}
           </button>

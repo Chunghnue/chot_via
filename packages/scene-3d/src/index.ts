@@ -5,3 +5,4 @@ export type { StreetSceneProps } from './types';
 export { default as ShowcaseScene, type ShowcaseSceneProps } from './showcase-scene';
 export { GlbStreetView, playChime, type GlbStreetViewProps } from './glb-street-view';
 export type { GlbStreetLabels, CameraCommand, CameraCommandKind } from './glb-street';
+export { CityView, type CityViewProps } from './city-view';

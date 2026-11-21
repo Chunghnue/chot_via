@@ -12,7 +12,7 @@ apps/web-admin    React 19 + Vite + React Router (quản trị/kiểm duyệt)  
 packages/shared   Zod DTO · mã phản hồi · quy tắc thời gian · i18n (chữ hiển thị) → packages/shared/CLAUDE.md
 packages/api-client  RTK Query có kiểu (baseApi + injectEndpoints)             → packages/api-client/CLAUDE.md
 packages/ui       theme.css (màu/font DUY NHẤT) + component Tailwind/Radix     → packages/ui/CLAUDE.md
-packages/scene-3d Cảnh Phố 3D dựng từ file GLB (GlbStreetView, dùng ở trang chủ và /pho-3d; cấu hình trong admin → Cấu hình trang chủ)
+packages/scene-3d Thành phố 3D từ hình tách nền (CityView, dùng ở trang chủ và /pho-3d, không có poster; hình ở public/images/pho/, bố cục ở city-assets.ts); GlbStreetView (GLB) chỉ còn cho xem trước trong admin
 docs/             DEPLOY · CAN-CHU-DU-AN-CUNG-CAP · DECISIONS · STATUS · ARCHITECTURE · DESIGN-REFERENCE · ROADMAP · DESIGN-SYSTEM · ASSET-PROMPTS · reference/
 ```
 pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-via/<tên>`.
@@ -28,6 +28,8 @@ pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-vi
 | Test | `pnpm test` (Vitest) · `pnpm test:e2e` (Playwright) · `pnpm test:e2e:prod` (PWA/offline trên bản `next build`) · `pnpm test:all` |
 | Build | `pnpm build` |
 | Reset DB dev | `pnpm --filter @chot-via/backend db:reset` rồi migrate + seed |
+
+Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck`.
 
 Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900000000`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
 

@@ -25,3 +25,9 @@ Khóa dịch vụ thật (SMS, OAuth, R2, Turnstile, PostHog, Sentry) và máy c
 
 ## Kiểm thử (G12) — xong
 278 test xanh: Vitest 149 (shared 36, API 87, giao diện 26) + E2E 127 (4 cỡ màn hình + admin, gồm UAT-09/UAT-10) + E2E bản production 2 (PWA, service worker, chạy offline). Chi tiết và cách chạy: `docs/TEST-REPORT.md` (`pnpm test`, `pnpm test:e2e`, `pnpm test:e2e:prod`). Quy tắc: viết và chạy toàn bộ một lượt, sửa đến khi xanh.
+
+## Thành phố 3D mặc định (21/11/2026)
+- Xong: hero trang chủ và `/pho-3d` là thành phố 3D (`CityView`), bỏ poster và nút "Ghé phố 3D"; cắt/tách nền thêm 25 hình vào `public/images/pho/`; điều khiển kéo xoay, đi tới/lui, phóng to/thu nhỏ; bấm cửa hàng mở thẻ điểm, bấm Thần Tài mở hộp xin vía; chỉ `typecheck`, chưa chạy test.
+- Còn lại: viết/chạy lại test (e2e cũ có thể còn tìm nút "Ghé phố 3D"/"Về ảnh phố"); đo FPS và dung lượng tải trên điện thoại, iPad thật; kiểm 2K/4K; ảnh nguồn nhỏ nên Nhà thuốc và đồ trang trí hơi mềm; xóa `GlbStreetView` nếu admin không cần xem trước GLB nữa.
+- Xoay 360° (Cách A) xong: kéo/nút xoay đủ vòng, mọi hình luôn hướng về người xem; khung `CITY_GLB_OVERRIDES` sẵn để cắm model GLB thật (đã thử bằng Quán Cafe GLB cũ rồi trả về trống). Test e2e đã cập nhật theo luồng xin vía một chạm (thẻ lời chúc, khóa bấm đúp) và hero 3D; chạy lại toàn bộ sau khi làm 360°.
+

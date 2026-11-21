@@ -6,7 +6,7 @@ import { ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
-import { wishDialogToggled } from '@/features/ui/uiSlice';
+import { wishRequested } from '@/features/ui/uiSlice';
 import { useMounted } from '@/lib/use-mounted';
 import { useAppDispatch } from '@/store/hooks';
 
@@ -15,7 +15,7 @@ export function DeityBanner({ compact = false }: { compact?: boolean }) {
   const t = useTranslations('home.extras');
   const dispatch = useAppDispatch();
   return (
-    <button type="button" onClick={() => dispatch(wishDialogToggled(true))} aria-label={t('deityTitle')}
+    <button type="button" onClick={() => dispatch(wishRequested())} aria-label={t('deityTitle')}
       className={cn('relative flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-linear-to-r from-gold-soft via-wish-soft to-gold-soft text-left shadow-card ring-1 ring-gold/40 transition active:scale-[0.98]', compact ? 'flex-wrap p-3' : 'px-4 py-3')}>
       <img src="/images/than-tai.webp" alt="" aria-hidden className={cn('shrink-0 object-contain', compact ? 'h-20 w-auto' : 'h-16 w-auto')} draggable={false} />
       <span className="flex min-w-0 flex-1 flex-col">

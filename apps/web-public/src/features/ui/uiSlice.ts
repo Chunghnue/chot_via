@@ -5,14 +5,21 @@ import type { ReportTarget } from '@chot-via/shared';
 export type LoginReason = 'post' | 'react' | 'comment' | 'follow' | 'save' | 'place' | 'profile' | 'generic' | 'poll' | 'like' | 'block';
 
 export interface UiState {
-  wishDialogOpen: boolean;
+  /** Số lần xin vía Thần Tài đã được yêu cầu (tăng mỗi lần bấm nút Xin vía); thành phần WishBurst nghe giá trị này để nổ vía ngay. */
+  wishRequest: number;
+  /** Mốc thời gian (ms) trước đó bỏ qua các lần bấm tiếp theo, tránh bấm nhầm hai lần tạo hai lượt xin vía. */
+  wishLockedUntil: number;
   login: { open: boolean; reason: LoginReason };
   placeSheet: { placeId: string | null; step: 'detail' | 'wish' };
   report: { targetType: ReportTarget; targetId: string } | null;
 }
 
+/** Thời gian khóa nút Xin vía sau mỗi lần bấm (đúng bằng thời gian hiệu ứng nổ). */
+const WISH_LOCK_MS = 3000;
+
 const initialState: UiState = {
-  wishDialogOpen: false,
+  wishRequest: 0,
+  wishLockedUntil: 0,
   login: { open: false, reason: 'generic' },
   placeSheet: { placeId: null, step: 'detail' },
   report: null,
@@ -22,8 +29,13 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    wishDialogToggled(state, action: PayloadAction<boolean>) {
-      state.wishDialogOpen = action.payload;
+    wishRequested: {
+      reducer(state, action: PayloadAction<number>) {
+        if (action.payload < state.wishLockedUntil) return;
+        state.wishRequest += 1;
+        state.wishLockedUntil = action.payload + WISH_LOCK_MS;
+      },
+      prepare: () => ({ payload: Date.now() }),
     },
     loginRequested(state, action: PayloadAction<LoginReason>) {
       state.login = { open: true, reason: action.payload };
@@ -48,12 +60,12 @@ export const uiSlice = createSlice({
     },
   },
   selectors: {
-    selectWishDialogOpen: (s) => s.wishDialogOpen,
+    selectWishRequest: (s) => s.wishRequest,
     selectLogin: (s) => s.login,
     selectPlaceSheet: (s) => s.placeSheet,
     selectReport: (s) => s.report,
   },
 });
 
-export const { wishDialogToggled, loginRequested, loginDismissed, placeSheetOpened, placeSheetStepChanged, placeSheetClosed, reportRequested, reportDismissed } = uiSlice.actions;
-export const { selectWishDialogOpen, selectLogin, selectPlaceSheet, selectReport } = uiSlice.selectors;
+export const { wishRequested, loginRequested, loginDismissed, placeSheetOpened, placeSheetStepChanged, placeSheetClosed, reportRequested, reportDismissed } = uiSlice.actions;
+export const { selectWishRequest, selectLogin, selectPlaceSheet, selectReport } = uiSlice.selectors;

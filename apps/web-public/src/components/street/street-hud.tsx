@@ -4,13 +4,13 @@ import { selectIsMember, useFollowPlaceMutation, useGetMeStatsQuery, useGetMissi
 import type { PlaceSummary } from '@chot-via/shared';
 import { Avatar, Button, Card, Skeleton, buttonClass, cn, compactCount, toast } from '@chot-via/ui';
 import type { CameraCommandKind } from '@chot-via/scene-3d';
-import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize2, Minimize2, Minus, Plus, Box } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize2, Minimize2, Minus, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { ChallengeTasks, FeaturedEventCard } from '@/components/home/home-extras';
 import { WeeklyBoard } from '@/components/rail/weekly-board';
 import { composerOpened } from '@/features/composer/composerSlice';
-import { loginRequested, wishDialogToggled } from '@/features/ui/uiSlice';
+import { loginRequested, wishRequested } from '@/features/ui/uiSlice';
 import { useMounted } from '@/lib/use-mounted';
 import { useCurrentUser, useRequireMember } from '@/lib/use-member';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -35,10 +35,10 @@ export function StreetBadges({ wishesTotal, place }: { wishesTotal: number | nul
 }
 
 /** Joystick xoay/nâng góc nhìn + cụm nút 3D · toàn màn hình · phóng to · thu nhỏ. Chỉ điều khiển camera, không đổi dữ liệu. */
-export function StreetControls({ is3d, fullscreen, onToggle3d, onFullscreen, onCommand }: { is3d: boolean; fullscreen: boolean; onToggle3d: () => void; onFullscreen: () => void; onCommand: (kind: CameraCommandKind) => void }) {
+export function StreetControls({ fullscreen, onFullscreen, onCommand }: { fullscreen: boolean; onFullscreen: () => void; onCommand: (kind: CameraCommandKind) => void }) {
   const t = useTranslations('street.hud');
   const pad = (kind: CameraCommandKind, label: string, cls: string, icon: React.ReactNode) => (
-    <button type="button" aria-label={label} disabled={!is3d} onClick={() => onCommand(kind)} className={cn('absolute grid size-8 place-items-center rounded-full text-ink transition active:scale-90 disabled:opacity-40', cls)}>{icon}</button>
+    <button type="button" aria-label={label} onClick={() => onCommand(kind)} className={cn('absolute grid size-8 place-items-center rounded-full text-ink transition active:scale-90', cls)}>{icon}</button>
   );
   return (
     <>
@@ -49,10 +49,9 @@ export function StreetControls({ is3d, fullscreen, onToggle3d, onFullscreen, onC
         {pad('right', t('dpad.right'), 'right-1 top-1/2 -translate-y-1/2', <ChevronRight className="size-5" aria-hidden />)}
       </div>
       <div className="absolute right-3 top-1/3 z-10 hidden flex-col gap-2 xl:flex">
-        <button type="button" aria-label={t('toggle3d')} aria-pressed={is3d} onClick={onToggle3d} className={round}><Box className="size-5" aria-hidden /></button>
         <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>{fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}</button>
-        <button type="button" aria-label={t('zoomIn')} disabled={!is3d} onClick={() => onCommand('in')} className={round}><Plus className="size-5" aria-hidden /></button>
-        <button type="button" aria-label={t('zoomOut')} disabled={!is3d} onClick={() => onCommand('out')} className={round}><Minus className="size-5" aria-hidden /></button>
+        <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={round}><Plus className="size-5" aria-hidden /></button>
+        <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={round}><Minus className="size-5" aria-hidden /></button>
       </div>
     </>
   );
@@ -69,7 +68,7 @@ export function StreetTiles({ onSend }: { onSend: () => void }) {
       <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{img('/images/ic-laugh.webp')}<span className="truncate">{t('story')}</span></button>
       <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>{img('/images/ic-trophy.webp')}<span className="truncate">{t('brag')}</span></button>
       <button type="button" className={tile} onClick={onSend}>{img('/images/ic-gift.webp')}<span className="truncate">{t('send')}</span></button>
-      <button type="button" className={tile} onClick={() => dispatch(wishDialogToggled(true))}>{img('/images/ic-pray.webp')}<span className="truncate">{t('receive')}</span></button>
+      <button type="button" className={tile} onClick={() => dispatch(wishRequested())}>{img('/images/ic-pray.webp')}<span className="truncate">{t('receive')}</span></button>
       <Link href="/tao-diem" className={tile}>{img('/images/ic-home.webp')}<span className="truncate">{t('create')}</span></Link>
       <Link href="/bang-xep-hang" className={tile}>{img('/images/ic-crown.webp')}<span className="truncate">{t('rank')}</span></Link>
       <Link href="/su-kien" className={tile}>{img('/images/ic-medal-1.webp')}<span className="truncate">{t('challenge')}</span></Link>
@@ -116,7 +115,7 @@ export function DeityPanel() {
       <div className="flex min-w-0 flex-1 flex-col gap-1.5 text-center">
         <h2 className="font-display text-lg font-extrabold text-wish-strong">{t('title')}</h2>
         <p className="whitespace-pre-line text-sm font-semibold leading-snug text-ink">{t('text')}</p>
-        <Button variant="primary" size="sm" onClick={() => dispatch(wishDialogToggled(true))}>{t('cta')}</Button>
+        <Button variant="primary" size="sm" onClick={() => dispatch(wishRequested())}>{t('cta')}</Button>
       </div>
     </Card>
   );

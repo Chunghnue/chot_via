@@ -5,7 +5,7 @@ import type { GlbQuality, GlbStreetLabels, GlbStreetProps } from './glb-street';
 
 const GlbStreet = lazy(() => import('./glb-street'));
 
-class Boundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
+export class Boundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
   override state = { failed: false };
   static getDerivedStateFromError(): { failed: boolean } { return { failed: true }; }
   override componentDidCatch(_error: Error, _info: ErrorInfo): void { /* Lỗi tải GLB hoặc WebGL: quay về ảnh phố. */ }
@@ -20,7 +20,7 @@ export type GlbStreetViewProps = Omit<GlbStreetProps, 'quality' | 'maxFps' | 'ac
 };
 
 /** Mức chi tiết theo thiết bị: điện thoại dùng LOD thấp và 30 FPS, iPad LOD vừa, máy tính LOD cao. */
-function useQuality(): { quality: GlbQuality; maxFps: number } {
+export function useQuality(): { quality: GlbQuality; maxFps: number } {
   const [state, setState] = useState<{ quality: GlbQuality; maxFps: number }>({ quality: 'mid', maxFps: 60 });
   useEffect(() => {
     const coarse = window.matchMedia('(pointer: coarse)').matches;

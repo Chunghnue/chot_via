@@ -27,10 +27,9 @@ test.describe('PWA trên bản production', () => {
     const hero = page.getByRole('button', { name: /Xin vía hôm nay/ }).first();
     await expect(hero).toBeVisible();
     await hero.click();
-    const dialog = page.getByRole('dialog');
-    await dialog.getByRole('button', { name: /Nhận vía/ }).click();
-    await expect(dialog.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
-    await expect(dialog.getByText(/Lời chúc dự phòng/).first()).toBeVisible();
+    const card = page.getByTestId('wish-card');
+    await expect(card.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
+    await expect(card.getByText(/Lời chúc dự phòng/).first()).toBeVisible();
     await context.setOffline(false);
   });
 });

@@ -25,9 +25,7 @@
     "rotate": "Tự xoay",
     "soundOn": "Âm thanh bật",
     "soundOff": "Âm thanh tắt",
-    "hint": "Kéo để xoay · Cuộn để zoom · Chạm cửa hàng",
-    "view3d": "Xem 3D",
-    "viewImage": "Xem ảnh phố"
+    "hint": "Kéo để xoay 360° · Ctrl/⌘ + cuộn hoặc nút +/− để phóng to · Chạm cửa hàng"
   },
   "hud": {
     "wishersBadge": "{count} lượt xin vía",
@@ -35,15 +33,14 @@
     "dpad": {
       "left": "Xoay sang trái",
       "right": "Xoay sang phải",
-      "up": "Nâng góc nhìn",
-      "down": "Hạ góc nhìn",
+      "up": "Đi tới",
+      "down": "Đi lùi",
       "label": "Điều khiển góc nhìn"
     },
     "zoomIn": "Phóng to",
     "zoomOut": "Thu nhỏ",
     "fullscreen": "Toàn màn hình",
     "exitFullscreen": "Thoát toàn màn hình",
-    "toggle3d": "Chuyển 2D / 3D",
     "tiles": {
       "story": "Kể khổ",
       "brag": "Khoe doanh thu",

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { composerClosed, composerOpened, composerSlice, draftChanged, kindChosen, stepChanged } from '../src/features/composer/composerSlice';
 import { feedSlice, feedSortChanged, feedTypeChanged } from '../src/features/feed/feedSlice';
-import { loginRequested, uiSlice, wishDialogToggled } from '../src/features/ui/uiSlice';
+import { loginRequested, uiSlice, wishRequested } from '../src/features/ui/uiSlice';
 import { currentCleared, wishRecorded, wishSlice, wishSynced, type WishEntry } from '../src/features/wish/wishSlice';
 
 const entry = (at: string, titleCode: WishEntry['titleCode'] = 'today', offline = false): WishEntry => ({ at, titleCode, templateId: 't1', offline });
@@ -88,10 +88,17 @@ describe('feed / ui slice', () => {
     expect(s).toMatchObject({ type: 'story', sort: 'hot' });
   });
 
-  it('popup xin vía và yêu cầu đăng nhập theo hành động', () => {
-    let s = uiSlice.reducer(undefined, wishDialogToggled(true));
-    expect(s.wishDialogOpen).toBe(true);
-    s = uiSlice.reducer(s, loginRequested('post'));
+  it('xin vía một chạm: mỗi lần bấm tăng bộ đếm, bấm liền trong thời gian khóa thì bỏ qua', () => {
+    let s = uiSlice.reducer(undefined, { type: wishRequested.type, payload: 10_000 });
+    expect(s.wishRequest).toBe(1);
+    s = uiSlice.reducer(s, { type: wishRequested.type, payload: 11_000 });
+    expect(s.wishRequest).toBe(1);
+    s = uiSlice.reducer(s, { type: wishRequested.type, payload: 13_001 });
+    expect(s.wishRequest).toBe(2);
+  });
+
+  it('yêu cầu đăng nhập theo hành động', () => {
+    const s = uiSlice.reducer(undefined, loginRequested('post'));
     expect(s.login).toEqual({ open: true, reason: 'post' });
   });
 });

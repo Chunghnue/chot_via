@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { expectNoHorizontalScroll } from './support';
 
-test.describe('trang chủ theo thiết kế: hero ảnh phố, hàng nút, chân trang', () => {
+test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, chân trang', () => {
   test('hàng nút hành động theo 3 ảnh: điện thoại 6 nút, iPad 5 nút, máy tính 6 nút', async ({ page, viewport }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
@@ -18,24 +18,33 @@ test.describe('trang chủ theo thiết kế: hero ảnh phố, hàng nút, châ
     await expectNoHorizontalScroll(page);
   });
 
-  test('bấm vùng cửa hàng trên ảnh phố mở trang cửa hàng; bấm Thần Tài mở hộp Xin vía', async ({ page, viewport }) => {
-    test.skip((viewport?.width ?? 0) < 1024, 'trên điện thoại/iPad dọc ảnh phố bị cắt hai bên');
+  test('hero là thành phố 3D ngay khi mở trang: có canvas, không còn nút Ghé phố 3D / Về ảnh phố, có nút điều khiển góc nhìn', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: /^Mở Quán Cafe/ }).first().click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Thần Tài' }).first().click({ force: true });
-    await expect(page.getByRole('dialog')).toBeVisible();
+    const hero = page.getByRole('region', { name: /Phố Chốt Vía 3D/ });
+    await expect(hero.locator('canvas')).toBeVisible();
+    await expect(page.getByRole('button', { name: /^(Ghé phố 3D|Về ảnh phố)$/ })).toHaveCount(0);
+    const controls = hero.getByRole('group', { name: 'Điều khiển góc nhìn phố 3D' });
+    for (const name of ['Xoay sang trái', 'Xoay sang phải', 'Đi tới', 'Đi lùi', 'Phóng to', 'Thu nhỏ']) await controls.getByRole('button', { name }).click();
+    await expect(hero.getByRole('button', { name: /Xin vía hôm nay/ })).toBeVisible();
+    await expectNoHorizontalScroll(page);
   });
 
-  test('"Ghé phố 3D" bật/tắt chế độ 3D mà không làm mất nút Xin vía', async ({ page }) => {
+  test('bấm Thần Tài trong cảnh 3D nổ vía ngay (không hộp thoại)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    const toggle = page.getByRole('button', { name: /^(Ghé phố 3D|Về ảnh phố)$/ });
-    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.getByRole('button', { name: /Xin vía hôm nay/ }).first()).toBeVisible();
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    const canvas = page.getByRole('region', { name: /Phố Chốt Vía 3D/ }).locator('canvas');
+    await expect(canvas).toBeVisible();
+    await page.waitForTimeout(4000); // chờ ảnh Thần Tài tải vào cảnh
+    const box = await canvas.boundingBox();
+    expect(box).not.toBeNull();
+    if (!box) return;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height * 0.42);
+    await expect(page.getByTestId('wish-card')).toBeVisible();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('bấm cửa hàng trong cảnh phố ở Phố 3D mở thẻ điểm', async ({ page }) => {
+    await page.goto('/pho-3d', { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: /^Mở Quán Cafe/ }).first().dispatchEvent('click');
+    await expect(page.getByRole('dialog').getByText('Quán Cafe An Nhiên').first()).toBeVisible();
   });
 });

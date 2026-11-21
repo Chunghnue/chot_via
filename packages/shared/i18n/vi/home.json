@@ -67,8 +67,15 @@
   "challengeSub": "Hoàn thành {target} nhiệm vụ để nhận quà hấp dẫn!",
   "viaUnit": "vía",
   "shopStrip": "Cửa hàng trên phố",
-  "visit3d": "Ghé phố 3D",
-  "backToImage": "Về ảnh phố",
+  "scene": {
+    "controls": "Điều khiển góc nhìn phố 3D",
+    "rotateLeft": "Xoay sang trái",
+    "rotateRight": "Xoay sang phải",
+    "forward": "Đi tới",
+    "back": "Đi lùi",
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ"
+  },
   "installApp": "Tải ứng dụng / PWA",
   "tagline": "Cộng đồng người bán hàng",
   "footerLinks": "Liên kết chân trang",

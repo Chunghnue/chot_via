@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 import { useTranslations } from 'use-intl';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { selectWishEntries } from '@/features/wish/wishSlice';
-import { wishDialogToggled } from '@/features/ui/uiSlice';
+import { wishRequested } from '@/features/ui/uiSlice';
 import { useMounted } from '@/lib/use-mounted';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
@@ -43,7 +43,7 @@ export function QuickWishCard() {
         <p className="mt-1 font-display text-xl font-extrabold text-wish-strong">{t('received')}</p>
         <p className="text-[0.78rem] font-medium text-ink">{t('quickHint')}</p>
       </div>
-      <Button variant="wish" size="lg" className="mt-3 w-full" onClick={() => dispatch(wishDialogToggled(true))}>✨ {t(`cta.${titleCode}`)}</Button>
+      <Button variant="wish" size="lg" className="mt-3 w-full" onClick={() => dispatch(wishRequested())}>✨ {t(`cta.${titleCode}`)}</Button>
     </Card>
   );
 }

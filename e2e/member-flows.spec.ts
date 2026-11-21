@@ -41,9 +41,9 @@ test.describe('thành viên: đăng nhập đúng lúc, giữ bản nháp', () =
     await expect(page.getByText('0 điểm vía')).toBeVisible();
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: /Xin vía/ }).first().click();
-    await page.getByRole('dialog').getByRole('button', { name: /Nhận vía/ }).click();
-    await expect(page.getByRole('dialog').getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
-    await page.keyboard.press('Escape');
+    const card = page.getByTestId('wish-card');
+    await expect(card.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
+    await expect(card.getByText('+1 điểm vía')).toBeVisible();
     await page.goto('/ca-nhan', { waitUntil: 'networkidle' });
     await expect(page.getByText('1 điểm vía')).toBeVisible();
     for (const tile of ['Cửa hàng 3D của tôi', 'Bài đăng', 'Thành tích', 'Yêu thích']) await expect(page.getByText(tile, { exact: true }).first()).toBeVisible();

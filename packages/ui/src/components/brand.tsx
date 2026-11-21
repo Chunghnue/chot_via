@@ -41,7 +41,7 @@ export function DeityAvatar({ className, glow, src = '/images/than-tai.webp' }: 
 /** Ảnh mặt tiền theo mẫu cửa hàng (đặt tại /images của ứng dụng web). */
 export const SHOP_IMAGES: Record<SceneModelKey, string> = {
   cafe: '/images/shop-quan-cafe.webp', fashion: '/images/shop-thoi-trang.webp', minimart: '/images/shop-minimart.webp', restaurant: '/images/shop-nha-hang.webp',
-  pharmacy: '/images/cua-hang-mau.webp', retail: '/images/cua-hang-mau.webp', sale_office: '/images/shop-van-phong-sale.webp', generic: '/images/cua-hang-mau.webp',
+  pharmacy: '/images/pho/nha-thuoc.webp', retail: '/images/cua-hang-mau.webp', sale_office: '/images/shop-van-phong-sale.webp', generic: '/images/cua-hang-mau.webp',
 };
 
 /** Mặt tiền cửa hàng/văn phòng theo mẫu; dùng cho thẻ điểm, danh sách và trang tạo điểm. */

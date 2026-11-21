@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
-import { wishDialogToggled } from '@/features/ui/uiSlice';
+import { wishRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 
 const icon = 'size-5 shrink-0';
@@ -33,7 +33,7 @@ export function TabletSideNav() {
           <button type="button" className={item} onClick={() => dispatch(composerOpened(undefined))}><PlusSquare className={icon} aria-hidden />{t('post')}</button>
           {link('/bang-tin?type=story', t('story'), <Flame className={icon} aria-hidden />)}
           {link('/bang-tin?type=brag', t('brag'), <Handshake className={icon} aria-hidden />)}
-          <button type="button" className={item} onClick={() => dispatch(wishDialogToggled(true))}><Sparkles className={icon} aria-hidden />{t('tabletWish')}</button>
+          <button type="button" className={item} onClick={() => dispatch(wishRequested())}><Sparkles className={icon} aria-hidden />{t('tabletWish')}</button>
           {link('/pho-3d', t('tabletSendReceive'), <Gift className={icon} aria-hidden />)}
           {link('/su-kien', t('challenge'), <Target className={icon} aria-hidden />)}
           {link('/bang-xep-hang', t('leaderboard'), <BarChart3 className={icon} aria-hidden />)}

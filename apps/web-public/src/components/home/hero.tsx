@@ -2,14 +2,15 @@
 
 import { DEFAULT_HOME_CONFIG, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@chot-via/shared';
 import { Button, cn } from '@chot-via/ui';
-import { GlbStreetView } from '@chot-via/scene-3d';
+import { CityView, useSceneCapability, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
+import { ChevronDown, ChevronUp, Minus, Plus, RotateCcw, RotateCw } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslations } from 'use-intl';
-import { useGlbLabels, useStreetLabels } from '@/components/place/use-street-labels';
+import { useStreetLabels } from '@/components/place/use-street-labels';
 import { composerOpened } from '@/features/composer/composerSlice';
-import { placeSheetOpened, wishDialogToggled } from '@/features/ui/uiSlice';
-import { useAppDispatch } from '@/store/hooks';
+import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/ui/uiSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { useCurrentUser } from '@/lib/use-member';
 
@@ -30,19 +31,24 @@ function RegionButton({ slot, onOpen, label }: { slot: StreetSlotDto; onOpen: (p
   );
 }
 
-/** Hero Phố Chốt Vía 3D: ảnh phố theo thiết kế (cửa hàng và Thần Tài bấm được), "Ghé phố 3D" mở cảnh WebGL dựng từ file GLB; nút Xin vía luôn nổi bật nhất. */
+/**
+ * Hero Phố Chốt Vía 3D: luôn là thành phố 3D (cảnh WebGL dựng từ hình tách nền của bộ thiết kế): kéo để xoay đủ 360°, nút +/− để phóng to, nút ▲▼ để đi tới/lui, người đi lại.
+ * Thiết bị không hỗ trợ WebGL thì hiện ảnh phố tĩnh (vùng bấm theo %). Nút Xin vía luôn nổi bật nhất.
+ */
 export function HomeHero({ home }: { home: HomeDto | undefined }) {
   const t = useTranslations('home');
   const dispatch = useAppDispatch();
   const labels = useStreetLabels();
-  const glbLabels = useGlbLabels();
   const tw = useTranslations('wish');
   const { titleCode } = useWishTitle();
-  const [view3d, setView3d] = useState(false);
+  const capability = useSceneCapability();
+  const wishRequest = useAppSelector(selectWishRequest);
+  const [command, setCommand] = useState<CameraCommand | null>(null);
+  const send = useCallback((kind: CameraCommandKind): void => setCommand((c) => ({ id: (c?.id ?? 0) + 1, kind })), []);
   const config = home?.layout.config ?? DEFAULT_HOME_CONFIG;
   const slots = home?.layout.street ?? [];
   const openPlace = (id: string): void => { dispatch(placeSheetOpened({ placeId: id })); };
-  const openWish = (): void => { dispatch(wishDialogToggled(true)); };
+  const openWish = (): void => { dispatch(wishRequested()); };
   const imageStage = (
     <div
       className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -61,17 +67,12 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   return (
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
-        {view3d ? (
-          <GlbStreetView
-            className="absolute inset-0" config={config} slots={slots} onSelectPlace={openPlace} onSelectDeity={openWish} labels={glbLabels}
-            fallback={imageStage}
-          />
-        ) : imageStage}
+        <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
           <h1 className="font-display text-[clamp(1.1rem,5.6cqw,5.2rem)] font-extrabold leading-none text-title-light md:text-title md:text-[clamp(1.9rem,5.6cqw,5.2rem)]">{config.heroTitle}</h1>
           <p className="rounded-full border-2 border-surface bg-gold px-[1.2cqw] py-[0.2cqw] text-[clamp(0.55rem,1.65cqw,1.4rem)] font-bold text-on-gold shadow-card md:border-0 md:px-[1.6cqw] md:py-[0.2cqw] md:text-[clamp(0.7rem,1.7cqw,1.4rem)]">{config.heroSubtitle}</p>
         </div>
-        {!view3d && config.signLines.length > 0 ? (
+        {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[10%] hidden flex-col items-center md:flex">
             <span className="h-[2cqw] w-[0.5cqw] bg-[#7a4a23]" />
             <div className="flex flex-col items-center gap-[0.3cqw] rounded-[1cqw] border-[0.4cqw] border-[#7a4a23] bg-[#d9a15f] px-[1.8cqw] py-[1cqw] shadow-card [background-image:repeating-linear-gradient(90deg,transparent_0_2.4cqw,rgb(122_74_35/0.18)_2.4cqw_2.6cqw)]">
@@ -79,14 +80,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
             </div>
           </div>
         ) : null}
-        <Button
-          type="button" variant="soft" size="sm" aria-pressed={view3d} onClick={() => setView3d((v) => !v)}
-          className="absolute left-[2%] top-[3%] z-10 shadow-card"
-        >{view3d ? t('backToImage') : t('visit3d')}</Button>
-        {view3d ? null : HERO_COINS.map((c) => (
-          <img key={`${c.x}-${c.y}`} src="/images/ic-coin.webp" alt="" aria-hidden draggable={false}
-            className="pointer-events-none absolute animate-float object-contain drop-shadow-md md:hidden" style={{ left: `${c.x}%`, top: `${c.y}%`, width: `${c.w}cqw`, animationDelay: `${c.d}s` }} />
-        ))}
+        {capability.supports3D ? <HeroControls onCommand={send} /> : null}
         <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex flex-col items-center gap-[2.4cqw] px-[7%] md:bottom-[12%] md:gap-1.5 md:px-3">
           <div className="relative w-full md:w-auto">
             <span aria-hidden className="pointer-events-none absolute inset-x-[-4%] -bottom-[36%] h-[90%] rounded-[50%] border-[0.6cqw] border-gold/70 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-90 blur-[1px] md:hidden" />
@@ -103,11 +97,21 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   );
 }
 
-/** Đồng xu bay quanh Thần Tài trên điện thoại (toạ độ % theo khung hero, w theo cqw). */
-const HERO_COINS = [
-  { x: 22, y: 56, w: 9, d: 0 }, { x: 25, y: 38, w: 6, d: 0.6 }, { x: 70, y: 50, w: 8, d: 1.1 },
-  { x: 76, y: 63, w: 6, d: 0.3 }, { x: 66, y: 32, w: 5, d: 0.9 }, { x: 33, y: 27, w: 4, d: 1.5 },
-] as const;
+/** Nút điều khiển góc nhìn của thành phố 3D (lưới 2 cột ở góc trên bên phải để không đè lên hàng nút phía dưới ở hero thấp như iPad ngang): xoay trái / phải, đi tới / đi lùi dọc phố, phóng to / thu nhỏ. Mọi kích thước màn hình đều có (cuộn chuột chỉ cuộn trang). */
+function HeroControls({ onCommand }: { onCommand: (kind: CameraCommandKind) => void }) {
+  const t = useTranslations('home.scene');
+  const btn = 'grid size-8 place-items-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur transition active:scale-90 md:size-9';
+  return (
+    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[4%] z-10 grid grid-cols-2 gap-1.5">
+      <button type="button" aria-label={t('rotateLeft')} onClick={() => onCommand('left')} className={btn}><RotateCcw className="size-4" aria-hidden /></button>
+      <button type="button" aria-label={t('rotateRight')} onClick={() => onCommand('right')} className={btn}><RotateCw className="size-4" aria-hidden /></button>
+      <button type="button" aria-label={t('forward')} onClick={() => onCommand('up')} className={btn}><ChevronUp className="size-5" aria-hidden /></button>
+      <button type="button" aria-label={t('back')} onClick={() => onCommand('down')} className={btn}><ChevronDown className="size-5" aria-hidden /></button>
+      <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={btn}><Plus className="size-5" aria-hidden /></button>
+      <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={btn}><Minus className="size-5" aria-hidden /></button>
+    </div>
+  );
+}
 
 /** Bàn tay chỉ trỏ ở cuối nút (ảnh thiết kế). Đặt file 3D vào /images/ic-pointer.webp rồi gán đường dẫn vào đây để thay emoji tạm. */
 const POINTER_IMAGE: string | null = null;
@@ -171,7 +175,7 @@ export function ActionCards({ actions }: { actions: readonly HomeActionDto[] }) 
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
           if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
           if (a.kind === 'brag') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened(role ? { kind: 'brag', role } : { kind: 'brag' }))}>{inner(a, title)}</button>;
-          if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(wishDialogToggled(true))}>{inner(a, title)}</button>;
+          if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(wishRequested())}>{inner(a, title)}</button>;
           return <Link key={a.code} href={a.href ?? '/'} className={cls} style={style}>{inner(a, title)}</Link>;
         })}
       </nav>

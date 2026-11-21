@@ -9,25 +9,35 @@ test.describe('khách: vào là xin vía được ngay', () => {
     await expect(shown(page, 'Phố Chốt Vía 3D')).toBeVisible();
   });
 
-  test('xin vía Thần Tài: popup → nhận vía → "Đã nhận vía!" và liên kết sang Phố 3D, không đòi đăng nhập', async ({ page }) => {
+  test('xin vía Thần Tài một chạm: bấm là nổ ngay, hiện lời chúc nổi và liên kết sang Phố 3D; không hộp thoại, không bước xác nhận, không đòi đăng nhập', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: /Xin vía hôm nay/ }).first().click();
-    const dialog = page.getByRole('dialog');
-    await expect(dialog.getByText('Thần Tài đã sẵn sàng cho vía!')).toBeVisible();
-    await dialog.getByRole('button', { name: /Nhận vía/ }).click();
-    await expect(dialog.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
-    await expect(dialog.getByRole('button', { name: 'Đã nhận vía!' })).toBeVisible();
-    await expect(dialog.getByRole('link', { name: /Gửi vía cho cửa hàng khác trong Phố 3D/ })).toBeVisible();
-    await expect(dialog.getByText(/lịch sử/i)).toHaveCount(0);
-    await dialog.getByRole('button', { name: 'Đã nhận vía!' }).click();
+    await expect(page.getByTestId('wish-burst')).toBeAttached();
+    const card = page.getByTestId('wish-card');
+    await expect(card.getByRole('heading', { name: 'Thần Tài đã cho vía!' })).toBeVisible();
+    await expect(card.getByRole('link', { name: /Gửi vía cho cửa hàng khác trong Phố 3D/ })).toBeVisible();
+    await expect(card.getByText(/lịch sử/i)).toHaveCount(0);
     await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Đã nhận vía!' })).toHaveCount(0);
+    await card.getByRole('button', { name: 'Đóng lời chúc' }).click();
+    await expect(card).toHaveCount(0);
+  });
+
+  test('bấm liền hai lần chỉ ghi nhận một lượt xin vía (nút bị khóa trong lúc đang nổ)', async ({ page }) => {
+    let calls = 0;
+    page.on('request', (r) => { if (r.method() === 'POST' && r.url().includes('/wishes/deity')) calls += 1; });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const hero = page.getByRole('button', { name: /Xin vía (hôm|sáng|chiều|tối) nay/ }).first();
+    await hero.click();
+    await hero.click({ force: true });
+    await expect(page.getByTestId('wish-card')).toBeVisible();
+    expect(calls).toBe(1);
   });
 
   test('sau lần xin vía đầu, nút hero đổi sang tiêu đề theo buổi (sáng/chiều/tối nay)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: /Xin vía hôm nay/ }).first().click();
-    await page.getByRole('dialog').getByRole('button', { name: /Nhận vía/ }).click();
-    await page.getByRole('button', { name: 'Đã nhận vía!' }).click();
+    await expect(page.getByTestId('wish-card')).toBeVisible();
     await expect(page.getByRole('button', { name: /Xin vía (sáng|chiều|tối) nay/ }).first()).toBeVisible();
   });
 
