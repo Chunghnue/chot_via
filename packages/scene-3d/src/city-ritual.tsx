@@ -8,6 +8,7 @@ import { CITY_IMAGES, SHOP_WIDTH, spreadShopX } from './city-assets';
 import { aspectOf, glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
 import type { SceneColors } from './colors';
 import { Label } from './label';
+import { HOLD_ARM_EULER, Mascot, MASCOT_HAND, type MascotRig } from './mascot';
 import { RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
 
 /** Cảnh nghi lễ: Thỉnh Thần Tài (20 giây) và Đốt vía (10 giây), diễn ngay trong thành phố ở trang chủ, trước cửa hàng của người dùng. */
@@ -260,10 +261,11 @@ function ThrowFlashes({ spot, start, colors }: { spot: Spot; start: Start; color
 
 /* ---------- Đốt vía ---------- */
 
-/** Người đốt vía là một người nhỏ bước ra từ hông cửa hàng (ảnh gốc cao khoảng 1,4 m, cửa hàng cao hơn 6 m). */
+/** Người đốt vía là nhân vật phi hành gia 3D bước ra từ cửa cửa hàng (cao khoảng 2 m, cửa hàng cao hơn 6 m). */
 const PERSON_SCALE = 1.05;
-const PAPER_H = 1.1;
-const HAND_Y = 1.15;
+const PAPER_H = 0.85;
+/** Góc quay thân tối đa (rad) khi đi ngang: nhìn chếch ba phần tư thay vì dán mặt vào máy quay. */
+const WALK_YAW = 0.85;
 const SMOKE = 16;
 const SMOKE_LIFE = 3.2;
 const EMBERS = 14;
@@ -320,24 +322,26 @@ function usePaperTexture(colors: SceneColors): CanvasTexture | null {
 }
 
 /** Người cầm tờ giấy đốt vía đi đi lại lại trước cửa hàng; giấy cháy dần từ trên xuống, khói bay lên, cuối cùng cửa hàng sáng vàng. */
-function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: SceneColors; start: Start; alphaCover: boolean }) {
+function BurnActors({ spot, colors, start }: { spot: Spot; colors: SceneColors; start: Start }) {
   const B = RITUAL_BEATS.burn;
-  const tex = useSprite(CITY_IMAGES.walkers[0]);
   const paper = usePaperTexture(colors);
   const flameTex = useFlameTexture();
   const root = useRef<Group>(null);
   const face = useRef<Group>(null);
+  const figure = useRef<Group>(null);
+  const head = useRef<Group>(null);
   const legL = useRef<Group>(null);
   const legR = useRef<Group>(null);
-  const hand = useRef<Group>(null);
+  const armFree = useRef<Group>(null);
+  const armHold = useRef<Group>(null);
+  const hold = useRef<Group>(null);
+  const rig: MascotRig = { figure, head, legL, legR, armFree, armHold, hold };
   const sheet = useRef<Group>(null);
   const flames = useRef<(SpriteObject | null)[]>([]);
   const glow = useRef<SpriteObject>(null);
   const embers = useRef<(SpriteObject | null)[]>([]);
   const smoke = useRef<(SpriteObject | null)[]>([]);
   const bless = useRef<(SpriteObject | null)[]>([]);
-  const bustH = 1.4;
-  const bustW = bustH * aspectOf(tex);
   const baseZ = spot.z + 4.2;
   /** Người bước ra từ cửa chính của cửa hàng (cửa mở ra rồi mới thấy người), đi tiến ra trước cửa rồi mới đi đi lại lại. */
   const startX = spot.x;
@@ -349,21 +353,34 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
   const pace = (a: number): number => spot.x + 1.6 + 2.4 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter));
   const personX = (a: number): number => MathUtils.lerp(startX, pace(a), out(a));
   const burned = (a: number): number => clamp01((a - B.ignite) / (B.ash - B.ignite));
+  const rootScale = (a: number): number => PERSON_SCALE * (0.5 + 0.5 * out(a));
+  /** Góc xoay thân quanh trục đứng: quay về phía đang đi (đổi chiều êm ở hai đầu quãng đường), đứng thẳng lại khi giấy cháy hết. */
+  const yawOf = (a: number): number => WALK_YAW * MathUtils.clamp(2.5 * Math.cos(0.8 * (Math.min(a, B.ash) - B.enter)), -1, 1) * out(a) * (1 - smooth((a - B.ash) / 0.6));
+  /** Vị trí bàn tay cầm giấy trong cảnh tại thời điểm `a` (giả định máy quay nhìn thẳng từ phía trước, như phần còn lại của nghi lễ). */
+  const handAt = (a: number): { x: number; z: number } => {
+    const k = rootScale(a);
+    const yaw = yawOf(a);
+    const c = Math.cos(yaw);
+    const s = Math.sin(yaw);
+    return { x: personX(a) + k * (MASCOT_HAND.x * c + MASCOT_HAND.z * s), z: personZ(a) + k * (-MASCOT_HAND.x * s + MASCOT_HAND.z * c) };
+  };
 
   useFrame(({ clock }) => {
     const a = ageOf(start, clock.elapsedTime);
     const walking = a < B.ash;
-    const dirx = Math.cos(0.8 * (Math.min(a, B.ash) - B.enter)) >= 0 ? 1 : -1;
-    const x = personX(a);
+    const k = rootScale(a);
+    const yaw = yawOf(a);
     const swing = walking ? Math.sin(a * 7) * 0.55 : 0;
-    if (root.current) { root.current.position.set(x, 0, personZ(a)); root.current.scale.setScalar(PERSON_SCALE * (0.5 + 0.5 * out(a))); root.current.visible = a > B.enter + 0.5; }
+    const wave = smooth((a - B.ash) / 0.5);
+    if (root.current) { root.current.position.set(personX(a), 0, personZ(a)); root.current.scale.setScalar(k); root.current.visible = a > B.enter + 0.5; }
     if (legL.current) legL.current.rotation.x = swing;
     if (legR.current) legR.current.rotation.x = -swing;
-    if (face.current) {
-      face.current.position.y = walking ? Math.abs(Math.sin(a * 7)) * 0.05 : 0;
-      face.current.rotation.z = a > B.ash ? Math.sin(Math.min(1, (a - B.ash) / 0.8) * Math.PI) * 0.16 : 0;
-    }
-    if (hand.current) { hand.current.position.set(dirx * 0.5, HAND_Y, 0.25); hand.current.rotation.z = Math.sin(a * 5) * 0.2; }
+    if (figure.current) { figure.current.position.y = walking ? Math.abs(Math.sin(a * 7)) * 0.05 : 0; figure.current.rotation.y = yaw; }
+    if (head.current) { head.current.rotation.y = -yaw * 0.55; head.current.rotation.z = a > B.ash ? Math.sin(Math.min(1, (a - B.ash) / 0.8) * Math.PI) * 0.16 : 0; }
+    // Tay rảnh đung đưa khi đi, giơ lên vẫy khi giấy cháy hết; tay cầm hạ xuống
+    if (armFree.current) armFree.current.rotation.set(-swing * 0.8 * (1 - wave), 0, -wave * (2.5 + 0.35 * Math.sin(a * 9)));
+    if (armHold.current) armHold.current.rotation.set(HOLD_ARM_EULER.x * (1 - wave) + Math.sin(a * 7) * 0.04, 0, HOLD_ARM_EULER.z * (1 - wave));
+    if (hold.current) hold.current.rotation.set(0, -yaw * 0.9, Math.sin(a * 5) * 0.12);
     const b = burned(a);
     const left = 1 - b;
     if (sheet.current) { sheet.current.scale.y = Math.max(0.001, left); sheet.current.visible = left > 0.01; }
@@ -373,19 +390,20 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
     flames.current.forEach((m, i) => {
       if (!m) return;
       m.visible = lit > 0.01;
-      const k = lit * (1 + 0.16 * Math.sin(a * 23 + i * 2) + 0.08 * Math.sin(a * 41 + i));
+      const f = lit * (1 + 0.16 * Math.sin(a * 23 + i * 2) + 0.08 * Math.sin(a * 41 + i));
       const size = [0.62, 0.44, 0.28][i] ?? 0.3;
-      const h = size * 1.3 * k;
+      const h = size * 1.3 * f;
       m.position.set(0, flameY + h * 0.42, 0.08 + i * 0.01);
-      m.scale.set(size * k, h, 1);
+      m.scale.set(size * f, h, 1);
     });
     if (glow.current) { glow.current.visible = lit > 0.01; glow.current.position.y = flameY + 0.25; }
     // Tàn lửa bay lên từ mép giấy
+    const hand = handAt(a);
     embers.current.forEach((m, i) => {
       if (!m) return;
       const t = (a * 1.1 + hash(i, 5) * 2) % 1.4;
       m.visible = lit > 0.5 && walking;
-      m.position.set(x + (dirx * 0.5 + Math.sin(i * 7 + a * 3) * 0.3 * t) * PERSON_SCALE, (HAND_Y + flameY) * PERSON_SCALE + t * 1.1, personZ(a) + 0.3);
+      m.position.set(hand.x + Math.sin(i * 7 + a * 3) * 0.3 * t * k, (MASCOT_HAND.y + flameY) * k + t * 1.1, hand.z + 0.3);
       const s = 0.2 * (1 - t / 1.4);
       m.scale.set(s, s, 1);
     });
@@ -397,10 +415,9 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
       const born = first + Math.floor((a - first) / SMOKE_LIFE) * SMOKE_LIFE;
       const age = a - born;
       if (born > B.ash + 0.2) { m.visible = false; return; }
-      const ex = personX(born);
-      const edir = Math.cos(0.8 * (Math.min(born, B.ash) - B.enter)) >= 0 ? 1 : -1;
+      const at = handAt(born);
       m.visible = true;
-      m.position.set(ex + edir * 0.5 * PERSON_SCALE + Math.sin(i * 1.7) * 0.5 * age, (HAND_Y + PAPER_H * (1 - burned(born))) * PERSON_SCALE + 0.3 + age * 1.1 + age * age * 0.3, personZ(born) + 0.4);
+      m.position.set(at.x + Math.sin(i * 1.7) * 0.5 * age, (MASCOT_HAND.y + PAPER_H * (1 - burned(born))) * rootScale(born) + 0.3 + age * 1.1 + age * age * 0.3, at.z + 0.4);
       const s = 0.45 + age * 0.9;
       m.scale.set(s, s, 1);
       m.material.opacity = 0.42 * (1 - age / SMOKE_LIFE);
@@ -421,16 +438,10 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
     <>
       <group ref={root}>
         <Shadow size={1.8} opacity={0.3} color={colors.ink} />
-        <group ref={legL} position={[-0.16, 0.62, 0]}><mesh position={[0, -0.31, 0]}><boxGeometry args={[0.2, 0.62, 0.22]} /><meshStandardMaterial color={colors.personHair} /></mesh></group>
-        <group ref={legR} position={[0.16, 0.62, 0]}><mesh position={[0, -0.31, 0]}><boxGeometry args={[0.2, 0.62, 0.22]} /><meshStandardMaterial color={colors.personHair} /></mesh></group>
         <group ref={face}>
-          <mesh position={[0, 0.58 + bustH / 2, 0]}>
-            <planeGeometry args={[bustW, bustH]} />
-            <meshBasicMaterial map={tex} alphaTest={0.4} alphaToCoverage={alphaCover} side={DoubleSide} toneMapped={false} />
-          </mesh>
-          <group ref={hand}>
+          <Mascot rig={rig} colors={colors}>
             <group ref={sheet}>
-              <mesh position={[0, PAPER_H / 2, 0.06]}>
+              <mesh position={[PAPER_H * 0.72 * 0.3, PAPER_H / 2, 0]}>
                 <planeGeometry args={[PAPER_H * 0.72, PAPER_H]} />
                 {paper ? <meshBasicMaterial map={paper} side={DoubleSide} toneMapped={false} /> : <meshBasicMaterial color={colors.gold} side={DoubleSide} />}
               </mesh>
@@ -443,7 +454,7 @@ function BurnActors({ spot, colors, start, alphaCover }: { spot: Spot; colors: S
             <sprite ref={glow} position={[0, PAPER_H * 0.9, 0.02]} scale={[2.2, 2.2, 1]} visible={false}>
               <spriteMaterial map={glowTexture()} color={colors.wish} transparent opacity={0.35} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
             </sprite>
-          </group>
+          </Mascot>
         </group>
       </group>
       {Array.from({ length: EMBERS }, (_, i) => (
@@ -499,7 +510,7 @@ function RitualActors({ ritual, slots, colors, alphaCover, start, onStart }: { r
       ) : (
         <>
           <ShopDoor spot={spot} colors={colors} start={start} plan={{ openFrom: 0.5, openTo: 1.2, closeFrom: 2.8, closeTo: 3.5, knocks: [], seconds: RITUAL_SECONDS.burn }} />
-          <BurnActors spot={spot} colors={colors} start={start} alphaCover={alphaCover} />
+          <BurnActors spot={spot} colors={colors} start={start} />
         </>
       )}
     </>

@@ -8,6 +8,8 @@ export const CITY_IMAGES = {
   ground: `${P}san-pho.webp`,
   coin: '/images/ic-coin.webp',
   deityPoses: ['/images/than-tai.webp', '/images/than-tai-nhan-via.webp', '/images/than-tai-bo-dung.webp'],
+  mascotFace: `${P}npc-mascot-mat.webp`,
+  mascotLogo: `${P}npc-mascot-logo.webp`,
   walkers: [`${P}npc-chu-quan.webp`, `${P}npc-chu-shop.webp`, `${P}npc-khach.webp`, `${P}npc-cong-dong.webp`],
 } as const;
 
