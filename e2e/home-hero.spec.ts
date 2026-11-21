@@ -1,22 +1,30 @@
 import { expect, test } from '@playwright/test';
-import { expectNoHorizontalScroll } from './support';
+import { apiLogin, expectNoHorizontalScroll } from './support';
 
 test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, chân trang', () => {
-  test('hàng nút hành động của khách: Đốt vía và Thỉnh Thần Tài chỉ hiện khi đăng nhập nên còn 4 nút ở mọi cỡ màn', async ({ page, viewport }) => {
+  test('hàng nút hành động: khách chỉ thấy Kể khổ và Khoe doanh thu / Deal (Đốt vía và Thỉnh Thần Tài chỉ hiện khi đăng nhập); không còn Thử thách, Tạo cửa hàng 3D', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
-    const width = viewport?.width ?? 0;
-    const ipad = width >= 768 && width < 1280;
-    const buttons = row.locator('a:visible, button:visible');
-    await expect(buttons).toHaveCount(4);
+    await expect(row.locator('a:visible, button:visible')).toHaveCount(2);
+    await expect(row.getByText(/Kể khổ/).first()).toBeVisible();
+    await expect(row.getByText(/Khoe doanh thu|Khoe deal/).first()).toBeVisible();
+    for (const gone of [/Thử thách/, /Tạo cửa hàng 3D/, /Ghé phố/]) await expect(row.getByText(gone)).toHaveCount(0);
     await expect(page.getByTestId('action-burn')).toHaveCount(0);
     await expect(page.getByTestId('action-invoke')).toHaveCount(0);
-    const names = width < 768
-      ? [/Ghé phố/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
-      : ipad
-        ? [/Ghé phố 3D/, /Kể khổ/, /Khoe doanh thu|Khoe deal/, /Tạo cửa hàng 3D/]
-        : [/Kể khổ/, /Khoe doanh thu|Khoe deal/, /Thử thách/, /Tạo cửa hàng 3D/];
-    for (const name of names) await expect(row.getByText(name).first()).toBeVisible();
+    await expectNoHorizontalScroll(page);
+  });
+
+  test('thành viên: hàng nút theo thứ tự Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu; Đốt vía và Thỉnh Thần Tài cao bằng nhau và cao hơn nút khác', async ({ page }) => {
+    await apiLogin(page.context().request);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const row = page.getByRole('navigation', { name: 'Hành động chính' });
+    const buttons = row.locator('a:visible, button:visible');
+    await expect(buttons).toHaveCount(4);
+    const texts = await buttons.allInnerTexts();
+    expect(texts.map((t) => t.split('\n')[0]?.trim())).toEqual([expect.stringMatching(/Kể khổ/), 'Đốt vía', 'Thỉnh Thần Tài', expect.stringMatching(/Khoe doanh thu|Khoe deal/)]);
+    const heights = await buttons.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height));
+    expect(Math.abs((heights[1] ?? 0) - (heights[2] ?? 0))).toBeLessThan(1);
+    expect(heights[1] ?? 0).toBeGreaterThan(heights[0] ?? 99);
     await expectNoHorizontalScroll(page);
   });
 

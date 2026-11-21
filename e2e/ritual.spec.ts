@@ -59,9 +59,7 @@ test.describe('Đốt vía và Thỉnh Thần Tài (cho cửa hàng của chính
     }
   });
 
-  test('có cửa hàng: Thỉnh Thần Tài chạy khoảng 20 giây rồi hiện lời chúc', async ({ page, viewport }) => {
-    const width = viewport?.width ?? 0;
-    test.skip(width >= 768 && width < 1280, 'nút Thỉnh Thần Tài không hiện ở hàng nút của iPad (theo thiết kế)');
+  test('có cửa hàng: Thỉnh Thần Tài chạy khoảng 20 giây rồi hiện lời chúc', async ({ page }) => {
     test.setTimeout(120_000);
     await memberWithStore(page);
     await page.goto('/', { waitUntil: 'networkidle' });

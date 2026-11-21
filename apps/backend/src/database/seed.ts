@@ -9,6 +9,16 @@ import {
 const { db, close } = createDb();
 
 /** Dữ liệu khởi tạo: danh mục, mẫu lời chúc, cửa hàng DEMO do admin tạo (không có doanh thu/giao dịch thật). */
+// Bố cục hàng nút trang chủ mới (Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu / Deal, bỏ Ghé phố 3D / Thử thách / Tạo cửa hàng 3D khỏi hàng): chỉ áp dụng MỘT lần
+// (đánh dấu bằng khóa `home_actions_layout`) để không đè lên chỉnh sửa của admin về sau.
+const [layoutMark] = await db.insert(appSettings).values({ key: 'home_actions_layout', value: { v: 1 } }).onConflictDoNothing().returning({ key: appSettings.key });
+if (layoutMark) {
+  const order: [string, number, boolean][] = [['story', 0, true], ['send_wish', 1, true], ['get_wish', 2, true], ['brag', 3, true], ['visit_street', 4, false], ['challenge', 5, false], ['create_store', 6, false]];
+  for (const [code, n, active] of order) {
+    await db.update(homeActions).set({ active, sortOrder: n, sortTablet: n, sortDesktop: n, showMobile: true, showTablet: true, showDesktop: true }).where(eq(homeActions.code, code));
+  }
+}
+
 // Đổi hai nút hành động cũ "Gửi vía" / "Nhận vía" ở trang chủ thành "Đốt vía" / "Thỉnh Thần Tài" (chỉ sửa dữ liệu, không đổi cấu trúc bảng; chạy lại nhiều lần vẫn an toàn,
 // và không đụng tới nút nào admin đã tự đổi sang kiểu khác).
 await db.update(homeActions).set({ label: 'Đốt vía', subLabel: 'Xua vía dữ, đón lộc', iconUrl: '/images/ic-fire.webp', kind: 'burn', href: null }).where(and(eq(homeActions.code, 'send_wish'), eq(homeActions.kind, 'link')));

@@ -6,7 +6,7 @@ import { appSettings, homeActions, homeFooterLinks, placeCategories, places, sce
 const { db, close } = createDb();
 
 /** Dữ liệu trang chủ theo thiết kế: file 3D (GLB v2, 3 mức chi tiết), hàng nút hành động, chân trang, các ô cửa hàng trên phố. Chạy lại nhiều lần vẫn an toàn. */
-const SEED_VERSION = 4;
+const SEED_VERSION = 5;
 /** Bản đặt lại tỉ lệ model và vị trí ô cửa hàng (v2); bản 3 chỉ thêm hàng nút theo 3 ảnh mới nên không đụng bố cục phố đã chỉnh. */
 const LAYOUT_VERSION = 2;
 const [versionRow] = await db.select().from(appSettings).where(eq(appSettings.key, 'home_seed_version')).limit(1);
@@ -37,20 +37,20 @@ for (const [model, file] of Object.entries(GLB)) {
   await db.update(sceneTemplates).set(set).where(eq(sceneTemplates.modelKey, model as SceneModelKey));
 }
 
-// Hàng nút theo 3 ảnh thiết kế: điện thoại 6 nút, iPad 5 nút, máy tính 6 nút; mỗi cỡ màn xếp thứ tự riêng.
-// Chỉ ghi đè khi chưa có hoặc bản seed cũ (< 3); sau đó admin sửa thoải mái ở "Nút hành động trang chủ".
-const ACTIONS: { code: string; label: string; subLabel: string; icon: string; kind: HomeActionKind; href: string | null; m: boolean; t: boolean; d: boolean; order: number; tablet: number | null; desktop: number | null }[] = [
-  { code: 'visit_street', label: 'Ghé phố 3D', subLabel: 'Khám phá cửa hàng', icon: 'ic-home', kind: 'link', href: '/pho-3d', m: true, t: true, d: false, order: 0, tablet: 0, desktop: null },
-  { code: 'send_wish', label: 'Đốt vía', subLabel: 'Xua vía dữ, đón lộc', icon: 'ic-fire', kind: 'burn', href: null, m: true, t: true, d: true, order: 1, tablet: 3, desktop: 2 },
-  { code: 'get_wish', label: 'Thỉnh Thần Tài', subLabel: 'Thần Tài đến cửa hàng', icon: 'ic-pray', kind: 'invoke', href: null, m: true, t: false, d: true, order: 2, tablet: null, desktop: 3 },
-  { code: 'story', label: 'Kể khổ', subLabel: 'Giải tỏa áp lực', icon: 'ic-laugh', kind: 'story', href: null, m: true, t: true, d: true, order: 3, tablet: 1, desktop: 0 },
-  { code: 'brag', label: 'Khoe doanh thu / Deal', subLabel: 'Chia sẻ thành công', icon: 'ic-money-bag', kind: 'brag', href: null, m: true, t: true, d: true, order: 4, tablet: 2, desktop: 1 },
-  { code: 'challenge', label: 'Thử thách', subLabel: 'Nhận quà hấp dẫn', icon: 'ic-trophy', kind: 'link', href: '/su-kien', m: false, t: false, d: true, order: 5, tablet: null, desktop: 4 },
-  { code: 'create_store', label: 'Tạo cửa hàng 3D', subLabel: 'Cửa hàng của riêng bạn', icon: 'ic-home', kind: 'link', href: '/tao-diem', m: true, t: true, d: true, order: 6, tablet: 4, desktop: 5 },
+// Hàng nút ở trang chủ (mọi cỡ màn giống nhau): Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu / Deal. Ghé phố 3D, Thử thách, Tạo cửa hàng 3D không còn ở hàng này (vẫn có ở menu).
+// Chỉ ghi đè khi chưa có hoặc bản seed cũ (< 5); sau đó admin sửa thoải mái ở "Nút hành động trang chủ".
+const ACTIONS: { code: string; label: string; subLabel: string; icon: string; kind: HomeActionKind; href: string | null; active: boolean; order: number }[] = [
+  { code: 'story', label: 'Kể khổ', subLabel: 'Giải tỏa áp lực', icon: 'ic-laugh', kind: 'story', href: null, active: true, order: 0 },
+  { code: 'send_wish', label: 'Đốt vía', subLabel: 'Xua vía dữ, đón lộc', icon: 'ic-fire', kind: 'burn', href: null, active: true, order: 1 },
+  { code: 'get_wish', label: 'Thỉnh Thần Tài', subLabel: 'Thần Tài đến cửa hàng', icon: 'ic-pray', kind: 'invoke', href: null, active: true, order: 2 },
+  { code: 'brag', label: 'Khoe doanh thu / Deal', subLabel: 'Chia sẻ thành công', icon: 'ic-money-bag', kind: 'brag', href: null, active: true, order: 3 },
+  { code: 'visit_street', label: 'Ghé phố 3D', subLabel: 'Khám phá cửa hàng', icon: 'ic-home', kind: 'link', href: '/pho-3d', active: false, order: 4 },
+  { code: 'challenge', label: 'Thử thách', subLabel: 'Nhận quà hấp dẫn', icon: 'ic-trophy', kind: 'link', href: '/su-kien', active: false, order: 5 },
+  { code: 'create_store', label: 'Tạo cửa hàng 3D', subLabel: 'Cửa hàng của riêng bạn', icon: 'ic-home', kind: 'link', href: '/tao-diem', active: false, order: 6 },
 ];
 if (storedVersion < SEED_VERSION) {
   for (const x of ACTIONS) {
-    const v = { label: x.label, subLabel: x.subLabel, iconUrl: `/images/${x.icon}.webp`, kind: x.kind, href: x.href, showMobile: x.m, showTablet: x.t, showDesktop: x.d, sortOrder: x.order, sortTablet: x.tablet, sortDesktop: x.desktop };
+    const v = { label: x.label, subLabel: x.subLabel, iconUrl: `/images/${x.icon}.webp`, kind: x.kind, href: x.href, showMobile: true, showTablet: true, showDesktop: true, active: x.active, sortOrder: x.order, sortTablet: x.order, sortDesktop: x.order };
     const [found] = await db.select({ id: homeActions.id }).from(homeActions).where(eq(homeActions.code, x.code)).limit(1);
     if (found) await db.update(homeActions).set(v).where(eq(homeActions.id, found.id));
     else await db.insert(homeActions).values({ code: x.code, ...v });

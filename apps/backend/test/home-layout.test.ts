@@ -11,8 +11,8 @@ describe('trang chủ: bố cục do admin nhập', () => {
     expect(r.status).toBe(200);
     const { layout } = r.data;
     expect(layout.config.heroImageUrl).toBe(DEFAULT_HOME_CONFIG.heroImageUrl);
-    expect(layout.actions.map((a) => a.code)).toEqual(['visit_street', 'send_wish', 'get_wish', 'story', 'brag', 'challenge', 'create_store']);
-    expect(layout.actions.find((a) => a.code === 'challenge')?.showTablet).toBe(false);
+    expect(layout.actions.map((a) => a.code)).toEqual(['story', 'send_wish', 'get_wish', 'brag']);
+    expect(layout.actions.every((a) => a.showMobile && a.showTablet && a.showDesktop)).toBe(true);
     expect(layout.actions.find((a) => a.code === 'story')?.sortDesktop).toBe(0);
     expect(layout.footerLinks.length).toBeGreaterThan(0);
     const cafe = layout.street.find((s) => s.modelKey === 'cafe');

@@ -159,12 +159,12 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
   const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4 md:max-xl:gap-1.5 md:max-xl:rounded-3xl md:max-xl:p-1.5 md:max-xl:pr-2';
 
-  const inner = (a: HomeActionDto, title: string) => (
+  const inner = (a: HomeActionDto, title: string, featured = false) => (
     <>
-      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className="size-11 shrink-0 object-contain md:size-10 md:max-xl:size-8" draggable={false} /> : null}
+      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className={cn('shrink-0 object-contain', featured ? 'size-14 md:size-12 md:max-xl:size-10' : 'size-11 md:size-10 md:max-xl:size-8')} draggable={false} /> : null}
       <span className="flex min-w-0 flex-col leading-tight">
-        <span className="font-display text-[0.72rem] font-extrabold leading-tight text-ink sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]">{title}</span>
-        {a.subLabel ? <span className="hidden text-xs font-medium leading-tight text-ink-muted @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]">{a.subLabel}</span> : null}
+        <span className={cn('font-display text-[0.72rem] font-extrabold leading-tight sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]', featured ? 'text-on-wish xl:text-[1.05rem]' : 'text-ink')}>{title}</span>
+        {a.subLabel ? <span className={cn('hidden text-xs font-medium leading-tight @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]', featured ? 'text-on-wish/90' : 'text-ink-muted')}>{a.subLabel}</span> : null}
       </span>
     </>
   );
@@ -174,15 +174,17 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
     <div className="@container relative z-10 -mt-5 md:-mt-8 xl:-mt-9">
       <nav
         aria-label={t('actions.label')} style={vars}
-        className="grid grid-cols-[repeat(var(--cm),minmax(0,1fr))] gap-2 px-2 sm:px-4 md:grid-cols-[repeat(var(--ct),minmax(0,1fr))] md:gap-3 md:px-5 xl:grid-cols-[repeat(var(--cd),minmax(0,1fr))] xl:gap-3 xl:px-6 @max-[56rem]:xl:grid-cols-3"
+        className="grid grid-cols-[repeat(var(--cm),minmax(0,1fr))] gap-2 px-2 sm:px-4 md:grid-cols-[repeat(var(--ct),minmax(0,1fr))] md:gap-3 md:px-5 xl:grid-cols-[repeat(var(--cd),minmax(0,1fr))] xl:gap-3 xl:px-6 items-end"
       >
         {actions.map((a, index) => {
-          const cls = cn(base, deviceClass(a));
+          const featured = a.kind === 'burn' || a.kind === 'invoke';
+          // Đốt vía và Thỉnh Thần Tài: cùng một chiều cao, cao và nổi bật hơn các nút còn lại.
+          const cls = cn(base, deviceClass(a), featured && 'h-[7.25rem] border-2 border-gold from-wish via-wish to-wish-strong shadow-cta md:h-[5rem] md:max-xl:h-[4.5rem]');
           const style = orderStyle(a, index);
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
           if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
           if (a.kind === 'brag') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened(role ? { kind: 'brag', role } : { kind: 'brag' }))}>{inner(a, title)}</button>;
-          if (a.kind === 'burn' || a.kind === 'invoke') return <button key={a.code} type="button" className={cls} style={style} data-testid={`action-${a.kind}`} onClick={() => void request(a.kind === 'burn' ? 'burn' : 'invoke')}>{inner(a, title)}</button>;
+          if (a.kind === 'burn' || a.kind === 'invoke') return <button key={a.code} type="button" className={cls} style={style} data-testid={`action-${a.kind}`} onClick={() => void request(a.kind === 'burn' ? 'burn' : 'invoke')}>{inner(a, title, true)}</button>;
           if (a.kind === 'wish') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(wishRequested())}>{inner(a, title)}</button>;
           return <Link key={a.code} href={a.href ?? '/'} className={cls} style={style}>{inner(a, title)}</Link>;
         })}
