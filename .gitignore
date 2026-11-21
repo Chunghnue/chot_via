@@ -24,3 +24,5 @@ zip
 storage-test
 apps/backend/storage-test
 *.log
+
+.DS_Store
