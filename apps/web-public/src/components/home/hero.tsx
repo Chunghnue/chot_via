@@ -88,8 +88,8 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
           <div className="relative w-full md:w-auto">
             <span aria-hidden className="pointer-events-none absolute inset-x-[-4%] -bottom-[36%] h-[90%] rounded-[50%] border-[0.6cqw] border-gold/70 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-90 blur-[1px] md:hidden" />
             <span aria-hidden className="pointer-events-none absolute inset-x-[2%] -bottom-[24%] h-[70%] rounded-[50%] border-[0.5cqw] border-surface/70 md:hidden" />
-            <Button variant="wish" size="lg" className="pointer-events-auto animate-glow relative h-[17cqw] w-full border-[0.9cqw] border-surface bg-linear-to-b from-[color-mix(in_srgb,var(--color-wish)_72%,white)] via-wish to-wish-strong px-4 text-[clamp(1.1rem,6.1cqw,2.2rem)] shadow-[0_0_0_0.9cqw_var(--color-gold),inset_0_0.8cqw_0_rgb(255_255_255/0.35),0_2.4cqw_5cqw_rgb(242_80_26/0.55)] md:h-14 md:w-auto md:border-0 md:bg-linear-to-b md:from-wish md:via-wish md:to-wish-strong md:px-12 md:text-2xl md:shadow-cta xl:h-[4.25rem] xl:px-16 xl:text-3xl" onClick={openWish}>
-              <img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain" draggable={false} />{tw(`title.${titleCode}`)}
+            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[17cqw] w-full border-[0.9cqw] border-surface bg-linear-to-b from-[color-mix(in_srgb,var(--color-wish)_72%,white)] via-wish to-wish-strong px-4 text-[clamp(1.1rem,6.1cqw,2.2rem)] shadow-[0_0_0_0.9cqw_var(--color-gold),inset_0_0.8cqw_0_rgb(255_255_255/0.35),0_2.4cqw_5cqw_rgb(242_80_26/0.55)] md:h-14 md:w-auto md:border-0 md:bg-linear-to-b md:from-wish md:via-wish md:to-wish-strong md:px-12 md:text-2xl md:shadow-cta xl:h-[4.25rem] xl:px-16 xl:text-3xl" onClick={openWish}>
+              {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain" draggable={false} />{tw(`titleTail.${titleCode}`)}
               <PointerHand />
             </Button>
           </div>

@@ -5,6 +5,13 @@
     "afternoon": "Xin vía chiều nay",
     "evening": "Xin vía tối nay"
   },
+  "titleLead": "Xin vía",
+  "titleTail": {
+    "today": "hôm nay",
+    "morning": "sáng nay",
+    "afternoon": "chiều nay",
+    "evening": "tối nay"
+  },
   "cta": {
     "today": "Nhận vía ngay",
     "morning": "Nhận vía sáng nay",

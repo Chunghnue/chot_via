@@ -130,8 +130,8 @@ export default function StreetPage() {
               <StreetControls fullscreen={fullscreen} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
               <StreetTiles />
               <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
-                <Button variant="wish" size="lg" className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
-                  <span aria-hidden>🙏</span>{tw(`title.${titleCode}`)}
+                <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
+                  {tw('titleLead')}<span aria-hidden>🙏</span>{tw(`titleTail.${titleCode}`)}
                 </Button>
               </div>
             </div>
