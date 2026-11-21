@@ -101,4 +101,20 @@ describe('đăng nhập OTP', () => {
     expect(r.status).toBeLessThan(300);
     expect(r.data.accessToken).toBeTruthy();
   });
+
+  it('hai ứng dụng (web công khai và admin) làm mới phiên cùng lúc bằng cùng một cookie đều giữ được phiên', async () => {
+    const s = await login();
+    const a = await post<{ accessToken: string }>('/auth/session', {}, { cookie: s.cookie });
+    const b = await post<{ accessToken: string }>('/auth/session', {}, { cookie: s.cookie });
+    console.log('DBG', JSON.stringify([a.status, a.data === null, b.status, b.data === null, s.cookie.slice(0,40)]));
+    expect(a.data).not.toBeNull();
+    expect(b.data).not.toBeNull();
+  });
+
+  it('đăng xuất thì cookie cũ không dùng lại được, kể cả ngay sau đó', async () => {
+    const s = await login();
+    expect((await post('/auth/logout', {}, { cookie: s.cookie })).status).toBeLessThan(300);
+    const r = await post<unknown>('/auth/session', {}, { cookie: s.cookie });
+    expect(r.data).toBeNull();
+  });
 });

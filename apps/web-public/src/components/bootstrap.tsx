@@ -1,6 +1,6 @@
 'use client';
 
-import { selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation } from '@chot-via/api-client';
+import { selectAuthStatus, selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation } from '@chot-via/api-client';
 import { toast, useCodeMessage } from '@chot-via/ui';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'use-intl';
@@ -15,6 +15,9 @@ export function Bootstrap() {
   const [restore] = useRestoreSessionMutation();
   const { data: pack } = useGetOfflinePackQuery();
   const isMember = useAppSelector(selectIsMember);
+  const status = useAppSelector(selectAuthStatus);
+  const statusRef = useRef(status);
+  statusRef.current = status;
   const { data: today } = useGetDeityTodayQuery(undefined, { skip: !isMember });
   const t = useTranslations('auth');
   const message = useCodeMessage();
@@ -44,6 +47,21 @@ export function Bootstrap() {
       }
     }
   }, [dispatch, restore, t, message]);
+
+  // Đăng nhập ở web admin (cùng cookie phiên) sau khi trang này đã mở: quay lại tab này là tự nhận phiên, không cần tải lại trang.
+  useEffect(() => {
+    let last = 0;
+    const sync = (): void => {
+      if (document.visibilityState !== 'visible' || statusRef.current !== 'guest') return;
+      const now = Date.now();
+      if (now - last < 3000) return;
+      last = now;
+      void restore();
+    };
+    document.addEventListener('visibilitychange', sync);
+    window.addEventListener('focus', sync);
+    return () => { document.removeEventListener('visibilitychange', sync); window.removeEventListener('focus', sync); };
+  }, [restore]);
 
   useEffect(() => {
     if (pack) dispatch(offlinePackLoaded(pack.texts));
