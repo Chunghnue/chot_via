@@ -1,20 +1,22 @@
-import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react';
 import { AdditiveBlending, CanvasTexture, DoubleSide, MathUtils, SRGBColorSpace, type Group, type Sprite as SpriteObject } from 'three';
-import type { StreetSlotDto } from '@chot-via/shared';
+import type { SceneModelKey, StreetSlotDto } from '@chot-via/shared';
 import { SHOP_IMAGES } from '@chot-via/ui';
-import { CITY_IMAGES, SHOP_WIDTH, spreadShopX } from './city-assets';
-import { aspectOf, glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
+import { CITY_IMAGES, doorOf, RITUAL_DEITY_GLB, SHOP_DOOR, SHOP_WIDTH, spreadShopX } from './city-assets';
+import { glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
 import type { SceneColors } from './colors';
 import { Label } from './label';
+import { DeityGlbFigure } from './deity-glb';
+import { DeityWalker, newPose, type DeityPose } from './deity-walker';
 import { HOLD_ARM_EULER, Mascot, MASCOT_HAND, type MascotRig } from './mascot';
 import { RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
 
 /** Cảnh nghi lễ: Thỉnh Thần Tài (20 giây) và Đốt vía (10 giây), diễn ngay trong thành phố ở trang chủ, trước cửa hàng của người dùng. */
 
 type Start = RefObject<number | null>;
-interface Spot { x: number; z: number; own: boolean; width: number }
+/** Chỗ cửa hàng trong cảnh: `x` là tâm cửa hàng, `doorX` là chỗ cánh cửa thật (lệch tâm theo từng kiểu cửa hàng). */
+interface Spot { x: number; z: number; own: boolean; width: number; modelKey: SceneModelKey; doorX: number }
 
 const clamp01 = (v: number): number => MathUtils.clamp(v, 0, 1);
 const smooth = (v: number): number => { const k = clamp01(v); return k * k * (3 - 2 * k); };
@@ -32,8 +34,10 @@ function ageOf(start: Start, now: number): number {
 /** Vị trí cửa hàng cho nghi lễ: nếu cửa hàng đã nằm trên phố thì dùng đúng ô đó, không thì đặt cạnh quảng trường Thần Tài. */
 export function ritualSpot(ritual: RitualScene, slots: readonly StreetSlotDto[]): Spot {
   const slot = slots.find((s) => s.placeId === ritual.placeId);
-  if (slot) return { x: spreadShopX(slot.position.x, slot.position.z), z: slot.position.z, own: false, width: SHOP_WIDTH[slot.modelKey] };
-  return { x: RITUAL_SPOT.x, z: RITUAL_SPOT.z, own: true, width: SHOP_WIDTH[ritual.modelKey] };
+  const modelKey = slot ? slot.modelKey : ritual.modelKey;
+  const width = SHOP_WIDTH[modelKey];
+  const x = slot ? spreadShopX(slot.position.x, slot.position.z) : RITUAL_SPOT.x;
+  return { x, z: slot ? slot.position.z : RITUAL_SPOT.z, own: !slot, width, modelKey, doorX: x + SHOP_DOOR[modelKey].x * width };
 }
 
 /** Quầng sáng nở ra rồi tắt, che khoảnh khắc cửa hàng hiện ra hoặc biến đi. */
@@ -75,9 +79,10 @@ function OwnShop({ ritual, spot, colors, alphaCover, start }: { ritual: RitualSc
 interface DoorPlan { openFrom: number; openTo: number; closeFrom?: number; closeTo?: number; knocks: readonly number[]; seconds: number }
 
 function ShopDoor({ spot, colors, start, plan }: { spot: Spot; colors: SceneColors; start: Start; plan: DoorPlan }) {
-  const s = spot.width / 7.2;
-  const doorW = 1.5 * s;
-  const doorH = 2.7 * s;
+  const door = doorOf(spot.modelKey, spot.width);
+  const doorW = door.w;
+  const doorH = door.h;
+  const s = doorW / 1.5;
   const billboard = useRef<Group>(null);
   const leaf = useRef<Group>(null);
   const spill = useRef<SpriteObject>(null);
@@ -100,7 +105,7 @@ function ShopDoor({ spot, colors, start, plan }: { spot: Spot; colors: SceneColo
     }
   });
   return (
-    <group position={[spot.x, 0, spot.z + 0.12]}>
+    <group position={[spot.doorX, door.y, spot.z + 0.12]}>
       <group ref={billboard}>
         <group ref={room} visible={false}>
           {/* Khung cửa và phần trong cửa sáng vàng */}
@@ -124,71 +129,99 @@ function ShopDoor({ spot, colors, start, plan }: { spot: Spot; colors: SceneColo
 
 /* ---------- Thỉnh Thần Tài ---------- */
 
-const RUN_SCALE = 0.6;
+/** Mặt trên bệ Thần Tài (m). */
+const PEDESTAL_Y = 0.98;
+/** Tâm bệ trong cảnh (đúng chỗ `CityDeity` đặt). */
+const PEDESTAL: { x: number; z: number } = { x: 0, z: 1 };
+/** Ba bậc của bệ: bán kính mép bậc (m, tính từ tâm) và độ cao bậc đó so với bậc dưới. Cộng lại đúng 0,98 m như bệ trong cảnh. */
+const STAIRS: readonly { r: number; rise: number }[] = [{ r: 4.65, rise: 0.34 }, { r: 3.95, rise: 0.32 }, { r: 3.25, rise: 0.32 }];
 
-/** Thần Tài rời bệ, chạy tới cửa hàng, gõ cửa, chúc rồi vung tay tung vàng, cuối cùng chạy về bệ. */
+/** Độ cao mặt đất tại điểm (x, z): 0 ngoài bệ, lên dần theo từng bậc khi vào gần tâm. `soft` là nửa bề rộng chỗ chuyển bậc (m). */
+function groundAt(x: number, z: number, soft: number): number {
+  const r = Math.hypot(x - PEDESTAL.x, z - PEDESTAL.z);
+  let h = 0;
+  for (const s of STAIRS) h += s.rise * (1 - smooth((r - s.r + soft) / (2 * soft)));
+  return h;
+}
+
+/** Chỗ Thần Tài đứng trước cửa hàng, tính từ cánh cửa thật (m): ra phía người xem và lệch phải một chút để không bị chậu hoa che. */
+const STOP = { dx: 0.4, dz: 4.1 } as const;
+/** Một vòng bước đủ 8 khung hình (hai bước) dài bao nhiêu mét trên mặt đất: chọn để chân khớp tốc độ đi, không trượt. */
+const STRIDE = 3.4;
+
+function easeOutBack(t: number): number {
+  const k = clamp01(t) - 1;
+  return 1 + 2.70158 * k * k * k + 1.70158 * k * k;
+}
+
+/**
+ * Thần Tài biến hình từ tượng trên bệ (loé sáng vàng) thành Thần Tài đi bộ (hoạt ảnh của chủ dự án), bước xuống bệ rồi đi tới cửa hàng, gõ cửa, chúc,
+ * tung vàng, cuối cùng đi về bệ và biến lại thành tượng. Khung hình chọn theo quãng đường đã đi; độ cao theo mặt bậc dưới chân. Có file GLB
+ * (`RITUAL_DEITY_GLB`) thì dùng model đó thay cho hoạt ảnh.
+ */
 function InvokeDeity({ spot, colors, start }: { spot: Spot; colors: SceneColors; start: Start }) {
   const B = RITUAL_BEATS.invoke;
-  const textures = useTexture([...CITY_IMAGES.deityPoses]);
-  useMemo(() => { textures.forEach((t) => { t.colorSpace = SRGBColorSpace; t.anisotropy = 8; }); }, [textures]);
   const outer = useRef<Group>(null);
   const shadow = useRef<Group>(null);
   const inner = useRef<Group>(null);
-  const bill = useRef<Group>(null);
-  const poses = useRef<(Group | null)[]>([]);
-  const poseHeight = 5.8;
-  const stopX = spot.x + 1.8;
-  const stopZ = spot.z + 3.8;
-  useFaceCamera(bill, 1);
-  useFrame(({ clock }) => {
+  const pose = useRef<DeityPose>(newPose());
+  const motion = useRef({ x: 0, z: 1, ready: false, phase: 0, move: 0, flip: false, speed: 0, throwId: 0, lastThrow: -1 });
+  const stopX = spot.doorX + STOP.dx;
+  const stopZ = spot.z + STOP.dz;
+  const seconds = RITUAL_SECONDS.invoke;
+  useFrame(({ clock }, delta) => {
+    const dt = Math.min(delta, 0.05);
     const a = ageOf(start, clock.elapsedTime);
-    let x = 0; let z = 1; let y = 0.98; let sc = 1; let tilt = 0; let pulse = 0;
-    if (a < B.jump) {
-      y = 0.98 + Math.sin(a * 5) * 0.1;
-    } else if (a < B.run) {
-      const p = (a - B.jump) / (B.run - B.jump);
-      z = MathUtils.lerp(1, 6.4, p); y = MathUtils.lerp(0.98, 0, p) + Math.sin(Math.PI * p) * 2.4; sc = MathUtils.lerp(1, RUN_SCALE, smooth(p));
-    } else if (a < B.arrive) {
-      const p = (a - B.run) / (B.arrive - B.run);
-      x = MathUtils.lerp(0, stopX, p); z = MathUtils.lerp(6.4, stopZ, p); y = Math.abs(Math.sin(a * 12)) * 0.5; sc = RUN_SCALE; tilt = Math.sin(a * 12) * 0.07;
-    } else if (a < B.back) {
-      x = stopX; z = stopZ; y = 0; sc = RUN_SCALE;
-      for (const k of B.knocks) { const d = (a - k) / 0.35; if (d >= 0 && d < 1) { y = Math.sin(Math.PI * d) * 0.35; tilt = -0.12 * Math.sin(Math.PI * d); } }
-      if (a > B.greet - 0.4 && a < B.greet + 1.2) tilt = Math.sin((a - B.greet) * 5) * 0.06;
-      for (const k of B.throws) { const d = (a - k) / 0.8; if (d >= 0 && d < 1) { y = Math.sin(Math.PI * d) * 0.55; tilt = -0.3 * Math.sin(Math.PI * d); pulse = 0.12 * Math.sin(Math.PI * d); } }
-    } else if (a < B.home) {
-      const p = (a - B.back) / (B.home - B.back);
-      x = MathUtils.lerp(stopX, 0, smooth(p)); z = MathUtils.lerp(stopZ, 1, smooth(p)); y = MathUtils.lerp(0, 0.98, p) + Math.sin(Math.PI * p) * 2; sc = MathUtils.lerp(RUN_SCALE, 1, smooth(p));
-    } else {
-      sc = 1 + 0.1 * Math.exp(-6 * (a - B.home)); y = 0.98 + Math.sin(a * 5) * 0.1;
+    const m = motion.current;
+    // Vị trí theo mốc: đứng trên bệ → đi tới cửa hàng → đứng gõ cửa, chúc, tung vàng → đi về bệ
+    let x = PEDESTAL.x; let z = PEDESTAL.z;
+    if (a >= B.jump && a < B.arrive) {
+      const p = smooth((a - B.jump) / (B.arrive - B.jump));
+      x = MathUtils.lerp(PEDESTAL.x, stopX, p); z = MathUtils.lerp(PEDESTAL.z, stopZ, p);
+    } else if (a >= B.arrive && a < B.back) {
+      x = stopX; z = stopZ;
+    } else if (a >= B.back && a < B.home) {
+      const p = smooth((a - B.back) / (B.home - B.back));
+      x = MathUtils.lerp(stopX, PEDESTAL.x, p); z = MathUtils.lerp(stopZ, PEDESTAL.z, p);
     }
-    if (outer.current) outer.current.position.set(x, 0, z);
-    if (shadow.current) shadow.current.scale.setScalar(sc * Math.max(0.5, 1.2 - y * 0.12));
-    if (inner.current) { inner.current.position.y = y; inner.current.scale.setScalar(sc * (1 + pulse)); inner.current.rotation.z = tilt; }
-    const throwing = a > B.throws[0] - 0.2 && a < (B.throws[2] ?? 16) + 1;
-    poses.current.forEach((g, i) => { if (g) g.visible = i === (throwing ? 1 : 0); });
+    if (!m.ready) { m.x = x; m.z = z; m.ready = true; }
+    const dx = x - m.x;
+    const dz = z - m.z;
+    const dist = Math.hypot(dx, dz);
+    m.x = x; m.z = z;
+    m.speed = MathUtils.damp(m.speed, dt > 0 ? dist / dt : 0, 10, dt);
+    m.move = MathUtils.damp(m.move, clamp01(m.speed / 0.5), 10, dt);
+    m.phase += (dist / STRIDE) * Math.PI * 2;
+    if (Math.abs(dx) > 0.0004) m.flip = dx > 0;
+
+    // Các động tác tại chỗ: gõ cửa, chúc, vung tay tung vàng
+    let knock = 0;
+    for (const k of B.knocks) { const d = (a - k) / 0.35; if (d >= 0 && d < 1) knock = Math.max(knock, Math.sin(Math.PI * d)); }
+    let throwing = 0; let throwIdx = -1;
+    B.throws.forEach((k, i) => { const d = (a - k) / 0.8; if (d >= 0 && d < 1) { const v = Math.sin(Math.PI * d); if (v > throwing) { throwing = v; throwIdx = i; } } });
+    if (throwIdx >= 0 && throwIdx !== m.lastThrow) m.throwId += 1;
+    m.lastThrow = throwIdx;
+    const greet = smooth((a - (B.greet - 0.4)) / 0.4) * (1 - smooth((a - (B.greet + 1.2)) / 0.3));
+    const dp = pose.current;
+    dp.mv = m.move; dp.ph = m.phase; dp.flip = m.flip; dp.knock = knock; dp.greet = greet; dp.throwing = throwing; dp.throwId = m.throwId;
+
+    // Biến hình: hiện ra trong ánh sáng vàng ở đầu, biến lại thành tượng ở cuối
+    const pop = easeOutBack(a / 0.6);
+    const shown = a > 0.02 && a < seconds - 0.12;
+    const floor = groundAt(x, z, 0.5);
+    const hop = throwing * 0.18 + knock * 0.06;
+    if (outer.current) { outer.current.position.set(x, 0, z); outer.current.visible = shown; }
+    if (shadow.current) { shadow.current.position.y = floor; shadow.current.scale.setScalar(Math.max(0.5, 1.2 - hop * 0.3) * pop); }
+    if (inner.current) { inner.current.position.y = a < B.jump || a >= B.home - 0.01 ? PEDESTAL_Y : floor + hop; inner.current.scale.setScalar(pop); }
   });
   return (
-    <group ref={outer} position={[0, 0, 1]}>
+    <group ref={outer} position={[0, 0, 1]} visible={false}>
       <group ref={shadow}><Shadow size={5} opacity={0.35} color={colors.ink} /></group>
-      <group ref={inner} position={[0, 0.98, 0]}>
-        <group ref={bill}>
-          <sprite position={[0, poseHeight * 0.55, -0.6]} scale={[14, 14, 1]}>
-            <spriteMaterial map={glowTexture()} color={colors.gold} transparent opacity={0.5} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
-          </sprite>
-          {[0, 1].map((i) => {
-            const tex = textures[i];
-            if (!tex) return null;
-            return (
-              <group key={i} ref={(g) => { poses.current[i] = g; }} visible={i === 0}>
-                <mesh position={[0, poseHeight / 2, 0]}>
-                  <planeGeometry args={[poseHeight * aspectOf(tex), poseHeight]} />
-                  <meshBasicMaterial map={tex} alphaTest={0.4} side={DoubleSide} toneMapped={false} />
-                </mesh>
-              </group>
-            );
-          })}
-        </group>
+      <group ref={inner} position={[0, PEDESTAL_Y, 0]}>
+        <sprite position={[0, 2.2, -0.5]} scale={[9, 9, 1]}>
+          <spriteMaterial map={glowTexture()} color={colors.gold} transparent opacity={0.38} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
+        </sprite>
+        {RITUAL_DEITY_GLB ? <DeityGlbFigure pose={pose} glb={RITUAL_DEITY_GLB} /> : <DeityWalker pose={pose} colors={colors} />}
       </group>
     </group>
   );
@@ -203,9 +236,9 @@ function InvokeCoins({ spot, start, alphaCover }: { spot: Spot; start: Start; al
   const tex = useSprite(CITY_IMAGES.coin);
   const refs = useRef<(SpriteObject | null)[]>([]);
   const state = useRef({ p: new Float32Array(COINS * 3), v: new Float32Array(COINS * 3), alive: new Uint8Array(COINS) });
-  const originX = spot.x + 1.8 - 0.9;
-  const originZ = spot.z + 3.8 - 0.4;
-  const dx = spot.x - originX;
+  const originX = spot.doorX + STOP.dx - 0.9;
+  const originZ = spot.z + STOP.dz - 0.4;
+  const dx = spot.doorX - originX;
   const dz = spot.z + 0.6 - originZ;
   const len = Math.hypot(dx, dz) || 1;
   useFrame(({ clock }, delta) => {
@@ -217,7 +250,7 @@ function InvokeCoins({ spot, start, alphaCover }: { spot: Spot; start: Start; al
       if (!m) continue;
       const birth = (B.throws[i % 3] ?? 13) + 0.12 + Math.floor(i / 3) * 0.022;
       if (!alive[i] && a >= birth && a < birth + 0.5) {
-        const speed = 2 + hash(i, 1) * 3.5;
+        const speed = (2 + hash(i, 1) * 3.5) * Math.max(1, len / 4.2);
         p[i * 3] = originX; p[i * 3 + 1] = 2.6; p[i * 3 + 2] = originZ;
         v[i * 3] = (dx / len) * speed + (hash(i, 2) - 0.5) * 4;
         v[i * 3 + 1] = 6 + hash(i, 4) * 6;
@@ -254,7 +287,7 @@ function InvokeCoins({ spot, start, alphaCover }: { spot: Spot; start: Start; al
 function ThrowFlashes({ spot, start, colors }: { spot: Spot; start: Start; colors: SceneColors }) {
   return (
     <>
-      {RITUAL_BEATS.invoke.throws.map((at) => <Flash key={at} x={spot.x + 0.4} y={2.6} z={spot.z + 3.2} start={start} at={at} size={9} color={colors.gold} />)}
+      {RITUAL_BEATS.invoke.throws.map((at) => <Flash key={at} x={spot.doorX + 0.4} y={2.6} z={spot.z + STOP.dz - 0.6} start={start} at={at} size={9} color={colors.gold} />)}
     </>
   );
 }
@@ -344,13 +377,13 @@ function BurnActors({ spot, colors, start }: { spot: Spot; colors: SceneColors; 
   const bless = useRef<(SpriteObject | null)[]>([]);
   const baseZ = spot.z + 4.2;
   /** Người bước ra từ cửa chính của cửa hàng (cửa mở ra rồi mới thấy người), đi tiến ra trước cửa rồi mới đi đi lại lại. */
-  const startX = spot.x;
+  const startX = spot.doorX;
   const startZ = spot.z + 0.4;
   const out = (a: number): number => smooth((a - B.enter - 0.4) / 2.2);
   const personZ = (a: number): number => MathUtils.lerp(startZ, baseZ, out(a));
   useFaceCamera(face, 1);
 
-  const pace = (a: number): number => spot.x + 1.6 + 2.4 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter));
+  const pace = (a: number): number => spot.doorX + 1.6 + 2.4 * Math.sin(0.8 * (Math.min(a, B.ash) - B.enter));
   const personX = (a: number): number => MathUtils.lerp(startX, pace(a), out(a));
   const burned = (a: number): number => clamp01((a - B.ignite) / (B.ash - B.ignite));
   const rootScale = (a: number): number => PERSON_SCALE * (0.5 + 0.5 * out(a));
@@ -504,6 +537,8 @@ function RitualActors({ ritual, slots, colors, alphaCover, start, onStart }: { r
         <>
           <ShopDoor spot={spot} colors={colors} start={start} plan={{ openFrom: RITUAL_BEATS.invoke.open, openTo: RITUAL_BEATS.invoke.open + 1.5, knocks: RITUAL_BEATS.invoke.knocks, seconds: RITUAL_SECONDS.invoke }} />
           <InvokeDeity spot={spot} colors={colors} start={start} />
+          <Flash x={0} y={2.8} z={1} start={start} at={0} size={11} color={colors.gold} />
+          <Flash x={0} y={2.8} z={1} start={start} at={RITUAL_BEATS.invoke.home} size={11} color={colors.gold} />
           <InvokeCoins spot={spot} start={start} alphaCover={alphaCover} />
           <ThrowFlashes spot={spot} start={start} colors={colors} />
         </>

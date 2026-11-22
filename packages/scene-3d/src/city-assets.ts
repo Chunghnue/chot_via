@@ -8,6 +8,7 @@ export const CITY_IMAGES = {
   ground: `${P}san-pho.webp`,
   coin: '/images/ic-coin.webp',
   deityPoses: ['/images/than-tai.webp', '/images/than-tai-nhan-via.webp', '/images/than-tai-bo-dung.webp'],
+  deityWalk: `${P}than-tai-di.webp`,
   mascotFace: `${P}npc-mascot-mat.webp`,
   mascotLogo: `${P}npc-mascot-logo.webp`,
   walkers: [`${P}npc-chu-quan.webp`, `${P}npc-chu-shop.webp`, `${P}npc-khach.webp`, `${P}npc-cong-dong.webp`],
@@ -19,11 +20,42 @@ export const SHOP_WIDTH: Record<SceneModelKey, number> = {
 };
 
 /**
+ * Cánh cửa thật trên hình từng kiểu cửa hàng (đo trên hình): `x` = tâm cửa so với tâm hình (tỉ lệ theo bề rộng), `w` = rộng (theo bề rộng),
+ * `bottom` = mép dưới cửa tính từ đáy hình, `h` = cao (theo chiều cao hình), `aspect` = cao / rộng của hình.
+ * Cánh cửa dựng đè, chỗ Thần Tài đứng gõ cửa, điểm bắn vàng và chỗ người đốt vía bước ra đều tính từ đây.
+ */
+export const SHOP_DOOR: Record<SceneModelKey, { x: number; w: number; bottom: number; h: number; aspect: number }> = {
+  cafe: { x: 0.03, w: 0.13, bottom: 0.25, h: 0.33, aspect: 0.667 },
+  minimart: { x: -0.03, w: 0.14, bottom: 0.2, h: 0.34, aspect: 0.721 },
+  fashion: { x: 0.15, w: 0.12, bottom: 0.2, h: 0.36, aspect: 0.75 },
+  restaurant: { x: 0.1, w: 0.12, bottom: 0.25, h: 0.34, aspect: 0.667 },
+  pharmacy: { x: -0.01, w: 0.16, bottom: 0.09, h: 0.38, aspect: 0.988 },
+  retail: { x: -0.11, w: 0.1, bottom: 0.14, h: 0.3, aspect: 0.75 },
+  sale_office: { x: -0.17, w: 0.12, bottom: 0.2, h: 0.37, aspect: 0.667 },
+  generic: { x: -0.11, w: 0.1, bottom: 0.14, h: 0.3, aspect: 0.75 },
+};
+
+/** Vị trí và cỡ cánh cửa (m) của một cửa hàng rộng `width`: `x` lệch so với tâm cửa hàng, `y` là độ cao chân cửa so với mặt đất. */
+export function doorOf(key: SceneModelKey, width: number): { x: number; y: number; w: number; h: number } {
+  const d = SHOP_DOOR[key];
+  const imageHeight = width * d.aspect;
+  return { x: d.x * width, y: d.bottom * imageHeight, w: d.w * width, h: d.h * imageHeight };
+}
+
+/**
  * Model GLB thay cho hình phẳng (xoay 360° thật, thấy cả mặt hông và mặt sau). Khóa là loại cửa hàng (`SceneModelKey`) hoặc `deity` (Thần Tài).
  * Để trống = dùng hình tách nền (luôn hướng về người xem). Khi có model GLB có texture đúng phong cách, chỉ cần điền vào đây.
  * `scale` nhân kích thước model; `y` nâng model lên (Thần Tài đứng trên bệ cao khoảng 1 m).
  */
 export const CITY_GLB_OVERRIDES: Partial<Record<SceneModelKey | 'deity', { url: string; scale: number }>> = {};
+
+/**
+ * Model GLB có xương của Thần Tài trong nghi lễ Thỉnh Thần Tài (xoay đủ mọi góc, đi bộ như người thật). Để `null` = dùng bản dựng bằng khối 3D trong `deity-rig.tsx`.
+ * Khi có file: đặt vào `apps/web-public/public/3d/models/`, điền `url` và tên các clip (xem `docs/THAN-TAI-GLB.md`).
+ * `scale` đưa model về cao khoảng 4,3 m, `y` nâng/hạ để chân chạm đất, `walkSpeed` là tốc độ (m/s) mà clip đi bộ gốc diễn ra ở nhịp 1x.
+ */
+export interface RitualGlb { url: string; scale: number; y: number; walkSpeed: number; clips: { idle: string; walk: string; wave?: string; throw?: string } }
+export const RITUAL_DEITY_GLB: RitualGlb | null = null;
 
 export interface DecorItem { src: string; x: number; z: number; width: number; face?: number; flip?: boolean; shadow?: number }
 
