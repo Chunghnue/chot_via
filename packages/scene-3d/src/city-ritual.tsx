@@ -10,7 +10,7 @@ import { Label } from './label';
 import { DeityGlbFigure } from './deity-glb';
 import { DeityWalker, newPose, type DeityPose } from './deity-walker';
 import { HOLD_ARM_EULER, Mascot, MASCOT_HAND, type MascotRig } from './mascot';
-import { RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
+import { pickRitualSlot, RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
 
 /** Cảnh nghi lễ: Thỉnh Thần Tài (20 giây) và Đốt vía (10 giây), diễn ngay trong thành phố ở trang chủ, trước cửa hàng của người dùng. */
 
@@ -31,9 +31,9 @@ function ageOf(start: Start, now: number): number {
   return now - start.current;
 }
 
-/** Vị trí cửa hàng cho nghi lễ: nếu cửa hàng đã nằm trên phố thì dùng đúng ô đó, không thì đặt cạnh quảng trường Thần Tài. */
+/** Vị trí cửa hàng cho nghi lễ: ô cửa hàng đã có trên phố (xem `pickRitualSlot`), nhân vật tự đi tới đó. Chỉ khi phố chưa có ô nào thì mới dựng cửa hàng tạm cạnh quảng trường. */
 export function ritualSpot(ritual: RitualScene, slots: readonly StreetSlotDto[]): Spot {
-  const slot = slots.find((s) => s.placeId === ritual.placeId);
+  const slot = pickRitualSlot(slots, ritual.placeId, ritual.modelKey);
   const modelKey = slot ? slot.modelKey : ritual.modelKey;
   const width = SHOP_WIDTH[modelKey];
   const x = slot ? spreadShopX(slot.position.x, slot.position.z) : RITUAL_SPOT.x;

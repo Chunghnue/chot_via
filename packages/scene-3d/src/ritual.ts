@@ -1,4 +1,4 @@
-import type { SceneModelKey } from '@chot-via/shared';
+import type { SceneModelKey, StreetSlotDto } from '@chot-via/shared';
 
 /** Hai nghi lễ cho cửa hàng của chính người dùng: Thỉnh Thần Tài (Thần Tài chạy tới gõ cửa, vung vàng) và Đốt vía (người cầm giấy đốt vía đi lại trước cửa). */
 export type RitualKind = 'invoke' | 'burn';
@@ -39,3 +39,15 @@ export const RITUAL_SECONDS: Record<RitualKind, number> = { invoke: RITUAL_BEATS
 
 /** Chỗ đặt cửa hàng của người dùng trong cảnh khi cửa hàng chưa nằm trên phố (mét; cạnh quảng trường Thần Tài). */
 export const RITUAL_SPOT = { x: -10.4, z: 3.6 } as const;
+
+/** Kiểu cửa hàng không có ô riêng trên phố (Bán lẻ, Chung…) thì nghi lễ diễn ra ở ô của kiểu này. */
+export const RITUAL_FALLBACK_MODEL: SceneModelKey = 'restaurant';
+
+/**
+ * Ô cửa hàng trên phố mà nghi lễ phải đi tới (không dựng bản sao cửa hàng nào, tránh che các cửa hàng khác): ô của chính cửa hàng đó; nếu cửa hàng chưa có ô thì ô của cửa hàng cùng kiểu
+ * (hai cửa hàng cùng kiểu cùng một chỗ); kiểu không có ô thì ô `RITUAL_FALLBACK_MODEL`. Chỉ xét ô đã có cửa hàng. Trả về null khi phố chưa có ô nào.
+ */
+export function pickRitualSlot(slots: readonly StreetSlotDto[], placeId: string, modelKey: SceneModelKey): StreetSlotDto | null {
+  const used = slots.filter((s) => s.placeId !== null);
+  return used.find((s) => s.placeId === placeId) ?? used.find((s) => s.modelKey === modelKey) ?? used.find((s) => s.modelKey === RITUAL_FALLBACK_MODEL) ?? used[0] ?? null;
+}

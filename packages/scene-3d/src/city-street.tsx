@@ -432,6 +432,10 @@ function fitDistance(cam: CityStreetProps['config']['camera'], aspect: number, f
 }
 
 /** Đặt camera theo khung hình, xử lý nút điều khiển (đi tới/lui, xoay, phóng to/thu nhỏ) và bay tới cửa hàng đang chọn. */
+/** Góc nhìn khi chạy nghi lễ: xoay quanh điểm nhìn (rad) về phía cửa hàng và độ nghiêng từ trục đứng (rad, nhỏ hơn = nhìn từ trên cao hơn). */
+const RITUAL_VIEW_AZIMUTH = 0.55;
+const RITUAL_VIEW_POLAR = 1.0;
+
 function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }: { config: CityStreetProps['config']['camera']; fitHalfWidth: number | undefined; resetTick: number; goal: { x: number; z: number; ratio: number } | null; controls: RefObject<ControlsRef | null>; command: CameraCommand | null }) {
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
@@ -470,14 +474,32 @@ function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }:
     invalidate();
   }, [command, camera, controls, invalidate]);
   const shifted = useRef(false);
+  /** Độ nghiêng camera trước khi nghi lễ nâng lên, để trả về sau khi xong. */
+  const savedPolar = useRef<number | null>(null);
   useFrame(() => {
     const c = controls.current;
     if (!c) return;
-    if (goal) { shifted.current = goal.ratio > 0.3; c.target.x = MathUtils.lerp(c.target.x, goal.x * goal.ratio, 0.06); return; }
+    if (goal) {
+      shifted.current = goal.ratio > 0.3;
+      c.target.x = MathUtils.lerp(c.target.x, goal.x * goal.ratio, 0.06);
+      // Nghi lễ: xoay camera quanh điểm nhìn về phía cửa hàng và nâng cao hơn để nhìn chéo vào cửa hàng ở hàng sau, không bị cửa hàng hàng trước che.
+      if (goal.ratio > 0.5) {
+        if (savedPolar.current === null) savedPolar.current = c.getPolarAngle();
+        c.setAzimuthalAngle(MathUtils.lerp(c.getAzimuthalAngle(), Math.sign(goal.x) * RITUAL_VIEW_AZIMUTH, 0.05));
+        c.setPolarAngle(MathUtils.lerp(c.getPolarAngle(), RITUAL_VIEW_POLAR, 0.05));
+      }
+      c.update();
+      return;
+    }
     // Nghi lễ vừa xong: nhẹ nhàng đưa camera về giữa phố.
     if (shifted.current) {
       c.target.x = MathUtils.lerp(c.target.x, 0, 0.08);
-      if (Math.abs(c.target.x) < 0.02) { c.target.x = 0; shifted.current = false; }
+      c.setAzimuthalAngle(MathUtils.lerp(c.getAzimuthalAngle(), 0, 0.08));
+      const polar0 = savedPolar.current;
+      if (polar0 !== null) c.setPolarAngle(MathUtils.lerp(c.getPolarAngle(), polar0, 0.08));
+      c.update();
+      const polarDone = polar0 === null || Math.abs(c.getPolarAngle() - polar0) < 0.005;
+      if (Math.abs(c.target.x) < 0.02 && Math.abs(c.getAzimuthalAngle()) < 0.01 && polarDone) { c.target.x = 0; c.setAzimuthalAngle(0); if (polar0 !== null) c.setPolarAngle(polar0); savedPolar.current = null; c.update(); shifted.current = false; }
     }
   });
   return null;
