@@ -12,17 +12,10 @@ import { ZodPipe } from '../../common/zod.pipe';
 import { env } from '../../config/env';
 import { AuthService, type SessionResult } from './auth.service';
 import { OAuthService } from './oauth.service';
+import { clearRefreshCookie, REFRESH_COOKIE, setRefreshCookie } from './session-cookie';
 
-const REFRESH_COOKIE = 'cv_rt';
-const REFRESH_PATH = '/api/v1/auth';
 const CSRF_HEADER = 'x-requested-with';
 const CSRF_VALUE = 'chotvia';
-
-function setRefreshCookie(reply: FastifyReply, token: string): void {
-  void reply.setCookie(REFRESH_COOKIE, token, {
-    httpOnly: true, sameSite: 'lax', secure: env.COOKIE_SECURE, path: REFRESH_PATH, maxAge: env.REFRESH_TOKEN_TTL_DAYS * 86_400,
-  });
-}
 
 /** Refresh/logout dựa vào cookie nên bắt buộc header tùy biến (trình duyệt không cho form chéo trang gửi) để chống CSRF. */
 function assertCsrf(req: FastifyRequest): void {
@@ -71,7 +64,7 @@ export class AuthController {
       setRefreshCookie(reply, result.refreshToken);
       return ok('OK', result.session);
     } catch {
-      void reply.clearCookie(REFRESH_COOKIE, { path: REFRESH_PATH });
+      clearRefreshCookie(reply);
       return ok('OK', null);
     }
   }
@@ -81,7 +74,7 @@ export class AuthController {
     assertCsrf(req);
     const raw = req.cookies[REFRESH_COOKIE];
     if (raw) await this.auth.logout(raw);
-    void reply.clearCookie(REFRESH_COOKIE, { path: REFRESH_PATH });
+    clearRefreshCookie(reply);
     return ok('LOGOUT_SUCCESS', { ok: true as const });
   }
 

@@ -54,6 +54,7 @@ Xem `.env.production.example` (có chú thích). Biến `NEXT_PUBLIC_*` được
 ## Lưu ý bảo mật
 - Không đưa `.env.production` vào git. Database/Redis không mở cổng ra ngoài.
 - Cookie phiên là `Secure`, `HttpOnly`; chỉ chạy qua HTTPS (đã bật `COOKIE_SECURE=true`).
+- Đăng nhập dùng chung giữa web public và admin: đặt `COOKIE_DOMAIN` bằng `WEB_DOMAIN` (admin là tên miền con của nó). Đổi giá trị này thì người đang đăng nhập phải đăng nhập lại một lần. Để trống thì cookie chỉ thuộc đúng host (hai trang không dùng chung phiên).
 - Sentry/PostHog/Turnstile để trống thì tự tắt; PostHog dùng máy chủ EU, không gửi dữ liệu cá nhân.
 
 ## Đã kiểm và chưa kiểm

@@ -12,6 +12,8 @@ const EnvSchema = z.object({
   ACCESS_TOKEN_TTL_MIN: z.coerce.number().int().default(15),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().default(30),
   COOKIE_SECURE: bool,
+  /** Tên miền chung của cookie phiên (vd. chotvia.example.com) để web public và admin ở tên miền con dùng chung đăng nhập. Để trống = cookie chỉ thuộc đúng host. */
+  COOKIE_DOMAIN: z.string().default('').transform((v) => v.trim().replace(/^\./, '').toLowerCase()),
   PUBLIC_WEB_URL: z.string().default('http://localhost:3000'),
   PUBLIC_API_URL: z.string().default('http://localhost:3000'),
   SMS_PROVIDER: z.enum(['dev', 'speedsms', 'esms', 'ghdc']).default('dev'),
@@ -48,6 +50,7 @@ const EnvSchema = z.object({
 }).refine((e) => !(e.NODE_ENV === 'production' && e.SMS_PROVIDER === 'dev'), {
   message: 'SMS_PROVIDER=dev không được dùng ở production (OTP không được ghi log)',
 }).superRefine((e, ctx) => {
+  if (e.COOKIE_DOMAIN !== '' && !/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(e.COOKIE_DOMAIN)) ctx.addIssue({ code: 'custom', path: ['COOKIE_DOMAIN'], message: 'COOKIE_DOMAIN phải là tên miền hợp lệ (ví dụ chotvia.example.com)' });
   if (e.SMS_PROVIDER !== 'ghdc') return;
   const required = ['GHDC_SMS_EMAIL', 'GHDC_SMS_PASSWORD', 'GHDC_SMS_CP_ID', 'GHDC_SMS_TEMP_ID'] as const;
   for (const key of required) {

@@ -63,6 +63,22 @@ export function Bootstrap() {
     return () => { document.removeEventListener('visibilitychange', sync); window.removeEventListener('focus', sync); };
   }, [restore]);
 
+  // Các tab của web public báo cho nhau khi đăng nhập/đăng xuất (BroadcastChannel chỉ trong cùng một địa chỉ web; admin ở tên miền con dùng cookie chung và tự nhận khi quay lại tab).
+  const channelRef = useRef<BroadcastChannel | null>(null);
+  const prevStatus = useRef(status);
+  useEffect(() => {
+    if (typeof BroadcastChannel === 'undefined') return undefined;
+    const channel = new BroadcastChannel('cv-auth');
+    channelRef.current = channel;
+    channel.onmessage = () => { void restore(); };
+    return () => { channel.close(); channelRef.current = null; };
+  }, [restore]);
+  useEffect(() => {
+    const before = prevStatus.current;
+    prevStatus.current = status;
+    if (before !== 'unknown' && before !== status && status !== 'unknown') channelRef.current?.postMessage(status);
+  }, [status]);
+
   useEffect(() => {
     if (pack) dispatch(offlinePackLoaded(pack.texts));
   }, [pack, dispatch]);
