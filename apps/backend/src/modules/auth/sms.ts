@@ -50,18 +50,25 @@ export interface GhdcSmsConfig { baseUrl: string; email: string; password: strin
 
 const GHDC_TIMEOUT_MS = 10_000;
 
-/**
- * Nội dung theo mẫu đã đăng ký với GHDC (thương hiệu Aibat do chủ hệ thống cung cấp, không đổi thành Chốt Vía). Giữ đúng như hệ thống cũ
- * đã gửi thành công: không dấu, kết thúc bằng dấu chấm.
- */
-export const ghdcContent = (code: string): string => `${code} la ma xac minh Aibat cua ban.`;
+/** Nội dung tin nhắn OTP gửi qua GHDC (chủ dự án chốt 24/11/2026: "Mã OTP của bạn là {OTP}"). */
+export const ghdcContent = (code: string): string => `Mã OTP của bạn là ${code}`;
 
 const GhdcLoginResponse = z.object({ token: z.string().trim().min(1) });
+/**
+ * Phản hồi của /sendSMS khi nhà cung cấp nhận tin (đã quan sát thực tế): một chuỗi JSON lồng trong JSON, giải ra `{ status: 1, mnp, carrier, smsid }`.
+ * Chỉ `status` bằng 1 mới là đã nhận; mọi giá trị khác hoặc dạng khác đều coi là thất bại.
+ */
+const GhdcSendResult = z.object({ status: z.union([z.literal(1), z.literal('1')]) });
+function parseGhdcSendBody(raw: unknown): z.SafeParseReturnType<unknown, { status: 1 | '1' }> {
+  let value = raw;
+  if (typeof value === 'string') { try { value = JSON.parse(value); } catch { value = null; } }
+  return GhdcSendResult.safeParse(value);
+}
 
 /**
  * GHDC (theo đúng cách hệ thống Aibat cũ đang gọi): mỗi lần gửi đăng nhập `POST {base}/auth/login` `{email, password}` lấy `token`, rồi
  * `POST {base}/sendSMS` `{temp_id, cp_id, isdn, content, token}` (token nằm trong thân yêu cầu). `cp_id` và `temp_id` gửi dạng chuỗi như hệ thống cũ.
- * Thành công khi cả hai bước trả HTTP 2xx (đăng nhập phải có token, `/sendSMS` phải trả JSON); mọi lỗi mạng, quá thời gian, HTTP lỗi hoặc phản hồi sai
+ * Thành công khi cả hai bước trả HTTP 2xx (đăng nhập phải có token, `/sendSMS` phải trả `status` = 1); mọi lỗi mạng, quá thời gian, HTTP lỗi hoặc phản hồi sai
  * đều ném AUTH_OTP_SEND_FAILED. Giữ kiểm tra chứng chỉ TLS (hệ thống cũ tắt, nhưng chứng chỉ của GHDC hợp lệ). Không ghi log OTP, mật khẩu, token hay thân phản hồi.
  */
 export class GhdcSmsProvider implements SmsProvider {
@@ -100,8 +107,8 @@ export class GhdcSmsProvider implements SmsProvider {
     const token = await this.login();
     const res = await this.post('/sendSMS', { temp_id: this.config.tempId, cp_id: this.config.cpId, isdn: phone, content: ghdcContent(code), token });
     if (!res.ok) return this.fail('/sendSMS', `HTTP ${res.status}`);
-    const body: unknown = await res.json().catch(() => null);
-    if (typeof body !== 'object' || body === null) return this.fail('/sendSMS', 'phản hồi không phải JSON');
+    const parsed = parseGhdcSendBody(await res.json().catch(() => null));
+    if (!parsed.success) return this.fail('/sendSMS', 'nhà cung cấp không xác nhận đã nhận tin (status khác 1 hoặc phản hồi sai dạng)');
   }
 }
 

@@ -17,7 +17,9 @@ function stubFetch(handler: (call: Call) => Response | Promise<Response>): Call[
   vi.stubGlobal('fetch', vi.fn(async (url: string, init: RequestInit) => { const call = { url, init }; calls.push(call); return handler(call); }));
   return calls;
 }
-const okHandler = (call: Call): Response => (call.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ status: 'ok' }));
+/** Phản hồi thật của GHDC: chuỗi JSON lồng trong JSON. */
+const SENT = json(JSON.stringify({ status: 1, mnp: 0, carrier: 'viettel', smsid: 'aibat-123-abc' }));
+const okHandler = (call: Call): Response => (call.url.endsWith('/auth/login') ? json({ token: TOKEN }) : SENT.clone());
 const bodyOf = (call: Call | undefined): Record<string, unknown> => JSON.parse(String(call?.init.body)) as Record<string, unknown>;
 
 async function loadSms(extra: Record<string, string> = {}) {
@@ -48,14 +50,20 @@ describe('GhdcSmsProvider', () => {
     expect(send?.url).toBe('https://sms.ghdc.vn/api/sendSMS');
     expect(send?.init.method).toBe('POST');
     expect(send?.init.headers).toMatchObject({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' });
-    expect(bodyOf(send)).toEqual({ temp_id: '34', cp_id: '118', isdn: PHONE, content: `${CODE} la ma xac minh Aibat cua ban.`, token: TOKEN });
+    expect(bodyOf(send)).toEqual({ temp_id: '34', cp_id: '118', isdn: PHONE, content: `Mã OTP của bạn là ${CODE}`, token: TOKEN });
     expect(send?.init.signal).toBeInstanceOf(AbortSignal);
   });
 
   it('nội dung đúng mẫu, dùng đúng mã OTP được truyền vào, không tự thêm sửa', async () => {
     const { ghdcContent } = await loadSms();
-    expect(ghdcContent('123456')).toBe('123456 la ma xac minh Aibat cua ban.');
-    expect(ghdcContent('000042')).toBe('000042 la ma xac minh Aibat cua ban.');
+    expect(ghdcContent('123456')).toBe('Mã OTP của bạn là 123456');
+    expect(ghdcContent('000042')).toBe('Mã OTP của bạn là 000042');
+  });
+
+  it('nhận cả khi GHDC trả đối tượng JSON thường có status = 1', async () => {
+    const { GhdcSmsProvider } = await loadSms();
+    stubFetch((c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ status: 1 })));
+    await expect(new GhdcSmsProvider(CONFIG).send(PHONE, CODE)).resolves.toBeUndefined();
   });
 
   it('bỏ dấu gạch chéo thừa cuối địa chỉ gốc', async () => {
@@ -72,6 +80,10 @@ describe('GhdcSmsProvider', () => {
     ['đăng nhập trả dữ liệu không phải JSON', (c) => (c.url.endsWith('/auth/login') ? new Response('<html>loi</html>', { status: 200 }) : json({})), 1],
     ['gửi tin trả HTTP 500', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ error: 'x' }, 500)), 2],
     ['gửi tin trả HTTP 400', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ error: 'x' }, 400)), 2],
+    ['gửi tin trả status khác 1 (dạng chuỗi lồng)', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json(JSON.stringify({ status: 0, mnp: 0 }))), 2],
+    ['gửi tin trả status khác 1 (dạng đối tượng)', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ status: 2 })), 2],
+    ['gửi tin trả đối tượng không có status', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json({ smsid: 'x' })), 2],
+    ['gửi tin trả chuỗi không phải JSON bên trong', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : json('da gui')), 2],
     ['gửi tin trả dữ liệu không phải JSON', (c) => (c.url.endsWith('/auth/login') ? json({ token: TOKEN }) : new Response('OK', { status: 200 })), 2],
   ];
   it.each(fails)('%s thì coi là thất bại (AUTH_OTP_SEND_FAILED)', async (_name, handler, expectedCalls) => {
