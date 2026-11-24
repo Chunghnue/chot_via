@@ -45,10 +45,71 @@ class EsmsProvider implements SmsProvider {
   }
 }
 
+/** Cấu hình GHDC: đăng nhập bằng email + mật khẩu để lấy token, rồi gửi tin theo mẫu đã đăng ký (cp_id, temp_id). */
+export interface GhdcSmsConfig { baseUrl: string; email: string; password: string; cpId: string; tempId: string }
+
+const GHDC_TIMEOUT_MS = 10_000;
+
+/**
+ * Nội dung theo mẫu đã đăng ký với GHDC (thương hiệu Aibat do chủ hệ thống cung cấp, không đổi thành Chốt Vía). Giữ đúng như hệ thống cũ
+ * đã gửi thành công: không dấu, kết thúc bằng dấu chấm.
+ */
+export const ghdcContent = (code: string): string => `${code} la ma xac minh Aibat cua ban.`;
+
+const GhdcLoginResponse = z.object({ token: z.string().trim().min(1) });
+
+/**
+ * GHDC (theo đúng cách hệ thống Aibat cũ đang gọi): mỗi lần gửi đăng nhập `POST {base}/auth/login` `{email, password}` lấy `token`, rồi
+ * `POST {base}/sendSMS` `{temp_id, cp_id, isdn, content, token}` (token nằm trong thân yêu cầu). `cp_id` và `temp_id` gửi dạng chuỗi như hệ thống cũ.
+ * Thành công khi cả hai bước trả HTTP 2xx (đăng nhập phải có token, `/sendSMS` phải trả JSON); mọi lỗi mạng, quá thời gian, HTTP lỗi hoặc phản hồi sai
+ * đều ném AUTH_OTP_SEND_FAILED. Giữ kiểm tra chứng chỉ TLS (hệ thống cũ tắt, nhưng chứng chỉ của GHDC hợp lệ). Không ghi log OTP, mật khẩu, token hay thân phản hồi.
+ */
+export class GhdcSmsProvider implements SmsProvider {
+  private readonly logger = new Logger('SMS[ghdc]');
+
+  constructor(private readonly config: GhdcSmsConfig, private readonly fetchImpl: typeof fetch = fetch) {}
+
+  private async post(path: string, body: Record<string, string>): Promise<Response> {
+    try {
+      return await this.fetchImpl(`${this.config.baseUrl.replace(/\/+$/, '')}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'Cache-Control': 'no-cache' },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(GHDC_TIMEOUT_MS),
+      });
+    } catch {
+      this.logger.warn(`GHDC ${path}: lỗi mạng hoặc quá thời gian chờ`);
+      throw new DomainError('AUTH_OTP_SEND_FAILED');
+    }
+  }
+
+  private fail(step: string, why: string): never {
+    this.logger.warn(`GHDC ${step}: ${why}`);
+    throw new DomainError('AUTH_OTP_SEND_FAILED');
+  }
+
+  private async login(): Promise<string> {
+    const res = await this.post('/auth/login', { email: this.config.email, password: this.config.password });
+    if (!res.ok) return this.fail('/auth/login', `HTTP ${res.status}`);
+    const parsed = GhdcLoginResponse.safeParse(await res.json().catch(() => null));
+    if (!parsed.success) return this.fail('/auth/login', 'phản hồi không có token');
+    return parsed.data.token;
+  }
+
+  async send(phone: string, code: string): Promise<void> {
+    const token = await this.login();
+    const res = await this.post('/sendSMS', { temp_id: this.config.tempId, cp_id: this.config.cpId, isdn: phone, content: ghdcContent(code), token });
+    if (!res.ok) return this.fail('/sendSMS', `HTTP ${res.status}`);
+    const body: unknown = await res.json().catch(() => null);
+    if (typeof body !== 'object' || body === null) return this.fail('/sendSMS', 'phản hồi không phải JSON');
+  }
+}
+
 export const SMS = Symbol('SMS_PROVIDER');
 
 export function createSmsProvider(): SmsProvider {
   if (env.SMS_PROVIDER === 'speedsms') return new SpeedSmsProvider();
   if (env.SMS_PROVIDER === 'esms') return new EsmsProvider();
+  if (env.SMS_PROVIDER === 'ghdc') return new GhdcSmsProvider({ baseUrl: env.GHDC_SMS_BASE_URL, email: env.GHDC_SMS_EMAIL, password: env.GHDC_SMS_PASSWORD, cpId: env.GHDC_SMS_CP_ID, tempId: env.GHDC_SMS_TEMP_ID });
   return new DevSmsProvider();
 }

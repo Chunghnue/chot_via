@@ -14,12 +14,18 @@ const EnvSchema = z.object({
   COOKIE_SECURE: bool,
   PUBLIC_WEB_URL: z.string().default('http://localhost:3000'),
   PUBLIC_API_URL: z.string().default('http://localhost:3000'),
-  SMS_PROVIDER: z.enum(['dev', 'speedsms', 'esms']).default('dev'),
+  SMS_PROVIDER: z.enum(['dev', 'speedsms', 'esms', 'ghdc']).default('dev'),
   DEV_FIXED_OTP: z.string().regex(/^\d{6}$/).default('123456'),
   SPEEDSMS_ACCESS_TOKEN: optional,
   SPEEDSMS_SENDER: optional,
   ESMS_API_KEY: optional,
   ESMS_SECRET_KEY: optional,
+  /** GHDC SMS OTP (chỉ bắt buộc khi SMS_PROVIDER=ghdc). Mật khẩu chỉ đặt trong .env.production trên máy chủ. */
+  GHDC_SMS_BASE_URL: z.string().default('').transform((v) => (v.trim() === '' ? 'https://sms.ghdc.vn/api' : v.trim())),
+  GHDC_SMS_EMAIL: optional,
+  GHDC_SMS_PASSWORD: optional,
+  GHDC_SMS_CP_ID: optional,
+  GHDC_SMS_TEMP_ID: optional,
   TURNSTILE_SECRET: optional,
   STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   STORAGE_LOCAL_DIR: z.string().default('./storage'),
@@ -41,6 +47,13 @@ const EnvSchema = z.object({
   SEED_ADMIN_NAME: z.string().default('Quản trị Chốt Vía'),
 }).refine((e) => !(e.NODE_ENV === 'production' && e.SMS_PROVIDER === 'dev'), {
   message: 'SMS_PROVIDER=dev không được dùng ở production (OTP không được ghi log)',
+}).superRefine((e, ctx) => {
+  if (e.SMS_PROVIDER !== 'ghdc') return;
+  const required = ['GHDC_SMS_EMAIL', 'GHDC_SMS_PASSWORD', 'GHDC_SMS_CP_ID', 'GHDC_SMS_TEMP_ID'] as const;
+  for (const key of required) {
+    if (e[key].trim() === '') ctx.addIssue({ code: 'custom', path: [key], message: `${key} là bắt buộc khi SMS_PROVIDER=ghdc` });
+  }
+  if (!z.string().url().safeParse(e.GHDC_SMS_BASE_URL).success) ctx.addIssue({ code: 'custom', path: ['GHDC_SMS_BASE_URL'], message: 'GHDC_SMS_BASE_URL phải là địa chỉ URL hợp lệ' });
 });
 
 export type Env = z.infer<typeof EnvSchema>;
