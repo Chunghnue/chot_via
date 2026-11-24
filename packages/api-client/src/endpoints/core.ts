@@ -3,7 +3,7 @@ import {
   PostWishResultSchema, type DeityWishBody, type OtpRequestBody, type OtpVerifyBody, type PlaceWishBody,
 } from '@chot-via/shared';
 import { z } from 'zod';
-import { pointsChanged, sessionCleared, sessionStarted } from '../auth-slice';
+import { hasAuthState, pointsChanged, sessionCleared, sessionStarted } from '../auth-slice';
 import { CSRF_HEADER_VALUES, baseApi, unwrap } from '../base';
 
 export const coreApi = baseApi.injectEndpoints({
@@ -29,12 +29,16 @@ export const coreApi = baseApi.injectEndpoints({
     restoreSession: b.mutation<z.output<typeof AuthSessionSchema> | null, void>({
       query: (_arg: void) => ({ url: '/auth/session', method: 'POST', headers: CSRF_HEADER_VALUES }),
       transformResponse: unwrap(AuthSessionSchema.nullable()),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(data ? sessionStarted(data) : sessionCleared());
-        } catch {
-          dispatch(sessionCleared());
+        } catch (error) {
+          /* Mạng chập chờn khi đang đăng nhập thì giữ nguyên phiên; chỉ khi máy chủ trả lời (hoặc chưa có phiên) mới coi là khách. */
+          const status = (error as { error?: { status?: unknown } } | null)?.error?.status;
+          const offline = status === 'FETCH_ERROR' || status === 'TIMEOUT_ERROR';
+          const state = getState();
+          if (!(offline && hasAuthState(state) && state.auth.status === 'member')) dispatch(sessionCleared());
         }
       },
     }),

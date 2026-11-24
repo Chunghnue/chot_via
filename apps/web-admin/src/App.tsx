@@ -1,4 +1,4 @@
-import { selectAuthStatus, selectCurrentUser, useRestoreSessionMutation } from '@chot-via/api-client';
+import { selectAuthStatus, selectCurrentUser, useRestoreSessionMutation, useSessionSync } from '@chot-via/api-client';
 import { Skeleton } from '@chot-via/ui';
 import { useEffect, useRef } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -27,6 +27,8 @@ export function App() {
     started.current = true;
     void restore();
   }, [restore]);
+  /* Đăng nhập/đăng xuất ở web public (cùng cookie phiên) thì admin cũng đổi theo khi quay lại tab. */
+  useSessionSync(status);
 
   if (status === 'unknown') return <div className="p-8"><Skeleton className="h-40" /></div>;
   if (status === 'guest' || !user) return <LoginPage />;

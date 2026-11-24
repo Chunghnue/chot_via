@@ -1,4 +1,5 @@
 export * from './auth-slice';
+export * from './session-sync';
 export * from './base';
 export * from './errors';
 export * from './endpoints/core';

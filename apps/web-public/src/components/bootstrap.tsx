@@ -1,6 +1,6 @@
 'use client';
 
-import { selectAuthStatus, selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation } from '@chot-via/api-client';
+import { selectAuthStatus, selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation, useSessionSync } from '@chot-via/api-client';
 import { toast, useCodeMessage } from '@chot-via/ui';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'use-intl';
@@ -16,8 +16,6 @@ export function Bootstrap() {
   const { data: pack } = useGetOfflinePackQuery();
   const isMember = useAppSelector(selectIsMember);
   const status = useAppSelector(selectAuthStatus);
-  const statusRef = useRef(status);
-  statusRef.current = status;
   const { data: today } = useGetDeityTodayQuery(undefined, { skip: !isMember });
   const t = useTranslations('auth');
   const message = useCodeMessage();
@@ -48,36 +46,8 @@ export function Bootstrap() {
     }
   }, [dispatch, restore, t, message]);
 
-  // Đăng nhập ở web admin (cùng cookie phiên) sau khi trang này đã mở: quay lại tab này là tự nhận phiên, không cần tải lại trang.
-  useEffect(() => {
-    let last = 0;
-    const sync = (): void => {
-      if (document.visibilityState !== 'visible' || statusRef.current !== 'guest') return;
-      const now = Date.now();
-      if (now - last < 3000) return;
-      last = now;
-      void restore();
-    };
-    document.addEventListener('visibilitychange', sync);
-    window.addEventListener('focus', sync);
-    return () => { document.removeEventListener('visibilitychange', sync); window.removeEventListener('focus', sync); };
-  }, [restore]);
-
-  // Các tab của web public báo cho nhau khi đăng nhập/đăng xuất (BroadcastChannel chỉ trong cùng một địa chỉ web; admin ở tên miền con dùng cookie chung và tự nhận khi quay lại tab).
-  const channelRef = useRef<BroadcastChannel | null>(null);
-  const prevStatus = useRef(status);
-  useEffect(() => {
-    if (typeof BroadcastChannel === 'undefined') return undefined;
-    const channel = new BroadcastChannel('cv-auth');
-    channelRef.current = channel;
-    channel.onmessage = () => { void restore(); };
-    return () => { channel.close(); channelRef.current = null; };
-  }, [restore]);
-  useEffect(() => {
-    const before = prevStatus.current;
-    prevStatus.current = status;
-    if (before !== 'unknown' && before !== status && status !== 'unknown') channelRef.current?.postMessage(status);
-  }, [status]);
+  // Đồng bộ đăng nhập/đăng xuất với web admin (cùng cookie phiên) và giữa các tab.
+  useSessionSync(status);
 
   useEffect(() => {
     if (pack) dispatch(offlinePackLoaded(pack.texts));
