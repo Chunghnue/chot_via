@@ -1,6 +1,6 @@
 'use client';
 
-import { DEFAULT_HOME_CONFIG, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@chot-via/shared';
+import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@chot-via/shared';
 import { Button, cn } from '@chot-via/ui';
 import { CityView, useSceneCapability, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
 import { ChevronDown, ChevronUp, Minus, Plus, RotateCcw, RotateCw } from 'lucide-react';
@@ -49,7 +49,8 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   const [command, setCommand] = useState<CameraCommand | null>(null);
   const send = useCallback((kind: CameraCommandKind): void => setCommand((c) => ({ id: (c?.id ?? 0) + 1, kind })), []);
   const config = home?.layout.config ?? DEFAULT_HOME_CONFIG;
-  const slots = home?.layout.street ?? [];
+  // Server mới chưa có ô cửa hàng nào thì vẫn hiện phố mặc định (không để phố trống).
+  const slots = home && home.layout.street.length > 0 ? home.layout.street : DEFAULT_STREET_SLOTS;
   const openPlace = (id: string): void => { dispatch(placeSheetOpened({ placeId: id })); };
   const openWish = (): void => { dispatch(wishRequested()); };
   const imageStage = (
@@ -155,6 +156,8 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   const role = user?.memberRole ?? null;
   // Đốt vía và Thỉnh Thần Tài chỉ hiện khi đã đăng nhập (làm cho cửa hàng của chính mình).
   const actions = all.filter((a) => isMember || (a.kind !== 'burn' && a.kind !== 'invoke'));
+  // Chưa có nút nào (database chưa nạp, hoặc admin tắt hết): không dựng khối rỗng, vì khối này kéo lên đè hero bằng lề âm.
+  if (actions.length === 0) return null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
   const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4 md:max-xl:gap-1.5 md:max-xl:rounded-3xl md:max-xl:p-1.5 md:max-xl:pr-2';

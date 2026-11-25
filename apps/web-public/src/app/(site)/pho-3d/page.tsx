@@ -3,7 +3,7 @@
 import { selectIsMember, useGetCatalogQuery, useGetHomeQuery, useGetPlacesQuery, useLazyGetRandomPlaceQuery } from '@chot-via/api-client';
 import { Button, Chip, EmptyState, Skeleton, Tabs, cn } from '@chot-via/ui';
 import { Dices, List, Search } from 'lucide-react';
-import { DEFAULT_HOME_CONFIG } from '@chot-via/shared';
+import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS } from '@chot-via/shared';
 import { CityView, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
@@ -67,7 +67,8 @@ export default function StreetPage() {
     const chosen = places.find((p) => p.id === street.selectedId);
     return chosen ?? places.reduce<(typeof places)[number] | null>((best, p) => (best === null || p.wishCount > best.wishCount ? p : best), null);
   }, [places, street.selectedId]);
-  const mapPoints = useMemo(() => (home?.layout.street ?? []).map((s) => ({ x: s.position.x, z: s.position.z })), [home]);
+  const streetSlots = home && home.layout.street.length > 0 ? home.layout.street : DEFAULT_STREET_SLOTS;
+  const mapPoints = useMemo(() => streetSlots.map((s) => ({ x: s.position.x, z: s.position.z })), [streetSlots]);
   const filtering = street.search !== '' || street.categoryId !== null || street.tab !== 'walk';
 
   const visibleIds = useMemo(() => (filtering ? new Set(places.map((p) => p.id)) : null), [filtering, places]);
@@ -116,7 +117,7 @@ export default function StreetPage() {
             <div ref={stageRef} className="relative aspect-[10/9] w-full overflow-hidden bg-surface-muted sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.2/1] xl:aspect-auto xl:min-h-[34rem] xl:flex-1">
               {home ? (
                 <CityView
-                  className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={home.layout.street} fitHalfWidth={16}
+                  className="absolute inset-0" config={home.layout.config ?? DEFAULT_HOME_CONFIG} slots={streetSlots} fitHalfWidth={16}
                   selectedPlaceId={street.selectedId} visiblePlaceIds={visibleIds} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={select} onSelectDeity={() => dispatch(wishRequested())}
                   fallback={imageStage}
                 />

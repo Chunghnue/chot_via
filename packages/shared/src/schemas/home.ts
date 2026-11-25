@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { HOME_ACTION_KINDS, SCENE_MODEL_KEYS } from '../enums';
+import { HOME_ACTION_KINDS, SCENE_MODEL_KEYS, type SceneModelKey } from '../enums';
 import { IdSchema } from '../common';
 
 export const HomePropSchema = z.object({
@@ -115,3 +115,21 @@ export const DEFAULT_HOME_CONFIG: HomeConfig = {
   pedestrians: 12,
   sparkles: true,
 };
+
+/**
+ * Phố mặc định khi database chưa có ô cửa hàng nào (server mới deploy, chưa nạp dữ liệu trang chủ): hai hàng nhà đối mặt đường, Thần Tài ở giữa.
+ * Cùng bố cục với `seed-home` ở backend; nhà chỉ để xem (chưa gắn cửa hàng, `placeId = null`) và mất đi khi admin tạo ô thật.
+ */
+const NO_GLB = { high: null, lod1: null, lod2: null } as const;
+const DEFAULT_STREET: readonly { n: number; label: string; modelKey: SceneModelKey; x: number; z: number; rotationDeg: number }[] = [
+  { n: 1, label: 'Quán Cafe', modelKey: 'cafe', x: -11.5, z: 4, rotationDeg: 90 },
+  { n: 2, label: 'Shop thời trang', modelKey: 'fashion', x: -11.5, z: -5, rotationDeg: 90 },
+  { n: 3, label: 'Nhà hàng', modelKey: 'restaurant', x: -11.5, z: -14, rotationDeg: 90 },
+  { n: 4, label: 'Văn phòng Sale', modelKey: 'sale_office', x: 11.5, z: 4, rotationDeg: -90 },
+  { n: 5, label: 'Minimart', modelKey: 'minimart', x: 11.5, z: -5, rotationDeg: -90 },
+  { n: 6, label: 'Nhà thuốc', modelKey: 'pharmacy', x: 11.5, z: -14, rotationDeg: -90 },
+];
+export const DEFAULT_STREET_SLOTS: StreetSlotDto[] = DEFAULT_STREET.map((s) => ({
+  id: `00000000-0000-4000-8000-00000000010${s.n}`, label: s.label, placeId: null, modelKey: s.modelKey, glb: { ...NO_GLB }, modelScale: 1,
+  region: { x: 0, y: 0, w: 0, h: 0 }, position: { x: s.x, z: s.z, rotationDeg: s.rotationDeg },
+}));
