@@ -131,8 +131,8 @@ export default function StreetPage() {
               <StreetControls fullscreen={fullscreen} onFullscreen={toggleFullscreen} onCommand={sendCommand} />
               <StreetTiles />
               <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
-                <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow h-12 px-8 text-xl shadow-cta md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
-                  {tw('titleLead')}<span aria-hidden>🙏</span>{tw(`titleTail.${titleCode}`)}
+                <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow h-12 border-[3px] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-8 font-display text-xl font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] [text-shadow:0_2px_0_rgb(150_30_0/0.55)] md:h-14 md:px-12 md:text-2xl" onClick={() => dispatch(wishRequested())}>
+                  {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain normal-case drop-shadow" draggable={false} />{tw(`titleTail.${titleCode}`)}
                 </Button>
               </div>
             </div>

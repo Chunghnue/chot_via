@@ -64,7 +64,7 @@ export function StreetTiles() {
   const dispatch = useAppDispatch();
   const { request } = useRitual();
   // Kiểu ô theo ảnh thiết kế trang chủ: viên thuốc bo tròn, nền trắng ngả tím nhạt có viền sáng, biểu tượng lớn bên trái, chữ đậm.
-  const tile = 'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.8rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
+  const tile = 'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.98rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
   const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 shrink-0 object-contain drop-shadow" draggable={false} />;
   return (
     <div className="absolute inset-x-4 bottom-3 z-10 hidden gap-2 xl:flex">

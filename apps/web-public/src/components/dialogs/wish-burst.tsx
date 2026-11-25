@@ -26,7 +26,7 @@ const PARTICLES = Array.from({ length: 60 }, (_, i) => {
   const distance = 12 + ((i * 53) % 22);
   return {
     id: i, bx: Math.round(Math.cos(angle) * distance * 1.4), by: Math.round(Math.sin(angle) * distance * 1.1),
-    size: 26 + ((i * 7) % 20), src: i % 3 === 0 ? '/images/ic-sparkles.webp' : '/images/ic-coin.webp', delay: Math.floor(i / 20) * 0.35 + (i % 5) * 0.03,
+    size: (26 + ((i * 7) % 20)) * 2, src: i % 3 === 0 ? '/images/ic-sparkles.webp' : '/images/ic-coin.webp', delay: Math.floor(i / 20) * 0.35 + (i % 5) * 0.03,
   };
 });
 const RAIN = Array.from({ length: 48 }, (_, i) => ({ id: i, left: 3 + ((i * 37) % 94), delay: (i % 12) * 0.12, x: ((i * 29) % 80) - 40, fall: 44 + ((i * 13) % 24) }));
@@ -46,13 +46,13 @@ export function Burst({ origin }: { origin?: { x: number; y: number } }) {
       <div className={origin ? 'absolute' : 'absolute left-1/2 top-[42%]'} style={origin ? { left: origin.x, top: origin.y } : undefined}>
         {PARTICLES.map((p) => (
           <img
-            key={p.id} src={p.src} alt="" draggable={false} className="absolute -ml-4 -mt-4 animate-burst object-contain drop-shadow-md opacity-0"
+            key={p.id} src={p.src} alt="" draggable={false} className="absolute -ml-8 -mt-8 animate-burst object-contain drop-shadow-md opacity-0"
             style={particleStyle(p.size, p.delay, p.bx, p.by)}
           />
         ))}
       </div>
       {RAIN.map((c) => (
-        <img key={c.id} src="/images/ic-coin.webp" alt="" draggable={false} className="absolute top-0 size-8 animate-coin object-contain opacity-0" style={rainStyle(c.left, c.delay, c.x, c.fall)} />
+        <img key={c.id} src="/images/ic-coin.webp" alt="" draggable={false} className="absolute top-0 size-16 animate-coin object-contain opacity-0" style={rainStyle(c.left, c.delay, c.x, c.fall)} />
       ))}
     </div>
   );
