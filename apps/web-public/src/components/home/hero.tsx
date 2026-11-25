@@ -74,9 +74,9 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
-        <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[1%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
-          <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(7.5cqw,9.5cqh)] w-[min(74cqw,84cqh)]" />
+          <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(9cqw,11.5cqh)] w-[min(60cqw,68cqh)]" />
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">
@@ -111,7 +111,7 @@ function HeroControls({ onCommand }: { onCommand: (kind: CameraCommandKind) => v
   const t = useTranslations('home.scene');
   const btn = 'grid size-7 place-items-center rounded-full text-ink transition hover:bg-surface active:scale-90 md:size-7';
   return (
-    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[4%] z-10 grid grid-cols-2 gap-0.5 rounded-2xl bg-surface/80 p-1 shadow-card backdrop-blur">
+    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[26%] z-10 grid grid-cols-2 md:top-[4%] gap-0.5 rounded-2xl bg-surface/80 p-1 shadow-card backdrop-blur">
       <button type="button" aria-label={t('rotateLeft')} onClick={() => onCommand('left')} className={btn}><RotateCcw className="size-3.5" aria-hidden /></button>
       <button type="button" aria-label={t('rotateRight')} onClick={() => onCommand('right')} className={btn}><RotateCw className="size-3.5" aria-hidden /></button>
       <button type="button" aria-label={t('forward')} onClick={() => onCommand('up')} className={btn}><ChevronUp className="size-4" aria-hidden /></button>
