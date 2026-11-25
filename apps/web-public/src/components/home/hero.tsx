@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { useCurrentUser } from '@/lib/use-member';
 import { HeroSubtitle } from './hero-subtitle';
+import { WoodSign } from './wood-sign';
 import { HeroTitle } from './hero-title';
 
 /** Tỉ lệ ảnh phố thiết kế (pho-3d-hero.png): vùng bấm tính theo % khung ảnh nên luôn khớp dù khung hero bị cắt ở các cỡ màn khác nhau. */
@@ -75,50 +76,22 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
           <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(9cqw,11.5cqh)] w-[min(60cqw,68cqh)]" />
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
-          <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">
-            <div className="rounded-[1.4cqw] border-[0.5cqw] border-sign-frame bg-linear-to-b from-sign-wood to-sign-wood-dark px-[1.8cqw] py-[1.2cqw] shadow-card ring-[0.25cqw] ring-sign-frame-dark">
-              {config.signLines.map((line) => (
-                <p key={line} className="flex items-center gap-[0.8cqw] whitespace-nowrap font-display text-[clamp(0.6rem,1.7cqw,1.4rem)] font-extrabold italic leading-[1.7] text-surface [text-shadow:0_0.2cqw_0_var(--color-sign-wood-dark)]">
-                  <span className="grid size-[2.2cqw] shrink-0 place-items-center rounded-full bg-linear-to-b from-sign-check to-sign-check-dark ring-[0.25cqw] ring-surface"><svg viewBox="0 0 12 12" className="size-[1.3cqw]"><path d="M2.5 6.4l2.4 2.4 4.6-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{line}
-                </p>
-              ))}
-            </div>
+          <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden w-[24cqw] md:block">
+            <WoodSign lines={config.signLines} />
           </div>
         ) : null}
         <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex flex-col items-center gap-[2.4cqw] px-[7%] md:bottom-[12%] md:gap-1.5 md:px-3">
           <div className="relative w-full md:w-auto">
             <span aria-hidden className="pointer-events-none absolute inset-x-[-4%] -bottom-[36%] h-[90%] rounded-[50%] border-[0.6cqw] border-gold/70 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-90 blur-[1px] md:hidden" />
             <span aria-hidden className="pointer-events-none absolute inset-x-[2%] -bottom-[24%] h-[70%] rounded-[50%] border-[0.5cqw] border-surface/70 md:hidden" />
-            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[15.5cqw] w-full border-[0.8cqw] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-4 font-display text-[clamp(1rem,5.6cqw,2.2rem)] font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_0.9cqw_var(--color-cta-glow),0_0_5cqw_1.5cqw_rgb(255_212_59/0.55),inset_0_0.8cqw_0_rgb(255_255_255/0.35)] [text-shadow:0_0.4cqw_0_rgb(150_30_0/0.55)] md:h-14 md:w-auto md:border-[3px] md:px-12 md:text-2xl md:shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] xl:h-[4.25rem] xl:px-16 xl:text-3xl">
+            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[15.5cqw] w-full border-[0.8cqw] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-4 font-display text-[clamp(1rem,5.6cqw,2.2rem)] font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_0.9cqw_var(--color-cta-glow),0_0_5cqw_1.5cqw_rgb(255_212_59/0.55),inset_0_0.8cqw_0_rgb(255_255_255/0.35)] [text-shadow:0_0.4cqw_0_rgb(150_30_0/0.55)] md:h-14 md:w-auto md:border-[3px] md:px-12 md:text-2xl md:shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] xl:h-[4.25rem] xl:px-16 xl:text-3xl" onClick={openWish}>
               {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain normal-case drop-shadow" draggable={false} />{tw(`titleTail.${titleCode}`)}
-              <PointerHand />
             </Button>
           </div>
           <p className="relative z-10 text-center text-[clamp(0.65rem,3.3cqw,0.95rem)] font-bold text-ink [text-shadow:0_0_6px_rgb(255_255_255),0_0_10px_rgb(255_255_255/0.9),0_1px_0_rgb(255_255_255)] md:text-sm">{config.ctaHint}<span aria-hidden> ✨</span></p>
         </div>
       </div>
     </section>
-  );
-}
-
-/** Bàn tay chỉ trỏ ở cuối nút (ảnh thiết kế). Đặt file 3D vào /images/ic-pointer.webp rồi gán đường dẫn vào đây để thay emoji tạm. */
-const POINTER_IMAGE: string | null = null;
-function PointerHand() {
-  return (
-    <span aria-hidden className="pointer-events-none absolute -bottom-[58%] -right-[1%] w-[2em] drop-shadow-md">
-      {POINTER_IMAGE ? <img src={POINTER_IMAGE} alt="" className="size-full object-contain" draggable={false} /> : (
-        <svg viewBox="0 0 64 64" className="size-full">
-          <g className="fill-surface stroke-ink" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" transform="rotate(-24 32 36)">
-            <rect x="37" y="26" width="9" height="16" rx="4.5" />
-            <rect x="45" y="29" width="8" height="14" rx="4" />
-            <rect x="26" y="4" width="11" height="34" rx="5.5" />
-            <path d="M20 32 h26 q5 0 5 5 v10 q0 8 -9 8 h-12 q-9 0 -9 -8 z" />
-            <path d="M21 40 q-9 -5 -12 1 q1 7 12 11" />
-            <rect x="20" y="55" width="30" height="7" rx="3" />
-          </g>
-        </svg>
-      )}
-    </span>
   );
 }
 
