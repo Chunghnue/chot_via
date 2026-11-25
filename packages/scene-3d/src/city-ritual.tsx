@@ -9,7 +9,7 @@ import type { SceneColors } from './colors';
 import { Label } from './label';
 import { DeityGlbFigure } from './deity-glb';
 import { DeityFlyer } from './deity-flyer';
-import { newPose, type DeityPose } from './deity-walker';
+import { newPose, type DeityPose } from './deity-pose';
 import { HOLD_ARM_EULER, Mascot, MASCOT_HAND, type MascotRig } from './mascot';
 import { pickRitualSlot, RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
 

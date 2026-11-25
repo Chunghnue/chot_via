@@ -1,8 +1,8 @@
 'use client';
 
 import { parseApiError, useGetCatalogQuery, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
-import { Button, FieldError, Input, Label, Sheet, cn, toast, useCodeMessage } from '@chot-via/ui';
-import { OtpRequestBodySchema, OtpVerifyBodySchema, type OAuthProvider, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
+import { Button, FieldError, Input, Label, OAuthButtons, Sheet, toast, useCodeMessage } from '@chot-via/ui';
+import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,23 +12,7 @@ import { useTurnstile } from '@/components/turnstile';
 import { loginDismissed, selectLogin } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
-const PROVIDERS: OAuthProvider[] = ['google', 'facebook', 'apple'];
-
-/** Biểu tượng nhà cung cấp đăng nhập: chữ G nhiều màu của Google, chữ f trắng của Facebook. */
-function ProviderIcon({ provider }: { provider: OAuthProvider }) {
-  if (provider === 'google') {
-    return (
-      <svg viewBox="0 0 48 48" className="size-5 shrink-0" aria-hidden>
-        <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
-        <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
-        <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3.1-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.100 0 24s.9 7.600 2.600 10.800l7.900-6.100z" />
-        <path fill="#34A853" d="M24 48c6.500 0 11.900-2.100 15.900-5.800l-7.500-5.800c-2.100 1.400-4.800 2.300-8.400 2.300-6.300 0-11.600-4.100-13.500-9.800l-7.900 6.100C6.500 42.600 14.600 48 24 48z" />
-      </svg>
-    );
-  }
-  if (provider === 'facebook') return <svg viewBox="0 0 24 24" className="size-5 shrink-0 fill-current" aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
-  return <span aria-hidden className="text-lg leading-none"></span>;
-}
+const PROVIDERS = ['google', 'facebook', 'apple'] as const;
 
 /** SCR-09: đăng nhập/đăng ký theo hành động bằng SMS OTP (P0); Google/Facebook/Apple hiện khi đã cấu hình (P1). */
 export function LoginSheet() {
@@ -130,16 +114,7 @@ export function LoginSheet() {
 
         <div className="flex flex-col gap-2">
           <p className="text-center text-xs text-ink-subtle">{t('socialDivider')}</p>
-          {PROVIDERS.filter((p) => p !== 'apple' || catalog?.authProviders.apple).map((p) => {
-            const on = catalog?.authProviders[p] === true;
-            const cls = cn('flex h-12 items-center justify-center gap-3 rounded-full text-sm font-bold transition active:scale-[0.98]', p === 'facebook' ? 'bg-brand-facebook text-on-primary hover:brightness-110' : 'border border-border bg-surface text-ink shadow-card hover:bg-surface-muted');
-            const inner = <><ProviderIcon provider={p} />{t(p)}</>;
-            return on ? (
-              <a key={p} href={`/api/v1/auth/oauth/${p}/start?returnTo=${encodeURIComponent(returnTo)}`} className={cls}>{inner}</a>
-            ) : (
-              <button key={p} type="button" className={cls} onClick={() => toast(t('providerOff', { name: p === 'google' ? 'Google' : p === 'facebook' ? 'Facebook' : 'Apple' }))}>{inner}</button>
-            );
-          })}
+          <OAuthButtons providers={PROVIDERS.filter((p) => p !== 'apple' || catalog?.authProviders.apple)} enabled={catalog?.authProviders} hrefFor={(p) => `/api/v1/auth/oauth/${p}/start?returnTo=${encodeURIComponent(returnTo)}`} label={(p) => (p === 'google' ? t('google') : p === 'facebook' ? t('facebook') : t('apple'))} onUnavailable={(p) => toast(t('providerOff', { name: p === 'google' ? 'Google' : p === 'facebook' ? 'Facebook' : 'Apple' }))} />
         </div>
         <p className="text-center text-xs text-ink-subtle">{t('privacy')}</p>
       </div>

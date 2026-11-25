@@ -1,14 +1,14 @@
 'use client';
 
-import { selectIsMember, useGetHomeQuery, useGetPostsQuery } from '@chot-via/api-client';
+import { selectIsMember, useGetPostsQuery } from '@chot-via/api-client';
 import { FEED_SORTS, FEED_TYPES, MEMBER_ROLES, type MemberRole, type PostListQuery } from '@chot-via/shared';
-import { DEFAULT_HOME_CONFIG } from '@chot-via/shared';
 import { Avatar, Button, Chip, EmptyState, Select, Skeleton, cn, useRoleLabel } from '@chot-via/ui';
 import { ArrowDownUp, ChevronDown, ImagePlus, Smile } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
 import { feedRoleChanged, feedSortChanged, feedTypeChanged, selectFeedFilters } from '@/features/feed/feedSlice';
+import { useHomeConfig } from '@/lib/use-home-config';
 import { useRequireMember } from '@/lib/use-member';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { PostCard, type PostCardVariant } from './post-card';
@@ -83,9 +83,8 @@ export function HomeFeedFilters() {
   const t = useTranslations('post');
   const dispatch = useAppDispatch();
   const filters = useAppSelector(selectFeedFilters);
-  const { data: home } = useGetHomeQuery();
-  // Danh sách chip do admin cấu hình (màn "Trang chủ"); chưa tải được thì dùng mặc định.
-  const chips = home?.layout.config.feedFilters ?? DEFAULT_HOME_CONFIG.feedFilters;
+  // Danh sách chip do admin cấu hình (màn "Trang chủ").
+  const chips = useHomeConfig().feedFilters;
   return (
     <div className="-mb-2 flex items-center gap-1 overflow-x-auto px-1 pb-3 pt-1 scrollbar-none min-[420px]:gap-1.5 sm:gap-2" role="group" aria-label={t('feedHeading')}>
       {chips.map(({ type, emoji }) => {
@@ -107,8 +106,7 @@ export function ComposeBar() {
   const t = useTranslations('post');
   const dispatch = useAppDispatch();
   const { user } = useRequireMember();
-  const { data: home } = useGetHomeQuery();
-  const cfg = home?.layout.config ?? DEFAULT_HOME_CONFIG;
+  const cfg = useHomeConfig();
   const open = (): void => { dispatch(composerOpened(undefined)); };
   const tool = 'grid size-9 place-items-center text-ink transition hover:text-primary-strong active:scale-90';
   return (

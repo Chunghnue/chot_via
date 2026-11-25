@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import { AnimationMixer, LoopOnce, MathUtils, type AnimationAction, type AnimationClip, type Group } from 'three';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import type { RitualGlb } from './city-assets';
-import type { DeityPose } from './deity-walker';
+import type { DeityPose } from './deity-pose';
 
 /** Tìm clip theo tên (không phân biệt hoa thường, chứa tên cần tìm). */
 function findClip(clips: readonly AnimationClip[], name: string | undefined): AnimationClip | null {

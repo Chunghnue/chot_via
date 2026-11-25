@@ -1,8 +1,8 @@
 'use client';
 
 import { useGetHomeQuery } from '@chot-via/api-client';
-import { toast } from '@chot-via/ui';
-import { Link2, Music2 } from 'lucide-react';
+import { BrandIcon, toast } from '@chot-via/ui';
+import { Link2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'use-intl';
@@ -21,20 +21,18 @@ function shareTarget(label: string): ShareTarget | null {
   return key === 'facebook' || key === 'zalo' || key === 'tiktok' ? key : null;
 }
 
+/** Chọn biểu tượng theo nhãn liên kết admin nhập (không phân biệt hoa thường); nhãn lạ = biểu tượng liên kết. */
 export function SocialIcon({ label }: { label: string }) {
   const key = label.trim().toLowerCase();
-  if (key === 'facebook') return <svg viewBox="0 0 24 24" className="size-5 fill-current" aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
-  if (key === 'tiktok') return <Music2 className="size-5" aria-hidden />;
-  if (key === 'zalo') return <span aria-hidden className="text-[0.7rem] font-extrabold leading-none">Zalo</span>;
-  return <Link2 className="size-5" aria-hidden />;
+  return key === 'facebook' || key === 'tiktok' || key === 'zalo' ? <BrandIcon brand={key} /> : <Link2 className="size-5" aria-hidden />;
 }
 
 /** Biểu tượng chân trang theo ảnh thiết kế: Facebook (tròn xanh), Zalo (vuông bo viền xanh), TikTok (tròn đen), liên kết (chuỗi đen). */
 function FooterSocialIcon({ label }: { label: string }) {
   const key = label.trim().toLowerCase();
-  if (key === 'facebook') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-facebook text-on-primary"><svg viewBox="0 0 24 24" className="size-6 fill-current"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg></span>;
-  if (key === 'zalo') return <span aria-hidden className="grid size-9 place-items-center rounded-[0.7rem] border-[2.5px] border-brand-zalo bg-surface text-[0.6rem] font-extrabold leading-none text-brand-zalo">Zalo</span>;
-  if (key === 'tiktok') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-tiktok text-on-primary"><svg viewBox="0 0 24 24" className="size-5 fill-current"><path d="M16.6 5.8c-.9-.6-1.5-1.5-1.7-2.6h-3v12.1c0 1.4-1.1 2.5-2.5 2.5S7 16.7 7 15.3s1.1-2.5 2.5-2.5c.3 0 .5 0 .8.1V9.8c-.3 0-.5-.1-.8-.1-2.9 0-5.3 2.4-5.3 5.6S6.6 21 9.5 21s5.7-2.4 5.7-5.7V9.5c1.1.8 2.4 1.2 3.8 1.2V7.6c-.9 0-1.7-.3-2.4-.8z" /></svg></span>;
+  if (key === 'facebook') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-facebook text-on-primary"><BrandIcon brand="facebook" className="size-6" /></span>;
+  if (key === 'zalo') return <span aria-hidden className="grid size-9 place-items-center rounded-[0.7rem] border-[2.5px] border-brand-zalo bg-surface text-[0.6rem] text-brand-zalo"><BrandIcon brand="zalo" className="text-[0.6rem]" /></span>;
+  if (key === 'tiktok') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-tiktok text-on-primary"><BrandIcon brand="tiktok" /></span>;
   return <span aria-hidden className="grid size-9 place-items-center text-ink"><Link2 className="size-7" strokeWidth={2.4} /></span>;
 }
 

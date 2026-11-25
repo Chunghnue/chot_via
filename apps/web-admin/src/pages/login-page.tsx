@@ -1,5 +1,5 @@
 import { parseApiError, useGetCatalogQuery, useLogoutMutation, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
-import { Button, Card, CloverMark, FieldError, Input, Label, cn, toast, useCodeMessage } from '@chot-via/ui';
+import { Button, Card, CloverMark, FieldError, Input, Label, OAuthButtons, toast, useCodeMessage } from '@chot-via/ui';
 import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -7,21 +7,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslations } from 'use-intl';
 
 const PROVIDERS = ['google', 'facebook'] as const;
-
-/** Biểu tượng nhà cung cấp đăng nhập: chữ G nhiều màu của Google, chữ f trắng của Facebook. */
-function ProviderIcon({ provider }: { provider: (typeof PROVIDERS)[number] }) {
-  if (provider === 'google') {
-    return (
-      <svg viewBox="0 0 48 48" className="size-5 shrink-0" aria-hidden>
-        <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
-        <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
-        <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3.1-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z" />
-        <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
-        </svg>
-    );
-  }
-  return <svg viewBox="0 0 24 24" className="size-5 shrink-0 fill-current" aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
-}
 
 export function LoginPage() {
   const t = useTranslations('admin.login');
@@ -83,16 +68,7 @@ export function LoginPage() {
         )}
         <div className="mt-5 flex flex-col gap-2">
           <p className="text-center text-xs text-ink-subtle">{t('socialDivider')}</p>
-          {PROVIDERS.map((p) => {
-            const on = catalog?.authProviders[p] === true;
-            const cls = cn('flex h-12 items-center justify-center gap-3 rounded-full text-sm font-bold transition active:scale-[0.98]', p === 'facebook' ? 'bg-brand-facebook text-on-primary hover:brightness-110' : 'border border-border bg-surface text-ink shadow-card hover:bg-surface-muted');
-            const inner = <><ProviderIcon provider={p} />{t(p)}</>;
-            return on ? (
-              <a key={p} href={`/api/v1/auth/oauth/${p}/start?app=admin&returnTo=/`} className={cls}>{inner}</a>
-            ) : (
-              <button key={p} type="button" className={cls} onClick={() => toast(t('providerOff', { name: p === 'google' ? 'Google' : 'Facebook' }))}>{inner}</button>
-            );
-          })}
+          <OAuthButtons providers={PROVIDERS} enabled={catalog?.authProviders} hrefFor={(p) => `/api/v1/auth/oauth/${p}/start?app=admin&returnTo=/`} label={(p) => (p === 'google' ? t('google') : t('facebook'))} onUnavailable={(p) => toast(t('providerOff', { name: p === 'google' ? 'Google' : 'Facebook' }))} />
         </div>
       </Card>
     </div>

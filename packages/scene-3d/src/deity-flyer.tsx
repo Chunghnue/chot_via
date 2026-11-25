@@ -4,7 +4,7 @@ import { AdditiveBlending, DoubleSide, MathUtils, Vector3, type Group, type Spri
 import { CITY_IMAGES } from './city-assets';
 import { glowTexture, useSprite, aspectOf } from './city-kit';
 import type { SceneColors } from './colors';
-import type { DeityPose } from './deity-walker';
+import type { DeityPose } from './deity-pose';
 
 /** Chiều cao Thần Tài bay trong cảnh (m). */
 const FLY_HEIGHT = 4.4;

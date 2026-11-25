@@ -48,3 +48,44 @@ export const SHOP_IMAGES: Record<SceneModelKey, string> = {
 export function PlaceIllustration({ modelKey, className }: { modelKey: SceneModelKey; className?: string }) {
   return <img src={SHOP_IMAGES[modelKey]} alt="" aria-hidden draggable={false} className={cn('h-auto w-full select-none object-contain', className)} />;
 }
+
+/** Biểu tượng nhà cung cấp đăng nhập / mạng xã hội dùng chung (web, admin, chân trang): Google, Facebook, Zalo, TikTok. */
+export type BrandKey = 'google' | 'facebook' | 'zalo' | 'tiktok' | 'apple';
+
+export function BrandIcon({ brand, className }: { brand: BrandKey; className?: string }) {
+  if (brand === 'google') {
+    return (
+      <svg viewBox="0 0 48 48" className={cn('size-5 shrink-0', className)} aria-hidden>
+        <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+        <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
+        <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3.1-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z" />
+        <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+      </svg>
+    );
+  }
+  if (brand === 'facebook') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
+  if (brand === 'tiktok') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M16.6 5.8c-.9-.6-1.5-1.5-1.7-2.6h-3v12.1c0 1.4-1.1 2.5-2.5 2.5S7 16.7 7 15.3s1.1-2.5 2.5-2.5c.3 0 .5 0 .8.1V9.8c-.3 0-.5-.1-.8-.1-2.9 0-5.3 2.4-5.3 5.6S6.6 21 9.5 21s5.7-2.4 5.7-5.7V9.5c1.1.8 2.4 1.2 3.8 1.2V7.6c-.9 0-1.7-.3-2.4-.8z" /></svg>;
+  if (brand === 'zalo') return <span aria-hidden className={cn('text-[0.7rem] font-extrabold leading-none', className)}>Zalo</span>;
+  return <span aria-hidden className={cn('text-lg leading-none', className)}></span>;
+}
+
+/** Nhóm nút đăng nhập Google/Facebook (và Apple nếu bật) dùng chung cho web và admin. Chưa bật ở máy chủ thì nút vẫn hiện, bấm thì báo `onUnavailable`. */
+export function OAuthButtons({ providers, enabled, hrefFor, label, onUnavailable }: {
+  providers: readonly Exclude<BrandKey, 'zalo' | 'tiktok'>[];
+  enabled: Partial<Record<string, boolean>> | undefined;
+  hrefFor: (provider: string) => string;
+  label: (provider: string) => string;
+  onUnavailable: (provider: string) => void;
+}) {
+  return (
+    <>
+      {providers.map((p) => {
+        const cls = cn('flex h-12 items-center justify-center gap-3 rounded-full text-sm font-bold transition active:scale-[0.98]', p === 'facebook' ? 'bg-brand-facebook text-on-primary hover:brightness-110' : 'border border-border bg-surface text-ink shadow-card hover:bg-surface-muted');
+        const inner = <><BrandIcon brand={p} />{label(p)}</>;
+        return enabled?.[p] === true
+          ? <a key={p} href={hrefFor(p)} className={cls}>{inner}</a>
+          : <button key={p} type="button" className={cls} onClick={() => onUnavailable(p)}>{inner}</button>;
+      })}
+    </>
+  );
+}
