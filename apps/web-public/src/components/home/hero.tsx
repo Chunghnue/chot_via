@@ -108,15 +108,15 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
 /** Nút điều khiển góc nhìn của thành phố 3D (lưới 2 cột ở góc trên bên phải để không đè lên hàng nút phía dưới ở hero thấp như iPad ngang): xoay trái / phải, đi tới / đi lùi dọc phố, phóng to / thu nhỏ. Mọi kích thước màn hình đều có (cuộn chuột chỉ cuộn trang). */
 function HeroControls({ onCommand }: { onCommand: (kind: CameraCommandKind) => void }) {
   const t = useTranslations('home.scene');
-  const btn = 'grid size-8 place-items-center rounded-full bg-surface/90 text-ink shadow-card backdrop-blur transition active:scale-90 md:size-9';
+  const btn = 'grid size-7 place-items-center rounded-full text-ink transition hover:bg-surface active:scale-90 md:size-7';
   return (
-    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[4%] z-10 grid grid-cols-2 gap-1.5">
-      <button type="button" aria-label={t('rotateLeft')} onClick={() => onCommand('left')} className={btn}><RotateCcw className="size-4" aria-hidden /></button>
-      <button type="button" aria-label={t('rotateRight')} onClick={() => onCommand('right')} className={btn}><RotateCw className="size-4" aria-hidden /></button>
-      <button type="button" aria-label={t('forward')} onClick={() => onCommand('up')} className={btn}><ChevronUp className="size-5" aria-hidden /></button>
-      <button type="button" aria-label={t('back')} onClick={() => onCommand('down')} className={btn}><ChevronDown className="size-5" aria-hidden /></button>
-      <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={btn}><Plus className="size-5" aria-hidden /></button>
-      <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={btn}><Minus className="size-5" aria-hidden /></button>
+    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[4%] z-10 grid grid-cols-2 gap-0.5 rounded-2xl bg-surface/80 p-1 shadow-card backdrop-blur">
+      <button type="button" aria-label={t('rotateLeft')} onClick={() => onCommand('left')} className={btn}><RotateCcw className="size-3.5" aria-hidden /></button>
+      <button type="button" aria-label={t('rotateRight')} onClick={() => onCommand('right')} className={btn}><RotateCw className="size-3.5" aria-hidden /></button>
+      <button type="button" aria-label={t('forward')} onClick={() => onCommand('up')} className={btn}><ChevronUp className="size-4" aria-hidden /></button>
+      <button type="button" aria-label={t('back')} onClick={() => onCommand('down')} className={btn}><ChevronDown className="size-4" aria-hidden /></button>
+      <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={btn}><Plus className="size-4" aria-hidden /></button>
+      <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={btn}><Minus className="size-4" aria-hidden /></button>
     </div>
   );
 }
