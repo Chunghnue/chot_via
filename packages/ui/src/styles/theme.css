@@ -54,6 +54,17 @@
   --color-surface: #FFFFFF;
   --color-surface-muted: #F3F7F4;
   --color-search-bg: #EAF1F5;
+  /* Nút Đốt vía (màu lửa) và Thỉnh Thần Tài (màu vàng) ở hàng nút trang chủ */
+  --color-fire-top: #FF8A3D;
+  --color-fire-mid: #F5481E;
+  --color-fire-bottom: #C42A0A;
+  --color-gold-bright: #FFE27A;
+  --color-gold-deep: #E9A412;
+  /* Nút Xin vía ở hero (ảnh thiết kế): đỏ cam rực chuyển sắc, viền sáng, quầng vàng */
+  --color-cta-top: #FF6B3B;
+  --color-cta-mid: #F5481E;
+  --color-cta-bottom: #D92D0B;
+  --color-cta-glow: #FFD43B;
   /* Tiêu đề hero "Phố Chốt Vía 3D" (ảnh thiết kế): viền ngoài xanh đậm, viền trong xanh tươi, chữ trắng ngả xanh ngọc ở đáy */
   --color-hero-title-outer: #0E5A2B;
   --color-hero-title-edge: #23A046;

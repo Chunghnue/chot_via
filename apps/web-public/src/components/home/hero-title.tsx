@@ -12,7 +12,9 @@ export function HeroTitle({ text, className }: { text: string; className?: strin
   const white = `${id}-white`;
   const gold = `${id}-gold`;
   const words = text.trim().split(/\s+/);
-  const goldFrom = words.length >= 3 ? words.length - 2 : words.length;
+  // Từ cuối vàng; nếu tiêu đề kết thúc bằng "3D" thì cả từ trước nó cũng vàng ("Vía 3D" như ảnh thiết kế).
+  const last = words[words.length - 1] ?? '';
+  const goldFrom = words.length >= 3 ? (/^3d$/i.test(last) ? words.length - 2 : words.length - 1) : words.length;
   const size = Math.min(84, 960 / Math.max(text.length, 1));
   const body = (paint: (i: number) => string | undefined) => (
     <textPath href={`#${arc}`} startOffset="50%" textAnchor="middle">

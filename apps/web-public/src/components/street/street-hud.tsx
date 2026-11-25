@@ -58,23 +58,23 @@ export function StreetControls({ fullscreen, onFullscreen, onCommand }: { fullsc
   );
 }
 
-/** Hàng ô lối tắt nằm đáy cảnh phố (máy tính): Kể khổ · Khoe doanh thu · Đốt vía · Thỉnh Thần Tài (hai ô này chỉ hiện khi đã đăng nhập) · Tạo cửa hàng 3D · BXH · Thử thách. */
+/** Hàng ô lối tắt nằm đáy cảnh phố (máy tính): Kể khổ · Khoe doanh thu · Đốt vía · Thỉnh Thần Tài (luôn hiện; chưa đăng nhập thì mời đăng nhập) · Tạo cửa hàng 3D · BXH · Thử thách. */
 export function StreetTiles() {
   const t = useTranslations('street.hud.tiles');
   const dispatch = useAppDispatch();
-  const { isMember } = useRequireMember();
   const { request } = useRitual();
-  const tile = 'flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl bg-surface/95 px-2 py-2 text-center text-sm font-bold text-ink shadow-card transition hover:-translate-y-0.5 active:scale-95';
-  const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 object-contain" draggable={false} />;
+  // Kiểu ô theo ảnh thiết kế trang chủ: viên thuốc bo tròn, nền trắng ngả tím nhạt có viền sáng, biểu tượng lớn bên trái, chữ đậm.
+  const tile = 'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.8rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
+  const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 shrink-0 object-contain drop-shadow" draggable={false} />;
   return (
     <div className="absolute inset-x-4 bottom-3 z-10 hidden gap-2 xl:flex">
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{img('/images/ic-laugh.webp')}<span className="truncate">{t('story')}</span></button>
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>{img('/images/ic-trophy.webp')}<span className="truncate">{t('brag')}</span></button>
-      {isMember ? <button type="button" className={tile} onClick={() => void request('burn')}>{img('/images/ic-fire.webp')}<span className="truncate">{t('send')}</span></button> : null}
-      {isMember ? <button type="button" className={tile} onClick={() => void request('invoke')}>{img('/images/ic-pray.webp')}<span className="truncate">{t('receive')}</span></button> : null}
-      <Link href="/tao-diem" className={tile}>{img('/images/ic-home.webp')}<span className="truncate">{t('create')}</span></Link>
-      <Link href="/bang-xep-hang" className={tile}>{img('/images/ic-crown.webp')}<span className="truncate">{t('rank')}</span></Link>
-      <Link href="/su-kien" className={tile}>{img('/images/ic-medal-1.webp')}<span className="truncate">{t('challenge')}</span></Link>
+      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{img('/images/ic-laugh.webp')}<span className="min-w-0 leading-tight">{t('story')}</span></button>
+      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>{img('/images/ic-trophy.webp')}<span className="min-w-0 leading-tight">{t('brag')}</span></button>
+      <button type="button" className={tile} onClick={() => void request('burn')}>{img('/images/ic-fire.webp')}<span className="min-w-0 leading-tight">{t('send')}</span></button>
+      <button type="button" className={tile} onClick={() => void request('invoke')}>{img('/images/ic-pray.webp')}<span className="min-w-0 leading-tight">{t('receive')}</span></button>
+      <Link href="/tao-diem" className={tile}>{img('/images/ic-home.webp')}<span className="min-w-0 leading-tight">{t('create')}</span></Link>
+      <Link href="/bang-xep-hang" className={tile}>{img('/images/ic-crown.webp')}<span className="min-w-0 leading-tight">{t('rank')}</span></Link>
+      <Link href="/su-kien" className={tile}>{img('/images/ic-medal-1.webp')}<span className="min-w-0 leading-tight">{t('challenge')}</span></Link>
     </div>
   );
 }

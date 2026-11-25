@@ -76,7 +76,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
-          <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(4cqw,5cqh)] w-[min(78cqw,88cqh)]" />
+          <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(7.5cqw,9.5cqh)] w-[min(74cqw,84cqh)]" />
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">
@@ -94,12 +94,12 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
           <div className="relative w-full md:w-auto">
             <span aria-hidden className="pointer-events-none absolute inset-x-[-4%] -bottom-[36%] h-[90%] rounded-[50%] border-[0.6cqw] border-gold/70 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-90 blur-[1px] md:hidden" />
             <span aria-hidden className="pointer-events-none absolute inset-x-[2%] -bottom-[24%] h-[70%] rounded-[50%] border-[0.5cqw] border-surface/70 md:hidden" />
-            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[17cqw] w-full border-[0.9cqw] border-surface bg-linear-to-b from-[color-mix(in_srgb,var(--color-wish)_72%,white)] via-wish to-wish-strong px-4 text-[clamp(1.1rem,6.1cqw,2.2rem)] shadow-[0_0_0_0.9cqw_var(--color-gold),inset_0_0.8cqw_0_rgb(255_255_255/0.35),0_2.4cqw_5cqw_rgb(242_80_26/0.55)] md:h-14 md:w-auto md:border-0 md:bg-linear-to-b md:from-wish md:via-wish md:to-wish-strong md:px-12 md:text-2xl md:shadow-cta xl:h-[4.25rem] xl:px-16 xl:text-3xl" onClick={openWish}>
-              {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain" draggable={false} />{tw(`titleTail.${titleCode}`)}
+            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[17cqw] w-full border-[0.8cqw] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-4 font-display text-[clamp(1.1rem,6.1cqw,2.2rem)] font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_0.9cqw_var(--color-cta-glow),0_0_5cqw_1.5cqw_rgb(255_212_59/0.55),inset_0_0.8cqw_0_rgb(255_255_255/0.35)] [text-shadow:0_0.4cqw_0_rgb(150_30_0/0.55)] md:h-14 md:w-auto md:border-[3px] md:px-12 md:text-2xl md:shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] xl:h-[4.25rem] xl:px-16 xl:text-3xl">
+              {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain normal-case drop-shadow" draggable={false} />{tw(`titleTail.${titleCode}`)}
               <PointerHand />
             </Button>
           </div>
-          <p className="relative z-10 text-center text-[clamp(0.65rem,3.3cqw,0.95rem)] font-bold text-on-primary [text-shadow:0_1px_2px_rgb(0_0_0/0.75),0_0_8px_rgb(0_0_0/0.4)] md:rounded-full md:bg-surface/90 md:px-3 md:py-0.5 md:text-xs md:font-semibold md:text-ink-muted md:[text-shadow:none]">{config.ctaHint}<span aria-hidden className="md:hidden"> ✨</span></p>
+          <p className="relative z-10 text-center text-[clamp(0.65rem,3.3cqw,0.95rem)] font-bold text-ink [text-shadow:0_0_6px_rgb(255_255_255),0_0_10px_rgb(255_255_255/0.9),0_1px_0_rgb(255_255_255)] md:text-sm">{config.ctaHint}<span aria-hidden> ✨</span></p>
         </div>
       </div>
     </section>
@@ -126,7 +126,7 @@ function HeroControls({ onCommand }: { onCommand: (kind: CameraCommandKind) => v
 const POINTER_IMAGE: string | null = null;
 function PointerHand() {
   return (
-    <span aria-hidden className="pointer-events-none absolute -bottom-[62%] -right-[2%] w-[2.3em] drop-shadow-md md:hidden">
+    <span aria-hidden className="pointer-events-none absolute -bottom-[62%] -right-[2%] w-[2.3em] drop-shadow-md">
       {POINTER_IMAGE ? <img src={POINTER_IMAGE} alt="" className="size-full object-contain" draggable={false} /> : (
         <svg viewBox="0 0 64 64" className="size-full">
           <g className="fill-surface stroke-ink" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" transform="rotate(-24 32 36)">
@@ -164,14 +164,14 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   if (actions.length === 0) return null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
-  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center gap-2 rounded-2xl bg-linear-to-b from-primary-soft to-surface p-2 shadow-card ring-1 ring-border/60 transition active:scale-[0.97] max-md:flex-col max-md:text-center md:rounded-full md:pr-4 md:max-xl:gap-1.5 md:max-xl:rounded-3xl md:max-xl:p-1.5 md:max-xl:pr-2';
+  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center justify-center gap-2.5 rounded-full bg-linear-to-br from-surface via-surface to-story-soft p-2 shadow-[0_6px_14px_rgb(60_40_120/0.16)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 active:scale-[0.97] max-md:flex-col max-md:rounded-2xl max-md:text-center md:max-xl:gap-1.5 md:max-xl:p-1.5';
 
   const inner = (a: HomeActionDto, title: string, featured = false) => (
     <>
-      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className={cn('shrink-0 object-contain', featured ? 'size-14 md:size-12 md:max-xl:size-10' : 'size-11 md:size-10 md:max-xl:size-8')} draggable={false} /> : null}
-      <span className="flex min-w-0 flex-col leading-tight">
-        <span className={cn('font-display text-[0.72rem] font-extrabold leading-tight sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]', featured ? 'text-on-wish xl:text-[1.05rem]' : 'text-ink')}>{title}</span>
-        {a.subLabel ? <span className={cn('hidden text-xs font-medium leading-tight @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]', featured ? 'text-on-wish/90' : 'text-ink-muted')}>{a.subLabel}</span> : null}
+      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className={cn('shrink-0 object-contain', featured ? 'size-14 md:size-12 md:max-xl:size-10' : 'size-11 md:size-11 md:max-xl:size-8')} draggable={false} /> : null}
+      <span className="flex min-w-0 flex-col items-start leading-tight max-md:items-center">
+        <span className={cn('font-display text-[0.72rem] font-extrabold leading-tight sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]', featured ? cn('text-[1.05rem] md:text-[1.2rem] xl:text-[1.3rem]', a.kind === 'invoke' ? 'text-on-gold' : 'text-on-wish') : 'text-ink')}>{title}</span>
+        {a.subLabel ? <span className={cn('hidden text-xs font-medium leading-tight @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]', featured ? (a.kind === 'invoke' ? 'text-on-gold/90' : 'text-on-wish/90') : 'text-ink-muted')}>{a.subLabel}</span> : null}
       </span>
     </>
   );
@@ -186,7 +186,7 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
         {actions.map((a, index) => {
           const featured = a.kind === 'burn' || a.kind === 'invoke';
           // Đốt vía và Thỉnh Thần Tài: cùng một chiều cao, cao và nổi bật hơn các nút còn lại.
-          const cls = cn(base, deviceClass(a), featured && 'h-[7.25rem] border-2 border-gold from-wish via-wish to-wish-strong shadow-cta md:h-[5rem] md:max-xl:h-[4.5rem]');
+          const cls = cn(base, deviceClass(a), featured && 'h-[7.25rem] border-2 border-gold shadow-cta md:h-[5rem] md:max-xl:h-[4.5rem]', a.kind === 'burn' && 'bg-linear-to-b from-fire-top via-fire-mid to-fire-bottom', a.kind === 'invoke' && 'bg-linear-to-b from-gold-bright via-gold to-gold-deep');
           const style = orderStyle(a, index);
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
           if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;
