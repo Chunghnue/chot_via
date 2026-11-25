@@ -15,15 +15,15 @@ export function DeityBanner({ compact = false }: { compact?: boolean }) {
   const t = useTranslations('home.extras');
   const dispatch = useAppDispatch();
   if (compact) {
-    // Máy tính (ảnh thiết kế): Thần Tài to thò lên khỏi mép thẻ, tiêu đề đỏ một dòng, nút xanh "Xin vía ngay →".
+    // Máy tính (ảnh thiết kế): thẻ kem vàng, Thần Tài nằm gọn bên trái, tiêu đề đỏ + "Nhận lộc hôm nay" + nút xanh "Xin vía ngay →" bên phải.
     return (
-      <div className="relative mt-5 flex min-h-[8rem] items-center rounded-3xl bg-linear-to-br from-gold-soft via-surface to-gold-soft pl-[8rem] pr-3 shadow-card ring-1 ring-gold/40">
-        <img src="/images/than-tai.webp" alt="" aria-hidden className="pointer-events-none absolute -left-2 -top-4 w-[8.75rem] select-none object-contain drop-shadow-md" draggable={false} />
-        <div className="flex min-w-0 flex-1 flex-col items-start gap-1 py-3">
-          <span className="whitespace-nowrap font-display text-[1.15rem] font-extrabold italic leading-tight text-wish-strong">{t('deityTitle')}</span>
+      <div className="flex items-center gap-2 rounded-2xl bg-linear-to-br from-gold-soft via-surface to-gold-soft p-3 shadow-card ring-1 ring-gold/40">
+        <img src="/images/than-tai-bay.webp" alt="" aria-hidden className="h-[6.5rem] w-auto shrink-0 select-none object-contain drop-shadow" draggable={false} />
+        <div className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center">
+          <span className="font-display text-[1.05rem] font-extrabold italic leading-tight text-wish-strong">{t('deityTitle')}</span>
           <span className="text-xs font-semibold leading-snug text-ink">{t('deityTodayHint')}</span>
           <button type="button" onClick={() => dispatch(wishRequested())} aria-label={t('deityTitle')}
-            className="mt-1 inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-full bg-linear-to-b from-primary to-primary-strong px-4 text-sm font-bold text-on-primary shadow-card ring-2 ring-surface transition hover:brightness-105 active:scale-95">{t('wishNow')}<ArrowRight className="size-4" aria-hidden /></button>
+            className="mt-1 inline-flex h-10 w-full items-center justify-center gap-1 whitespace-nowrap rounded-full bg-linear-to-b from-primary-bright to-primary px-3 text-sm font-bold text-on-primary shadow-card ring-2 ring-surface transition hover:brightness-105 active:scale-95">{t('wishNow')}<ArrowRight className="size-5 shrink-0" aria-hidden /></button>
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ export function ChallengeTasks() {
           })}
         </ul>
       )}
-      <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'lg' }), 'mt-1 w-full bg-linear-to-b from-primary to-primary-strong text-lg font-bold shadow-card ring-2 ring-surface')}>{t('joinNow')}<ArrowRight className="size-5" aria-hidden /></Link>
+      <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'lg' }), 'mt-1 w-full bg-linear-to-b from-primary-bright to-primary text-lg font-bold shadow-card ring-2 ring-surface')}>{t('joinNow')}<ArrowRight className="size-5 shrink-0" aria-hidden /></Link>
     </Card>
   );
 }
@@ -81,7 +81,7 @@ export function CreateStoreCard() {
       <img src="/images/cua-hang-mau.webp" alt="" aria-hidden className="h-32 w-auto object-contain drop-shadow-lg" draggable={false} />
       <h2 className="font-display text-2xl font-extrabold text-primary-strong">{tn('createStoreTitleLine1')}</h2>
       <p className="text-sm font-medium leading-snug text-ink">{t('storeText')}</p>
-      <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'lg' }), 'mt-1 w-full bg-linear-to-b from-primary to-primary-strong text-lg font-bold shadow-card ring-2 ring-surface')}>{tn('createStoreCta')}<ArrowRight className="size-5" aria-hidden /></Link>
+      <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'lg' }), 'mt-1 w-full bg-linear-to-b from-primary-bright to-primary text-lg font-bold shadow-card ring-2 ring-surface')}>{tn('createStoreCta')}<ArrowRight className="size-5 shrink-0" aria-hidden /></Link>
     </Card>
   );
 }
@@ -109,7 +109,7 @@ export function FeaturedEventCard() {
         <p className="font-display text-lg font-extrabold leading-tight text-wish-strong">{event.title}</p>
         {event.description ? <p className="line-clamp-3 text-xs font-medium text-ink">{event.description}</p> : null}
         <p className="text-[0.7rem] text-ink-subtle">{t('until', { date: f.date(event.endsAt) })}</p>
-        <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'sm' }), 'mt-1 bg-linear-to-b from-primary to-primary-strong font-bold')}>{t('joinNow')}<ArrowRight className="size-4" aria-hidden /></Link>
+        <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'sm' }), 'mt-1 bg-linear-to-b from-primary-bright to-primary font-bold')}>{t('joinNow')}<ArrowRight className="size-5 shrink-0" aria-hidden /></Link>
       </div>
       {data.length > 1 ? (
         <div className="flex justify-center gap-1.5" aria-hidden>{data.map((e, i) => <span key={e.id} className={cn('size-1.5 rounded-full', i === index % data.length ? 'bg-primary' : 'bg-border')} />)}</div>
