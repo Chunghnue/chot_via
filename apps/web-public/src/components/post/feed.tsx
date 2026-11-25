@@ -2,8 +2,8 @@
 
 import { selectIsMember, useGetPostsQuery } from '@chot-via/api-client';
 import { FEED_SORTS, FEED_TYPES, MEMBER_ROLES, type MemberRole, type PostListQuery } from '@chot-via/shared';
-import { Avatar, Button, Card, Chip, EmptyState, IconButton, Select, Skeleton, cn, useRoleLabel } from '@chot-via/ui';
-import { ArrowDownUp, ImagePlus } from 'lucide-react';
+import { Avatar, Button, Chip, EmptyState, Select, Skeleton, cn, useRoleLabel } from '@chot-via/ui';
+import { ArrowDownUp, ImagePlus, Smile } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
@@ -64,7 +64,7 @@ export function HomeSortControl({ variant }: { variant: 'select' | 'icon' }) {
     dispatch(feedSortChanged(next));
   };
   if (variant === 'select') {
-    return <Select aria-label={t('sort.new')} className="ml-auto hidden h-10 w-auto min-w-[8.5rem] rounded-full text-sm font-semibold xl:block" value={filters.sort} onChange={(e) => onChange(e.target.value)}>{options}</Select>;
+    return <Select aria-label={t('sort.new')} className="ml-auto hidden h-11 w-auto min-w-[7.5rem] rounded-full border-transparent bg-surface text-sm font-bold shadow-card xl:block" value={filters.sort} onChange={(e) => onChange(e.target.value)}>{options}</Select>;
   }
   return (
     <label className="relative ml-auto flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-primary-strong shadow-card xl:hidden">
@@ -85,7 +85,7 @@ export function HomeFeedFilters() {
         return (
           <Chip
             key={type} active={active} onClick={() => dispatch(feedTypeChanged(type))}
-            className={cn('h-10 min-w-0 flex-auto justify-center px-2 text-[0.74rem] shadow-card min-[420px]:px-3 min-[420px]:text-[0.82rem] sm:h-11 sm:px-4 sm:text-[0.95rem] xl:flex-none', active ? 'border-transparent bg-linear-to-b from-primary-bright to-primary' : 'border-border/60')}
+            className={cn('h-10 min-w-0 flex-auto justify-center px-2 text-[0.74rem] shadow-card min-[420px]:px-3 min-[420px]:text-[0.82rem] sm:h-11 sm:px-4 sm:text-[0.95rem] xl:flex-none', active ? 'btn-glossy border-transparent' : 'border-transparent')}
           >{t(`filters.${type}`)}{emoji ? ` ${emoji}` : ''}</Chip>
         );
       })}
@@ -99,13 +99,20 @@ export function ComposeBar() {
   const t = useTranslations('post');
   const dispatch = useAppDispatch();
   const { user } = useRequireMember();
+  const open = (): void => { dispatch(composerOpened(undefined)); };
+  const tool = 'grid size-9 place-items-center text-ink transition hover:text-primary-strong active:scale-90';
   return (
-    <Card className="flex items-center gap-3 p-3">
-      <Avatar src={user?.avatarUrl ?? null} name={user?.displayName ?? '?'} size={44} />
-      <button type="button" onClick={() => dispatch(composerOpened(undefined))} className="h-11 min-w-0 flex-1 truncate rounded-full bg-surface-muted px-4 text-left text-sm text-ink-muted hover:bg-border">{t('prompt')}</button>
-      <IconButton label={t('composer.photos')} onClick={() => dispatch(composerOpened(undefined))} className="hidden text-primary-strong hover:bg-primary-soft sm:flex"><ImagePlus className="size-5" aria-hidden /></IconButton>
-      <Button size="sm" onClick={() => dispatch(composerOpened(undefined))}>{t('promptPost')}</Button>
-    </Card>
+    <div className="flex flex-col gap-2 rounded-3xl bg-surface p-3 shadow-card ring-1 ring-border/40">
+      <div className="flex items-center gap-3">
+        <Avatar src={user?.avatarUrl ?? null} name={user?.displayName ?? '?'} size={56} />
+        <button type="button" onClick={open} className="h-12 min-w-0 flex-1 truncate rounded-2xl border-2 border-info/20 bg-info-soft/60 px-4 text-left text-[0.95rem] text-ink-muted shadow-[inset_0_1px_3px_rgb(35_83_164/0.08)] transition hover:border-info/40">{t('prompt')}</button>
+      </div>
+      <div className="flex items-center justify-end gap-3">
+        <button type="button" aria-label={t('composer.photos')} onClick={open} className={cn(tool, 'border-r border-border/70 pr-3')}><ImagePlus className="size-6" strokeWidth={2.2} aria-hidden /></button>
+        <button type="button" aria-label={t('composer.emoji')} onClick={open} className={cn(tool, 'border-r border-border/70 pr-3')}><Smile className="size-6" strokeWidth={2.2} aria-hidden /></button>
+        <button type="button" onClick={open} className="btn-glossy inline-flex h-11 min-w-32 items-center justify-center rounded-full px-6 text-[0.95rem] font-bold text-on-primary transition active:scale-95">{t('promptPost')}</button>
+      </div>
+    </div>
   );
 }
 

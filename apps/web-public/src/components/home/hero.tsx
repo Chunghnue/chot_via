@@ -15,6 +15,7 @@ import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/u
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { useCurrentUser } from '@/lib/use-member';
+import { HeroTitle } from './hero-title';
 
 /** Tỉ lệ ảnh phố thiết kế (pho-3d-hero.png): vùng bấm tính theo % khung ảnh nên luôn khớp dù khung hero bị cắt ở các cỡ màn khác nhau. */
 const HERO_IMAGE_RATIO = 1672 / 941;
@@ -73,14 +74,17 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
-          <h1 className="font-display text-[clamp(1.1rem,5.6cqw,5.2rem)] font-extrabold leading-none text-title-light md:text-title md:text-[clamp(1.9rem,5.6cqw,5.2rem)]">{config.heroTitle}</h1>
-          <p className="rounded-full border-2 border-surface bg-gold px-[1.2cqw] py-[0.2cqw] text-[clamp(0.55rem,1.65cqw,1.4rem)] font-bold text-on-gold shadow-card md:border-0 md:px-[1.6cqw] md:py-[0.2cqw] md:text-[clamp(0.7rem,1.7cqw,1.4rem)]">{config.heroSubtitle}</p>
+          <HeroTitle text={config.heroTitle} className="w-[min(70cqw,64rem)]" />
+          <p className="-mt-[2.4cqw] rounded-full border-[0.35cqw] border-surface bg-linear-to-b from-gold-soft via-gold to-gold px-[2.2cqw] py-[0.35cqw] text-[clamp(0.6rem,1.9cqw,1.6rem)] font-extrabold text-primary-strong shadow-card">{config.heroSubtitle}</p>
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
-          <div aria-hidden className="pointer-events-none absolute right-[3%] top-[10%] hidden flex-col items-center md:flex">
-            <span className="h-[2cqw] w-[0.5cqw] bg-[#7a4a23]" />
-            <div className="flex flex-col items-center gap-[0.3cqw] rounded-[1cqw] border-[0.4cqw] border-[#7a4a23] bg-[#d9a15f] px-[1.8cqw] py-[1cqw] shadow-card [background-image:repeating-linear-gradient(90deg,transparent_0_2.4cqw,rgb(122_74_35/0.18)_2.4cqw_2.6cqw)]">
-              {config.signLines.map((line) => <span key={line} className="whitespace-nowrap font-display text-[clamp(0.6rem,1.5cqw,1.3rem)] font-extrabold text-[#4a2a10]">{line}</span>)}
+          <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">
+            <div className="rounded-[1.4cqw] border-[0.5cqw] border-sign-frame bg-linear-to-b from-sign-wood to-sign-wood-dark px-[1.8cqw] py-[1.2cqw] shadow-card ring-[0.25cqw] ring-sign-frame-dark">
+              {config.signLines.map((line) => (
+                <p key={line} className="flex items-center gap-[0.8cqw] whitespace-nowrap font-display text-[clamp(0.6rem,1.7cqw,1.4rem)] font-extrabold italic leading-[1.7] text-surface [text-shadow:0_0.2cqw_0_var(--color-sign-wood-dark)]">
+                  <span className="grid size-[2.2cqw] shrink-0 place-items-center rounded-full bg-linear-to-b from-sign-check to-sign-check-dark ring-[0.25cqw] ring-surface"><svg viewBox="0 0 12 12" className="size-[1.3cqw]"><path d="M2.5 6.4l2.4 2.4 4.6-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{line}
+                </p>
+              ))}
             </div>
           </div>
         ) : null}

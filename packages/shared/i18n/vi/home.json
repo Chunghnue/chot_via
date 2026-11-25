@@ -104,6 +104,11 @@
     "members": "{count} thành viên",
     "communityText": "Nơi chia sẻ, động viên và lan tỏa may mắn cho người kinh doanh!",
     "composerPlaceholder": "Chia sẻ câu chuyện, thành tích, nỗi lòng của bạn…",
-    "postNow": "Đăng bài ngay"
-  }
+    "postNow": "Đăng bài ngay",
+    "communityPrefix": "Cộng đồng",
+    "communityBrand": "Chốt Vía",
+    "rewardPoints": "+{points} điểm"
+  },
+  "copyLink": "Sao chép link Chốt Vía",
+  "linkCopied": "Đã sao chép link Chốt Vía"
 }

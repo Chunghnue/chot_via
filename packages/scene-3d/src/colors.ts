@@ -10,6 +10,7 @@ export interface SceneColors {
   leafLight: string; leafDark: string; blossom: string; blossomDark: string; bench: string; metal: string; red: string; stripe: string; stone: string; water: string; mai: string;
   mascotSuit: string; mascotTeal: string; mascotGreen: string;
   deityRobeDark: string;
+  signFrame: string; signFrameDark: string; signWood: string; signWoodDark: string; signCheck: string; signCheckDark: string;
 }
 
 /** Màu cảnh 3D đọc từ token trong theme.css (một nguồn duy nhất), không viết cứng trong mã. */
@@ -30,6 +31,7 @@ export function useSceneColors(): SceneColors {
       red: c('scene-balloon'), stripe: c('scene-balloon-stripe'), stone: c('scene-stone'), water: c('scene-water'), mai: c('scene-mai'),
       mascotSuit: c('scene-mascot-suit'), mascotTeal: c('scene-mascot-teal'), mascotGreen: c('scene-mascot-green'),
       deityRobeDark: c('scene-deity-robe-dark'),
+      signFrame: c('sign-frame'), signFrameDark: c('sign-frame-dark'), signWood: c('sign-wood'), signWoodDark: c('sign-wood-dark'), signCheck: c('sign-check'), signCheckDark: c('sign-check-dark'),
     };
   }, []);
 }

@@ -144,11 +144,11 @@ function MissionsPage() {
   const to = useTranslations('admin.resources.options');
   return <ResourcePage config={{
     title: t('nav.missions'), note: t('resources.missionsNote'), schema: MissionInputSchema,
-    defaults: { code: '', name: '', description: '', period: 'daily', action: 'deity_wish', target: 1, sortOrder: 0, active: true }, toInput: ({ id: _id, ...rest }) => rest,
+    defaults: { code: '', name: '', description: '', period: 'daily', action: 'deity_wish', target: 1, rewardPoints: 0, sortOrder: 0, active: true }, toInput: ({ id: _id, ...rest }) => rest,
     fields: [{ name: 'code', label: tf('code'), kind: 'text' }, { name: 'name', label: tf('name'), kind: 'text' }, { name: 'description', label: tf('description'), kind: 'textarea' },
       { name: 'period', label: tf('period'), kind: 'select', options: options(MISSION_PERIODS, (p) => to(`period.${p}`)) }, { name: 'action', label: tf('action'), kind: 'select', options: options(MISSION_ACTIONS, (a) => to(`missionAction.${a}`)) },
-      { name: 'target', label: tf('target'), kind: 'number' }, { name: 'sortOrder', label: tf('sortOrder'), kind: 'number' }, { name: 'active', label: tf('active'), kind: 'switch' }],
-    columns: [{ header: tf('name'), cell: (i) => <b>{i.name}</b> }, { header: tf('action'), cell: (i) => to(`missionAction.${i.action}`) }, { header: tf('period'), cell: (i) => to(`period.${i.period}`) }, { header: tf('target'), cell: (i) => i.target }, { header: tf('active'), cell: (i) => <ActiveBadge active={i.active} /> }],
+      { name: 'target', label: tf('target'), kind: 'number' }, { name: 'rewardPoints', label: tf('rewardPoints'), kind: 'number' }, { name: 'sortOrder', label: tf('sortOrder'), kind: 'number' }, { name: 'active', label: tf('active'), kind: 'switch' }],
+    columns: [{ header: tf('name'), cell: (i) => <b>{i.name}</b> }, { header: tf('action'), cell: (i) => to(`missionAction.${i.action}`) }, { header: tf('period'), cell: (i) => to(`period.${i.period}`) }, { header: tf('target'), cell: (i) => i.target }, { header: tf('rewardPoints'), cell: (i) => `+${i.rewardPoints}` }, { header: tf('active'), cell: (i) => <ActiveBadge active={i.active} /> }],
     useList: () => { const q = useMissionsListQuery(); return { data: q.data, isLoading: q.isLoading }; }, useCreate: useMissionsCreateMutation, useUpdate: useMissionsUpdateMutation, useRemove: useMissionsRemoveMutation,
   }} />;
 }

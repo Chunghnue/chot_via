@@ -23,7 +23,7 @@ Thứ tự ưu tiên khi mâu thuẫn: **quyết định đã chốt → thiết
 15. OTP: SpeedSMS (eSMS dự phòng); 6 số, hiệu lực 5 phút, gửi lại sau 60 giây, tối đa 3 lần/15 phút, sai tối đa 5 lần/mã, khóa 15 phút. Dev được log OTP / dùng mã cố định; production không log OTP.
 16. Điểm P0 do admin tạo (đánh dấu demo, không doanh thu giả); P1 người dùng tự tạo từ mẫu có sẵn.
 17. Phạm vi: **P0 + P1** trên Responsive Web + PWA; P2 sau; không làm app native.
-18. Điểm: **+1** mỗi lần thành công của (xin vía Thần Tài / gửi vía cửa hàng / gửi vía Sale) — **chỉ thành viên đăng nhập**, khách không được điểm, không cộng bù. Điểm quy ra cấp độ, huy hiệu, xếp hạng. **Ngưỡng cấp độ/huy hiệu chưa chốt → không hard-code, admin cấu hình, mặc định để trống (chờ phê duyệt).** Nhiệm vụ chỉ ghi nhận tiến độ, không cộng điểm.
+18. Điểm (cập nhật 25/11/2026: nhiệm vụ nay có điểm thưởng theo hệ số `missions.reward_points`, thưởng một lần mỗi kỳ cho thành viên; mẫu: Đăng 1 bài +50, Gửi vía cho 5 người +50, Ghé 3 cửa hàng mới +30). Ban đầu: **+1** mỗi lần thành công của (xin vía Thần Tài / gửi vía cửa hàng / gửi vía Sale) — **chỉ thành viên đăng nhập**, khách không được điểm, không cộng bù. Điểm quy ra cấp độ, huy hiệu, xếp hạng. **Ngưỡng cấp độ/huy hiệu chưa chốt → không hard-code, admin cấu hình, mặc định để trống (chờ phê duyệt).** Nhiệm vụ chỉ ghi nhận tiến độ, không cộng điểm.
 19. Bảng màu HEX chính thức do đội thiết kế gửi; hiện dùng giá trị tạm trong `theme.css`.
 20. Analytics: PostHog Cloud (EU), không cookie, không gửi SĐT/nội dung Kể khổ/số liệu doanh thu.
 - Bảng xếp hạng: tối đa **100** thành viên, mặc định hiện **5**, có nút xem thêm.

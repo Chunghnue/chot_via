@@ -105,7 +105,7 @@ export const DEFAULT_HOME_CONFIG: HomeConfig = {
   heroTitle: 'Phố Chốt Vía 3D',
   heroSubtitle: 'Ghé phố – Đốt vía – Thỉnh Thần Tài',
   ctaHint: 'Chạm để xin vía từ Thần Tài',
-  signLines: ['Chúc may mắn', 'Chốt đơn thần tốc', 'Doanh thu bùng nổ'],
+  signLines: ['Giải tỏa áp lực', 'Tiếp thêm động lực', 'Kết nối cộng đồng'],
   streetGlbUrl: null,
   deityGlbUrl: '/3d/models/than_tai.glb',
   deityScale: 1.6,

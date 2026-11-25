@@ -26,7 +26,7 @@
   "emptyFollowing": "Bạn chưa theo dõi ai có bài viết. Hãy theo dõi vài người nhé!",
   "loadMore": "Xem thêm bài viết",
   "end": "Bạn đã xem hết bảng tin.",
-  "prompt": "Bạn muốn chia sẻ gì hôm nay?",
+  "prompt": "Chia sẻ câu chuyện, thành tích, nỗi lòng của bạn...",
   "promptHint": "Kể khổ, khoe doanh thu, khoe deal, xin vía…",
   "promptPost": "Đăng bài",
   "feedHeading": "Bảng tin cộng đồng",
@@ -79,7 +79,8 @@
     "keepEditing": "Tiếp tục soạn",
     "posted": "Đã đăng bài lên bảng tin!",
     "privacyNote": "Số tiền mặc định được ẩn. Không đăng thông tin khách hàng, số điện thoại hay hợp đồng mật.",
-    "composeTitle": "Soạn bài đăng"
+    "composeTitle": "Soạn bài đăng",
+    "emoji": "Biểu tượng cảm xúc"
   },
   "metrics": {
     "revenue": "Doanh thu hôm nay",

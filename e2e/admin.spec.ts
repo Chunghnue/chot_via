@@ -20,7 +20,7 @@ test.describe('web admin', () => {
     // Mở thẳng /home-config: form chỉ dựng khi đã có dữ liệu, không trắng trang (field.value.join trên undefined).
     await page.goto('http://localhost:5273/home-config', { waitUntil: 'networkidle' });
     await expect(page.getByRole('heading', { name: 'Trang chủ (hero)' })).toBeVisible();
-    await expect(page.locator('#signLines')).toHaveValue('Chúc may mắn\nChốt đơn thần tốc\nDoanh thu bùng nổ');
+    await expect(page.locator('#signLines')).toHaveValue('Giải tỏa áp lực\nTiếp thêm động lực\nKết nối cộng đồng');
 
     await page.goto('http://localhost:5273/settings', { waitUntil: 'networkidle' });
     const toggle = page.getByRole('switch', { name: /Hiện dữ liệu mẫu/ });

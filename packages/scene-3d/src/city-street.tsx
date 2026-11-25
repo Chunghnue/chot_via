@@ -201,31 +201,54 @@ function CityDeity({ colors, reducedMotion, burstTick, away, onSelect }: { color
   );
 }
 
-/** Bảng hiệu gỗ "Chúc may mắn…" dựng trong cảnh (nội dung do admin nhập ở `signLines`). */
+/** Bảng khẩu hiệu gỗ dựng trong cảnh (nội dung do admin nhập ở `signLines`): khung gỗ sáng, mặt gỗ tối có vân, mỗi dòng có vòng tròn tick xanh và chữ trắng nghiêng như ảnh thiết kế. */
 function CitySign({ lines, colors }: { lines: readonly string[]; colors: SceneColors }) {
   const ref = useRef<Group>(null);
   useFaceCamera(ref, 1, true);
   const { map, aspect } = useMemo(() => {
     const w = 640;
-    const lineH = 96;
-    const h = 60 + lines.length * lineH + 40;
+    const rowH = 92;
+    const h = 84 + lines.length * rowH;
     const cv = document.createElement('canvas');
     cv.width = w; cv.height = h;
     const g = cv.getContext('2d');
     if (!g) return { map: null, aspect: 1 };
-    g.fillStyle = colors.bench;
-    g.beginPath(); g.roundRect(0, 0, w, h, 36); g.fill();
-    g.strokeStyle = colors.trunk; g.lineWidth = 14;
-    g.beginPath(); g.roundRect(7, 7, w - 14, h - 14, 30); g.stroke();
-    g.fillStyle = colors.trunk; g.globalAlpha = 0.25;
-    for (let x = 80; x < w; x += 110) g.fillRect(x, 14, 6, h - 28);
-    g.globalAlpha = 1;
-    g.font = '800 58px system-ui, -apple-system, "Segoe UI", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = colors.surface;
-    lines.forEach((line, i) => g.fillText(line, w / 2, 60 + i * lineH + lineH / 2 - 10, w - 60));
+    // Khung gỗ sáng (chuyển sắc, viền nổi)
+    const frame = g.createLinearGradient(0, 0, 0, h);
+    frame.addColorStop(0, colors.signFrame); frame.addColorStop(1, colors.signFrameDark);
+    g.fillStyle = frame; g.beginPath(); g.roundRect(0, 0, w, h, 34); g.fill();
+    g.strokeStyle = colors.surface; g.globalAlpha = 0.35; g.lineWidth = 4; g.beginPath(); g.roundRect(5, 5, w - 10, h - 10, 30); g.stroke(); g.globalAlpha = 1;
+    // Mặt gỗ tối với các tấm ván
+    const pad = 24;
+    const wood = g.createLinearGradient(0, pad, 0, h - pad);
+    wood.addColorStop(0, colors.signWood); wood.addColorStop(1, colors.signWoodDark);
+    g.fillStyle = wood; g.beginPath(); g.roundRect(pad, pad, w - pad * 2, h - pad * 2, 18); g.fill();
+    g.save(); g.beginPath(); g.roundRect(pad, pad, w - pad * 2, h - pad * 2, 18); g.clip();
+    g.strokeStyle = colors.signWoodDark; g.globalAlpha = 0.55; g.lineWidth = 3;
+    for (let i = 1; i < lines.length + 1; i += 1) { const y = pad + ((h - pad * 2) / (lines.length + 1)) * i; g.beginPath(); g.moveTo(pad, y); g.lineTo(w - pad, y); g.stroke(); }
+    g.globalAlpha = 0.18; g.lineWidth = 2;
+    for (let x = pad + 40; x < w - pad; x += 58) { g.beginPath(); g.moveTo(x, pad); g.bezierCurveTo(x + 14, h * 0.35, x - 14, h * 0.65, x + 4, h - pad); g.stroke(); }
+    g.restore(); g.globalAlpha = 1;
+    // Từng dòng: vòng tròn tick xanh + chữ trắng nghiêng
+    g.font = 'italic 800 50px system-ui, -apple-system, "Segoe UI", sans-serif'; g.textAlign = 'left'; g.textBaseline = 'middle';
+    const r = 27;
+    lines.forEach((line, i) => {
+      const cy = 42 + pad + i * rowH + rowH / 2 - 8;
+      const tw = Math.min(g.measureText(line).width, w - pad * 2 - r * 2 - 70);
+      const x0 = (w - (r * 2 + 18 + tw)) / 2;
+      const disc = g.createLinearGradient(0, cy - r, 0, cy + r);
+      disc.addColorStop(0, colors.signCheck); disc.addColorStop(1, colors.signCheckDark);
+      g.fillStyle = disc; g.beginPath(); g.arc(x0 + r, cy, r, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = colors.surface; g.lineWidth = 4; g.stroke();
+      g.lineWidth = 7; g.lineCap = 'round'; g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(x0 + r - 12, cy + 1); g.lineTo(x0 + r - 3, cy + 10); g.lineTo(x0 + r + 13, cy - 9); g.stroke();
+      g.fillStyle = colors.signWoodDark; g.fillText(line, x0 + r * 2 + 18 + 3, cy + 4, tw);
+      g.fillStyle = colors.surface; g.fillText(line, x0 + r * 2 + 18, cy, tw);
+    });
     const tex = new CanvasTexture(cv);
     tex.colorSpace = SRGBColorSpace; tex.anisotropy = 8;
     return { map: tex, aspect: w / h };
-  }, [lines, colors.bench, colors.trunk, colors.surface]);
+  }, [lines, colors.signFrame, colors.signFrameDark, colors.signWood, colors.signWoodDark, colors.signCheck, colors.signCheckDark, colors.surface]);
   useEffect(() => () => { map?.dispose(); }, [map]);
   if (!map || lines.length === 0) return null;
   const boardH = 1.9;

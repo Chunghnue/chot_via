@@ -286,9 +286,12 @@ export const pointLedger = pgTable('point_ledger', {
   action: text('action').$type<PointAction>().notNull(),
   points: integer('points').notNull().default(1),
   /** Khóa duy nhất theo sự kiện vía → mỗi hành động chỉ ghi điểm một lần. */
-  wishEventId: uuid('wish_event_id').notNull().unique().references(() => wishEvents.id, { onDelete: 'cascade' }),
+  wishEventId: uuid('wish_event_id').unique().references(() => wishEvents.id, { onDelete: 'cascade' }),
+  /** Điểm thưởng nhiệm vụ: mỗi (người dùng, nhiệm vụ, kỳ) ghi đúng một lần; `periodKey` là ngày bắt đầu kỳ (ISO). */
+  missionId: uuid('mission_id').references(() => missions.id, { onDelete: 'cascade' }),
+  periodKey: text('period_key'),
   createdAt: createdAt(),
-}, (t) => [index('point_ledger_user_idx').on(t.userId, t.action)]);
+}, (t) => [index('point_ledger_user_idx').on(t.userId, t.action), uniqueIndex('point_ledger_mission_unique').on(t.userId, t.missionId, t.periodKey)]);
 
 export const reports = pgTable('reports', {
   id: id(),
@@ -337,6 +340,8 @@ export const missions = pgTable('missions', {
   period: text('period').$type<MissionPeriod>().notNull(),
   action: text('action').$type<MissionAction>().notNull(),
   target: integer('target').notNull(),
+  /** Điểm thưởng khi hoàn thành nhiệm vụ trong kỳ (0 = không thưởng). */
+  rewardPoints: integer('reward_points').notNull().default(0),
   sortOrder: integer('sort_order').notNull().default(0),
   active: boolean('active').notNull().default(true),
 });

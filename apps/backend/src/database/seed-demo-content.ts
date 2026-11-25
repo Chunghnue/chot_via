@@ -2,7 +2,7 @@ import { eq, sql } from 'drizzle-orm';
 import type { MemberRole, MetricType, PostType } from '@chot-via/shared';
 import { createDb } from './database';
 import { vnWeekStart } from '@chot-via/shared';
-import { achievements, challenges, events, hotTopics, missions, places, pollVotes, postMedia, posts, users, wishEvents } from './schema';
+import { achievements, challenges, events, hotTopics, missions, notifications, places, pollVotes, postMedia, posts, users, wishEvents } from './schema';
 
 const { db, close } = createDb();
 const HOUR = 3_600_000;
@@ -88,6 +88,13 @@ for (const demo of POSTS) {
   }
 }
 
+// Điểm vía mẫu cho vài tài khoản có ảnh đại diện để mục "Cộng đồng Chốt Vía" và tab Cộng đồng có người nổi bật (chỉ đặt khi tài khoản đó chưa có điểm).
+const SAMPLE_POINTS: [string, number][] = [['Lan Anh', 98], ['Tuấn Anh', 91], ['Thu Hương', 84], ['Đặng Văn Nam', 77], ['Lan Sale', 70], ['Đức Hoàng', 63]];
+for (const [name, points] of SAMPLE_POINTS) {
+  const id = ids.get(name);
+  if (id) await db.update(users).set({ points, pointsUpdatedAt: new Date() }).where(sql`${users.id} = ${id} and ${users.points} = 0 and ${users.isDemo} = true`);
+}
+
 const [anyTopic] = await db.select({ id: hotTopics.id }).from(hotTopics).limit(1);
 if (!anyTopic) await db.insert(hotTopics).values(TOPICS.map((title, i) => ({ title, hashtag: null, sortOrder: i })));
 
@@ -115,18 +122,44 @@ for (const dp of PLACES) {
 }
 
 /** Nhiệm vụ, thử thách tuần và sự kiện mẫu theo thiết kế (không có điểm thưởng). */
-await db.update(missions).set({ name: 'Ghé 5 cửa hàng', target: 5, sortOrder: 0 }).where(eq(missions.code, 'visit_2'));
-await db.update(missions).set({ name: 'Gửi vía cho 5 người', target: 5, sortOrder: 1 }).where(eq(missions.code, 'send_5'));
-await db.update(missions).set({ name: 'Đăng 1 bài chia sẻ', target: 1, sortOrder: 2 }).where(eq(missions.code, 'post_1'));
+await db.update(missions).set({ name: 'Đăng 1 bài chia sẻ', target: 1, rewardPoints: 50, sortOrder: 0 }).where(eq(missions.code, 'post_1'));
+await db.update(missions).set({ name: 'Gửi vía cho 5 người', target: 5, rewardPoints: 50, sortOrder: 1 }).where(eq(missions.code, 'send_5'));
+await db.update(missions).set({ name: 'Ghé 3 cửa hàng mới', target: 3, rewardPoints: 30, sortOrder: 2 }).where(eq(missions.code, 'visit_2'));
 await db.update(missions).set({ active: false }).where(eq(missions.code, 'deity_3'));
 const [ch] = await db.select({ id: challenges.id }).from(challenges).limit(1);
-if (ch) await db.update(challenges).set({ name: 'Hoàn thành 3 nhiệm vụ để nhận quà hấp dẫn!', description: 'Ghé 5 cửa hàng, gửi vía cho 5 người, đăng 1 bài chia sẻ.', target: 3 }).where(eq(challenges.id, ch.id));
-const [ev] = await db.select({ id: events.id }).from(events).limit(1);
-if (!ev) {
-  await db.insert(events).values([
-    { title: 'Tuần lễ gửi vía cuối năm', description: 'Cùng cộng đồng gửi vía cho nhau, chốt đơn thật nhiều trước Tết!', coverUrl: '/images/bia-quan-cafe.webp', startsAt: weekStart, endsAt: new Date(weekStart.getTime() + 30 * 86_400_000), active: true },
-    { title: 'Kể khổ vui – xả stress cuối tuần', description: 'Kể chuyện bán hàng dở khóc dở cười, nhận thật nhiều cảm xúc từ mọi người.', coverUrl: '/images/kk-banner.webp', startsAt: weekStart, endsAt: new Date(weekStart.getTime() + 14 * 86_400_000), active: true },
-  ]);
+if (ch) await db.update(challenges).set({ name: 'Hoàn thành 3 nhiệm vụ để nhận quà hấp dẫn!', description: 'Đăng 1 bài chia sẻ, gửi vía cho 5 người, ghé 3 cửa hàng mới.', target: 3 }).where(eq(challenges.id, ch.id));
+// Sự kiện mẫu (chèn theo tiêu đề nên chạy lặp không nhân đôi; thêm sự kiện mới vào đây là có ở mọi server khi chạy lại).
+const DAY = 86_400_000;
+const sampleEvents: { title: string; description: string; coverUrl: string; days: number; startOffset?: number }[] = [
+  { title: 'Tuần lễ gửi vía cuối năm', description: 'Cùng cộng đồng gửi vía cho nhau, chốt đơn thật nhiều trước Tết!', coverUrl: '/images/bia-quan-cafe.webp', days: 30 },
+  { title: 'Thử thách “Chốt Deal Tháng Vàng”', description: 'Chia sẻ deal, nhận quà lên đến 1.000.000đ', coverUrl: '/images/ic-gift.webp', days: 21, startOffset: -1 },
+  { title: 'Kể khổ vui – xả stress cuối tuần', description: 'Kể chuyện bán hàng dở khóc dở cười, nhận thật nhiều cảm xúc từ mọi người.', coverUrl: '/images/kk-banner.webp', days: 14 },
+];
+for (const e of sampleEvents) {
+  const [found] = await db.select({ id: events.id }).from(events).where(eq(events.title, e.title)).limit(1);
+  if (!found) await db.insert(events).values({ title: e.title, description: e.description, coverUrl: e.coverUrl, startsAt: new Date(weekStart.getTime() + (e.startOffset ?? 0) * DAY), endsAt: new Date(weekStart.getTime() + e.days * DAY), active: true });
+}
+
+// Thông báo mẫu cho mọi tài khoản thật (không phải mẫu) chưa có thông báo nào, để chuông ở đầu trang có số chưa đọc (12) và trang Thông báo có nội dung.
+const [anyPost] = await db.select({ id: posts.id }).from(posts).where(eq(posts.isDemo, true)).limit(1);
+const [anyPlace] = await db.select({ title: places.title, slug: places.slug }).from(places).where(eq(places.isDemo, true)).limit(1);
+const realUsers = await db.select({ id: users.id }).from(users).where(eq(users.isDemo, false));
+if (anyPost && anyPlace) {
+  const actors = ['Lan Anh', 'Tuấn Anh', 'Thu Hương', 'Đặng Văn Nam', 'Lan Sale', 'Đức Hoàng'];
+  const wishNames = ['Đông khách', 'Nhiều đơn', 'Chốt deal', 'Đạt KPI', 'Buôn may bán đắt'];
+  for (const u of realUsers) {
+    const [has] = await db.select({ n: sql<number>`count(*)::int` }).from(notifications).where(eq(notifications.userId, u.id));
+    if ((has?.n ?? 0) > 0) continue;
+    const rows = Array.from({ length: 12 }, (_, i) => {
+      const actorName = actors[i % actors.length] ?? 'Lan Anh';
+      const base = { userId: u.id, createdAt: new Date(Date.now() - (i + 1) * 47 * 60_000) };
+      if (i % 4 === 0) return { ...base, type: 'place_wished' as const, params: { placeTitle: anyPlace.title, placeSlug: anyPlace.slug, wishTypeName: wishNames[i % wishNames.length] ?? 'Đông khách', senderName: actorName } };
+      if (i % 4 === 1) return { ...base, type: 'post_reacted' as const, params: { postId: anyPost.id, actorName } };
+      if (i % 4 === 2) return { ...base, type: 'post_commented' as const, params: { postId: anyPost.id, actorName } };
+      return { ...base, type: 'new_follower' as const, params: { userId: ids.get(actorName) ?? u.id, actorName } };
+    });
+    await db.insert(notifications).values(rows);
+  }
 }
 
 console.log('Đã thêm dữ liệu mẫu cho trang chủ và Kể khổ.');

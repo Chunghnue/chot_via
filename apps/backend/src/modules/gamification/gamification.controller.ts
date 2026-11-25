@@ -8,13 +8,14 @@ import { Ctx, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { iso } from '../../common/mappers';
 import { DB, type Db } from '../../database/database';
+import { PointsService } from './points.service';
 import { challenges, comments, events, missions, placeVisits, places, posts, reactions, users, wishEvents } from '../../database/schema';
 
 @Controller()
 export class GamificationController {
-  constructor(@Inject(DB) private readonly db: Db) {}
+  constructor(@Inject(DB) private readonly db: Db, @Inject(PointsService) private readonly points: PointsService) {}
 
-  /** Tiến độ nhiệm vụ chỉ để theo dõi (không cộng điểm thưởng). Khách thấy danh sách, progress = null. */
+  /** Tiến độ nhiệm vụ. Khách thấy danh sách, progress = null. Thành viên hoàn thành nhiệm vụ có điểm thưởng thì được cộng đúng một lần mỗi kỳ (ghi nhận khi xem danh sách; chạy lại không cộng trùng). */
   private async progress(action: MissionAction, since: Date, userId: string | null): Promise<number> {
     const mine = (col: PgColumn, value: string | null) => (value ? eq(col, value) : undefined);
     switch (action) {
@@ -53,7 +54,12 @@ export class GamificationController {
     for (const m of rows) {
       const since = m.period === 'daily' ? vnDayStart(now) : vnWeekStart(now);
       const progress = ctx.user ? Math.min(await this.progress(m.action, since, ctx.user.id), m.target) : null;
-      items.push({ id: m.id, code: m.code, name: m.name, description: m.description, period: m.period, action: m.action, target: m.target, progress, completed: progress !== null && progress >= m.target });
+      const completed = progress !== null && progress >= m.target;
+      if (ctx.user && completed && m.rewardPoints > 0) {
+        const userId = ctx.user.id;
+        await this.db.transaction((tx) => this.points.awardMission(tx, userId, m.id, since.toISOString(), m.rewardPoints));
+      }
+      items.push({ id: m.id, code: m.code, name: m.name, description: m.description, period: m.period, action: m.action, target: m.target, rewardPoints: m.rewardPoints, progress, completed });
     }
     return ok('OK', items);
   }

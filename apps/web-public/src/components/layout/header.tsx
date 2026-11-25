@@ -53,7 +53,7 @@ export function Header() {
           <span className="hidden xl:block"><Logo markSrc="/images/logo-co.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
         </Link>
 
-        <form onSubmit={submitSearch} role="search" className={cn('order-3 hidden w-[20%] min-w-[9rem] max-w-[35rem] shrink-0 lg:block xl:w-[22%] min-[1440px]:w-[24%]', pathname === '/' && 'lg:max-xl:order-2 lg:max-xl:w-auto lg:max-xl:max-w-none lg:max-xl:flex-1 lg:max-xl:shrink')}>
+        <form onSubmit={submitSearch} role="search" className={cn('order-3 hidden w-[20%] min-w-[6rem] max-w-[35rem] shrink lg:block xl:w-[22%] min-[1440px]:w-[24%]', pathname === '/' && 'lg:max-xl:order-2 lg:max-xl:w-auto lg:max-xl:max-w-none lg:max-xl:flex-1 lg:max-xl:shrink')}>
           <label className="relative block">
             <span className="sr-only">{tc('search')}</span>
             <Search className="pointer-events-none absolute right-4 top-1/2 size-[1.15rem] -translate-y-1/2 text-ink" aria-hidden />

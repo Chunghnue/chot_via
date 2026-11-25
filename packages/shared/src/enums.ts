@@ -74,8 +74,8 @@ export type TimeBucket = (typeof TIME_BUCKETS)[number];
 export const WISH_TITLE_CODES = ['today', 'morning', 'afternoon', 'evening'] as const;
 export type WishTitleCode = (typeof WISH_TITLE_CODES)[number];
 
-/** Hành động ghi điểm (+1 mỗi lần thành công) — chỉ 3 nguồn theo quyết định đã chốt. */
-export const POINT_ACTIONS = ['deity_wish', 'place_wish_store', 'place_wish_sale'] as const;
+/** Hành động ghi điểm: +1 mỗi lần thành công của 3 hành động vía, và điểm thưởng khi hoàn thành nhiệm vụ (`mission`, hệ số do admin đặt ở từng nhiệm vụ; chủ dự án đổi 25/11/2026). */
+export const POINT_ACTIONS = ['deity_wish', 'place_wish_store', 'place_wish_sale', 'mission'] as const;
 export type PointAction = (typeof POINT_ACTIONS)[number];
 
 export const MISSION_ACTIONS = ['deity_wish', 'place_wish', 'visit_place', 'publish_post', 'react_post', 'comment_post'] as const;

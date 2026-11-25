@@ -54,6 +54,23 @@
   --color-surface: #FFFFFF;
   --color-surface-muted: #F3F7F4;
   --color-search-bg: #EAF1F5;
+  --color-btn-glossy-top: #5DC25C;
+  --color-btn-glossy-bottom: #2A963E;
+  --color-btn-glossy-edge: #8ED68B;
+  /* Nền banner "Sự kiện nổi bật" (cam đào chuyển sắc theo ảnh thiết kế) */
+  --color-event-from: #FFEBC0;
+  --color-event-to: #F8C88B;
+  /* Bảng khẩu hiệu gỗ ở hero: khung gỗ sáng, mặt gỗ tối, vòng tròn tick xanh (theo ảnh thiết kế) */
+  --color-sign-frame: #DDA765;
+  --color-sign-frame-dark: #A56F3A;
+  --color-sign-wood: #70431F;
+  --color-sign-wood-dark: #4A2910;
+  --color-sign-check: #46C45F;
+  --color-sign-check-dark: #1E8E3E;
+  /* Màu thương hiệu của mạng xã hội (biểu tượng chia sẻ ở chân trang) */
+  --color-brand-facebook: #1877F2;
+  --color-brand-zalo: #0068FF;
+  --color-brand-tiktok: #0B0B0B;
   --color-border: #D6E5DB;
   --color-ink: #17291F;
   --color-ink-muted: #43584B;
@@ -212,6 +229,14 @@
   /* Mọi nút và phần tử bấm được hiện con trỏ bàn tay khi rê chuột vào (Tailwind v4 mặc định để mũi tên). */
   button, [role="button"], a[href], summary, select, label[for], input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="file"], [type="range"]) { cursor: pointer; }
   button:disabled, [role="button"][aria-disabled="true"], select:disabled, input:disabled { cursor: not-allowed; }
+}
+
+/* Nút xanh bóng của ảnh thiết kế ("Tham gia ngay", "Xin vía ngay"): xanh lá sáng chuyển đậm, vệt sáng phía trên, chữ có bóng đổ nhẹ. */
+@utility btn-glossy {
+  background-image: linear-gradient(to bottom, var(--color-btn-glossy-top), var(--color-btn-glossy-bottom));
+  box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.45), inset 0 -2px 0 rgb(0 0 0 / 0.12), 0 4px 8px rgb(20 90 40 / 0.28);
+  text-shadow: 0 1px 2px rgb(0 60 20 / 0.5);
+  border: 1.5px solid var(--color-btn-glossy-edge);
 }
 
 @utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }

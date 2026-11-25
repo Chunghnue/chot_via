@@ -5,6 +5,8 @@ import { IdSchema, IsoDateSchema } from '../common';
 export const MissionSchema = z.object({
   id: IdSchema, code: z.string(), name: z.string(), description: z.string(),
   period: z.enum(MISSION_PERIODS), action: z.enum(MISSION_ACTIONS), target: z.number().int().positive(),
+  /** Điểm thưởng khi hoàn thành nhiệm vụ (hệ số quy ra điểm, admin đặt; 0 = không thưởng). */
+  rewardPoints: z.number().int().nonnegative(),
   /** null = khách chưa đăng nhập (chỉ xem danh sách). */
   progress: z.number().int().nullable(),
   completed: z.boolean(),

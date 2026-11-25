@@ -261,7 +261,8 @@
       "uploadFile": "Tải file lên",
       "noPlace": "— Chưa liên kết —",
       "sortTablet": "Thứ tự trên iPad (trống = như mặc định)",
-      "sortDesktop": "Thứ tự trên máy tính (trống = như mặc định)"
+      "sortDesktop": "Thứ tự trên máy tính (trống = như mặc định)",
+      "rewardPoints": "Điểm thưởng khi hoàn thành (hệ số quy ra điểm, 0 = không thưởng)"
     },
     "options": {
       "templateSource": {
@@ -328,7 +329,7 @@
     "pending": "Chờ duyệt bảng điểm chính thức từ chủ dự án — chưa có giá trị mặc định.",
     "levelsNote": "Ngưỡng điểm cấp độ chưa được chốt: chưa có cấp nào được tạo sẵn. Điểm: +1 mỗi lần xin vía/gửi vía thành công của thành viên.",
     "badgesNote": "Điều kiện nhận huy hiệu chưa được chốt: chưa có huy hiệu nào được tạo sẵn.",
-    "missionsNote": "Nhiệm vụ chỉ ghi nhận tiến độ, không cộng thêm điểm.",
+    "missionsNote": "Nhiệm vụ ghi nhận tiến độ; hoàn thành nhiệm vụ có điểm thưởng thì thành viên được cộng điểm đúng một lần mỗi kỳ (ngày hoặc tuần).",
     "keywordsNote": "Từ khóa được so khớp không phân biệt hoa thường và dấu tiếng Việt.",
     "hotTopicsNote": "Hiển thị ở khối \"Chủ đề hot\" bên phải trang Kể khổ. Hashtag (không bắt buộc) dùng để lọc bảng tin khi người dùng bấm vào chủ đề.",
     "streetNote": "Mỗi dòng là một cửa hàng trên phố: vùng bấm trên ảnh phố (theo % khung ảnh) và vị trí khi xem 3D. Liên kết với cửa hàng thật để bấm vào mở trang cửa hàng đó."
