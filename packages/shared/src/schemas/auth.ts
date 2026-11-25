@@ -15,5 +15,5 @@ export const AuthSessionSchema = z.object({ accessToken: z.string(), expiresInSe
 export type AuthSession = z.infer<typeof AuthSessionSchema>;
 
 export const OAuthParamSchema = z.object({ provider: z.enum(OAUTH_PROVIDERS) });
-export const OAuthStartQuerySchema = z.object({ returnTo: z.string().max(300).optional() });
+export const OAuthStartQuerySchema = z.object({ returnTo: z.string().max(300).optional(), app: z.enum(['web', 'admin']).optional() });
 export const OAuthCallbackQuerySchema = z.object({ code: z.string().optional(), state: z.string().optional(), error: z.string().optional() });

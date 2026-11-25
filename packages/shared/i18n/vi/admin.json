@@ -47,7 +47,11 @@
     "changePhone": "Đổi số điện thoại",
     "noAccess": "Tài khoản này không có quyền truy cập khu vực quản trị.",
     "logout": "Đăng xuất",
-    "devHint": "Chế độ dev: dùng mã {code}"
+    "devHint": "Chế độ dev: dùng mã {code}",
+    "socialDivider": "Hoặc đăng nhập bằng",
+    "google": "Tiếp tục với Google",
+    "facebook": "Tiếp tục với Facebook",
+    "providerOff": "Đăng nhập bằng {name} chưa được bật trên máy chủ này, bạn dùng số điện thoại nhé."
   },
   "common": {
     "actions": "Thao tác",

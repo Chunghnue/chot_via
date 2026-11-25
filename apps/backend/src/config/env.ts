@@ -15,6 +15,8 @@ const EnvSchema = z.object({
   /** Tên miền chung của cookie phiên (vd. chotvia.example.com) để web public và admin ở tên miền con dùng chung đăng nhập. Để trống = cookie chỉ thuộc đúng host. */
   COOKIE_DOMAIN: z.string().default('').transform((v) => v.trim().replace(/^\./, '').toLowerCase()),
   PUBLIC_WEB_URL: z.string().default('http://localhost:3000'),
+  /** Địa chỉ web admin: đăng nhập Google/Facebook bắt đầu từ admin thì quay về đây. */
+  PUBLIC_ADMIN_URL: z.string().default('http://localhost:5173'),
   PUBLIC_API_URL: z.string().default('http://localhost:3000'),
   SMS_PROVIDER: z.enum(['dev', 'speedsms', 'esms', 'ghdc']).default('dev'),
   DEV_FIXED_OTP: z.string().regex(/^\d{6}$/).default('123456'),

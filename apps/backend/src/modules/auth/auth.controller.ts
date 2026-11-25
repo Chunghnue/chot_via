@@ -79,8 +79,8 @@ export class AuthController {
   }
 
   @Get('oauth/:provider/start')
-  async oauthStart(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string }) {
-    const state = await this.oauth.signState(params.provider, this.oauth.safeReturnTo(query.returnTo));
+  async oauthStart(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string; app?: 'web' | 'admin' }) {
+    const state = await this.oauth.signState(params.provider, this.oauth.safeReturnTo(query.returnTo), query.app ?? 'web');
     return reply.redirect(await this.oauth.authorizeUrl(params.provider, state));
   }
 
@@ -96,8 +96,9 @@ export class AuthController {
   }
 
   private async finishOAuth(reply: FastifyReply, provider: OAuthProvider, input: z.infer<typeof CallbackBody>): Promise<void> {
-    const returnTo = await this.oauth.readState(input.state, provider);
-    const target = (flag: string): string => `${env.PUBLIC_WEB_URL}${returnTo}${returnTo.includes('?') ? '&' : '?'}${flag}`;
+    const { returnTo, app } = await this.oauth.readState(input.state, provider);
+    const base = app === 'admin' ? env.PUBLIC_ADMIN_URL : env.PUBLIC_WEB_URL;
+    const target = (flag: string): string => `${base}${returnTo}${returnTo.includes('?') ? '&' : '?'}${flag}`;
     if (!input.code || input.error) return reply.redirect(target('login=failed'));
     try {
       const profile = await this.oauth.exchange(provider, input.code, input.user);

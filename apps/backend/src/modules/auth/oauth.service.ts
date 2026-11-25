@@ -32,16 +32,16 @@ export class OAuthService {
     return value && value.startsWith('/') && !value.startsWith('//') ? value : '/';
   }
 
-  signState(provider: OAuthProvider, returnTo: string): Promise<string> {
-    return new SignJWT({ provider, returnTo }).setProtectedHeader({ alg: 'HS256' }).setExpirationTime('10m').sign(secret);
+  signState(provider: OAuthProvider, returnTo: string, app: 'web' | 'admin' = 'web'): Promise<string> {
+    return new SignJWT({ provider, returnTo, app }).setProtectedHeader({ alg: 'HS256' }).setExpirationTime('10m').sign(secret);
   }
 
-  async readState(state: string | undefined, provider: OAuthProvider): Promise<string> {
+  async readState(state: string | undefined, provider: OAuthProvider): Promise<{ returnTo: string; app: 'web' | 'admin' }> {
     try {
       if (!state) throw new Error('no state');
       const { payload } = await jwtVerify(state, secret, { algorithms: ['HS256'] });
       if (payload['provider'] !== provider || typeof payload['returnTo'] !== 'string') throw new Error('bad state');
-      return this.safeReturnTo(payload['returnTo']);
+      return { returnTo: this.safeReturnTo(payload['returnTo']), app: payload['app'] === 'admin' ? 'admin' : 'web' };
     } catch {
       throw new DomainError('AUTH_PROVIDER_FAILED');
     }

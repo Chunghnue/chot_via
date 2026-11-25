@@ -52,6 +52,7 @@ services:
       COOKIE_SECURE: "true"
       STORAGE_LOCAL_DIR: /data/storage
       PUBLIC_WEB_URL: https://${WEB_DOMAIN}
+      PUBLIC_ADMIN_URL: https://${ADMIN_DOMAIN}
       PUBLIC_API_URL: https://${WEB_DOMAIN}
     volumes: ["uploads:/data/storage"]
     depends_on:
