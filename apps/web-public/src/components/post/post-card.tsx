@@ -202,7 +202,7 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
         <div className="ml-auto">
           <Popover align="end" trigger={
             <button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full border border-primary px-4 text-primary-strong hover:bg-primary-soft', wishes.done && 'bg-primary-soft')}>
-              <span aria-hidden>🙏</span>{wishes.done ? t('actions.wished') : t('actions.wish')}{wishes.count > 0 && !wide ? ` (${wishes.count})` : ''}
+              <img src="/images/logo-co.webp" alt="" aria-hidden className="size-5 object-contain" draggable={false} />{wishes.done ? t('actions.wished') : t('actions.wish')}{wishes.count > 0 && !wide ? ` (${wishes.count})` : ''}
             </button>
           }>
             <div className="grid grid-cols-3 gap-1.5">

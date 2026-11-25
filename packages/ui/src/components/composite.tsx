@@ -147,13 +147,13 @@ export function RankRow({ rank, avatar, title, sub, value, valueClassName, highl
 }) {
   const medal = RANK_MEDALS[rank - 1];
   return render(
-    cn('flex items-center gap-3 rounded-xl px-2 py-1.5 transition hover:bg-surface-muted', highlight && 'bg-primary-soft'),
+    cn('flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition hover:bg-surface-muted', highlight && 'bg-primary-soft'),
     <>
       <span className="flex w-8 shrink-0 justify-center font-display text-lg font-extrabold text-ink-muted" aria-label={rankLabel}>
         {medal ? <img src={medal} alt="" aria-hidden className="size-8 object-contain" draggable={false} /> : rank}
       </span>
       <Avatar src={avatar.src} name={avatar.name} size={36} />
-      <span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-ink">{title}</span>{sub}</span>
+      <span className="min-w-0 flex-1"><span className="line-clamp-2 break-words text-[0.8rem] font-semibold leading-tight text-ink sm:text-sm">{title}</span>{sub}</span>
       <span className={cn('shrink-0 font-display text-base font-extrabold text-primary-strong', valueClassName)}>{value}</span>
     </>,
   );

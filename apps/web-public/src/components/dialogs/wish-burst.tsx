@@ -23,19 +23,20 @@ const CARD_MS = 6500;
 /** Hạt nổ bắn ra từ giữa màn hình: toạ độ cố định (không ngẫu nhiên) để lần nào cũng giống nhau và khớp khi hydrate. */
 const PARTICLES = Array.from({ length: 60 }, (_, i) => {
   const angle = (i / 60) * Math.PI * 2 + (i % 3) * 0.15;
-  const distance = 150 + ((i * 53) % 230);
+  const distance = 12 + ((i * 53) % 22);
   return {
-    id: i, bx: Math.round(Math.cos(angle) * distance), by: Math.round(Math.sin(angle) * distance * 0.8),
+    id: i, bx: Math.round(Math.cos(angle) * distance * 1.4), by: Math.round(Math.sin(angle) * distance * 1.1),
     size: 26 + ((i * 7) % 20), src: i % 3 === 0 ? '/images/ic-sparkles.webp' : '/images/ic-coin.webp', delay: Math.floor(i / 20) * 0.35 + (i % 5) * 0.03,
   };
 });
-const RAIN = Array.from({ length: 48 }, (_, i) => ({ id: i, left: 3 + ((i * 37) % 94), delay: (i % 12) * 0.12, x: ((i * 29) % 80) - 40 }));
+const RAIN = Array.from({ length: 48 }, (_, i) => ({ id: i, left: 3 + ((i * 37) % 94), delay: (i % 12) * 0.12, x: ((i * 29) % 80) - 40, fall: 44 + ((i * 13) % 24) }));
 
 function particleStyle(size: number, delay: number, bx: number, by: number): CssVars {
-  return { width: size, animationDelay: `${delay}s`, '--bx': `${bx}px`, '--by': `${by}px` };
+  return { width: size, animationDelay: `${delay}s`, '--bx': `${bx}vw`, '--by': `${by}vh` };
 }
-function rainStyle(left: number, delay: number, x: number): CssVars {
-  return { left: `${left}%`, animationDelay: `${delay}s`, '--coin-x': `${x}px` };
+function rainStyle(left: number, delay: number, x: number, fall: number): CssVars {
+  // Mưa vàng rơi tới 44–68% chiều cao màn hình: cả cơn vàng phủ khoảng 2/3 màn hình.
+  return { left: `${left}%`, animationDelay: `${delay}s`, '--coin-x': `${x}px`, '--coin-y': `${fall}vh` };
 }
 
 /** Vía nổ: đồng xu và tia sáng bắn ra ba đợt (từ giữa màn hình, hoặc từ chỗ vừa bấm nếu có `origin`) cùng cơn mưa đồng xu; tắt hoàn toàn khi người dùng bật giảm chuyển động. */
@@ -51,7 +52,7 @@ export function Burst({ origin }: { origin?: { x: number; y: number } }) {
         ))}
       </div>
       {RAIN.map((c) => (
-        <img key={c.id} src="/images/ic-coin.webp" alt="" draggable={false} className="absolute top-0 size-8 animate-coin object-contain opacity-0" style={rainStyle(c.left, c.delay, c.x)} />
+        <img key={c.id} src="/images/ic-coin.webp" alt="" draggable={false} className="absolute top-0 size-8 animate-coin object-contain opacity-0" style={rainStyle(c.left, c.delay, c.x, c.fall)} />
       ))}
     </div>
   );

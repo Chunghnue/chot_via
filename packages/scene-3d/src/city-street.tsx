@@ -260,8 +260,8 @@ function CoinShower({ tick, reducedMotion, alphaCover }: { tick: number; reduced
     const wave = Math.floor(i / COINS_PER_WAVE);
     const k = i % COINS_PER_WAVE;
     const a = (k / COINS_PER_WAVE) * Math.PI * 2 + (k % 3) * 0.2 + wave * 0.5;
-    const up = 5 + ((k * 7) % 6) + wave * 0.8;
-    const out = 2.5 + ((k * 5) % 5) + wave * 0.9;
+    const up = 6 + ((k * 7) % 7) + wave * 1.2;
+    const out = 4 + ((k * 5) % 8) + wave * 1.4;
     return { vx: Math.cos(a) * out, vz: Math.sin(a) * out * 0.5, vy: up, size: 0.9 + ((k * 3) % 4) * 0.22, spin: 3 + (k % 5), delay: wave * COIN_WAVE_GAP };
   }), []);
   const meshes = useRef<(Group | null)[]>([]);

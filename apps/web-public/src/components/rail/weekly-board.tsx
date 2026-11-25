@@ -49,7 +49,7 @@ export function WeeklyBoard({ variant }: { variant: 'rail' | 'page' }) {
   return (
     <div className="flex flex-col gap-3">
       <Card className={cn('p-4', variant === 'page' && 'p-5')}>
-        <SectionTitle icon="/images/ic-trophy.webp" title={variant === 'page' ? t('pageTitle') : t('weeklyTitle')} />
+        <SectionTitle icon="/images/ic-crown.webp" title={variant === 'page' ? t('pageTitle') : t('weeklyTitle')} />
         <Tabs size="sm" value={tab} onChange={setTab} items={tabs.map((x) => ({ key: x, label: label(x) }))} className="mb-3" />
         {tab === 'community' ? null : <PlaceRows kind={tab} limit={variant === 'page' ? 10 : 3} big={variant === 'page'} />}
         {tab !== 'community' && variant === 'page' ? <p className="mt-3 text-center text-xs text-ink-subtle">{t('weekHint')}</p> : null}
