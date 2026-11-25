@@ -29,11 +29,11 @@ services:
       timeout: 3s
       retries: 20
 
-  # Chạy một lần mỗi lần cập nhật: tạo/cập nhật bảng rồi nạp danh mục khởi tạo (bỏ qua nếu đã có dữ liệu).
+  # Chạy một lần mỗi lần cập nhật: tạo/cập nhật bảng rồi nạp danh mục khởi tạo + dữ liệu trang chủ (hàng nút, chân trang, cấu hình phố); lần đầu đưa về bản trắng (không cửa hàng/thử thách mẫu). Chạy lại an toàn.
   migrate:
     build: { context: ., dockerfile: deploy/Dockerfile.backend }
     restart: "no"
-    command: ["sh", "-c", "node dist/migrate.js && node dist/seed.js"]
+    command: ["sh", "-c", "node dist/migrate.js && node dist/seed.js && node dist/seed-home.js && node dist/seed-baseline.js"]
     env_file: .env.production
     environment:
       DATABASE_URL: postgres://chotvia:${POSTGRES_PASSWORD}@postgres:5432/chotvia

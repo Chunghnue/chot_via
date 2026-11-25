@@ -24,7 +24,7 @@ nano .env.production            # điền WEB_DOMAIN, ADMIN_DOMAIN, mật khẩu
 
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 ```
-Thứ tự tự động: Postgres → `migrate` (tạo bảng + nạp danh mục khởi tạo, bỏ qua nếu đã có) → backend → web/admin → Caddy.
+Thứ tự tự động: Postgres → `migrate` (tạo bảng, nạp danh mục khởi tạo và dữ liệu trang chủ gồm hàng nút hành động, chân trang, cấu hình phố; lần đầu đưa về bản trắng không có cửa hàng/thử thách mẫu; chạy lại an toàn) → backend → web/admin → Caddy.
 
 Kiểm tra: `docker compose --env-file .env.production -f docker-compose.prod.yml ps` (tất cả `running`/`healthy`, riêng `migrate` là `exited 0`) rồi mở `https://<WEB_DOMAIN>` và `https://<ADMIN_DOMAIN>`.
 
@@ -58,7 +58,7 @@ Xem `.env.production.example` (có chú thích). Biến `NEXT_PUBLIC_*` được
 - Sentry/PostHog/Turnstile để trống thì tự tắt; PostHog dùng máy chủ EU, không gửi dữ liệu cá nhân.
 
 ## Đã kiểm và chưa kiểm
-- Đã kiểm trên máy dev (không dùng Docker): build backend ra 3 file (`main`, `migrate`, `seed`); chạy `migrate` + `seed` (chạy lại seed không nhân đôi dữ liệu) rồi chạy API ở `NODE_ENV=production`; lệnh `pnpm deploy --legacy` dùng trong Dockerfile cho ra bản backend chạy được; build web dạng `standalone`, chạy `node server.js` — trang, proxy `/api`, ảnh, manifest và service worker hoạt động; build admin; `docker compose config` hợp lệ.
+- Đã kiểm trên máy dev (không dùng Docker): build backend ra 5 file (`main`, `migrate`, `seed`, `seed-home`, `seed-baseline`); chạy `migrate` + `seed` (chạy lại seed không nhân đôi dữ liệu) rồi chạy API ở `NODE_ENV=production`; lệnh `pnpm deploy --legacy` dùng trong Dockerfile cho ra bản backend chạy được; build web dạng `standalone`, chạy `node server.js` — trang, proxy `/api`, ảnh, manifest và service worker hoạt động; build admin; `docker compose config` hợp lệ.
 - **Chưa kiểm:** `docker build` các ảnh thật và `docker compose up` (Docker Desktop trên máy dev chưa chạy), Caddy cấp chứng chỉ thật, gửi SMS thật. Lần đầu triển khai nên chạy thử trên máy chủ thử hoặc subdomain thử trước.
 
 ## Máy chủ đã có nginx giữ cổng 80/443 (dùng chung nhiều site)

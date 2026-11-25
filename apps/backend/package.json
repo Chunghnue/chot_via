@@ -13,7 +13,9 @@
     "db:seed": "tsx --env-file=../../.env src/database/seed.ts && tsx --env-file=../../.env src/database/seed-demo-content.ts && tsx --env-file=../../.env src/database/seed-home.ts",
     "db:seed:home": "tsx --env-file=../../.env src/database/seed-home.ts",
     "db:embedded": "tsx scripts/embedded-postgres.ts",
-    "db:reset": "tsx --env-file=../../.env scripts/reset-db.ts"
+    "db:reset": "tsx --env-file=../../.env scripts/reset-db.ts",
+    "db:seed:baseline": "tsx --env-file=../../.env src/database/seed.ts && tsx --env-file=../../.env src/database/seed-home.ts && tsx --env-file=../../.env src/database/seed-baseline.ts",
+    "db:reset:baseline": "pnpm db:reset && pnpm db:migrate && pnpm db:seed:baseline"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1171.0",
