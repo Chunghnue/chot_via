@@ -31,14 +31,18 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
     return () => window.clearTimeout(id);
   }, [sceneReady]);
   useEffect(() => {
-    const start = (): void => setArmed(true);
+    // Đợi trang và ảnh phố tĩnh tải xong (sự kiện load) rồi mới tải three.js và dựng cảnh, để hai việc không tranh băng thông trên mạng chậm.
+    let cancelled = false;
+    let idle = 0;
     const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
-    if (typeof w.requestIdleCallback === 'function') {
-      const id = w.requestIdleCallback(start, { timeout: 1200 });
-      return () => w.cancelIdleCallback?.(id);
-    }
-    const id = window.setTimeout(start, 300);
-    return () => window.clearTimeout(id);
+    const start = (): void => { if (!cancelled) setArmed(true); };
+    const afterLoad = (): void => {
+      if (typeof w.requestIdleCallback === 'function') idle = w.requestIdleCallback(start, { timeout: 1500 });
+      else idle = window.setTimeout(start, 300);
+    };
+    if (document.readyState === 'complete') afterLoad();
+    else window.addEventListener('load', afterLoad, { once: true });
+    return () => { cancelled = true; window.removeEventListener('load', afterLoad); if (idle) { if (w.cancelIdleCallback) w.cancelIdleCallback(idle); else window.clearTimeout(idle); } };
   }, []);
 
   useEffect(() => {
