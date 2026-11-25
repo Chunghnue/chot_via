@@ -14,7 +14,7 @@ import { useRitualScene } from '@/features/ritual/use-ritual-scene';
 import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
-import { useCurrentUser, useRequireMember } from '@/lib/use-member';
+import { useCurrentUser } from '@/lib/use-member';
 
 /** Tỉ lệ ảnh phố thiết kế (pho-3d-hero.png): vùng bấm tính theo % khung ảnh nên luôn khớp dù khung hero bị cắt ở các cỡ màn khác nhau. */
 const HERO_IMAGE_RATIO = 1672 / 941;
@@ -151,11 +151,10 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   const t = useTranslations('home');
   const dispatch = useAppDispatch();
   const user = useCurrentUser();
-  const { isMember } = useRequireMember();
   const { request } = useRitual();
   const role = user?.memberRole ?? null;
-  // Đốt vía và Thỉnh Thần Tài chỉ hiện khi đã đăng nhập (làm cho cửa hàng của chính mình).
-  const actions = all.filter((a) => isMember || (a.kind !== 'burn' && a.kind !== 'invoke'));
+  // Đốt vía và Thỉnh Thần Tài luôn hiện; chưa đăng nhập thì bấm vào sẽ được mời đăng nhập, chưa có cửa hàng thì dẫn đi tạo (xem useRitual).
+  const actions = all;
   // Chưa có nút nào (database chưa nạp, hoặc admin tắt hết): không dựng khối rỗng, vì khối này kéo lên đè hero bằng lề âm.
   if (actions.length === 0) return null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
