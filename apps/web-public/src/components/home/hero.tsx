@@ -68,7 +68,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
 
   return (
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
-      <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
+      <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
         <CityView className="absolute inset-0" config={config} slots={slots} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[1%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
@@ -143,7 +143,7 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   if (actions.length === 0) return null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
-  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center justify-center gap-2.5 rounded-full max-md:h-14 md:flex-none md:px-6 xl:px-8 bg-linear-to-br from-surface via-surface to-story-soft p-2 shadow-[0_6px_14px_rgb(60_40_120/0.16)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 active:scale-[0.97] md:max-xl:gap-2 md:max-xl:p-1.5 md:max-xl:px-4';
+  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center justify-center gap-2.5 rounded-full max-md:h-14 md:max-xl:flex-1 md:max-xl:px-3 xl:flex-none xl:px-8 md:flex-none bg-linear-to-br from-surface via-surface to-story-soft p-2 shadow-[0_6px_14px_rgb(60_40_120/0.16)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 active:scale-[0.97] md:max-xl:gap-2 md:max-xl:p-1.5 md:max-xl:px-4';
 
   const inner = (a: HomeActionDto, title: string, featured = false) => (
     <>
@@ -160,7 +160,7 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
     <div className="@container relative z-10 -mt-5 md:-mt-8 xl:-mt-9">
       <nav
         aria-label={t('actions.label')} style={vars}
-        className="grid grid-cols-2 gap-2.5 px-2 sm:px-4 md:flex md:flex-wrap md:justify-center md:gap-3 md:px-5 xl:gap-4 xl:px-6 items-end"
+        className="grid grid-cols-2 gap-2.5 px-2 sm:px-4 md:flex md:flex-wrap md:justify-center md:max-xl:flex-nowrap md:gap-3 md:px-5 xl:gap-4 xl:px-6 items-end"
       >
         {actions.map((a, index) => {
           const featured = a.kind === 'burn' || a.kind === 'invoke';

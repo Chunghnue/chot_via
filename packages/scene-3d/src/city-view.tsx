@@ -23,6 +23,13 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
   const [visible, setVisible] = useState(true);
   // Hiện ảnh phố tĩnh ngay; chỉ dựng cảnh 3D (tải three.js, dựng WebGL) sau khi trang đã vẽ xong và trình duyệt rảnh, để lần đầu vào web không bị đứng.
   const [armed, setArmed] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
+  const [posterGone, setPosterGone] = useState(false);
+  useEffect(() => {
+    if (!sceneReady) return undefined;
+    const id = window.setTimeout(() => setPosterGone(true), 600);
+    return () => window.clearTimeout(id);
+  }, [sceneReady]);
   useEffect(() => {
     const start = (): void => setArmed(true);
     const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
@@ -45,18 +52,21 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
   const pickPlace = useCallback((id: string) => { if (sound) playChime(); onSelectPlace(id); }, [sound, onSelectPlace]);
   const pickDeity = useCallback(() => { if (sound) playChime(); onSelectDeity(); }, [sound, onSelectDeity]);
 
+  const show3D = capability.ready && armed && capability.supports3D;
   return (
     <div ref={box} className={cn('relative', className)}>
-      {!capability.ready || !armed ? <>{fallback}</> : !capability.supports3D ? <>{fallback}</> : (
+      {/* Ảnh phố tĩnh luôn nằm dưới: hiện ngay lúc vào trang, mờ dần khi cảnh 3D đã vẽ xong (không bao giờ để khung trống). */}
+      {!show3D || !posterGone ? <div className={cn('absolute inset-0', show3D && 'pointer-events-none')}>{fallback}</div> : null}
+      {show3D ? (
         <Boundary fallback={fallback}>
-          <Suspense fallback={fallback}>
+          <Suspense fallback={null}>
             <CityStreet
               {...rest} config={config} quality={q.quality} maxFps={q.maxFps} active={visible} reducedMotion={capability.reducedMotion}
-              resetTick={resetTick} autoRotate={false} onSelectPlace={pickPlace} onSelectDeity={pickDeity} className="absolute inset-0"
+              resetTick={resetTick} autoRotate={false} onSelectPlace={pickPlace} onSelectDeity={pickDeity} onReady={() => setSceneReady(true)} className={cn('absolute inset-0 transition-opacity duration-500', sceneReady ? 'opacity-100' : 'opacity-0')}
             />
           </Suspense>
         </Boundary>
-      )}
+      ) : null}
     </div>
   );
 }

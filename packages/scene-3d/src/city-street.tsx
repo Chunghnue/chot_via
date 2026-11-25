@@ -36,6 +36,8 @@ export interface CityStreetProps {
   ritual?: RitualScene | null | undefined;
   /** Gọi một lần khi cảnh nghi lễ thực sự bắt đầu chạy (sau khi tải xong hình), kèm `tick` của nghi lễ. */
   onRitualStart?: ((tick: number) => void) | undefined;
+  /** Gọi một lần khi cảnh đã vẽ ổn định (ảnh phố tĩnh bên dưới có thể ẩn đi). */
+  onReady?: (() => void) | undefined;
   /** Nửa bề ngang (mét) luôn phải thấy được; bỏ trống thì tự chọn theo tỉ lệ khung (khung hẹp chỉ cần thấy phần giữa). */
   fitHalfWidth?: number | undefined;
   selectedPlaceId?: string | null | undefined;
@@ -637,6 +639,19 @@ function Scene({ props }: { props: CityStreetProps }): ReactNode {
   );
 }
 
+/** Báo cảnh đã sẵn sàng sau vài khung hình và một nhịp ngắn cho ảnh trong cảnh kịp tải; để ảnh phố tĩnh che chỗ trống khi cảnh còn đang dựng. */
+function ReadySignal({ onReady }: { onReady: (() => void) | undefined }) {
+  const frames = useRef(0);
+  const done = useRef(false);
+  const born = useRef(performance.now());
+  useFrame(() => {
+    if (done.current) return;
+    frames.current += 1;
+    if (frames.current >= 10 && performance.now() - born.current > 900) { done.current = true; onReady?.(); }
+  });
+  return null;
+}
+
 export default function CityStreet(props: CityStreetProps) {
   const { config, quality, maxFps, className } = props;
   const cam = config.camera;
@@ -649,6 +664,7 @@ export default function CityStreet(props: CityStreetProps) {
         onCreated={({ gl }) => { gl.toneMappingExposure = 1.1; }}
       >
         <FrameDriver maxFps={maxFps} active={props.active} />
+        <ReadySignal onReady={props.onReady} />
         <Scene props={props} />
       </Canvas>
     </div>
