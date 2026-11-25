@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@chot-via/ui';
-import { BarChart3, CalendarDays, Home, Plus, Store, UserRound } from 'lucide-react';
+import { CalendarDays, Home, Plus, Store, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'use-intl';
@@ -10,7 +10,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { isActivePath } from './header';
 
 /**
- * Thanh điều hướng dưới (điện thoại, theo ảnh thiết kế mới): Trang chủ · Phố 3D · (+) Đăng bài · Sự kiện · BXH · Cá nhân.
+ * Thanh điều hướng dưới (điện thoại, theo ảnh thiết kế mới): Trang chủ · Phố 3D · (+) Đăng bài · Sự kiện · Cá nhân.
  * Nút Xin vía vẫn nổi bật nhất ở hero và thẻ "Xin vía Thần Tài" (quyết định ngày 20/11 thay cho quyết định #1 ngày 19/11).
  */
 export function BottomNav() {
@@ -25,7 +25,7 @@ export function BottomNav() {
   );
   return (
     <nav aria-label={t('mainMenu')} className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-safe backdrop-blur md:hidden">
-      <div className="mx-auto grid max-w-lg grid-cols-[repeat(6,minmax(0,1fr))] items-end">
+      <div className="mx-auto grid max-w-lg grid-cols-[repeat(5,minmax(0,1fr))] items-end">
         {item('/', t('home'), <Home className="size-6" aria-hidden />)}
         {item('/pho-3d', t('street'), <Store className="size-6" aria-hidden />)}
         <div className="flex min-w-0 justify-center">
@@ -36,7 +36,6 @@ export function BottomNav() {
           </button>
         </div>
         {item('/su-kien', t('eventsShort'), <CalendarDays className="size-6" aria-hidden />)}
-        {item('/bang-xep-hang', t('leaderboardAbbr'), <BarChart3 className="size-6" aria-hidden />)}
         {item('/ca-nhan', t('profile'), <UserRound className="size-6" aria-hidden />)}
       </div>
     </nav>
