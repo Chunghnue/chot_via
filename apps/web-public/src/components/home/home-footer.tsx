@@ -73,7 +73,7 @@ export function HomeFooter() {
     <footer className="mx-auto hidden w-full max-w-[1800px] rounded-t-[2.5rem] border-t border-primary/20 bg-linear-to-b from-surface via-primary-soft/70 to-primary-soft px-6 py-6 md:block 3xl:max-w-[2200px]">
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 min-[1440px]:flex-nowrap">
         <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={tn('home')}>
-          <img src="/images/logo-co.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
+          <img src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
           <span className="flex flex-col leading-tight">
             <span className="font-display text-3xl font-extrabold italic text-primary-strong">Chốt Vía</span>
             <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>

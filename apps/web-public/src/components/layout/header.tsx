@@ -49,8 +49,8 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border bg-surface pt-safe">
       <div className="mx-auto flex h-16 w-full max-w-[1800px] items-center gap-3 px-4 lg:h-[4.5rem] lg:gap-5 lg:px-8 xl:h-[5.125rem] 3xl:max-w-[2200px]">
         <Link href="/" aria-label={tc('appName')} className="shrink-0">
-          <span className="xl:hidden"><Logo compact markSrc="/images/logo-co.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
-          <span className="hidden xl:block"><Logo markSrc="/images/logo-co.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
+          <span className="xl:hidden"><Logo compact markSrc="/images/logo-than-tai.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
+          <span className="hidden xl:block"><Logo markSrc="/images/logo-than-tai.webp" name={tc('appName')} tagline={tc('tagline')} /></span>
         </Link>
 
         <form onSubmit={submitSearch} role="search" className={cn('order-3 hidden w-[20%] min-w-[6rem] max-w-[35rem] shrink lg:block xl:w-[22%] min-[1440px]:w-[24%]', pathname === '/' && 'lg:max-xl:order-2 lg:max-xl:w-auto lg:max-xl:max-w-none lg:max-xl:flex-1 lg:max-xl:shrink')}>
