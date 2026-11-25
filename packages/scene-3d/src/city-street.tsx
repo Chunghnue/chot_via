@@ -433,8 +433,18 @@ function fitDistance(cam: CityStreetProps['config']['camera'], aspect: number, f
 
 /** Đặt camera theo khung hình, xử lý nút điều khiển (đi tới/lui, xoay, phóng to/thu nhỏ) và bay tới cửa hàng đang chọn. */
 /** Góc nhìn khi chạy nghi lễ: xoay quanh điểm nhìn (rad) về phía cửa hàng và độ nghiêng từ trục đứng (rad, nhỏ hơn = nhìn từ trên cao hơn). */
-const RITUAL_VIEW_AZIMUTH = 0.55;
-const RITUAL_VIEW_POLAR = 1.0;
+/**
+ * Cửa hàng càng xa bệ Thần Tài thì camera càng phải tiến sâu, nhìn từ cao hơn và lại gần để không bị dãy cửa hàng phía trước che; cửa hàng sát bệ gần như không cần chỉnh.
+ * `far` ∈ 0..1 tính liên tục theo khoảng cách từ bệ tới cửa hàng (không có mốc cứng).
+ */
+const RITUAL_NEAR_DIST = 11.5;
+const RITUAL_FAR_DIST = 19;
+const RITUAL_AZIMUTH: readonly [number, number] = [0.22, 0.42];
+const RITUAL_POLAR: readonly [number, number] = [1.0, 0.78];
+const RITUAL_ZOOM: readonly [number, number] = [0.72, 0.7];
+const RITUAL_SHIFT_X: readonly [number, number] = [0.6, 0.92];
+/** Điểm nhìn đặt cách cửa hàng bao nhiêu mét về phía người xem (Thần Tài đứng trước cửa, nên cửa hàng gần bệ vẫn phải dời điểm nhìn tới đó để không bị cắt mép dưới). */
+const RITUAL_AHEAD_Z: readonly [number, number] = [3, 2];
 
 function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }: { config: CityStreetProps['config']['camera']; fitHalfWidth: number | undefined; resetTick: number; goal: { x: number; z: number; ratio: number } | null; controls: RefObject<ControlsRef | null>; command: CameraCommand | null }) {
   const camera = useThree((s) => s.camera);
@@ -476,6 +486,8 @@ function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }:
   const shifted = useRef(false);
   /** Độ nghiêng camera trước khi nghi lễ nâng lên, để trả về sau khi xong. */
   const savedPolar = useRef<number | null>(null);
+  const savedTargetZ = useRef<number | null>(null);
+  const savedRadius = useRef<number | null>(null);
   useFrame(() => {
     const c = controls.current;
     if (!c) return;
@@ -484,9 +496,16 @@ function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }:
       c.target.x = MathUtils.lerp(c.target.x, goal.x * goal.ratio, 0.06);
       // Nghi lễ: xoay camera quanh điểm nhìn về phía cửa hàng và nâng cao hơn để nhìn chéo vào cửa hàng ở hàng sau, không bị cửa hàng hàng trước che.
       if (goal.ratio > 0.5) {
-        if (savedPolar.current === null) savedPolar.current = c.getPolarAngle();
-        c.setAzimuthalAngle(MathUtils.lerp(c.getAzimuthalAngle(), Math.sign(goal.x) * RITUAL_VIEW_AZIMUTH, 0.05));
-        c.setPolarAngle(MathUtils.lerp(c.getPolarAngle(), RITUAL_VIEW_POLAR, 0.05));
+        if (savedPolar.current === null) { savedPolar.current = c.getPolarAngle(); savedTargetZ.current = c.target.z; savedRadius.current = c.getDistance(); }
+        const far = MathUtils.clamp((Math.hypot(goal.x, goal.z - 1) - RITUAL_NEAR_DIST) / (RITUAL_FAR_DIST - RITUAL_NEAR_DIST), 0, 1);
+        const at = (r: readonly [number, number]): number => MathUtils.lerp(r[0], r[1], far);
+        c.setAzimuthalAngle(MathUtils.lerp(c.getAzimuthalAngle(), Math.sign(goal.x) * at(RITUAL_AZIMUTH), 0.05));
+        c.setPolarAngle(MathUtils.lerp(c.getPolarAngle(), at(RITUAL_POLAR), 0.05));
+        c.target.x = MathUtils.lerp(c.target.x, goal.x * at(RITUAL_SHIFT_X), 0.06);
+        c.target.z = MathUtils.lerp(c.target.z, goal.z + at(RITUAL_AHEAD_Z), 0.06);
+        const r = c.getDistance();
+        const want = (savedRadius.current ?? r) * at(RITUAL_ZOOM);
+        c.object.position.sub(c.target).multiplyScalar(MathUtils.lerp(r, want, 0.05) / r).add(c.target);
       }
       c.update();
       return;
@@ -495,11 +514,16 @@ function CameraRig({ config, fitHalfWidth, resetTick, goal, controls, command }:
     if (shifted.current) {
       c.target.x = MathUtils.lerp(c.target.x, 0, 0.08);
       c.setAzimuthalAngle(MathUtils.lerp(c.getAzimuthalAngle(), 0, 0.08));
+      const tz0 = savedTargetZ.current;
+      const r0 = savedRadius.current;
+      if (tz0 !== null) c.target.z = MathUtils.lerp(c.target.z, tz0, 0.08);
+      if (r0 !== null) { const r = c.getDistance(); c.object.position.sub(c.target).multiplyScalar(MathUtils.lerp(r, r0, 0.08) / r).add(c.target); }
       const polar0 = savedPolar.current;
       if (polar0 !== null) c.setPolarAngle(MathUtils.lerp(c.getPolarAngle(), polar0, 0.08));
       c.update();
       const polarDone = polar0 === null || Math.abs(c.getPolarAngle() - polar0) < 0.005;
-      if (Math.abs(c.target.x) < 0.02 && Math.abs(c.getAzimuthalAngle()) < 0.01 && polarDone) { c.target.x = 0; c.setAzimuthalAngle(0); if (polar0 !== null) c.setPolarAngle(polar0); savedPolar.current = null; c.update(); shifted.current = false; }
+      const backDone = (tz0 === null || Math.abs(c.target.z - tz0) < 0.05) && (r0 === null || Math.abs(c.getDistance() - r0) < 0.1);
+      if (backDone && Math.abs(c.target.x) < 0.02 && Math.abs(c.getAzimuthalAngle()) < 0.01 && polarDone) { c.target.x = 0; c.setAzimuthalAngle(0); if (polar0 !== null) c.setPolarAngle(polar0); savedPolar.current = null; if (tz0 !== null) c.target.z = tz0; savedTargetZ.current = null; savedRadius.current = null; c.update(); shifted.current = false; }
     }
   });
   return null;

@@ -8,7 +8,8 @@ import { glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-ki
 import type { SceneColors } from './colors';
 import { Label } from './label';
 import { DeityGlbFigure } from './deity-glb';
-import { DeityWalker, newPose, type DeityPose } from './deity-walker';
+import { DeityFlyer } from './deity-flyer';
+import { newPose, type DeityPose } from './deity-walker';
 import { HOLD_ARM_EULER, Mascot, MASCOT_HAND, type MascotRig } from './mascot';
 import { pickRitualSlot, RITUAL_BEATS, RITUAL_SECONDS, RITUAL_SPOT, type RitualScene } from './ritual';
 
@@ -144,6 +145,9 @@ function groundAt(x: number, z: number, soft: number): number {
   return h;
 }
 
+/** Độ cao lơ lửng trước cửa và độ vồng của cung bay (m). */
+const HOVER = 0.8;
+const ARC = 1.8;
 /** Chỗ Thần Tài đứng trước cửa hàng, tính từ cánh cửa thật (m): ra phía người xem và lệch phải một chút để không bị chậu hoa che. */
 const STOP = { dx: 0.4, dz: 4.1 } as const;
 /** Một vòng bước đủ 8 khung hình (hai bước) dài bao nhiêu mét trên mặt đất: chọn để chân khớp tốc độ đi, không trượt. */
@@ -212,7 +216,15 @@ function InvokeDeity({ spot, colors, start }: { spot: Spot; colors: SceneColors;
     const hop = throwing * 0.18 + knock * 0.06;
     if (outer.current) { outer.current.position.set(x, 0, z); outer.current.visible = shown; }
     if (shadow.current) { shadow.current.position.y = floor; shadow.current.scale.setScalar(Math.max(0.5, 1.2 - hop * 0.3) * pop); }
-    if (inner.current) { inner.current.position.y = a < B.jump || a >= B.home - 0.01 ? PEDESTAL_Y : floor + hop; inner.current.scale.setScalar(pop); }
+    if (inner.current) {
+      // Bay: nhấc khỏi bệ theo cung cong, lơ lửng trước cửa (nhún nhẹ), rồi hạ xuống bệ khi về
+      let air = 0;
+      if (a >= B.jump && a < B.arrive) { const p = smooth((a - B.jump) / (B.arrive - B.jump)); air = HOVER * p + ARC * Math.sin(Math.PI * p); }
+      else if (a >= B.arrive && a < B.back) air = HOVER + 0.1 * Math.sin((a - B.arrive) * 3);
+      else if (a >= B.back && a < B.home) { const p = smooth((a - B.back) / (B.home - B.back)); air = HOVER * (1 - p) + ARC * Math.sin(Math.PI * p); }
+      inner.current.position.y = a < B.jump || a >= B.home - 0.01 ? PEDESTAL_Y : groundAt(x, z, 0.5) + air + hop;
+      inner.current.scale.setScalar(pop);
+    }
   });
   return (
     <group ref={outer} position={[0, 0, 1]} visible={false}>
@@ -221,7 +233,7 @@ function InvokeDeity({ spot, colors, start }: { spot: Spot; colors: SceneColors;
         <sprite position={[0, 2.2, -0.5]} scale={[9, 9, 1]}>
           <spriteMaterial map={glowTexture()} color={colors.gold} transparent opacity={0.38} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
         </sprite>
-        {RITUAL_DEITY_GLB ? <DeityGlbFigure pose={pose} glb={RITUAL_DEITY_GLB} /> : <DeityWalker pose={pose} colors={colors} />}
+        {RITUAL_DEITY_GLB ? <DeityGlbFigure pose={pose} glb={RITUAL_DEITY_GLB} /> : <DeityFlyer pose={pose} colors={colors} />}
       </group>
     </group>
   );

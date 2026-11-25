@@ -9,6 +9,8 @@ export const CITY_IMAGES = {
   coin: '/images/ic-coin.webp',
   deityPoses: ['/images/than-tai.webp', '/images/than-tai-nhan-via.webp', '/images/than-tai-bo-dung.webp'],
   deityWalk: `${P}than-tai-di.webp`,
+  /** Thần Tài toàn thân (cắt từ ảnh bố đứng, bỏ bệ) dùng khi bay trong Thỉnh Thần Tài. */
+  deityFly: '/images/than-tai-bay.webp',
   mascotFace: `${P}npc-mascot-mat.webp`,
   mascotLogo: `${P}npc-mascot-logo.webp`,
   walkers: [`${P}npc-chu-quan.webp`, `${P}npc-chu-shop.webp`, `${P}npc-khach.webp`, `${P}npc-cong-dong.webp`],
