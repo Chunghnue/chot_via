@@ -17,19 +17,19 @@ import { useCurrentUser } from '@/lib/use-member';
 type CssVars = React.CSSProperties & Record<`--${string}`, string>;
 
 /** Thời gian hiện hiệu ứng nổ (ms) và thời gian thẻ lời chúc tự tắt (ms). */
-const BURST_MS = 2200;
+const BURST_MS = 3400;
 const CARD_MS = 6500;
 
 /** Hạt nổ bắn ra từ giữa màn hình: toạ độ cố định (không ngẫu nhiên) để lần nào cũng giống nhau và khớp khi hydrate. */
-const PARTICLES = Array.from({ length: 22 }, (_, i) => {
-  const angle = (i / 22) * Math.PI * 2 + (i % 3) * 0.15;
-  const distance = 150 + ((i * 53) % 150);
+const PARTICLES = Array.from({ length: 60 }, (_, i) => {
+  const angle = (i / 60) * Math.PI * 2 + (i % 3) * 0.15;
+  const distance = 150 + ((i * 53) % 230);
   return {
     id: i, bx: Math.round(Math.cos(angle) * distance), by: Math.round(Math.sin(angle) * distance * 0.8),
-    size: 26 + ((i * 7) % 20), src: i % 3 === 0 ? '/images/ic-sparkles.webp' : '/images/ic-coin.webp', delay: (i % 5) * 0.03,
+    size: 26 + ((i * 7) % 20), src: i % 3 === 0 ? '/images/ic-sparkles.webp' : '/images/ic-coin.webp', delay: Math.floor(i / 20) * 0.35 + (i % 5) * 0.03,
   };
 });
-const RAIN = Array.from({ length: 14 }, (_, i) => ({ id: i, left: 4 + ((i * 37) % 92), delay: (i % 7) * 0.12, x: ((i * 29) % 60) - 30 }));
+const RAIN = Array.from({ length: 48 }, (_, i) => ({ id: i, left: 3 + ((i * 37) % 94), delay: (i % 12) * 0.12, x: ((i * 29) % 80) - 40 }));
 
 function particleStyle(size: number, delay: number, bx: number, by: number): CssVars {
   return { width: size, animationDelay: `${delay}s`, '--bx': `${bx}px`, '--by': `${by}px` };
@@ -38,11 +38,11 @@ function rainStyle(left: number, delay: number, x: number): CssVars {
   return { left: `${left}%`, animationDelay: `${delay}s`, '--coin-x': `${x}px` };
 }
 
-/** Vía nổ: đồng xu và tia sáng bắn ra từ giữa màn hình cùng cơn mưa đồng xu; tắt hoàn toàn khi người dùng bật giảm chuyển động. */
-export function Burst() {
+/** Vía nổ: đồng xu và tia sáng bắn ra ba đợt (từ giữa màn hình, hoặc từ chỗ vừa bấm nếu có `origin`) cùng cơn mưa đồng xu; tắt hoàn toàn khi người dùng bật giảm chuyển động. */
+export function Burst({ origin }: { origin?: { x: number; y: number } }) {
   return (
     <div className="pointer-events-none fixed inset-0 z-60 overflow-hidden motion-reduce:hidden" aria-hidden data-testid="wish-burst">
-      <div className="absolute left-1/2 top-[42%]">
+      <div className={origin ? 'absolute' : 'absolute left-1/2 top-[42%]'} style={origin ? { left: origin.x, top: origin.y } : undefined}>
         {PARTICLES.map((p) => (
           <img
             key={p.id} src={p.src} alt="" draggable={false} className="absolute -ml-4 -mt-4 animate-burst object-contain drop-shadow-md opacity-0"

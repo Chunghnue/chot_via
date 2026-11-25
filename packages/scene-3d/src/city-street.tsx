@@ -245,16 +245,24 @@ function CitySign({ lines, colors }: { lines: readonly string[]; colors: SceneCo
 }
 
 /** Đồng xu bắn tung ra từ Thần Tài mỗi khi `tick` tăng (nổ vía), rơi theo trọng lực rồi mờ dần. */
+/** Số đợt và số đồng mỗi đợt khi xin vía; khoảng cách giữa hai đợt (giây). */
+const COIN_WAVES = 3;
+const COINS_PER_WAVE = 34;
+const COIN_WAVE_GAP = 0.45;
+
 function CoinShower({ tick, reducedMotion, alphaCover }: { tick: number; reducedMotion: boolean; alphaCover: boolean }) {
   const tex = useSprite(CITY_IMAGES.coin);
   const start = useRef(-1);
   const seen = useRef(tick);
   const group = useRef<Group>(null);
-  const coins = useMemo(() => Array.from({ length: 26 }, (_, i) => {
-    const a = (i / 26) * Math.PI * 2 + (i % 3) * 0.2;
-    const up = 5 + ((i * 7) % 6);
-    const out = 2.5 + ((i * 5) % 5);
-    return { vx: Math.cos(a) * out, vz: Math.sin(a) * out * 0.5, vy: up, size: 0.9 + ((i * 3) % 4) * 0.22, spin: 3 + (i % 5) };
+  // Tung vàng hào phóng: ba đợt nối nhau, mỗi đợt 34 đồng bắn ra mọi hướng (đợt sau cao và xa hơn một chút).
+  const coins = useMemo(() => Array.from({ length: COIN_WAVES * COINS_PER_WAVE }, (_, i) => {
+    const wave = Math.floor(i / COINS_PER_WAVE);
+    const k = i % COINS_PER_WAVE;
+    const a = (k / COINS_PER_WAVE) * Math.PI * 2 + (k % 3) * 0.2 + wave * 0.5;
+    const up = 5 + ((k * 7) % 6) + wave * 0.8;
+    const out = 2.5 + ((k * 5) % 5) + wave * 0.9;
+    return { vx: Math.cos(a) * out, vz: Math.sin(a) * out * 0.5, vy: up, size: 0.9 + ((k * 3) % 4) * 0.22, spin: 3 + (k % 5), delay: wave * COIN_WAVE_GAP };
   }), []);
   const meshes = useRef<(Group | null)[]>([]);
   useFrame(({ clock }) => {
@@ -263,14 +271,16 @@ function CoinShower({ tick, reducedMotion, alphaCover }: { tick: number; reduced
     const g = group.current;
     if (!g) return;
     const age = start.current < 0 ? -1 : clock.elapsedTime - start.current;
-    g.visible = age >= 0 && age < 2.2;
+    g.visible = age >= 0 && age < 2.2 + (COIN_WAVES - 1) * COIN_WAVE_GAP;
     if (!g.visible) return;
     coins.forEach((c, i) => {
       const m = meshes.current[i];
       if (!m) return;
-      m.position.set(c.vx * age, 4 + c.vy * age - 9 * age * age * 0.5, 1 + c.vz * age);
-      m.scale.set(Math.cos(age * c.spin * 3) * c.size, c.size, 1);
-      m.visible = age < 1.9 || Math.floor(age * 18 + i) % 2 === 0;
+      const a = age - c.delay;
+      m.visible = a >= 0 && a < 2.2 && (a < 1.9 || Math.floor(a * 18 + i) % 2 === 0);
+      if (!m.visible) return;
+      m.position.set(c.vx * a, 4 + c.vy * a - 9 * a * a * 0.5, 1 + c.vz * a);
+      m.scale.set(Math.cos(a * c.spin * 3) * c.size, c.size, 1);
     });
   });
   return (

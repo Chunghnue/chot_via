@@ -6,6 +6,7 @@ import { PlaceSheet } from './place-sheet';
 import { ReportDialog } from './report-dialog';
 import { RitualHost } from './ritual-host';
 import { WishBurst } from './wish-burst';
+import { ZaloShareHost } from './zalo-share-host';
 
 /** Các popup dùng chung toàn app (nổ vía, soạn bài, đăng nhập, điểm trên phố, báo cáo) — mở bằng Redux `ui`/`composer`. */
 export function GlobalDialogs() {
@@ -17,6 +18,7 @@ export function GlobalDialogs() {
       <PlaceSheet />
       <LoginSheet />
       <ReportDialog />
+      <ZaloShareHost />
     </>
   );
 }

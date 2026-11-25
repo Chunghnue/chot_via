@@ -9,10 +9,12 @@ import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, toast, u
 import { CornerUpRight, Crown, Flag, Heart, MessageCircle, MoreHorizontal, Share2, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'use-intl';
 import { track } from '@/lib/analytics';
 import { useApiToast } from '@/lib/use-api-toast';
 import { useRequireMember } from '@/lib/use-member';
+import { Burst } from '@/components/dialogs/wish-burst';
 import { reportRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { PostContent, kindTone, useKindLabel } from './post-content';
@@ -54,6 +56,8 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
 
   const [reaction, setReaction] = useState<{ mine: ReactionType | null; count: number }>({ mine: post.viewer?.reaction ?? null, count: post.counts.reactions });
   const [saved, setSaved] = useState(post.viewer?.saved ?? false);
+  /** Tiền vàng tung toé từ chỗ vừa bấm khi gửi vía (lớp phủ toàn màn hình, vẽ ngoài thẻ bài bằng portal). */
+  const [coins, setCoins] = useState({ id: 0, x: 0, y: 0, on: false });
   const [wishes, setWishes] = useState({ count: post.counts.wishes, done: post.viewer?.wished ?? false });
   const [shares, setShares] = useState(post.counts.shares);
   const [poll, setPoll] = useState<PollDto | null>(post.poll);
@@ -85,7 +89,12 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
     } catch { /* người dùng hủy chia sẻ */ }
   };
 
-  const sendWish = async (wishTypeId: string): Promise<void> => {
+  const sendWish = async (wishTypeId: string, at?: { x: number; y: number }): Promise<void> => {
+    if (at) {
+      const id = coins.id + 1;
+      setCoins({ id, ...at, on: true });
+      window.setTimeout(() => setCoins((c) => (c.id === id ? { ...c, on: false } : c)), 3400);
+    }
     try {
       const r = await wish({ postId: post.id, wishTypeId }).unwrap();
       setWishes({ count: r.wishes, done: true });
@@ -199,13 +208,14 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
             <div className="grid grid-cols-3 gap-1.5">
               {catalog?.wishTypes.map((w) => (
                 <PopoverClose key={w.id} asChild>
-                  <button type="button" onClick={() => void sendWish(w.id)} className="flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted"><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}</button>
+                  <button type="button" onClick={(e) => void sendWish(w.id, { x: e.clientX || window.innerWidth / 2, y: e.clientY || window.innerHeight / 2 })} className="flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted"><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}</button>
                 </PopoverClose>
               ))}
             </div>
           </Popover>
         </div>
       </footer>
+      {coins.on ? createPortal(<Burst key={coins.id} origin={{ x: coins.x, y: coins.y }} />, document.body) : null}
     </Card>
   );
 }

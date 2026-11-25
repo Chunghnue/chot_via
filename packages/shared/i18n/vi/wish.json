@@ -63,7 +63,21 @@
       "zalo": "Đã sao chép lời chúc và link. Nếu Zalo chưa điền sẵn chữ, bạn dán vào nhé!",
       "tiktok": "Đã sao chép lời chúc và link. Mở TikTok rồi dán vào bài đăng của bạn nhé!"
     },
-    "copyFailed": "Không sao chép được lời chúc, bạn hãy tự chép nhé."
+    "copyFailed": "Không sao chép được lời chúc, bạn hãy tự chép nhé.",
+    "name": {
+      "facebook": "Facebook",
+      "zalo": "Zalo",
+      "tiktok": "TikTok",
+      "system": "Khác"
+    },
+    "zalo": {
+      "title": "Chia sẻ qua Zalo",
+      "copiedSub": "Link đã được sao chép sẵn, bạn chỉ cần dán vào khung chat",
+      "qrHint": "Quét mã bằng Zalo trên điện thoại để gửi cho bạn bè",
+      "openWeb": "Mở Zalo Web",
+      "copyLink": "Sao chép link",
+      "linkCopied": "Đã sao chép link Chốt Vía"
+    }
   },
   "ritual": {
     "burn": "Đốt vía",

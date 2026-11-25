@@ -4,7 +4,7 @@ import { cn, toast } from '@chot-via/ui';
 import { Share2 } from 'lucide-react';
 import { useTranslations } from 'use-intl';
 import { SocialIcon } from '@/components/home/home-footer';
-import { shareMessage, shareUrl, type ShareTarget } from '@/lib/share';
+import { isDesktopPointer, shareMessage, shareUrl, siteUrl, ZALO_SHARE_EVENT, type ShareTarget } from '@/lib/share';
 
 const TARGETS: ShareTarget[] = ['facebook', 'zalo', 'tiktok'];
 
@@ -17,6 +17,15 @@ async function copy(text: string): Promise<boolean> {
 export function useShareTo(): (target: ShareTarget, text: string) => Promise<void> {
   const t = useTranslations('wish.share');
   return async (target, text) => {
+    // Zalo trên máy tính không nhận sẵn nội dung: mở hộp có mã QR, Zalo Web và nút sao chép link.
+    if (target === 'zalo' && isDesktopPointer()) {
+      window.dispatchEvent(new CustomEvent(ZALO_SHARE_EVENT, { detail: { text } }));
+      return;
+    }
+    // Zalo trên điện thoại: menu chia sẻ của hệ điều hành có sẵn Zalo trong danh sách.
+    if (target === 'zalo' && typeof navigator.share === 'function') {
+      try { await navigator.share({ text, url: siteUrl() }); return; } catch { /* người dùng đóng menu, thử cách dưới */ }
+    }
     const copied = await copy(shareMessage(text));
     window.open(shareUrl(target, text), '_blank', 'noopener,noreferrer');
     toast(copied ? t(`copied.${target}`) : t('copyFailed'));
@@ -30,7 +39,9 @@ export function useShareTo(): (target: ShareTarget, text: string) => Promise<voi
 export function ShareButtons({ text, className }: { text: string; className?: string }) {
   const t = useTranslations('wish.share');
   const canNative = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
-  const btn = 'grid size-9 place-items-center rounded-full bg-surface text-ink shadow-card ring-1 ring-border/60 transition hover:bg-surface-muted active:scale-90';
+  const btn = 'grid size-9 place-items-center rounded-full bg-surface text-ink shadow-card ring-1 ring-border/60 transition hover:bg-primary-soft hover:text-primary-strong hover:ring-primary active:scale-90';
+  /** Nhãn gạch chân hiện khi rê chuột vào biểu tượng, giống kiểu liên kết (ví dụ "Gửi vía cho cửa hàng khác"). */
+  const link = 'pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface px-1.5 py-0.5 text-xs font-bold text-primary-strong underline opacity-0 shadow-card transition group-hover:opacity-100 group-focus-visible:opacity-100';
 
   const shareTo = useShareTo();
   const system = async (): Promise<void> => {
@@ -41,7 +52,10 @@ export function ShareButtons({ text, className }: { text: string; className?: st
     <div className={cn('flex flex-wrap items-center gap-2', className)} data-testid="share-buttons">
       <span className="text-xs font-bold text-ink-muted">{t('label')}</span>
       {TARGETS.map((target) => (
-        <button key={target} type="button" aria-label={t(`aria.${target}`)} onClick={() => void shareTo(target, text)} className={btn}><SocialIcon label={target} /></button>
+        <button key={target} type="button" aria-label={t(`aria.${target}`)} title={t(`aria.${target}`)} onClick={() => void shareTo(target, text)} className={cn(btn, 'group relative')}>
+          <SocialIcon label={target} />
+          <span aria-hidden className={link}>{t(`name.${target}`)}</span>
+        </button>
       ))}
       {canNative ? <button type="button" aria-label={t('aria.system')} onClick={() => void system()} className={btn}><Share2 className="size-4" aria-hidden /></button> : null}
     </div>
