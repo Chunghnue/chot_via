@@ -27,7 +27,7 @@ export function Logo({ name, tagline, compact, markSrc }: { name: string; taglin
       {markSrc ? <img src={markSrc} alt="" aria-hidden className={compact ? 'size-9 object-contain' : 'size-[4.1rem] object-contain'} draggable={false} /> : <CloverMark className={compact ? 'size-8' : 'size-10'} />}
       <span className="flex flex-col leading-none">
         <span className={cn('font-display font-extrabold text-primary-strong', compact ? 'text-2xl' : 'text-[2.6rem] italic tracking-tight text-outline')}>{name}</span>
-        {compact ? null : <span className="mt-1 text-[0.75rem] font-semibold text-ink">{tagline}</span>}
+        {compact ? null : <span className="mt-1 text-[0.8rem] font-bold italic tracking-tight text-ink">{tagline}</span>}
       </span>
     </span>
   );

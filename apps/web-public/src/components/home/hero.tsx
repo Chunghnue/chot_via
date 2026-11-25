@@ -74,8 +74,8 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
-          <HeroTitle text={config.heroTitle} className="w-[min(70cqw,64rem)]" />
-          <p className="-mt-[3.2cqw] rounded-full border-[0.4cqw] border-surface bg-linear-to-b from-hero-pill-top to-hero-pill-bottom px-[3cqw] py-[0.55cqw] text-[clamp(0.65rem,2.2cqw,1.9rem)] font-extrabold text-ink shadow-card">{config.heroSubtitle}</p>
+          <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
+          <p className="-mt-[min(5cqw,6cqh)] whitespace-nowrap rounded-full border-[min(0.4cqw,0.7cqh)] border-surface bg-linear-to-b from-hero-pill-top to-hero-pill-bottom px-[min(3cqw,5cqh)] py-[min(0.7cqw,1.1cqh)] text-center text-[clamp(0.7rem,min(3.2cqw,4.4cqh),1.7rem)] font-extrabold leading-tight text-ink shadow-card">{config.heroSubtitle}</p>
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">

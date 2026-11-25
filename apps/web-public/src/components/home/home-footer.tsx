@@ -76,7 +76,7 @@ export function HomeFooter() {
           <img src="/images/logo-co.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
           <span className="flex flex-col leading-tight">
             <span className="font-display text-3xl font-extrabold italic text-primary-strong">Chốt Vía</span>
-            <span className="text-xs font-medium text-ink-muted">{t('tagline')}</span>
+            <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>
           </span>
         </Link>
         {links.length > 0 ? (
