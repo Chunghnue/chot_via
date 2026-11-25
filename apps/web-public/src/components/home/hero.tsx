@@ -68,8 +68,8 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
 
   return (
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
-      <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
-        <CityView className="absolute inset-0" config={config} slots={slots} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
+      <div className="relative aspect-[10/9] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.2/1] xl:aspect-[2.5/1]">
+        <CityView className="absolute inset-0" config={config} slots={slots} fitHalfWidth={16} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[1%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
           <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(9cqw,11.5cqh)] w-[min(60cqw,68cqh)]" />
