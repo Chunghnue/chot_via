@@ -209,6 +209,9 @@
   h1, h2, h3 { @apply font-display; }
   :focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; }
   button, [role="button"], a { touch-action: manipulation; }
+  /* Mọi nút và phần tử bấm được hiện con trỏ bàn tay khi rê chuột vào (Tailwind v4 mặc định để mũi tên). */
+  button, [role="button"], a[href], summary, select, label[for], input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="file"], [type="range"]) { cursor: pointer; }
+  button:disabled, [role="button"][aria-disabled="true"], select:disabled, input:disabled { cursor: not-allowed; }
 }
 
 @utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
