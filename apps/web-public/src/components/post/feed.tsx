@@ -1,9 +1,10 @@
 'use client';
 
-import { selectIsMember, useGetPostsQuery } from '@chot-via/api-client';
+import { selectIsMember, useGetHomeQuery, useGetPostsQuery } from '@chot-via/api-client';
 import { FEED_SORTS, FEED_TYPES, MEMBER_ROLES, type MemberRole, type PostListQuery } from '@chot-via/shared';
+import { DEFAULT_HOME_CONFIG } from '@chot-via/shared';
 import { Avatar, Button, Chip, EmptyState, Select, Skeleton, cn, useRoleLabel } from '@chot-via/ui';
-import { ArrowDownUp, ImagePlus, Smile } from 'lucide-react';
+import { ArrowDownUp, ChevronDown, ImagePlus, Smile } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
@@ -46,9 +47,6 @@ export function FeedFilters({ showRole = true }: { showRole?: boolean }) {
   );
 }
 
-/** Bộ lọc của trang chủ theo thiết kế: Tất cả · Kể khổ · Khoe doanh thu · Khoe deal. Ô sắp xếp ở góc phải (desktop) hoặc nút icon ở hàng tiêu đề (dưới 1280 px). */
-const HOME_FILTERS = [['all', ''], ['story', '😂'], ['revenue', '💰'], ['deal', '🧡']] as const;
-
 /** Sắp xếp bảng tin: dạng ô chọn (desktop) hoặc nút icon bấm mở danh sách chọn có sẵn của thiết bị (điện thoại, iPad). */
 export function HomeSortControl({ variant }: { variant: 'select' | 'icon' }) {
   const t = useTranslations('post');
@@ -64,7 +62,14 @@ export function HomeSortControl({ variant }: { variant: 'select' | 'icon' }) {
     dispatch(feedSortChanged(next));
   };
   if (variant === 'select') {
-    return <Select aria-label={t('sort.new')} className="ml-auto hidden h-11 w-auto min-w-[7.5rem] rounded-full border-transparent bg-surface text-sm font-bold shadow-card xl:block" value={filters.sort} onChange={(e) => onChange(e.target.value)}>{options}</Select>;
+    // Viên thuốc trắng "Mới nhất ⌄" (ảnh thiết kế): chữ đậm, mũi tên ngay sau chữ; ô chọn thật nằm đè lên, trong suốt.
+    return (
+      <label className="relative ml-auto hidden h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-surface px-5 text-[0.95rem] font-bold text-ink shadow-card transition hover:shadow-md xl:inline-flex">
+        <span>{t(`sort.${filters.sort}`)}</span>
+        <ChevronDown className="size-5" strokeWidth={3} aria-hidden />
+        <select aria-label={t('sort.new')} value={filters.sort} onChange={(e) => onChange(e.target.value)} className="absolute inset-0 size-full cursor-pointer opacity-0">{options}</select>
+      </label>
+    );
   }
   return (
     <label className="relative ml-auto flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-primary-strong shadow-card xl:hidden">
@@ -78,9 +83,12 @@ export function HomeFeedFilters() {
   const t = useTranslations('post');
   const dispatch = useAppDispatch();
   const filters = useAppSelector(selectFeedFilters);
+  const { data: home } = useGetHomeQuery();
+  // Danh sách chip do admin cấu hình (màn "Trang chủ"); chưa tải được thì dùng mặc định.
+  const chips = home?.layout.config.feedFilters ?? DEFAULT_HOME_CONFIG.feedFilters;
   return (
-    <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none min-[420px]:gap-1.5 sm:gap-2" role="group" aria-label={t('feedHeading')}>
-      {HOME_FILTERS.map(([type, emoji]) => {
+    <div className="-mb-2 flex items-center gap-1 overflow-x-auto px-1 pb-3 pt-1 scrollbar-none min-[420px]:gap-1.5 sm:gap-2" role="group" aria-label={t('feedHeading')}>
+      {chips.map(({ type, emoji }) => {
         const active = filters.type === type;
         return (
           <Chip
@@ -99,13 +107,15 @@ export function ComposeBar() {
   const t = useTranslations('post');
   const dispatch = useAppDispatch();
   const { user } = useRequireMember();
+  const { data: home } = useGetHomeQuery();
+  const cfg = home?.layout.config ?? DEFAULT_HOME_CONFIG;
   const open = (): void => { dispatch(composerOpened(undefined)); };
   const tool = 'grid size-9 place-items-center text-ink transition hover:text-primary-strong active:scale-90';
   return (
     <div className="flex flex-col gap-2 rounded-3xl bg-surface p-3 shadow-card ring-1 ring-border/40">
       <div className="flex items-center gap-3">
-        <Avatar src={user?.avatarUrl ?? null} name={user?.displayName ?? '?'} size={56} />
-        <button type="button" onClick={open} className="h-12 min-w-0 flex-1 truncate rounded-2xl border-2 border-info/20 bg-info-soft/60 px-4 text-left text-[0.95rem] text-ink-muted shadow-[inset_0_1px_3px_rgb(35_83_164/0.08)] transition hover:border-info/40">{t('prompt')}</button>
+        <Avatar src={user?.avatarUrl ?? (cfg.composeAvatarUrl || null)} name={user?.displayName ?? '?'} size={56} />
+        <button type="button" onClick={open} className="h-12 min-w-0 flex-1 truncate rounded-2xl border-2 border-info/20 bg-info-soft/60 px-4 text-left text-[0.95rem] text-ink-muted shadow-[inset_0_1px_3px_rgb(35_83_164/0.08)] transition hover:border-info/40">{cfg.composePlaceholder || t('prompt')}</button>
       </div>
       <div className="flex items-center justify-end gap-3">
         <button type="button" aria-label={t('composer.photos')} onClick={open} className={cn(tool, 'border-r border-border/70 pr-3')}><ImagePlus className="size-6" strokeWidth={2.2} aria-hidden /></button>

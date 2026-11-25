@@ -54,6 +54,13 @@
   --color-surface: #FFFFFF;
   --color-surface-muted: #F3F7F4;
   --color-search-bg: #EAF1F5;
+  /* Tiêu đề hero "Phố Chốt Vía 3D" (ảnh thiết kế): viền ngoài xanh đậm, viền trong xanh tươi, chữ trắng ngả xanh ngọc ở đáy */
+  --color-hero-title-outer: #0E5A2B;
+  --color-hero-title-edge: #23A046;
+  --color-hero-title-top: #FFFFFF;
+  --color-hero-title-bottom: #BFEFEA;
+  --color-hero-pill-top: #FFF9C4;
+  --color-hero-pill-bottom: #FFD93B;
   --color-btn-glossy-top: #5DC25C;
   --color-btn-glossy-bottom: #2A963E;
   --color-btn-glossy-edge: #8ED68B;

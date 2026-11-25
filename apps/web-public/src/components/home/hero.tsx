@@ -75,7 +75,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(70cqw,64rem)]" />
-          <p className="-mt-[2.4cqw] rounded-full border-[0.35cqw] border-surface bg-linear-to-b from-gold-soft via-gold to-gold px-[2.2cqw] py-[0.35cqw] text-[clamp(0.6rem,1.9cqw,1.6rem)] font-extrabold text-primary-strong shadow-card">{config.heroSubtitle}</p>
+          <p className="-mt-[3.2cqw] rounded-full border-[0.4cqw] border-surface bg-linear-to-b from-hero-pill-top to-hero-pill-bottom px-[3cqw] py-[0.55cqw] text-[clamp(0.65rem,2.2cqw,1.9rem)] font-extrabold text-ink shadow-card">{config.heroSubtitle}</p>
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">

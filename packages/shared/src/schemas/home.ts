@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { HOME_ACTION_KINDS, SCENE_MODEL_KEYS, type SceneModelKey } from '../enums';
+import { FEED_TYPES, HOME_ACTION_KINDS, SCENE_MODEL_KEYS, type SceneModelKey } from '../enums';
 import { IdSchema } from '../common';
 
 export const HomePropSchema = z.object({
@@ -15,6 +15,11 @@ export const HomeConfigSchema = z.object({
   heroSubtitle: z.string().trim().min(2).max(80),
   ctaHint: z.string().trim().max(80),
   signLines: z.array(z.string().trim().min(1).max(40)).max(6),
+  /** Ô đăng bài nhanh ở bảng tin trang chủ: ảnh đại diện mặc định (khi chưa đăng nhập hoặc chưa có ảnh) và chữ gợi ý. */
+  composeAvatarUrl: z.string().trim().max(500),
+  composePlaceholder: z.string().trim().max(120),
+  /** Các chip lọc bảng tin trang chủ, theo thứ tự (chữ lấy từ loại bài; `emoji` hiện sau chữ, để trống nếu không cần). */
+  feedFilters: z.array(z.object({ type: z.enum(FEED_TYPES), emoji: z.string().trim().max(8) })).min(1).max(6),
   /** File GLB cả phố (tuỳ chọn); trống thì ghép từng cửa hàng theo bố cục phố. */
   streetGlbUrl: z.string().trim().max(500).nullable(),
   /** Vùng bấm Thần Tài trên ảnh phố (% khung ảnh). */
@@ -106,6 +111,9 @@ export const DEFAULT_HOME_CONFIG: HomeConfig = {
   heroSubtitle: 'Ghé phố – Đốt vía – Thỉnh Thần Tài',
   ctaHint: 'Chạm để xin vía từ Thần Tài',
   signLines: ['Giải tỏa áp lực', 'Tiếp thêm động lực', 'Kết nối cộng đồng'],
+  composeAvatarUrl: '/images/av-01.webp',
+  composePlaceholder: 'Chia sẻ câu chuyện, thành tích, nỗi lòng của bạn...',
+  feedFilters: [{ type: 'all', emoji: '' }, { type: 'story', emoji: '😂' }, { type: 'revenue', emoji: '💰' }, { type: 'wish', emoji: '🙏' }],
   streetGlbUrl: null,
   deityGlbUrl: '/3d/models/than_tai.glb',
   deityScale: 1.6,

@@ -1,5 +1,5 @@
 import { useAdminHomeConfigQuery, useAdminHomeConfigSaveMutation, adminApi } from '@chot-via/api-client';
-import { HomeConfigSchema, type HomeConfig } from '@chot-via/shared';
+import { FEED_TYPES, HomeConfigSchema, type HomeConfig } from '@chot-via/shared';
 import { Button, Card, FormField, Input, Skeleton, SwitchField, Textarea, toast } from '@chot-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
@@ -11,6 +11,17 @@ import { PageHeader } from '../components/common';
 import { useApiToast } from '../lib/use-api-toast';
 
 type NumPath = 'pedestrians' | 'camera.targetY' | 'camera.targetZ' | 'camera.fov' | 'camera.distance' | 'camera.height' | 'camera.minPolarDeg' | 'camera.maxPolarDeg' | 'deityScale' | 'deityRegion.x' | 'deityRegion.y' | 'deityRegion.w' | 'deityRegion.h';
+
+/** Mỗi dòng "loại emoji" (ví dụ "revenue 💰"); loại không hợp lệ bị bỏ qua. */
+function parseFeedFilters(text: string): HomeConfig['feedFilters'] {
+  const out: HomeConfig['feedFilters'] = [];
+  for (const line of text.split('\n')) {
+    const [word = '', ...rest] = line.trim().split(/\s+/);
+    const type = FEED_TYPES.find((x) => x === word);
+    if (type) out.push({ type, emoji: rest.join(' ') });
+  }
+  return out.length > 0 ? out : [{ type: 'all', emoji: '' }];
+}
 
 function Num({ form, name, label }: { form: UseFormReturn<HomeConfig>; name: NumPath; label: string }) {
   return <FormField label={label} htmlFor={name}><Input id={name} type="number" step="any" {...form.register(name, { valueAsNumber: true })} /></FormField>;
@@ -95,6 +106,15 @@ function HomeConfigForm({ data }: { data: HomeConfig }) {
         <FormField className="md:col-span-2" label={t('signLines')} htmlFor="signLines">
           <Controller control={form.control} name="signLines" render={({ field }) => (
             <Textarea id="signLines" rows={4} value={field.value.join('\n')} onChange={(e) => field.onChange(e.target.value.split('\n').map((x) => x.trim()).filter((x) => x !== ''))} />
+          )} />
+        </FormField>
+        <FormField label={t('composeAvatarUrl')} htmlFor="composeAvatarUrl">
+          <Controller control={form.control} name="composeAvatarUrl" render={({ field }) => <AssetInput id="composeAvatarUrl" accept="image/*" value={field.value} onChange={(v) => field.onChange(v ?? '')} />} />
+        </FormField>
+        <FormField label={t('composePlaceholder')} htmlFor="composePlaceholder"><Input id="composePlaceholder" {...form.register('composePlaceholder')} /></FormField>
+        <FormField className="md:col-span-2" label={`${t('feedFilters')} — ${t('feedFiltersHint')}`} htmlFor="feedFilters">
+          <Controller control={form.control} name="feedFilters" render={({ field }) => (
+            <Textarea id="feedFilters" rows={5} value={field.value.map((f) => `${f.type} ${f.emoji}`.trim()).join('\n')} onChange={(e) => field.onChange(parseFeedFilters(e.target.value))} />
           )} />
         </FormField>
         <FormField label={t('streetGlbUrl')} htmlFor="streetGlbUrl">

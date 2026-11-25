@@ -44,6 +44,8 @@ const POSTS: DemoPost[] = [
   { author: 'Đức Hoàng', type: 'story', metric: null, body: 'Hẹn khách 3 lần, lần nào cũng "để mai anh báo lại" 😭', hashtags: ['kekho'], image: null, hoursAgo: 70, reactions: 560, comments: 18, shares: 0 },
   { author: 'Đức Hoàng', type: 'story', metric: null, body: 'Cuối tháng chạy KPI mà tim đập như đua xe 🏎️', hashtags: ['kekho'], image: null, hoursAgo: 100, reactions: 420, comments: 12, shares: 0 },
   { author: 'Tiến Nguyễn', type: 'story', metric: null, body: 'Nhập hàng nhiều quá, kho đầy mà khách chưa thấy đâu 😮‍💨', hashtags: ['kekho'], image: { url: '/images/kk-dong-don.webp', w: 1000, h: 750 }, hoursAgo: 140, reactions: 720, comments: 25, shares: 0 },
+  { author: 'Thu Hương', type: 'wish_share', metric: null, body: 'Xin vía đông khách cuối tuần cho cả nhà nhé! 🙏', hashtags: ['xinvia'], image: null, hoursAgo: 6, reactions: 210, comments: 18, shares: 4 },
+  { author: 'Tiến Nguyễn', type: 'wish_share', metric: null, body: 'Sáng nay xin vía Thần Tài, mong hôm nay chốt đơn thật nhiều ✨', hashtags: ['xinvia'], image: null, hoursAgo: 9, reactions: 164, comments: 11, shares: 2 },
   { author: 'Chốt Vía', type: 'story', metric: null, body: 'Bạn thấy tháng này bán hàng thế nào?', hashtags: ['binhchon'], image: null, hoursAgo: 30, reactions: 12, comments: 3, shares: 0, poll: ['Bán tốt, quá đỉnh! 🔥', 'Bình thường thôi 😐', 'Khó khăn quá 😟'] },
 ];
 

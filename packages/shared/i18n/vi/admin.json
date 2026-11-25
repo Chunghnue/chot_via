@@ -474,6 +474,10 @@
     "previewRotate": "Tự xoay",
     "previewSoundOn": "Âm thanh bật",
     "previewSoundOff": "Âm thanh tắt",
-    "previewHint": "Kéo để xoay · Cuộn để zoom"
+    "previewHint": "Kéo để xoay · Cuộn để zoom",
+    "composeAvatarUrl": "Ảnh đại diện mặc định ở ô đăng bài (khi chưa đăng nhập)",
+    "composePlaceholder": "Chữ gợi ý trong ô đăng bài",
+    "feedFilters": "Các chip lọc bảng tin trang chủ (mỗi dòng: loại + emoji)",
+    "feedFiltersHint": "Loại: all, story, brag, revenue, deal, wish. Ví dụ: revenue 💰"
   }
 }
