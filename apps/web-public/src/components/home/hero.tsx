@@ -2,10 +2,8 @@
 
 import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@chot-via/shared';
 import { Button, cn } from '@chot-via/ui';
-import { CityView, useSceneCapability, type CameraCommand, type CameraCommandKind } from '@chot-via/scene-3d';
-import { ChevronDown, ChevronUp, Minus, Plus, RotateCcw, RotateCw } from 'lucide-react';
+import { CityView, useSceneCapability } from '@chot-via/scene-3d';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { useStreetLabels } from '@/components/place/use-street-labels';
 import { composerOpened } from '@/features/composer/composerSlice';
@@ -48,8 +46,6 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   const capability = useSceneCapability();
   const wishRequest = useAppSelector(selectWishRequest);
   const ritualScene = useRitualScene();
-  const [command, setCommand] = useState<CameraCommand | null>(null);
-  const send = useCallback((kind: CameraCommandKind): void => setCommand((c) => ({ id: (c?.id ?? 0) + 1, kind })), []);
   const config = home?.layout.config ?? DEFAULT_HOME_CONFIG;
   // Server mới chưa có ô cửa hàng nào thì vẫn hiện phố mặc định (không để phố trống).
   const slots = home && home.layout.street.length > 0 ? home.layout.street : DEFAULT_STREET_SLOTS;
@@ -73,7 +69,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   return (
     <section aria-label={t('heroAlt')} className="relative isolate overflow-hidden rounded-sheet bg-surface-muted shadow-card">
       <div className="relative aspect-[555/470] w-full [container-type:size] sm:aspect-[4/3] md:aspect-[16/9] lg:aspect-[2.3/1] xl:aspect-[2.5/1]">
-        <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
+        <CityView className="absolute inset-0" config={config} slots={slots} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[1%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
           <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(9cqw,11.5cqh)] w-[min(60cqw,68cqh)]" />
@@ -89,12 +85,11 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
             </div>
           </div>
         ) : null}
-        {capability.supports3D ? <HeroControls onCommand={send} /> : null}
         <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex flex-col items-center gap-[2.4cqw] px-[7%] md:bottom-[12%] md:gap-1.5 md:px-3">
           <div className="relative w-full md:w-auto">
             <span aria-hidden className="pointer-events-none absolute inset-x-[-4%] -bottom-[36%] h-[90%] rounded-[50%] border-[0.6cqw] border-gold/70 bg-[radial-gradient(ellipse_at_center,var(--color-gold)_0%,transparent_70%)] opacity-90 blur-[1px] md:hidden" />
             <span aria-hidden className="pointer-events-none absolute inset-x-[2%] -bottom-[24%] h-[70%] rounded-[50%] border-[0.5cqw] border-surface/70 md:hidden" />
-            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[17cqw] w-full border-[0.8cqw] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-4 font-display text-[clamp(1.1rem,6.1cqw,2.2rem)] font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_0.9cqw_var(--color-cta-glow),0_0_5cqw_1.5cqw_rgb(255_212_59/0.55),inset_0_0.8cqw_0_rgb(255_255_255/0.35)] [text-shadow:0_0.4cqw_0_rgb(150_30_0/0.55)] md:h-14 md:w-auto md:border-[3px] md:px-12 md:text-2xl md:shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] xl:h-[4.25rem] xl:px-16 xl:text-3xl">
+            <Button variant="wish" size="lg" aria-label={tw(`title.${titleCode}`)} className="pointer-events-auto animate-glow relative h-[15.5cqw] w-full border-[0.8cqw] border-surface/90 bg-linear-to-b from-cta-top via-cta-mid to-cta-bottom px-4 font-display text-[clamp(1rem,5.6cqw,2.2rem)] font-extrabold uppercase tracking-wide text-on-wish shadow-[0_0_0_0.9cqw_var(--color-cta-glow),0_0_5cqw_1.5cqw_rgb(255_212_59/0.55),inset_0_0.8cqw_0_rgb(255_255_255/0.35)] [text-shadow:0_0.4cqw_0_rgb(150_30_0/0.55)] md:h-14 md:w-auto md:border-[3px] md:px-12 md:text-2xl md:shadow-[0_0_0_4px_var(--color-cta-glow),0_0_28px_6px_rgb(255_212_59/0.5),inset_0_3px_0_rgb(255_255_255/0.35)] xl:h-[4.25rem] xl:px-16 xl:text-3xl">
               {tw('titleLead')}<img src="/images/ic-pray.webp" alt="" aria-hidden className="size-[1.5em] object-contain normal-case drop-shadow" draggable={false} />{tw(`titleTail.${titleCode}`)}
               <PointerHand />
             </Button>
@@ -106,27 +101,11 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   );
 }
 
-/** Nút điều khiển góc nhìn của thành phố 3D (lưới 2 cột ở góc trên bên phải để không đè lên hàng nút phía dưới ở hero thấp như iPad ngang): xoay trái / phải, đi tới / đi lùi dọc phố, phóng to / thu nhỏ. Mọi kích thước màn hình đều có (cuộn chuột chỉ cuộn trang). */
-function HeroControls({ onCommand }: { onCommand: (kind: CameraCommandKind) => void }) {
-  const t = useTranslations('home.scene');
-  const btn = 'grid size-7 place-items-center rounded-full text-ink transition hover:bg-surface active:scale-90 md:size-7';
-  return (
-    <div role="group" aria-label={t('controls')} className="absolute right-[2%] top-[26%] z-10 grid grid-cols-2 md:top-[4%] gap-0.5 rounded-2xl bg-surface/80 p-1 shadow-card backdrop-blur">
-      <button type="button" aria-label={t('rotateLeft')} onClick={() => onCommand('left')} className={btn}><RotateCcw className="size-3.5" aria-hidden /></button>
-      <button type="button" aria-label={t('rotateRight')} onClick={() => onCommand('right')} className={btn}><RotateCw className="size-3.5" aria-hidden /></button>
-      <button type="button" aria-label={t('forward')} onClick={() => onCommand('up')} className={btn}><ChevronUp className="size-4" aria-hidden /></button>
-      <button type="button" aria-label={t('back')} onClick={() => onCommand('down')} className={btn}><ChevronDown className="size-4" aria-hidden /></button>
-      <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={btn}><Plus className="size-4" aria-hidden /></button>
-      <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={btn}><Minus className="size-4" aria-hidden /></button>
-    </div>
-  );
-}
-
 /** Bàn tay chỉ trỏ ở cuối nút (ảnh thiết kế). Đặt file 3D vào /images/ic-pointer.webp rồi gán đường dẫn vào đây để thay emoji tạm. */
 const POINTER_IMAGE: string | null = null;
 function PointerHand() {
   return (
-    <span aria-hidden className="pointer-events-none absolute -bottom-[62%] -right-[2%] w-[2.3em] drop-shadow-md">
+    <span aria-hidden className="pointer-events-none absolute -bottom-[58%] -right-[1%] w-[2em] drop-shadow-md">
       {POINTER_IMAGE ? <img src={POINTER_IMAGE} alt="" className="size-full object-contain" draggable={false} /> : (
         <svg viewBox="0 0 64 64" className="size-full">
           <g className="fill-surface stroke-ink" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" transform="rotate(-24 32 36)">
@@ -164,13 +143,13 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
   if (actions.length === 0) return null;
   const count = (pick: (a: HomeActionDto) => boolean): number => Math.max(1, actions.filter(pick).length);
   const vars = { '--cm': Math.min(6, count((a) => a.showMobile)), '--ct': count((a) => a.showTablet), '--cd': count((a) => a.showDesktop) } as React.CSSProperties;
-  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center justify-center gap-2.5 rounded-full md:flex-none md:px-6 xl:px-8 bg-linear-to-br from-surface via-surface to-story-soft p-2 shadow-[0_6px_14px_rgb(60_40_120/0.16)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 active:scale-[0.97] max-md:flex-col max-md:rounded-2xl max-md:text-center md:max-xl:gap-2 md:max-xl:p-1.5 md:max-xl:px-4';
+  const base = 'order-(--om) md:order-(--ot) xl:order-(--od) flex min-w-0 items-center justify-center gap-2.5 rounded-full max-md:h-14 md:flex-none md:px-6 xl:px-8 bg-linear-to-br from-surface via-surface to-story-soft p-2 shadow-[0_6px_14px_rgb(60_40_120/0.16)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 active:scale-[0.97] md:max-xl:gap-2 md:max-xl:p-1.5 md:max-xl:px-4';
 
   const inner = (a: HomeActionDto, title: string, featured = false) => (
     <>
-      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className={cn('shrink-0 object-contain', featured ? 'size-14 md:size-12 md:max-xl:size-10' : 'size-11 md:size-11 md:max-xl:size-8')} draggable={false} /> : null}
-      <span className="flex min-w-0 flex-col items-start leading-tight max-md:items-center">
-        <span className={cn('font-display text-[0.72rem] font-extrabold leading-tight sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]', featured ? cn('text-[1.05rem] md:text-[1.2rem] xl:text-[1.3rem]', a.kind === 'invoke' ? 'text-on-gold' : 'text-on-wish') : 'text-ink')}>{title}</span>
+      {a.iconUrl ? <img src={a.iconUrl} alt="" aria-hidden className={cn('shrink-0 object-contain', featured ? 'size-11 md:size-12 md:max-xl:size-10' : 'size-10 md:size-11 md:max-xl:size-8')} draggable={false} /> : null}
+      <span className="flex min-w-0 flex-col items-start leading-tight">
+        <span className={cn('font-display text-[0.82rem] font-extrabold leading-tight sm:text-xs md:text-[0.85rem] xl:text-[0.95rem]', featured ? cn('text-[1.05rem] md:text-[1.2rem] xl:text-[1.3rem]', a.kind === 'invoke' ? 'text-on-gold' : 'text-on-wish') : 'text-ink')}>{title}</span>
         {a.subLabel ? <span className={cn('hidden text-xs font-medium leading-tight @min-[56rem]:block md:max-xl:block md:max-xl:text-[0.62rem]', featured ? (a.kind === 'invoke' ? 'text-on-gold/90' : 'text-on-wish/90') : 'text-ink-muted')}>{a.subLabel}</span> : null}
       </span>
     </>
@@ -181,12 +160,12 @@ export function ActionCards({ actions: all }: { actions: readonly HomeActionDto[
     <div className="@container relative z-10 -mt-5 md:-mt-8 xl:-mt-9">
       <nav
         aria-label={t('actions.label')} style={vars}
-        className="grid grid-cols-[repeat(var(--cm),minmax(0,1fr))] gap-2 px-2 sm:px-4 md:flex md:flex-wrap md:justify-center md:gap-3 md:px-5 xl:gap-4 xl:px-6 items-end"
+        className="grid grid-cols-2 gap-2.5 px-2 sm:px-4 md:flex md:flex-wrap md:justify-center md:gap-3 md:px-5 xl:gap-4 xl:px-6 items-end"
       >
         {actions.map((a, index) => {
           const featured = a.kind === 'burn' || a.kind === 'invoke';
           // Đốt vía và Thỉnh Thần Tài: cùng một chiều cao, cao và nổi bật hơn các nút còn lại.
-          const cls = cn(base, deviceClass(a), featured && 'h-[7.25rem] border-2 border-gold shadow-cta md:h-[5rem] md:max-xl:h-[4.5rem]', a.kind === 'burn' && 'bg-linear-to-b from-fire-top via-fire-mid to-fire-bottom', a.kind === 'invoke' && 'bg-linear-to-b from-gold-bright via-gold to-gold-deep');
+          const cls = cn(base, deviceClass(a), featured && 'h-14 border-2 border-gold shadow-cta md:h-[5rem] md:max-xl:h-[4.5rem]', a.kind === 'burn' && 'bg-linear-to-b from-fire-top via-fire-mid to-fire-bottom', a.kind === 'invoke' && 'bg-linear-to-b from-gold-bright via-gold to-gold-deep');
           const style = orderStyle(a, index);
           const title = a.kind === 'brag' && role === 'owner' ? t('actions.bragOwner') : a.kind === 'brag' && role === 'sale' ? t('actions.bragSale') : a.label;
           if (a.kind === 'story') return <button key={a.code} type="button" className={cls} style={style} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{inner(a, title)}</button>;

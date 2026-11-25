@@ -26,7 +26,7 @@ export function ChallengeCard() {
             <p className="text-sm font-semibold leading-snug text-ink">{data.name}</p>
             {data.description ? <p className="mt-0.5 text-xs leading-snug text-ink-muted">{data.description}</p> : null}
           </div>
-          <img src="/images/ic-gift.webp" alt="" aria-hidden className="size-14 shrink-0 object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-gift.webp" alt="" aria-hidden className="size-14 shrink-0 object-contain" draggable={false} />
         </div>
         {data.progress !== null ? (
           <div className="mt-2 flex items-center gap-3">

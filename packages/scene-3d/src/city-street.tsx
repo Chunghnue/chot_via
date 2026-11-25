@@ -273,20 +273,20 @@ const COIN_WAVES = 3;
 const COINS_PER_WAVE = 34;
 const COIN_WAVE_GAP = 0.45;
 
-function CoinShower({ tick, reducedMotion, alphaCover }: { tick: number; reducedMotion: boolean; alphaCover: boolean }) {
+function CoinShower({ tick, reducedMotion, alphaCover, perWave = COINS_PER_WAVE }: { tick: number; reducedMotion: boolean; alphaCover: boolean; perWave?: number }) {
   const tex = useSprite(CITY_IMAGES.coin);
   const start = useRef(-1);
   const seen = useRef(tick);
   const group = useRef<Group>(null);
   // Tung vàng hào phóng: ba đợt nối nhau, mỗi đợt 34 đồng bắn ra mọi hướng (đợt sau cao và xa hơn một chút).
-  const coins = useMemo(() => Array.from({ length: COIN_WAVES * COINS_PER_WAVE }, (_, i) => {
-    const wave = Math.floor(i / COINS_PER_WAVE);
-    const k = i % COINS_PER_WAVE;
-    const a = (k / COINS_PER_WAVE) * Math.PI * 2 + (k % 3) * 0.2 + wave * 0.5;
+  const coins = useMemo(() => Array.from({ length: COIN_WAVES * perWave }, (_, i) => {
+    const wave = Math.floor(i / perWave);
+    const k = i % perWave;
+    const a = (k / perWave) * Math.PI * 2 + (k % 3) * 0.2 + wave * 0.5;
     const up = 6 + ((k * 7) % 7) + wave * 1.2;
     const out = 4 + ((k * 5) % 8) + wave * 1.4;
     return { vx: Math.cos(a) * out, vz: Math.sin(a) * out * 0.5, vy: up, size: (0.9 + ((k * 3) % 4) * 0.22) * 2, spin: 3 + (k % 5), delay: wave * COIN_WAVE_GAP };
-  }), []);
+  }), [perWave]);
   const meshes = useRef<(Group | null)[]>([]);
   useFrame(({ clock }) => {
     if (reducedMotion) return;
@@ -616,7 +616,7 @@ function Scene({ props }: { props: CityStreetProps }): ReactNode {
         />
       ))}
       <Suspense fallback={null}><CityDeity colors={colors} reducedMotion={reducedMotion} burstTick={props.burstTick ?? 0} away={ritualOn && props.ritual?.kind === 'invoke'} onSelect={onSelectDeity} />
-        <CoinShower tick={props.burstTick ?? 0} reducedMotion={reducedMotion} alphaCover={alphaCover} /></Suspense>
+        <CoinShower tick={props.burstTick ?? 0} reducedMotion={reducedMotion} alphaCover={alphaCover} perWave={quality === 'low' ? 18 : COINS_PER_WAVE} /></Suspense>
       {ritualOn && ritual ? <RitualStage key={ritual.tick} ritual={ritual} slots={slots} colors={colors} alphaCover={alphaCover} onStart={props.onRitualStart} /> : null}
       <CitySign lines={config.signLines} colors={colors} />
       {config.sparkles ? (

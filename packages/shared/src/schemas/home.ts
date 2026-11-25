@@ -106,7 +106,7 @@ const DEFAULT_HOME_PROPS: HomeProp[] = [
 ];
 
 export const DEFAULT_HOME_CONFIG: HomeConfig = {
-  heroImageUrl: '/images/pho-3d-hero.png',
+  heroImageUrl: '/images/pho-3d-hero.webp',
   heroTitle: 'Phố Chốt Vía',
   heroSubtitle: 'Ghé phố – Đốt vía – Thỉnh Thần Tài',
   ctaHint: 'Chạm để xin vía từ Thần Tài',

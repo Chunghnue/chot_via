@@ -18,7 +18,7 @@ export function DeityBanner({ compact = false }: { compact?: boolean }) {
     // Máy tính (ảnh thiết kế): thẻ kem vàng, Thần Tài nằm gọn bên trái, tiêu đề đỏ + "Nhận lộc hôm nay" + nút xanh "Xin vía ngay →" bên phải.
     return (
       <div className="flex items-center gap-2 rounded-2xl bg-linear-to-br from-gold-soft via-surface to-gold-soft p-3 shadow-card ring-1 ring-gold/40">
-        <img src="/images/than-tai-bay.webp" alt="" aria-hidden className="h-[6.5rem] w-auto shrink-0 select-none object-contain drop-shadow" draggable={false} />
+        <img loading="lazy" decoding="async" src="/images/than-tai-bay.webp" alt="" aria-hidden className="h-[6.5rem] w-auto shrink-0 select-none object-contain drop-shadow" draggable={false} />
         <div className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center">
           <span className="font-display text-[1.05rem] font-extrabold italic leading-tight text-wish-strong">{t('deityTitle')}</span>
           <span className="text-xs font-semibold leading-snug text-ink">{t('deityTodayHint')}</span>
@@ -31,7 +31,7 @@ export function DeityBanner({ compact = false }: { compact?: boolean }) {
   return (
     <button type="button" onClick={() => dispatch(wishRequested())} aria-label={t('deityTitle')}
       className="relative flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-linear-to-r from-gold-soft via-wish-soft to-gold-soft px-4 py-3 text-left shadow-card ring-1 ring-gold/40 transition active:scale-[0.98]">
-      <img src="/images/than-tai.webp" alt="" aria-hidden className="h-16 w-auto shrink-0 object-contain" draggable={false} />
+      <img loading="lazy" decoding="async" src="/images/than-tai.webp" alt="" aria-hidden className="h-16 w-auto shrink-0 object-contain" draggable={false} />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="font-display text-xl font-extrabold italic text-wish-strong">{t('deityTitle')}</span>
         <span className="text-xs font-medium leading-snug text-ink">{t('deityText')}</span>
@@ -49,15 +49,15 @@ export function ChallengeTasks() {
   return (
     <Card className="flex flex-col gap-3 bg-linear-to-b from-surface to-primary-soft/40 p-4 ring-1 ring-surface">
       <div className="flex items-center gap-3">
-        <img src="/images/ic-fire.webp" alt="" aria-hidden className="size-12 shrink-0 object-contain drop-shadow" draggable={false} />
+        <img loading="lazy" decoding="async" src="/images/ic-fire.webp" alt="" aria-hidden className="size-12 shrink-0 object-contain drop-shadow" draggable={false} />
         <h2 className="whitespace-nowrap font-display text-xl font-extrabold text-primary-strong">{t('challengeTitle')}</h2>
       </div>
       <div className="flex items-center justify-between gap-2">
         <p className="min-w-0 flex-1 text-[0.88rem] font-semibold leading-snug text-ink">{t('challengeSub')}</p>
         <span className="relative shrink-0">
-          <img src="/images/ic-crown.webp" alt="" aria-hidden className="size-16 object-contain drop-shadow-md" draggable={false} />
-          <img src="/images/ic-sparkles.webp" alt="" aria-hidden className="absolute -left-3 top-0 size-6 object-contain" draggable={false} />
-          <img src="/images/ic-coin.webp" alt="" aria-hidden className="absolute -right-2 bottom-0 size-6 object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-crown.webp" alt="" aria-hidden className="size-16 object-contain drop-shadow-md" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-sparkles.webp" alt="" aria-hidden className="absolute -left-3 top-0 size-6 object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-coin.webp" alt="" aria-hidden className="absolute -right-2 bottom-0 size-6 object-contain" draggable={false} />
         </span>
       </div>
       {isLoading || !mounted ? <Skeleton className="h-24" /> : (
@@ -85,7 +85,7 @@ export function CreateStoreCard() {
   const tn = useTranslations('nav');
   return (
     <Card className="flex flex-col items-center gap-2 overflow-hidden bg-linear-to-br from-primary-soft via-surface to-primary-soft p-5 text-center ring-1 ring-primary/20">
-      <img src="/images/cua-hang-mau.webp" alt="" aria-hidden className="h-32 w-auto object-contain drop-shadow-lg" draggable={false} />
+      <img loading="lazy" decoding="async" src="/images/cua-hang-mau.webp" alt="" aria-hidden className="h-32 w-auto object-contain drop-shadow-lg" draggable={false} />
       <h2 className="font-display text-2xl font-extrabold text-primary-strong">{tn('createStoreTitleLine1')}</h2>
       <p className="text-sm font-medium leading-snug text-ink">{t('storeText')}</p>
       <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'lg' }), 'mt-1 w-full btn-glossy text-lg font-bold')}>{tn('createStoreCta')}<ArrowRight className="size-5 shrink-0" strokeWidth={2.2} aria-hidden /></Link>
@@ -120,14 +120,14 @@ export function FeaturedEventCard() {
   const arrow = 'absolute top-1/2 z-10 grid size-7 -translate-y-1/2 place-items-center rounded-full bg-surface text-ink shadow-card ring-1 ring-border/60 transition hover:bg-surface-muted active:scale-90';
   return (
     <Card className="flex flex-col gap-2.5 p-4">
-      <h2 className="flex items-center gap-2 text-[1.1rem] font-extrabold text-ink"><img src="/images/ic-gift.webp" alt="" aria-hidden className="size-8 object-contain" draggable={false} />{t('eventsTitle')}</h2>
+      <h2 className="flex items-center gap-2 text-[1.1rem] font-extrabold text-ink"><img loading="lazy" decoding="async" src="/images/ic-gift.webp" alt="" aria-hidden className="size-8 object-contain" draggable={false} />{t('eventsTitle')}</h2>
       <div className="relative">
         {data.length > 1 ? <>
           <button type="button" onClick={() => step(-1)} aria-label={t('prev')} className={cn(arrow, '-left-3')}><ChevronLeft className="size-4" strokeWidth={3} aria-hidden /></button>
           <button type="button" onClick={() => step(1)} aria-label={t('next')} className={cn(arrow, '-right-3')}><ChevronRight className="size-4" strokeWidth={3} aria-hidden /></button>
         </> : null}
         <div className="relative flex min-h-40 flex-col items-center justify-center gap-1 rounded-2xl bg-linear-to-r from-event-from to-event-to px-3 pb-3 pt-4 text-center shadow-[inset_0_0_0_1px_rgb(255_255_255/0.6)]">
-          <img src="/images/ic-gift.webp" alt="" aria-hidden className="pointer-events-none absolute right-[2%] top-[6%] w-[31%] rotate-6 object-contain drop-shadow-md" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-gift.webp" alt="" aria-hidden className="pointer-events-none absolute right-[2%] top-[6%] w-[31%] rotate-6 object-contain drop-shadow-md" draggable={false} />
           <div className="flex w-[70%] flex-col items-center gap-0.5 self-start">
             <p className="text-[0.95rem] font-extrabold leading-tight text-wish-strong">{lead}{quoted ? <><br /><span className="whitespace-nowrap text-[0.82rem]">{quoted}</span></> : null}</p>
             {event.description ? <p className="mt-0.5 text-[0.74rem] font-semibold leading-snug text-ink">{highlightMoney(event.description)}</p> : null}
@@ -160,7 +160,7 @@ export function CommunityCard() {
         </svg>
         <span>{t('communityPrefix')} <span className="text-primary-strong">{t('communityBrand')}</span></span>
       </h2>
-      {members > 0 ? <p className="flex items-center gap-1.5 pl-1 text-sm font-bold text-ink"><img src="/images/ic-laugh.webp" alt="" aria-hidden className="size-5 object-contain" draggable={false} />{t('members', { count: members.toLocaleString('vi-VN') })}</p> : null}
+      {members > 0 ? <p className="flex items-center gap-1.5 pl-1 text-sm font-bold text-ink"><img loading="lazy" decoding="async" src="/images/ic-laugh.webp" alt="" aria-hidden className="size-5 object-contain" draggable={false} />{t('members', { count: members.toLocaleString('vi-VN') })}</p> : null}
       <div className="flex items-center justify-between gap-1.5 py-1">
         {(board?.items ?? []).slice(0, 5).map((m) => <Avatar key={m.user.id} src={m.user.avatarUrl} name={m.user.displayName} size={34} />)}
         {members > 5 ? <span className="grid size-[2.125rem] shrink-0 place-items-center rounded-full bg-info-soft text-xs font-bold text-ink">+{compactCount(members - 5).toUpperCase()}</span> : null}
@@ -184,7 +184,7 @@ export function MobileShortcutCards() {
         <Link key={i.href} href={i.href} className={cn('relative flex min-h-36 flex-col gap-1 overflow-hidden rounded-2xl bg-linear-to-b p-2.5 shadow-card ring-1 ring-border/60', i.tone)}>
           <span className="font-display text-sm font-extrabold leading-tight text-ink">{i.title}</span>
           <span className="text-[0.68rem] font-medium leading-tight text-ink">{i.text}</span>
-          <img src={i.img} alt="" aria-hidden className="mt-auto size-14 self-end object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src={i.img} alt="" aria-hidden className="mt-auto size-14 self-end object-contain" draggable={false} />
         </Link>
       ))}
     </div>

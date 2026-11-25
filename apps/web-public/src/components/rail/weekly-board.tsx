@@ -23,8 +23,8 @@ function PlaceRows({ kind, limit, big }: { kind: PlaceKind; limit: number; big: 
     <div className="flex flex-col gap-1">
       {big && first ? (
         <Link href={`/diem/${first.place.slug}`} className="mb-2 flex flex-col items-center gap-1 rounded-2xl bg-linear-to-b from-gold-soft to-surface px-3 py-4 text-center">
-          <img src="/images/ic-crown.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
-          <img src="/images/ic-medal-1.webp" alt="" aria-hidden className="-mt-1 size-12 object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-crown.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
+          <img loading="lazy" decoding="async" src="/images/ic-medal-1.webp" alt="" aria-hidden className="-mt-1 size-12 object-contain" draggable={false} />
           <span className="font-display text-lg font-extrabold text-ink">{first.place.title}</span>
           <span className="text-sm font-bold text-primary-strong">{t('viaCount', { count: compactCount(first.wishes).toUpperCase() })}</span>
         </Link>

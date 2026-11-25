@@ -1,4 +1,4 @@
-import { Skeleton, cn } from '@chot-via/ui';
+import { cn } from '@chot-via/ui';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSceneCapability } from './capability';
 import type { CityStreetProps } from './city-street';
@@ -21,6 +21,18 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
   const q = useQuality();
   const box = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
+  // Hiện ảnh phố tĩnh ngay; chỉ dựng cảnh 3D (tải three.js, dựng WebGL) sau khi trang đã vẽ xong và trình duyệt rảnh, để lần đầu vào web không bị đứng.
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    const start = (): void => setArmed(true);
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+    if (typeof w.requestIdleCallback === 'function') {
+      const id = w.requestIdleCallback(start, { timeout: 1200 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const id = window.setTimeout(start, 300);
+    return () => window.clearTimeout(id);
+  }, []);
 
   useEffect(() => {
     const el = box.current;
@@ -35,9 +47,9 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
 
   return (
     <div ref={box} className={cn('relative', className)}>
-      {!capability.ready ? <Skeleton className="absolute inset-0" /> : !capability.supports3D ? <>{fallback}</> : (
+      {!capability.ready || !armed ? <>{fallback}</> : !capability.supports3D ? <>{fallback}</> : (
         <Boundary fallback={fallback}>
-          <Suspense fallback={<Skeleton className="absolute inset-0" />}>
+          <Suspense fallback={fallback}>
             <CityStreet
               {...rest} config={config} quality={q.quality} maxFps={q.maxFps} active={visible} reducedMotion={capability.reducedMotion}
               resetTick={resetTick} autoRotate={false} onSelectPlace={pickPlace} onSelectDeity={pickDeity} className="absolute inset-0"

@@ -23,7 +23,13 @@ const config: NextConfig = {
     ];
   },
   async headers() {
-    return [{ source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache' }, { key: 'Service-Worker-Allowed', value: '/' }] }];
+    // Ảnh và model 3D đổi hiếm (thay file cùng tên là đổi ảnh): giữ trong bộ nhớ trình duyệt 1 ngày, sau đó dùng bản cũ trong lúc tải bản mới ngầm, để lần vào thứ hai gần như tức thì.
+    const assetCache = [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }];
+    return [
+      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache' }, { key: 'Service-Worker-Allowed', value: '/' }] },
+      { source: '/images/:path*', headers: assetCache },
+      { source: '/3d/:path*', headers: assetCache },
+    ];
   },
 };
 

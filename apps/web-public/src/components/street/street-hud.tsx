@@ -3,8 +3,7 @@
 import { selectIsMember, useFollowPlaceMutation, useGetMeStatsQuery, useGetMissionsQuery, useGetPostsQuery } from '@chot-via/api-client';
 import type { PlaceSummary } from '@chot-via/shared';
 import { Avatar, Button, Card, Skeleton, buttonClass, cn, compactCount, toast } from '@chot-via/ui';
-import type { CameraCommandKind } from '@chot-via/scene-3d';
-import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize2, Minimize2, Minus, Plus } from 'lucide-react';
+import { ArrowRight, Check, Maximize2, Minimize2 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { ChallengeTasks, FeaturedEventCard } from '@/components/home/home-extras';
@@ -35,26 +34,13 @@ export function StreetBadges({ wishesTotal, place }: { wishesTotal: number | nul
   );
 }
 
-/** Joystick xoay/nâng góc nhìn + cụm nút 3D · toàn màn hình · phóng to · thu nhỏ. Chỉ điều khiển camera, không đổi dữ liệu. */
-export function StreetControls({ fullscreen, onFullscreen, onCommand }: { fullscreen: boolean; onFullscreen: () => void; onCommand: (kind: CameraCommandKind) => void }) {
+/** Nút toàn màn hình của cảnh phố (máy tính). Không còn nút xoay / phóng to / thu nhỏ: kéo để xoay, chụm hoặc Ctrl+cuộn để phóng to. */
+export function StreetControls({ fullscreen, onFullscreen }: { fullscreen: boolean; onFullscreen: () => void }) {
   const t = useTranslations('street.hud');
-  const pad = (kind: CameraCommandKind, label: string, cls: string, icon: React.ReactNode) => (
-    <button type="button" aria-label={label} onClick={() => onCommand(kind)} className={cn('absolute grid size-8 place-items-center rounded-full text-ink transition active:scale-90', cls)}>{icon}</button>
-  );
   return (
-    <>
-      <div role="group" aria-label={t('dpad.label')} className="absolute bottom-28 left-4 z-10 hidden size-28 rounded-full bg-surface/80 shadow-card backdrop-blur xl:block">
-        {pad('up', t('dpad.up'), 'left-1/2 top-1 -translate-x-1/2', <ChevronUp className="size-5" aria-hidden />)}
-        {pad('down', t('dpad.down'), 'bottom-1 left-1/2 -translate-x-1/2', <ChevronDown className="size-5" aria-hidden />)}
-        {pad('left', t('dpad.left'), 'left-1 top-1/2 -translate-y-1/2', <ChevronLeft className="size-5" aria-hidden />)}
-        {pad('right', t('dpad.right'), 'right-1 top-1/2 -translate-y-1/2', <ChevronRight className="size-5" aria-hidden />)}
-      </div>
-      <div className="absolute right-3 top-1/3 z-10 hidden flex-col gap-2 xl:flex">
-        <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>{fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}</button>
-        <button type="button" aria-label={t('zoomIn')} onClick={() => onCommand('in')} className={round}><Plus className="size-5" aria-hidden /></button>
-        <button type="button" aria-label={t('zoomOut')} onClick={() => onCommand('out')} className={round}><Minus className="size-5" aria-hidden /></button>
-      </div>
-    </>
+    <div className="absolute right-3 top-1/3 z-10 hidden xl:block">
+      <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>{fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}</button>
+    </div>
   );
 }
 
