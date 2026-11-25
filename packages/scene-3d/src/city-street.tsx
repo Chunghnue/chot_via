@@ -347,10 +347,18 @@ function FloatingCoin({ index, reducedMotion, alphaCover }: { index: number; red
   );
 }
 
+/** Tên người đi lại (tự đặt): chẵn là nam, lẻ là nữ để tỉ lệ nam nữ bằng nhau; cả nhóm khách đông là một nhóm bạn. */
+const WALKER_NAMES = { male: ['Minh', 'Hùng', 'Nam', 'Đức', 'Tuấn', 'Long', 'Khánh', 'Bảo'], female: ['Lan', 'Hương', 'Mai', 'Linh', 'Thảo', 'Ngọc', 'Trang', 'Vy'] } as const;
+const GROUP_NAME = 'Nhóm bạn';
+
 /** Người đi lại: thân trên là ảnh tách từ bộ thiết kế, hai chân là khối 3D thật nên bước chân vung được. */
 function CityWalker({ index, colors, reducedMotion, alphaCover }: { index: number; colors: SceneColors; reducedMotion: boolean; alphaCover: boolean }) {
   const [shopkeeper, seller, buyer, crowd] = CITY_IMAGES.walkers;
-  const src = index === 3 ? crowd : [shopkeeper, seller, buyer][index % 3] ?? shopkeeper;
+  // Chẵn = nam (ảnh chủ quán), lẻ = nữ (hai ảnh nữ xen kẽ); một nhóm đông ở vị trí 3.
+  const isMale = index % 2 === 0;
+  const src = index === 3 ? crowd : isMale ? shopkeeper : (Math.floor(index / 2) % 2 === 0 ? seller : buyer) ?? seller;
+  const nameList = isMale ? WALKER_NAMES.male : WALKER_NAMES.female;
+  const name = index === 3 ? GROUP_NAME : nameList[Math.floor(index / 2) % nameList.length] ?? '';
   const tex = useSprite(src);
   const root = useRef<Group>(null);
   const face = useRef<Group>(null);
@@ -393,6 +401,7 @@ function CityWalker({ index, colors, reducedMotion, alphaCover }: { index: numbe
           <planeGeometry args={[bustW, bustH]} />
           <meshBasicMaterial map={tex} alphaTest={0.4} alphaToCoverage={alphaCover} side={DoubleSide} toneMapped={false} />
         </mesh>
+        {name ? <Label text={name} position={[0, 0.58 + bustH + 0.28, 0]} bg={colors.surface} fg={colors.ink} size={0.5} /> : null}
       </group>
     </group>
   );
