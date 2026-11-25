@@ -15,6 +15,7 @@ import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/u
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
 import { useCurrentUser } from '@/lib/use-member';
+import { HeroSubtitle } from './hero-subtitle';
 import { HeroTitle } from './hero-title';
 
 /** Tỉ lệ ảnh phố thiết kế (pho-3d-hero.png): vùng bấm tính theo % khung ảnh nên luôn khớp dù khung hero bị cắt ở các cỡ màn khác nhau. */
@@ -75,7 +76,7 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
         <CityView className="absolute inset-0" config={config} slots={slots} command={command} burstTick={wishRequest} {...ritualScene} onSelectPlace={openPlace} onSelectDeity={openWish} fallback={imageStage} />
         <div className="pointer-events-none absolute inset-x-0 top-[3%] flex flex-col items-center gap-[1.2cqw] text-center">
           <HeroTitle text={config.heroTitle} className="w-[min(88cqw,98cqh)]" />
-          <p className="-mt-[min(5cqw,6cqh)] whitespace-nowrap rounded-full border-[min(0.4cqw,0.7cqh)] border-surface bg-linear-to-b from-hero-pill-top to-hero-pill-bottom px-[min(3cqw,5cqh)] py-[min(0.7cqw,1.1cqh)] text-center text-[clamp(0.7rem,min(3.2cqw,4.4cqh),1.7rem)] font-extrabold leading-tight text-ink shadow-card">{config.heroSubtitle}</p>
+          <HeroSubtitle text={config.heroSubtitle} className="-mt-[min(4cqw,5cqh)] w-[min(78cqw,88cqh)]" />
         </div>
         {config.signLines.length > 0 && capability.ready && !capability.supports3D ? (
           <div aria-hidden className="pointer-events-none absolute right-[3%] top-[34%] hidden rotate-[2deg] md:block">
