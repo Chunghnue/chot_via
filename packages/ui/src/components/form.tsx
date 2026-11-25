@@ -29,7 +29,7 @@ export function Switch({ checked, onCheckedChange, label, id }: { checked: boole
   return (
     <SwitchPrimitive.Root
       id={id} checked={checked === true} onCheckedChange={onCheckedChange} aria-label={label}
-      className="relative h-7 w-12 shrink-0 rounded-full bg-border transition data-[state=checked]:bg-primary"
+      className="relative h-7 w-12 shrink-0 rounded-full bg-border transition data-[state=checked]:bg-primary-bright"
     >
       <SwitchPrimitive.Thumb className="block size-6 translate-x-0.5 rounded-full bg-surface shadow transition data-[state=checked]:translate-x-[22px]" />
     </SwitchPrimitive.Root>

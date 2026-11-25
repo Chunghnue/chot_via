@@ -96,7 +96,7 @@ export function Header() {
           {isMember && user ? (
             <Menu label={t('profile')} items={items} trigger={<button type="button" className="rounded-full"><Avatar src={user.avatarUrl} name={user.displayName} size={44} /></button>} />
           ) : status === 'unknown' ? null : (
-            <Button className="h-10 bg-linear-to-b from-primary-bright to-primary px-4 text-sm font-bold shadow-[0_6px_14px_-5px_var(--color-primary)] xl:h-[2.9rem] xl:px-6 xl:text-base" onClick={() => dispatch(loginRequested('generic'))}>
+            <Button className="h-10 btn-glossy px-4 text-sm font-bold shadow-[0_6px_14px_-5px_var(--color-primary)] xl:h-[2.9rem] xl:px-6 xl:text-base" onClick={() => dispatch(loginRequested('generic'))}>
               <CircleUserRound className="size-5 xl:size-[1.4rem]" aria-hidden />
               <span className="hidden min-[1100px]:inline">{t('login')}</span><span className="hidden lg:max-[1099px]:inline">{ta('loginCta')}</span>
             </Button>

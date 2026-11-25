@@ -100,7 +100,7 @@ export function Tabs<K extends string>({ items, value, onChange, variant = 'pill
             key={item.key} type="button" role="tab" aria-selected={active} onClick={() => onChange(item.key)}
             className={variant === 'underline'
               ? cn('h-12 border-b-4 text-sm font-bold sm:text-base', active ? 'border-primary text-primary-strong' : 'border-transparent text-ink')
-              : cn('rounded-full border font-semibold transition', size === 'sm' ? 'h-9 text-sm' : 'h-11 text-base', active ? 'border-primary bg-primary text-on-primary shadow-card' : 'border-border bg-surface text-ink hover:bg-surface-muted')}
+              : cn('rounded-full border font-semibold transition', size === 'sm' ? 'h-9 text-sm' : 'h-11 text-base', active ? 'btn-glossy text-on-primary' : 'border-border bg-surface text-ink hover:bg-surface-muted')}
           >{item.label}</button>
         );
       })}
@@ -129,7 +129,7 @@ export function IconButton({ label, className, children, type = 'button', ...res
 
 const tileTones = {
   soft: ['border-primary bg-primary-soft', 'border-border bg-surface'],
-  solid: ['border-primary bg-primary text-on-primary shadow-card', 'border-border bg-surface text-ink hover:bg-surface-muted'],
+  solid: ['btn-glossy text-on-primary', 'border-border bg-surface text-ink hover:bg-surface-muted'],
   outline: ['border-primary bg-surface', 'border-border bg-surface'],
 } as const;
 

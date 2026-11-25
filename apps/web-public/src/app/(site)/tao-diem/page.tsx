@@ -59,7 +59,7 @@ export default function CreatePlacePage() {
               <li key={text} className="flex items-center gap-2.5 text-base font-semibold text-ink"><Check className="size-5 shrink-0 rounded-full bg-primary p-0.5 text-on-primary" aria-hidden />{text}</li>
             ))}
           </ul>
-          <Button size="lg" className="w-full bg-linear-to-b from-primary to-primary-strong font-bold" onClick={start}>{t('heroCta')}</Button>
+          <Button size="lg" className="w-full btn-glossy font-bold" onClick={start}>{t('heroCta')}</Button>
           {isMember ? null : <p className="text-center text-xs text-ink-muted">{t('loginHint')}</p>}
         </div>
       </Card>

@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-on-primary hover:bg-primary-strong',
+        primary: 'btn-glossy text-on-primary hover:brightness-105',
         wish: 'bg-linear-to-b from-wish to-wish-strong text-on-wish shadow-cta hover:brightness-105',
         soft: 'bg-primary-soft text-primary-strong hover:brightness-95',
         outline: 'border border-border bg-surface text-ink hover:bg-surface-muted',
@@ -50,7 +50,7 @@ export function Card({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
 
 interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> { active?: boolean; tone?: 'primary' | 'story' | 'brag' | 'deal' | 'wish' }
 const chipActive: Record<NonNullable<ChipProps['tone']>, string> = {
-  primary: 'bg-primary text-on-primary border-primary',
+  primary: 'btn-glossy text-on-primary',
   story: 'bg-story text-on-primary border-story',
   brag: 'bg-brag text-on-primary border-brag',
   deal: 'bg-deal text-on-primary border-deal',

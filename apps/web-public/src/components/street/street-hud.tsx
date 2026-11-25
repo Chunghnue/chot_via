@@ -161,7 +161,7 @@ export function DailyPanel({ points }: { points: { x: number; z: number }[] }) {
           })}
         </ul>
       )}
-      <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full bg-linear-to-b from-primary to-primary-strong font-bold')}>{t('claim')}<ArrowRight className="size-4" aria-hidden /></Link>
+      <Link href="/su-kien" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full btn-glossy font-bold')}>{t('claim')}<ArrowRight className="size-4" aria-hidden /></Link>
     </Card>
   );
 }
@@ -176,7 +176,7 @@ function FeedMini() {
     <Card className="flex flex-col gap-2 p-3">
       <h2 className="font-display text-lg font-extrabold text-ink">{t('feed')}</h2>
       <div className="flex flex-wrap gap-1.5">
-        <Link href="/bang-tin" className={cn(chip, 'bg-primary text-on-primary hover:bg-primary-strong')}>{t('all')}</Link>
+        <Link href="/bang-tin" className={cn(chip, 'btn-glossy text-on-primary hover:brightness-105')}>{t('all')}</Link>
         <Link href="/bang-tin?type=story" className={chip}>{t('story')}</Link>
         <Link href="/bang-tin?type=brag" className={chip}>{t('brag')}</Link>
       </div>

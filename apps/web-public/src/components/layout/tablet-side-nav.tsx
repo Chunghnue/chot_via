@@ -22,7 +22,7 @@ export function TabletSideNav() {
   const link = (href: string, label: string, ic: React.ReactNode) => {
     const active = href === '/' && pathname === '/';
     return (
-      <Link key={label} href={href} aria-current={active ? 'page' : undefined} className={cn(item, active && 'bg-linear-to-b from-primary to-primary-strong text-on-primary shadow-card hover:bg-primary-strong')}>{ic}{label}</Link>
+      <Link key={label} href={href} aria-current={active ? 'page' : undefined} className={cn(item, active && 'btn-glossy text-on-primary shadow-card hover:brightness-105')}>{ic}{label}</Link>
     );
   };
   return (
@@ -50,7 +50,7 @@ export function TabletSideNav() {
           <h2 className="mt-1 font-display text-base font-extrabold leading-tight text-primary-strong">{t('createStoreTitleLine1')}<br />{t('createStoreTitleLine2')}</h2>
         </div>
         <div className="p-2">
-          <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full bg-linear-to-b from-primary to-primary-strong font-bold')}>{t('createStoreCta')}<ArrowRight className="size-4" aria-hidden /></Link>
+          <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full btn-glossy font-bold')}>{t('createStoreCta')}<ArrowRight className="size-4" aria-hidden /></Link>
         </div>
       </Card>
     </div>
