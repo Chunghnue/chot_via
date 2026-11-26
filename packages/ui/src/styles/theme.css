@@ -265,13 +265,15 @@
   border: 1.5px solid var(--color-btn-glossy-edge);
 }
 
-/* Ô chọn (select): bỏ mũi tên gốc của trình duyệt (dính sát mép phải), vẽ mũi tên trỏ xuống bằng hai nửa tam giác theo màu chữ phụ và lùi vào cách mép phải 1,25rem. */
+/* Ô chọn (select): bỏ mũi tên gốc của trình duyệt (dính sát mép phải), vẽ lại mũi tên chevron mỏng trỏ xuống bằng hai nét chéo theo màu chữ phụ, lùi vào cách mép phải 1rem. */
 @utility select-arrow {
   appearance: none;
   padding-inline-end: 3rem;
-  background-image: linear-gradient(45deg, transparent 50%, var(--color-ink-muted) 50%), linear-gradient(135deg, var(--color-ink-muted) 50%, transparent 50%);
-  background-position: calc(100% - 1.5rem) 50%, calc(100% - 1.125rem) 50%;
-  background-size: 0.4375rem 0.4375rem, 0.4375rem 0.4375rem;
+  background-image:
+    linear-gradient(to bottom left, transparent calc(50% - 0.07rem), var(--color-ink-muted) calc(50% - 0.07rem), var(--color-ink-muted) calc(50% + 0.07rem), transparent calc(50% + 0.07rem)),
+    linear-gradient(to bottom right, transparent calc(50% - 0.07rem), var(--color-ink-muted) calc(50% - 0.07rem), var(--color-ink-muted) calc(50% + 0.07rem), transparent calc(50% + 0.07rem));
+  background-position: calc(100% - 1.5rem) 50%, calc(100% - 1rem) 50%;
+  background-size: 0.5rem 0.5rem, 0.5rem 0.5rem;
   background-repeat: no-repeat;
 }
 @utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
