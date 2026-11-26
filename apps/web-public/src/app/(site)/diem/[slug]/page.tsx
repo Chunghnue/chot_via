@@ -97,7 +97,7 @@ export default function PlacePage() {
             <Heart className={cn('size-6', place.viewer?.liked ? 'fill-wish text-wish' : 'fill-wish/90 text-wish')} aria-hidden />{t('likeShort')} {compactCount(place.likeCount)}
           </button>
           <button type="button" className={fab} onClick={() => dispatch(placeSheetOpened({ placeId: place.id, step: 'wish' }))}>
-            <img src="/images/logo-co.webp" alt="" aria-hidden className="size-6 object-contain" draggable={false} />{t('wishShort')}
+            <img src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-6 object-contain" draggable={false} />{t('wishShort')}
           </button>
           <button type="button" className={fab} onClick={() => toggle('follow')} aria-pressed={place.viewer?.following === true}>
             {place.viewer?.following ? <UserCheck className="size-6 text-primary-strong" aria-hidden /> : <UserPlus className="size-6" aria-hidden />}{place.viewer?.following ? t('followingShort') : t('followShort')}

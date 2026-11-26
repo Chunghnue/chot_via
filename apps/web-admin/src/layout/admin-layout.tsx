@@ -1,5 +1,5 @@
 import { selectCurrentUser, useLogoutMutation } from '@chot-via/api-client';
-import { Avatar, Button, CloverMark, cn } from '@chot-via/ui';
+import { Avatar, Button, cn } from '@chot-via/ui';
 import {
   Award, BarChart3, CalendarDays, Flag, LayoutDashboard, ListChecks, LogOut, Menu, MessageSquare, MessagesSquare, ScrollText, Settings, Shapes,
   Shield, Sparkles, Store, Tags, Trophy, Users, X, FileText, Layers, KeyRound, Target, Flame,
@@ -81,7 +81,7 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
       <aside className="sticky top-0 hidden h-dvh flex-col border-r border-border bg-surface lg:flex">
-        <div className="flex items-center gap-2 border-b border-border p-4"><CloverMark className="size-9" /><span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span></div>
+        <div className="flex items-center gap-2 border-b border-border p-4"><img src="/logo-than-tai.webp" alt="" aria-hidden className="size-9 object-contain" draggable={false} /><span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span></div>
         {nav}
       </aside>
 

@@ -25,7 +25,7 @@ const USERS: DemoUser[] = [
   { name: 'Nhà Hàng Sông Xanh', role: 'owner', job: 'Chủ quán', province: 'Cần Thơ', avatar: '/images/av-04.webp' },
   { name: 'Đức Hoàng', role: 'sale', job: 'Sale', province: 'Hà Nội', avatar: '/images/av-07.webp' },
   { name: 'Tiến Nguyễn', role: 'owner', job: 'Chủ cửa hàng', province: 'Đà Nẵng', avatar: '/images/av-10.webp' },
-  { name: 'Chốt Vía', role: null, job: null, province: 'Hà Nội', avatar: '/images/logo-co.webp' },
+  { name: 'Chốt Vía', role: null, job: null, province: 'Hà Nội', avatar: '/images/logo-than-tai.webp' },
 ];
 
 const POSTS: DemoPost[] = [

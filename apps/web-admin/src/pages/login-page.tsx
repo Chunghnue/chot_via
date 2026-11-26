@@ -1,5 +1,5 @@
 import { parseApiError, useGetCatalogQuery, useLogoutMutation, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
-import { Button, Card, CloverMark, FieldError, Input, Label, OAuthButtons, toast, useCodeMessage } from '@chot-via/ui';
+import { Button, Card, FieldError, Input, Label, OAuthButtons, toast, useCodeMessage } from '@chot-via/ui';
 import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -46,7 +46,7 @@ export function LoginPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-linear-to-b from-primary-soft to-app p-4">
       <Card className="w-full max-w-md p-6 sm:p-8">
-        <div className="mb-4 flex items-center gap-3"><CloverMark className="size-12" /><div><h1 className="font-display text-2xl font-extrabold text-primary-strong">{t('title')}</h1><p className="text-sm text-ink-muted">{t('subtitle')}</p></div></div>
+        <div className="mb-4 flex items-center gap-3"><img src="/logo-than-tai.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} /><div><h1 className="font-display text-2xl font-extrabold text-primary-strong">{t('title')}</h1><p className="text-sm text-ink-muted">{t('subtitle')}</p></div></div>
         {phone === null ? (
           <form onSubmit={phoneForm.handleSubmit(send)} className="flex flex-col gap-3" noValidate>
             <div><Label htmlFor="phone">{t('phone')}</Label><Input id="phone" type="tel" inputMode="tel" autoComplete="tel" {...phoneForm.register('phone')} /></div>

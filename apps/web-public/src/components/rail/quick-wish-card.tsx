@@ -23,7 +23,7 @@ export function QuickWishCard() {
   return (
     <Card className="overflow-hidden p-4">
       <h2 className="mb-3 flex items-center gap-2 font-display text-xl font-extrabold text-ink">
-        <img src="/images/logo-co.webp" alt="" aria-hidden className="size-7 object-contain" draggable={false} />{t('quickTitle')}
+        <img src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-7 object-contain" draggable={false} />{t('quickTitle')}
       </h2>
       <ul className="grid grid-cols-4 gap-2">
         {SLOT_ORDER.map((code) => {
