@@ -7,7 +7,7 @@ import { SHARE_IMAGES } from '@/lib/post-share';
 const BACKEND = process.env['BACKEND_URL'] ?? 'http://localhost:3001';
 const fill = (text: string, params: Record<string, string>): string => text.replace(/\{(\w+)\}/g, (_, k: string) => params[k] ?? '');
 
-/** Thẻ xem trước riêng cho từng cửa hàng/văn phòng (ảnh "Cửa hàng 3D"; chưa có ảnh riêng cho văn phòng sale nên dùng chung). */
+/** Thẻ xem trước riêng cho từng cửa hàng/văn phòng (cửa hàng dùng ảnh "Cửa hàng 3D", văn phòng sale dùng ảnh 07 "Văn phòng sale"). */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   try {
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const brand = viMessages.common.appName;
     const title = fill(viMessages.wish.postShare.place, { name: place.title });
     const description = fill(viMessages.wish.postShare.placeDescription, { brand });
-    const image = SHARE_IMAGES.store;
+    const image = place.kind === 'sale_office' ? SHARE_IMAGES.salesOffice : SHARE_IMAGES.store;
     return {
       title, description,
       openGraph: { type: 'website', url: `/diem/${slug}`, title, description, siteName: brand, images: [{ url: image, width: 1200, height: 630, alt: title }] },

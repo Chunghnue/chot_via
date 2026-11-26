@@ -8,6 +8,7 @@ export const SHARE_IMAGES = {
   revenue: '/images/og/khoe-doanh-thu.jpg',
   deal: '/images/og/khoe-deal.jpg',
   store: '/images/og/cua-hang-3d.jpg',
+  salesOffice: '/images/og/share-07-van-phong-sale.jpg',
 } as const;
 export type ShareImageKey = keyof typeof SHARE_IMAGES;
 
