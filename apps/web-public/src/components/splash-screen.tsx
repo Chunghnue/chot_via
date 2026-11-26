@@ -3,11 +3,14 @@
 import { viMessages } from '@chot-via/shared/i18n';
 import { useEffect, useState } from 'react';
 
-/** Khóa lưu trong sessionStorage: đã hiện màn chờ trong phiên này (mỗi lần mở lại tab hoặc ứng dụng là một phiên mới). */
+/** Khóa lưu trong sessionStorage: màn chờ đã hiện trong phiên này (mỗi lần mở lại tab hoặc ứng dụng là một phiên mới). Ghi ngay từ lần hiện đầu tiên, không đợi màn chờ chạy xong. */
 export const SPLASH_KEY = 'cv_splash_seen';
 
-/** Đoạn chạy rất sớm trong <head>: phiên này đã xem màn chờ thì ẩn ngay từ khung hình đầu (bằng thuộc tính trên <html>, không xóa phần tử nên không lệch hydrate). */
-export const SPLASH_BOOT_SCRIPT = `try{if(sessionStorage.getItem('${SPLASH_KEY}'))document.documentElement.setAttribute('data-splash','off')}catch(e){}`;
+/**
+ * Đoạn chạy rất sớm trong <head>: phiên này đã có màn chờ rồi thì ẩn ngay từ khung hình đầu (bằng thuộc tính trên <html>, không xóa phần tử nên không lệch hydrate);
+ * chưa có thì đây là lần đầu: ghi dấu luôn để dù người dùng chuyển trang sớm rồi quay lại trang chủ (tải mới) cũng không hiện lại.
+ */
+export const SPLASH_BOOT_SCRIPT = `try{if(sessionStorage.getItem('${SPLASH_KEY}')){document.documentElement.setAttribute('data-splash','off')}else{sessionStorage.setItem('${SPLASH_KEY}','1')}}catch(e){}`;
 
 const MIN_MS = 700;
 const MAX_MS = 3500;
@@ -29,7 +32,6 @@ export function SplashScreen() {
       setFading(true);
       window.setTimeout(() => {
         root.setAttribute('data-splash', 'off');
-        try { sessionStorage.setItem(SPLASH_KEY, '1'); } catch { /* chế độ riêng tư: bỏ qua */ }
       }, 450);
     };
     const heroReady = (): boolean => {
