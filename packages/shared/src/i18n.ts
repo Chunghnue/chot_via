@@ -12,9 +12,10 @@ import codes from '../i18n/vi/codes.json';
 import validation from '../i18n/vi/validation.json';
 import admin from '../i18n/vi/admin.json';
 import shop from '../i18n/vi/shop.json';
+import legal from '../i18n/vi/legal.json';
 
 /** Toàn bộ chữ hiển thị nằm ở packages/shared/i18n/vi/*.json — không viết cứng chữ trong code giao diện. */
-export const viMessages = { common, nav, home, wish, place, street, post, auth, profile, community, codes, validation, admin, shop };
+export const viMessages = { common, nav, home, wish, place, street, post, auth, profile, community, codes, validation, admin, shop, legal };
 export type AppMessages = typeof viMessages;
 export const DEFAULT_LOCALE = 'vi';
 export const APP_TIME_ZONE = 'Asia/Ho_Chi_Minh';

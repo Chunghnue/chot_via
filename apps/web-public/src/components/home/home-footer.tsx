@@ -6,6 +6,7 @@ import { Link2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'use-intl';
+import { LegalLinks } from '@/components/legal/legal-links';
 import { useShareTo } from '@/components/common/share-buttons';
 import { siteUrl, type ShareTarget } from '@/lib/share';
 
@@ -115,6 +116,7 @@ export function HomeFooter() {
             {links.map((l) => <Link key={l.href + l.label} href={l.href} className="hover:text-primary-strong">{l.label}</Link>)}
           </nav>
         ) : null}
+        <LegalLinks />
       </div>
     </section>
     <footer className="mx-auto hidden w-full max-w-[1800px] rounded-t-[2.5rem] border-t border-primary/20 bg-linear-to-b from-surface via-primary-soft/70 to-primary-soft px-6 py-6 md:block 3xl:max-w-[2200px]">
@@ -138,6 +140,7 @@ export function HomeFooter() {
         ) : null}
         <InstallAndShare social={social} />
       </div>
+      <LegalLinks className="mt-4 border-t border-primary/20 pt-3" />
     </footer>
     </>
   );

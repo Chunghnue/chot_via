@@ -1,0 +1,800 @@
+{
+  "privacy": {
+    "seoTitle": "Chính sách quyền riêng tư | Xin Vía",
+    "seoDescription": "Tìm hiểu cách Xin Vía thu thập, sử dụng, bảo vệ thông tin cá nhân và quyền kiểm soát dữ liệu của người dùng.",
+    "title": "CHÍNH SÁCH QUYỀN RIÊNG TƯ – XIN VÍA",
+    "updated": "25/11/2026",
+    "intro": [],
+    "sections": [
+      {
+        "heading": "1. Giới thiệu",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía là nền tảng cộng đồng giải trí, chia sẻ cảm xúc, thành tích, câu chuyện kinh doanh và lan tỏa năng lượng tích cực dành cho người dùng."
+          },
+          {
+            "type": "p",
+            "text": "Chính sách này giải thích cách Xin Vía thu thập, sử dụng, lưu trữ, chia sẻ và bảo vệ thông tin cá nhân khi người dùng truy cập website, ứng dụng và các dịch vụ liên quan."
+          },
+          {
+            "type": "p",
+            "text": "Đơn vị vận hành dự kiến: Công ty Cổ phần Công nghệ AIBAT."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "2. Thông tin chúng tôi thu thập",
+        "blocks": [],
+        "subs": [
+          {
+            "heading": "2.1. Thông tin tài khoản",
+            "blocks": [
+              {
+                "type": "p",
+                "text": "Khi người dùng đăng ký hoặc đăng nhập, Xin Vía có thể thu thập:"
+              },
+              {
+                "type": "ul",
+                "items": [
+                  "Tên hiển thị.",
+                  "Ảnh đại diện.",
+                  "Địa chỉ email.",
+                  "Mã định danh tài khoản.",
+                  "Nghề nghiệp hoặc lĩnh vực kinh doanh do người dùng tự cung cấp."
+                ]
+              }
+            ]
+          },
+          {
+            "heading": "2.2. Thông tin từ Facebook Login",
+            "blocks": [
+              {
+                "type": "p",
+                "text": "Khi người dùng lựa chọn đăng nhập bằng Facebook, Xin Vía có thể nhận các thông tin được người dùng cấp quyền, bao gồm:"
+              },
+              {
+                "type": "ul",
+                "items": [
+                  "Mã định danh người dùng dành cho ứng dụng.",
+                  "Tên và ảnh đại diện công khai.",
+                  "Địa chỉ email, nếu được cấp quyền và có sẵn."
+                ]
+              },
+              {
+                "type": "p",
+                "text": "Xin Vía không thu thập mật khẩu Facebook của người dùng, không tự động đăng bài lên Facebook và không truy cập danh sách bạn bè hoặc tin nhắn riêng tư nếu không có quyền hợp lệ."
+              }
+            ]
+          },
+          {
+            "heading": "2.3. Nội dung do người dùng cung cấp",
+            "blocks": [
+              {
+                "type": "ul",
+                "items": [
+                  "Bài đăng, bình luận và cảm xúc.",
+                  "Nội dung kể khổ, khoe doanh thu, khoe deal và thành tích cá nhân.",
+                  "Hình ảnh, video và thông tin hồ sơ.",
+                  "Thông tin cửa hàng hoặc văn phòng 3D.",
+                  "Lịch sử tương tác gửi vía, nhận vía và các hoạt động cộng đồng."
+                ]
+              },
+              {
+                "type": "p",
+                "text": "Người dùng có quyền lựa chọn thông tin và số liệu kinh doanh muốn công khai."
+              }
+            ]
+          },
+          {
+            "heading": "2.4. Thông tin kỹ thuật",
+            "blocks": [
+              {
+                "type": "p",
+                "text": "Xin Vía có thể thu thập thông tin kỹ thuật cần thiết như địa chỉ IP, loại thiết bị, trình duyệt, hệ điều hành, cookie, mã định danh phiên truy cập và dữ liệu sử dụng dịch vụ."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "3. Mục đích sử dụng thông tin",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Thông tin được sử dụng nhằm:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Cung cấp và duy trì dịch vụ.",
+              "Xác thực tài khoản người dùng.",
+              "Cá nhân hóa trải nghiệm.",
+              "Lưu trữ bài đăng, thành tích và hoạt động cộng đồng.",
+              "Cải thiện hiệu năng và chất lượng sản phẩm.",
+              "Phát hiện spam, gian lận và hành vi vi phạm.",
+              "Hỗ trợ người dùng.",
+              "Thực hiện nghĩa vụ theo quy định pháp luật."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Thông tin chỉ được xử lý trên cơ sở pháp lý phù hợp và trong phạm vi cần thiết cho từng mục đích."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "4. Sử dụng dịch vụ không cần đăng nhập",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng có thể truy cập Xin Vía, khám phá phố 3D, nhận lời chúc và sử dụng một số tính năng giải trí mà không cần đăng ký tài khoản."
+          },
+          {
+            "type": "p",
+            "text": "Việc đăng nhập có thể được yêu cầu khi người dùng muốn đăng bài, lưu thành tích, quản lý hồ sơ hoặc tạo cửa hàng, văn phòng 3D cá nhân."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "5. Quyền riêng tư đối với nội dung kinh doanh",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía tôn trọng quyền riêng tư đối với doanh thu, giá trị hợp đồng và các thông tin kinh doanh của người dùng."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng có thể lựa chọn công khai hoặc ẩn số tiền khi chia sẻ thành tích, tùy theo chức năng được cung cấp."
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía không tự động công khai dữ liệu doanh thu từ hệ thống AIBAT hoặc các dịch vụ bên ngoài nếu chưa được người dùng cho phép."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "6. Cookie và công nghệ tương tự",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía có thể sử dụng cookie, local storage và các công nghệ tương tự để duy trì phiên truy cập, ghi nhớ tùy chọn, bảo mật và phân tích hiệu quả hoạt động."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng có thể quản lý cookie thông qua trình duyệt hoặc các công cụ quản lý quyền riêng tư được cung cấp."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "7. Chia sẻ thông tin",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía không bán thông tin cá nhân của người dùng."
+          },
+          {
+            "type": "p",
+            "text": "Thông tin có thể được chia sẻ trong phạm vi cần thiết với:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Nhà cung cấp hạ tầng và dịch vụ kỹ thuật.",
+              "Nhà cung cấp dịch vụ xác thực tài khoản.",
+              "Đơn vị xử lý thanh toán khi có giao dịch.",
+              "Đơn vị hỗ trợ bảo mật và vận hành.",
+              "Cơ quan có thẩm quyền theo quy định pháp luật."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Dữ liệu đăng nhập Facebook không được sử dụng hoặc chuyển giao trái với chính sách nền tảng Meta và quyền mà người dùng đã cấp."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "8. Bảo mật thông tin",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía áp dụng các biện pháp kỹ thuật và tổ chức phù hợp nhằm hạn chế truy cập trái phép, mất mát, thay đổi hoặc tiết lộ thông tin cá nhân."
+          },
+          {
+            "type": "p",
+            "text": "Không có hệ thống công nghệ nào có thể bảo đảm an toàn tuyệt đối. Người dùng cần chủ động bảo vệ tài khoản và thiết bị của mình."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "9. Lưu trữ dữ liệu",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Thông tin được lưu trữ trong thời gian cần thiết để cung cấp dịch vụ, thực hiện mục đích xử lý đã thông báo và đáp ứng các nghĩa vụ pháp lý."
+          },
+          {
+            "type": "p",
+            "text": "Khi không còn cần thiết, dữ liệu sẽ được xóa hoặc ẩn danh phù hợp với quy định pháp luật."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "10. Quyền của người dùng",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Theo quy định pháp luật áp dụng, người dùng có thể thực hiện các quyền liên quan đến dữ liệu cá nhân, bao gồm:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Được biết về việc xử lý dữ liệu.",
+              "Truy cập và chỉnh sửa thông tin.",
+              "Rút lại sự đồng ý.",
+              "Yêu cầu xóa dữ liệu.",
+              "Yêu cầu hạn chế hoặc phản đối việc xử lý.",
+              "Yêu cầu cung cấp dữ liệu cá nhân.",
+              "Khiếu nại và bảo vệ quyền lợi hợp pháp."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "11. Xóa tài khoản và dữ liệu",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng có thể yêu cầu xóa tài khoản và dữ liệu cá nhân theo hướng dẫn tại trang Xóa dữ liệu người dùng của Xin Vía."
+          },
+          {
+            "type": "p",
+            "text": "Việc xóa dữ liệu có thể chịu các giới hạn lưu trữ bắt buộc theo quy định pháp luật."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "12. Quyền riêng tư của trẻ em",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía dự kiến dành cho người dùng từ đủ 18 tuổi trở lên. Chúng tôi không chủ động thu thập thông tin cá nhân của người chưa đủ độ tuổi sử dụng dịch vụ."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "13. Thay đổi chính sách",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Chính sách quyền riêng tư có thể được cập nhật để phù hợp với hoạt động của nền tảng và quy định pháp luật. Những thay đổi quan trọng sẽ được thông báo phù hợp."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "14. Liên hệ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Đơn vị vận hành: Công ty Cổ phần Công nghệ AIBAT."
+          },
+          {
+            "type": "p",
+            "text": "Email: support@aibat.vn"
+          },
+          {
+            "type": "p",
+            "text": "Địa chỉ: Số 25 Ngõ 24, Hoàng Quốc Việt, Phường Nghĩa Đô, TP Hà Nội, Việt Nam"
+          },
+          {
+            "type": "p",
+            "text": "Website: xinvia.co"
+          }
+        ],
+        "subs": []
+      }
+    ]
+  },
+  "dataDeletion": {
+    "seoTitle": "Hướng dẫn xóa tài khoản và dữ liệu | Xin Vía",
+    "seoDescription": "Hướng dẫn yêu cầu xóa tài khoản, dữ liệu cá nhân và hủy liên kết Facebook với ứng dụng Xin Vía.",
+    "title": "HƯỚNG DẪN XÓA TÀI KHOẢN VÀ DỮ LIỆU NGƯỜI DÙNG",
+    "updated": null,
+    "intro": [
+      {
+        "type": "p",
+        "text": "Xin Vía tôn trọng quyền riêng tư và quyền kiểm soát dữ liệu cá nhân của người dùng."
+      },
+      {
+        "type": "p",
+        "text": "Bạn có thể yêu cầu xóa tài khoản và dữ liệu cá nhân đã cung cấp cho Xin Vía, bao gồm dữ liệu được thu thập thông qua Facebook Login."
+      }
+    ],
+    "sections": [
+      {
+        "heading": "1. Yêu cầu xóa trực tiếp",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Nếu chức năng xóa tài khoản đã được cung cấp trên ứng dụng, bạn có thể thực hiện theo các bước:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Đăng nhập tài khoản Xin Vía.",
+              "Truy cập trang Cá nhân.",
+              "Chọn Cài đặt tài khoản.",
+              "Chọn Quyền riêng tư và dữ liệu.",
+              "Chọn Xóa tài khoản.",
+              "Xác nhận yêu cầu xóa."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "2. Yêu cầu xóa qua email",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Bạn cũng có thể gửi yêu cầu tới:"
+          },
+          {
+            "type": "p",
+            "text": "Email: support@aibat.vn"
+          },
+          {
+            "type": "p",
+            "text": "Tiêu đề: Yêu cầu xóa dữ liệu – Xin Vía"
+          },
+          {
+            "type": "p",
+            "text": "Nội dung email cần cung cấp:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Tên tài khoản Xin Vía.",
+              "Email liên kết với tài khoản.",
+              "Phương thức đăng nhập đã sử dụng.",
+              "Phạm vi dữ liệu muốn xóa."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía có thể yêu cầu xác minh quyền sở hữu tài khoản trước khi xử lý."
+          },
+          {
+            "type": "p",
+            "text": "Vui lòng không cung cấp mật khẩu Facebook hoặc mật khẩu tài khoản trong email."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "3. Hủy liên kết Facebook",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Để ngừng cấp quyền truy cập thông tin Facebook cho Xin Vía:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Đăng nhập Facebook.",
+              "Truy cập Cài đặt và quyền riêng tư.",
+              "Chọn Cài đặt.",
+              "Tìm mục Ứng dụng và trang web.",
+              "Chọn ứng dụng Xin Vía.",
+              "Chọn Gỡ và xác nhận."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Việc gỡ ứng dụng khỏi Facebook không nhất thiết xóa toàn bộ dữ liệu đã được lưu trên hệ thống Xin Vía. Bạn cần gửi thêm yêu cầu xóa dữ liệu nếu muốn xóa tài khoản và thông tin đã lưu."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "4. Dữ liệu được xử lý khi xóa tài khoản",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Tùy thuộc phạm vi yêu cầu và quy định pháp luật, dữ liệu được xóa hoặc ẩn danh có thể bao gồm:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Thông tin hồ sơ cá nhân.",
+              "Mã định danh tài khoản Facebook.",
+              "Tên, email và ảnh đại diện.",
+              "Bài đăng, bình luận và nội dung cá nhân.",
+              "Lịch sử gửi vía và nhận vía.",
+              "Thành tích và điểm cộng đồng.",
+              "Cửa hàng hoặc văn phòng 3D cá nhân.",
+              "Thông tin xác thực và liên kết đăng nhập."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "5. Thời gian xử lý",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía sẽ xác nhận và xử lý yêu cầu trong thời hạn phù hợp với quy định pháp luật áp dụng."
+          },
+          {
+            "type": "p",
+            "text": "Một số thông tin có thể cần được lưu trữ trong thời gian bắt buộc để thực hiện nghĩa vụ pháp lý, giải quyết tranh chấp hoặc bảo đảm an toàn hệ thống."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "6. Lưu ý",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Sau khi tài khoản và dữ liệu được xóa hoàn toàn, người dùng có thể không khôi phục được thành tích, vật phẩm ảo và không gian 3D đã tạo."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "7. Liên hệ hỗ trợ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Đơn vị vận hành: Công ty Cổ phần Công nghệ AIBAT."
+          },
+          {
+            "type": "p",
+            "text": "Email: support@aibat.vn"
+          },
+          {
+            "type": "p",
+            "text": "Website: xinvia.co"
+          }
+        ],
+        "subs": []
+      }
+    ]
+  },
+  "terms": {
+    "seoTitle": "Điều khoản sử dụng dịch vụ | Xin Vía",
+    "seoDescription": "Quy định sử dụng nền tảng cộng đồng Xin Vía, quyền và trách nhiệm của người dùng khi tham gia các hoạt động giải trí và chia sẻ.",
+    "title": "ĐIỀU KHOẢN SỬ DỤNG DỊCH VỤ – XIN VÍA",
+    "updated": "25/11/2026",
+    "intro": [],
+    "sections": [
+      {
+        "heading": "1. Giới thiệu dịch vụ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía là nền tảng cộng đồng giải trí, kết nối và lan tỏa năng lượng tích cực thông qua các hoạt động xin vía, gửi vía, kể khổ, khoe thành tích và khám phá không gian 3D."
+          },
+          {
+            "type": "p",
+            "text": "Đơn vị vận hành dự kiến: Công ty Cổ phần Công nghệ AIBAT."
+          },
+          {
+            "type": "p",
+            "text": "Khi sử dụng dịch vụ, người dùng cần tuân thủ các điều khoản này và quy định pháp luật hiện hành."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "2. Bản chất của dịch vụ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Các hoạt động xin vía, nhận vía, gửi vía, lời chúc Thần Tài, vật phẩm may mắn và các hiệu ứng trên Xin Vía chỉ mang tính biểu tượng, giải trí và khích lệ tinh thần."
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía không cung cấp dịch vụ bói toán, tư vấn tâm linh, đầu tư hoặc bảo đảm kết quả kinh doanh."
+          },
+          {
+            "type": "p",
+            "text": "Việc sử dụng Xin Vía không bảo đảm người dùng sẽ tăng doanh thu, chốt được hợp đồng, đạt KPI hoặc nhận được lợi ích tài chính."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "3. Điều kiện sử dụng",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng cần:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Đáp ứng điều kiện độ tuổi sử dụng dịch vụ.",
+              "Cung cấp thông tin phù hợp khi đăng ký.",
+              "Bảo mật tài khoản của mình.",
+              "Tôn trọng quyền và lợi ích hợp pháp của cộng đồng.",
+              "Không sử dụng dịch vụ cho mục đích trái pháp luật."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "4. Tài khoản người dùng",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng có thể sử dụng một số chức năng mà không cần đăng nhập."
+          },
+          {
+            "type": "p",
+            "text": "Việc đăng nhập được yêu cầu đối với những chức năng cần xác thực, bao gồm đăng bài, lưu thành tích, quản lý hồ sơ và tạo không gian 3D cá nhân."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng chịu trách nhiệm đối với hoạt động do mình thực hiện trên tài khoản và cần thông báo khi phát hiện truy cập trái phép."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "5. Quy tắc cộng đồng",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía khuyến khích sự hài hước, chia sẻ chân thành, động viên và tôn trọng lẫn nhau."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng không được:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Đăng nội dung lừa đảo hoặc thông tin sai lệch nhằm trục lợi.",
+              "Xúc phạm, quấy rối hoặc bắt nạt người khác.",
+              "Đăng thông tin cá nhân của người khác khi chưa được phép.",
+              "Mạo danh cá nhân, tổ chức hoặc thương hiệu.",
+              "Đăng nội dung vi phạm quyền sở hữu trí tuệ.",
+              "Quảng cáo spam hoặc phát tán mã độc.",
+              "Tổ chức đánh bạc, cá cược hoặc huy động vốn trái phép.",
+              "Lợi dụng hoạt động xin vía để thực hiện hành vi mê tín dị đoan trái pháp luật hoặc lừa đảo.",
+              "Thao túng tương tác, điểm thưởng hoặc bảng xếp hạng."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "6. Nội dung do người dùng tạo",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng chịu trách nhiệm đối với nội dung mình đăng tải, bao gồm số liệu doanh thu, giá trị hợp đồng, hình ảnh và thông tin kinh doanh."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng giữ quyền sở hữu đối với nội dung của mình."
+          },
+          {
+            "type": "p",
+            "text": "Khi đăng tải nội dung, người dùng cấp cho Xin Vía quyền sử dụng không độc quyền trong phạm vi cần thiết để lưu trữ, hiển thị, phân phối và vận hành dịch vụ theo tùy chọn quyền riêng tư của người dùng."
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía không mặc nhiên xác nhận tính chính xác của các số liệu doanh thu hoặc thành tích được cộng đồng chia sẻ."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "7. Điểm thưởng và vật phẩm ảo",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía có thể cung cấp điểm cộng đồng, danh hiệu, vật phẩm trang trí, cửa hàng 3D và các tiện ích giải trí khác."
+          },
+          {
+            "type": "p",
+            "text": "Trừ khi có quy định hợp pháp và công bố riêng, các vật phẩm này:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Không phải tiền tệ hoặc tài sản đầu tư.",
+              "Không có chức năng thanh toán bên ngoài nền tảng.",
+              "Không được quy đổi thành tiền mặt.",
+              "Không được sử dụng để đặt cược hoặc đánh bạc.",
+              "Không bảo đảm mang lại may mắn hoặc lợi ích tài chính."
+            ]
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "8. Dịch vụ miễn phí và trả phí",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Các tính năng xin vía cơ bản được định hướng cung cấp miễn phí."
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía có thể cung cấp các gói thành viên, vật phẩm trang trí, tiện ích cá nhân hóa hoặc dịch vụ bổ sung có thu phí."
+          },
+          {
+            "type": "p",
+            "text": "Giá, thời hạn sử dụng, điều kiện gia hạn, hủy dịch vụ và hoàn tiền sẽ được công bố trước khi người dùng thực hiện giao dịch."
+          },
+          {
+            "type": "p",
+            "text": "Việc thanh toán không làm tăng khả năng nhận may mắn hoặc bảo đảm kết quả kinh doanh."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "9. Quyền sở hữu trí tuệ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Tên thương hiệu Xin Vía, logo, linh vật, thiết kế giao diện, mã nguồn, mô hình 3D và các tài nguyên do đơn vị vận hành sở hữu hoặc được cấp phép sử dụng được bảo vệ theo quy định pháp luật."
+          },
+          {
+            "type": "p",
+            "text": "Người dùng không được sao chép, khai thác thương mại hoặc phân phối trái phép các tài nguyên thuộc quyền sở hữu của Xin Vía."
+          },
+          {
+            "type": "p",
+            "text": "Điều khoản này không hạn chế các quyền sử dụng hợp pháp của người dùng theo quy định pháp luật."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "10. Kiểm duyệt và xử lý vi phạm",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía có thể áp dụng các biện pháp phù hợp đối với nội dung hoặc tài khoản vi phạm, bao gồm:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Cảnh báo người dùng.",
+              "Hạn chế hiển thị nội dung.",
+              "Gỡ bỏ nội dung vi phạm.",
+              "Tạm khóa hoặc chấm dứt tài khoản.",
+              "Phối hợp với cơ quan có thẩm quyền khi cần thiết."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Người dùng có thể liên hệ bộ phận hỗ trợ để khiếu nại về quyết định xử lý."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "11. Dịch vụ của bên thứ ba",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía có thể tích hợp dịch vụ đăng nhập Facebook, Google, thanh toán và các dịch vụ bên thứ ba khác."
+          },
+          {
+            "type": "p",
+            "text": "Việc sử dụng các dịch vụ này có thể chịu sự điều chỉnh của điều khoản và chính sách quyền riêng tư tương ứng."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "12. Giới hạn trách nhiệm",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía nỗ lực duy trì dịch vụ ổn định và an toàn nhưng không bảo đảm dịch vụ luôn hoạt động liên tục hoặc không có lỗi."
+          },
+          {
+            "type": "p",
+            "text": "Xin Vía không chịu trách nhiệm thay người dùng đối với các quyết định kinh doanh, đầu tư hoặc giao dịch phát sinh từ nội dung cộng đồng, trong phạm vi pháp luật cho phép."
+          },
+          {
+            "type": "p",
+            "text": "Không điều khoản nào loại trừ trách nhiệm bắt buộc của đơn vị vận hành theo pháp luật."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "13. Chấm dứt sử dụng dịch vụ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Người dùng có thể ngừng sử dụng hoặc yêu cầu xóa tài khoản bất kỳ lúc nào."
+          },
+          {
+            "type": "p",
+            "text": "Việc xử lý dữ liệu sau khi chấm dứt sử dụng được thực hiện theo Chính sách quyền riêng tư và quy định pháp luật."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "14. Thay đổi điều khoản",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Xin Vía có thể cập nhật điều khoản để phù hợp với sự phát triển của dịch vụ và quy định pháp luật."
+          },
+          {
+            "type": "p",
+            "text": "Những thay đổi quan trọng sẽ được thông báo phù hợp."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "15. Pháp luật áp dụng",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Điều khoản này được điều chỉnh theo pháp luật Việt Nam. Các tranh chấp được ưu tiên giải quyết thông qua thương lượng và các phương thức giải quyết tranh chấp hợp pháp."
+          }
+        ],
+        "subs": []
+      },
+      {
+        "heading": "16. Thông tin liên hệ",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Đơn vị vận hành: Công ty Cổ phần Công nghệ AIBAT."
+          },
+          {
+            "type": "p",
+            "text": "Email: support@aibat.vn"
+          },
+          {
+            "type": "p",
+            "text": "Địa chỉ: Số 25 Ngõ 24, Hoàng Quốc Việt, Phường Nghĩa Đô, TP Hà Nội, Việt Nam"
+          },
+          {
+            "type": "p",
+            "text": "Website: xinvia.co"
+          }
+        ],
+        "subs": []
+      }
+    ]
+  },
+  "footer": {
+    "privacy": "Chính sách quyền riêng tư",
+    "terms": "Điều khoản dịch vụ",
+    "dataDeletion": "Xóa dữ liệu người dùng",
+    "nav": "Chính sách và điều khoản",
+    "powered": "Powered by AIBAT",
+    "copyright": "© 2026 Xin Vía",
+    "updatedLabel": "Ngày cập nhật"
+  }
+}
