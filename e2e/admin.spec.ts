@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
+import { headers } from './support';
 
 test.describe('web admin', () => {
   test.skip(({ viewport }) => (viewport?.width ?? 0) < 1400, 'Chỉ chạy một lần ở desktop (OTP admin giới hạn 3 lần/15 phút).');
 
   test('đăng nhập admin, tạo bài mẫu và bật/tắt công tắc dữ liệu mẫu hiển thị trên app', async ({ page, request, context }) => {
     await page.goto('http://localhost:5273/', { waitUntil: 'networkidle' });
-    const H = { 'x-requested-with': 'chotvia', 'content-type': 'application/json' };
+    const H = headers();
     expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/request', { headers: H, data: { phone: '0900000000' } })).status()).toBe(201);
     expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/verify', { headers: H, data: { phone: '0900000000', code: '123456' } })).status()).toBe(201);
     await page.goto('http://localhost:5273/demo/posts', { waitUntil: 'networkidle' });

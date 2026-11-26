@@ -22,6 +22,9 @@ export const newPhone = (): string => `09${String(phoneSeq++).padStart(8, '0')}`
 
 /** Đăng nhập qua giao diện: nhập số, gửi OTP, nhập mã dev cố định. */
 export async function loginViaUi(page: Page, phone: string = newPhone()): Promise<void> {
+  // Backend giới hạn 10 lần gửi OTP mỗi giờ cho mỗi IP; mỗi lần đăng nhập giả lập một IP khác để cả bộ E2E không chạm trần.
+  const ip = headers()['x-forwarded-for'] ?? '10.77.1.1';
+  await page.route('**/api/v1/auth/otp/**', (route) => route.continue({ headers: { ...route.request().headers(), 'x-forwarded-for': ip } }));
   await page.getByPlaceholder('Nhập số điện thoại của bạn').fill(phone);
   await page.getByRole('button', { name: 'Gửi mã OTP' }).click();
   await page.getByPlaceholder('Mã 6 số').fill('123456');
