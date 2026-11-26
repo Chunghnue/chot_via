@@ -1,0 +1,23 @@
+/** Bảng biểu tượng cảm xúc theo nhóm cho ô soạn bài (giống các mạng xã hội): chọn nhóm rồi bấm để chèn vào chỗ con trỏ. */
+export const EMOJI_GROUPS = {
+  smile: ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '😊', '😇', '🥰', '😍', '🤩', '😘', '😋', '😜', '🤪', '😎', '🤗', '🤔', '🫡', '😏', '😌', '😴', '🥱', '😔', '😢', '😭', '😤', '😠', '😡', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤯', '🥳', '🤑', '🙄', '😬', '🫠', '😮‍💨'],
+  hand: ['👍', '👎', '👏', '🙌', '🙏', '🤝', '💪', '🫶', '👌', '✌️', '🤞', '🤟', '🤙', '👋', '🫰', '☝️', '👆', '👇', '👉', '👈', '✍️', '🖐️', '✋', '🤲', '🫵'],
+  work: ['💰', '💵', '💸', '🪙', '📈', '📉', '📊', '🎯', '🏆', '🥇', '🎉', '🎊', '🔥', '⚡', '💼', '📞', '📱', '💻', '🛒', '🛍️', '🏪', '☕', '📦', '🧾', '✅', '❌', '⏰', '📅', '🚀', '💡', '🤝', '📝', '🧧', '🏮'],
+  heart: ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💖', '💗', '💓', '💞', '💕', '💘', '💝', '💔', '❣️', '😻', '💋'],
+  food: ['☕', '🍵', '🧋', '🍺', '🍻', '🥂', '🍷', '🍜', '🍲', '🍚', '🍞', '🥐', '🍰', '🎂', '🍩', '🍪', '🍫', '🍎', '🍊', '🍉', '🍓', '🥑', '🍕', '🍔', '🍟', '🌮'],
+  nature: ['🌸', '🌺', '🌼', '🌻', '🌹', '🌷', '🍀', '🌿', '🌳', '🌴', '🌵', '🍃', '🍂', '☀️', '🌤️', '⛅', '🌧️', '⛈️', '🌈', '⭐', '🌟', '✨', '🌙', '🐱', '🐶', '🐰', '🐻', '🦋'],
+  symbol: ['✨', '🎁', '🔔', '📣', '📢', '💯', '🆕', '🆗', '🔝', '❗', '❓', '‼️', '⚠️', '➕', '➖', '✔️', '➡️', '⬆️', '⬇️', '🔴', '🟢', '🟡', '🔵', '🏷️', '🎵', '🎶', '🪄', '🧿'],
+} as const;
+
+export type EmojiGroup = keyof typeof EMOJI_GROUPS;
+export const EMOJI_GROUP_ICONS: Record<EmojiGroup, string> = { smile: '😀', hand: '👍', work: '💰', heart: '❤️', food: '☕', nature: '🌸', symbol: '✨' };
+
+const RECENT_KEY = 'cv_recent_emoji';
+export function readRecentEmoji(): string[] {
+  try { const v: unknown = JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]'); return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string').slice(0, 16) : []; } catch { return []; }
+}
+export function pushRecentEmoji(emoji: string): string[] {
+  const next = [emoji, ...readRecentEmoji().filter((e) => e !== emoji)].slice(0, 16);
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(next)); } catch { /* chế độ riêng tư: bỏ qua */ }
+  return next;
+}

@@ -80,7 +80,19 @@
     "posted": "Đã đăng bài lên bảng tin!",
     "privacyNote": "Số tiền mặc định được ẩn. Không đăng thông tin khách hàng, số điện thoại hay hợp đồng mật.",
     "composeTitle": "Soạn bài đăng",
-    "emoji": "Biểu tượng cảm xúc"
+    "emoji": "Biểu tượng cảm xúc",
+    "emojiCats": {
+      "recent": "Dùng gần đây",
+      "smile": "Mặt cười",
+      "hand": "Cử chỉ",
+      "work": "Công việc",
+      "heart": "Trái tim",
+      "food": "Ăn uống",
+      "nature": "Thiên nhiên",
+      "symbol": "Biểu tượng"
+    },
+    "emojiOpen": "Mở bảng biểu tượng cảm xúc",
+    "emojiClose": "Đóng bảng biểu tượng cảm xúc"
   },
   "metrics": {
     "revenue": "Doanh thu hôm nay",

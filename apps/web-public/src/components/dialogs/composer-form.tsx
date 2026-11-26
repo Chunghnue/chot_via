@@ -5,13 +5,14 @@ import {
   CreatePostBodySchema, METRIC_TYPES, MONEY_METRICS, OWNER_METRICS, RANGE_METRICS, SALE_METRICS, STORY_STICKERS, DISPLAY_MODES, MEMBER_ROLES,
   type AppSettings, type MetricType, type PublicSettings,
 } from '@chot-via/shared';
-import { AppIcon, Button, Chip, FieldError, Input, Label, Switch, Textarea, ToggleTile, cn, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
+import { AppIcon, Button, Chip, FieldError, Input, Label, Switch, Textarea, cn, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImagePlus, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'use-intl';
 import { z } from 'zod';
+import { EmojiPicker } from '@/components/common/emoji-picker';
 import { PostContent, type PostContentData } from '@/components/post/post-content';
 import { composerClosed, draftChanged, firstMetric, stepChanged, COMPOSER_KINDS, type ComposerDraft } from '@/features/composer/composerSlice';
 import { loginRequested } from '@/features/ui/uiSlice';
@@ -99,6 +100,19 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
   const rangeAllowed = RANGE_METRICS.includes(values.metricType);
   const isMoney = MONEY_METRICS.includes(values.metricType);
   const bodyError = form.formState.errors.body?.message;
+  const bodyField = form.register('body');
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  /** Chèn biểu tượng vào chỗ con trỏ trong ô nội dung (hoặc cuối bài nếu chưa chọn chỗ), rồi đặt con trỏ ngay sau biểu tượng. */
+  const insertEmoji = (emoji: string): void => {
+    const el = bodyRef.current;
+    const current = form.getValues('body');
+    const start = el?.selectionStart ?? current.length;
+    const end = el?.selectionEnd ?? current.length;
+    form.setValue('body', current.slice(0, start) + emoji + current.slice(end), { shouldDirty: true, shouldValidate: bodyError !== undefined });
+    const caret = start + emoji.length;
+    window.requestAnimationFrame(() => { el?.focus(); el?.setSelectionRange(caret, caret); });
+  };
 
   const addTag = (): void => {
     const tag = tagInput.replace(/^#+/, '').replace(/\s+/g, '').toLowerCase();
@@ -226,23 +240,17 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
       ) : null}
 
       <div>
-        <Textarea aria-label={placeholder} placeholder={placeholder} aria-invalid={!!bodyError} className="min-h-36" {...form.register('body')} />
+        <Textarea aria-label={placeholder} placeholder={placeholder} aria-invalid={!!bodyError} className="min-h-36" {...bodyField} ref={(el) => { bodyField.ref(el); bodyRef.current = el; }} />
+        <div className="mt-1.5 flex items-center gap-2">
+          <button type="button" aria-label={emojiOpen ? t('composer.emojiClose') : t('composer.emojiOpen')} aria-expanded={emojiOpen} onClick={() => setEmojiOpen((v) => !v)}
+            className={cn('inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-sm font-bold text-ink transition hover:bg-surface-muted', emojiOpen && 'bg-primary-soft ring-1 ring-primary')}><span aria-hidden className="text-xl leading-none">😊</span>{t('composer.emoji')}</button>
+        </div>
+        {emojiOpen ? <EmojiPicker className="mt-1.5" onPick={insertEmoji} /> : null}
         <div className="mt-1 flex items-start justify-between gap-2">
           <FieldError message={bodyError ? validation(bodyError, { min: 1, max }) : undefined} />
           <p className={cn('ml-auto shrink-0 text-xs', values.body.length > max ? 'text-danger' : 'text-ink-subtle')}>{tc('counter', { count: values.body.length, max })}</p>
         </div>
       </div>
-
-      {values.kind === 'story' ? (
-        <div>
-          <Label>{t('composer.sticker')}</Label>
-          <div className="flex flex-wrap gap-1.5">
-            {STORY_STICKERS.map((s) => (
-              <ToggleTile key={s} active={values.sticker === s} onClick={() => form.setValue('sticker', values.sticker === s ? null : s)} className="flex size-11 items-center justify-center text-2xl">{s}</ToggleTile>
-            ))}
-          </div>
-        </div>
-      ) : null}
 
       <div>
         <Label>{t('composer.photos')}</Label>
