@@ -42,7 +42,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 
 export const TAG_TYPES = [
   'Catalog', 'Home', 'Places', 'Place', 'Posts', 'Post', 'Comments', 'Me', 'Stats', 'Leaderboard', 'Missions', 'Notifications',
-  'Reports', 'AdminCatalog', 'AdminList', 'Settings',
+  'Reports', 'AdminCatalog', 'AdminList', 'Settings', 'Shop',
 ] as const;
 
 export const baseApi = createApi({

@@ -32,6 +32,8 @@ import { PostsController } from './modules/posts/posts.controller';
 import { CommentsService } from './modules/posts/comments.service';
 import { PostInteractionsService } from './modules/posts/post-interactions.service';
 import { PostsService } from './modules/posts/posts.service';
+import { ShopController } from './modules/shop/shop.controller';
+import { ShopService } from './modules/shop/shop.service';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
 import { WishesController } from './modules/wishes/wishes.controller';
@@ -40,7 +42,7 @@ import { WishesService } from './modules/wishes/wishes.service';
 @Module({
   controllers: [
     AuthController, CatalogController, WishesController, PlacesController, PostsController, UsersController,
-    ReportsController, MediaController, GamificationController, AdminController,
+    ReportsController, MediaController, GamificationController, AdminController, ShopController,
   ],
   providers: [
     { provide: DB, useFactory: () => createDb().db },
@@ -48,7 +50,7 @@ import { WishesService } from './modules/wishes/wishes.service';
     { provide: APP_GUARD, useClass: AccessGuard },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     SettingsService, TokenService, RateLimitService, TurnstileService, LevelsService, PointsService, KeywordsService,
-    NotificationsService, ReportsService, WishesService, PlacesService, PostsService, PostInteractionsService, CommentsService, UsersService, AuthService, OAuthService,
+    NotificationsService, ReportsService, WishesService, PlacesService, PostsService, PostInteractionsService, CommentsService, ShopService, UsersService, AuthService, OAuthService,
     StorageService, HomeLayoutService, AdminService, AdminCatalogService, AdminDemoService,
   ],
 })

@@ -12,6 +12,7 @@ import { ReportsPage } from './pages/reports-page';
 import { ResourceRoute } from './pages/resource-route';
 import { SettingsPage } from './pages/settings-page';
 import { HomeConfigPage } from './pages/home-config-page';
+import { ShopPage } from './pages/shop-page';
 import { DemoPostsPage, DemoUsersPage } from './pages/demo-pages';
 import { UsersPage } from './pages/users-page';
 import { useAppSelector } from './store';
@@ -51,6 +52,7 @@ export function App() {
             <Route path="demo/posts" element={<DemoPostsPage />} />
             <Route path="catalog/:resource" element={<ResourceRoute />} />
             <Route path="home-config" element={<HomeConfigPage />} />
+            <Route path="shop" element={<ShopPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="audit" element={<AuditPage />} />
           </>

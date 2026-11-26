@@ -8,3 +8,4 @@ export * from './social';
 export * from './gamification';
 export * from './admin';
 export * from './home';
+export * from './shop';

@@ -154,3 +154,9 @@ Bổ sung cùng ngày (chủ dự án chốt 3 điểm):
 - Chặn bằng máy: `scripts/check-file-size.mjs` chạy trong `pnpm typecheck`, lệnh riêng `pnpm check:size` và hook `pre-commit` (`.githooks/`, bật bởi `pnpm install` qua script `prepare`).
 - File cũ đã vượt trước ngày chốt được ghi trong `scripts/file-size-allowlist.json` với trần = số dòng lúc đó (`city-street.tsx` 676, `city-ritual.tsx` 575, `schema.ts` 450, `glb-street.tsx` 382): không được dài thêm; tách xuống dưới 300 dòng thì xóa khỏi danh sách. Không thêm file mới vào danh sách.
 - Lý do ghi lại: trước đó quy tắc chỉ được nói miệng nên không có gì chặn, nhiều file đã vượt (có file do các lần sửa gần đây làm dài thêm).
+
+## Bảng giá và vật phẩm do admin quản lý (26/11/2026, phương án A)
+
+- Nội dung hai trang công khai `/bang-gia` (gói thành viên, bảng quyền lợi, nguồn thu tham khảo) và `/vat-pham` (vật phẩm 3D, giá, ảnh) không còn đặt cứng trong file chữ; admin sửa ở menu **Nội dung & cấu hình → Gói & vật phẩm** (`/shop`).
+- **Không đổi cấu trúc database:** dữ liệu lưu thành một dòng JSON trong bảng `app_settings` (khóa `shop`), kiểm tra bằng `ShopCatalogSchema` (`packages/shared/src/schemas/shop.ts`). Chưa lưu thì dùng nội dung mặc định `DEFAULT_SHOP_CATALOG` theo tài liệu chiến lược. API: `GET /shop` (công khai, ẩn vật phẩm đã tắt), `GET` và `PUT /admin/shop` (chỉ admin, có ghi nhật ký thao tác).
+- Chỉ hiển thị nội dung, chưa có thanh toán; nút mua vẫn "Sắp ra mắt". Khi làm thanh toán và mua hàng thật sẽ chuyển sang bảng riêng (phương án B, cần chủ dự án duyệt đổi database).

@@ -44,6 +44,7 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
       { to: '/catalog/wish-types', label: t('nav.wishTypes'), icon: <Sparkles className={i} />, adminOnly: true },
       { to: '/catalog/wish-stickers', label: t('nav.wishStickers'), icon: <Shapes className={i} />, adminOnly: true },
       { to: '/catalog/wish-templates', label: t('nav.wishTemplates'), icon: <MessagesSquare className={i} />, adminOnly: true },
+      { to: '/shop', label: t('nav.shop'), icon: <Tags className={i} />, adminOnly: true },
     ] },
     { title: t('nav.groupGamification'), items: [
       { to: '/catalog/levels', label: t('nav.levels'), icon: <BarChart3 className={i} />, adminOnly: true },

@@ -7,3 +7,4 @@ export * from './endpoints/places';
 export * from './endpoints/posts';
 export * from './endpoints/community';
 export * from './endpoints/admin';
+export * from './endpoints/shop';

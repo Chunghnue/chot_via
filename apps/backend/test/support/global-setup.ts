@@ -27,7 +27,17 @@ function run(args: string): void {
 let server: ChildProcess | null = null;
 
 /** Tạo lại database test sạch → migration → seed (danh mục + dữ liệu mẫu) → bật API thật ở cổng riêng. Không đụng dữ liệu dev. */
+const isWindows = process.platform === 'win32';
+
+/** Tắt server test còn sót từ lần chạy trước (nếu không, bộ test sẽ dùng lại bản cũ và bỏ qua mã mới). */
+function freePort(): void {
+  if (isWindows) return;
+  const pids = spawnSync(`lsof -ti :${API_PORT}`, { shell: true, encoding: 'utf8' }).stdout.split('\n').map((x) => x.trim()).filter(Boolean);
+  for (const pid of pids) spawnSync(`kill -9 ${pid}`, { shell: true, stdio: 'ignore' });
+}
+
 export async function setup(): Promise<void> {
+  freePort();
   const admin = postgres(ADMIN_URL, { max: 1 });
   await admin.unsafe(`DROP DATABASE IF EXISTS ${TEST_DB} WITH (FORCE)`);
   await admin.unsafe(`CREATE DATABASE ${TEST_DB} ENCODING 'UTF8' LC_COLLATE 'C' LC_CTYPE 'C' TEMPLATE template0`);
@@ -36,7 +46,7 @@ export async function setup(): Promise<void> {
   run('src/database/seed.ts');
   run('src/database/seed-demo-content.ts');
   run('src/database/seed-home.ts');
-  server = spawn('npx tsx src/main.ts', { cwd: root, env: testEnv(), shell: true, stdio: 'ignore', windowsHide: true });
+  server = spawn('npx tsx src/main.ts', { cwd: root, env: testEnv(), shell: true, stdio: 'ignore', windowsHide: true, detached: !isWindows });
   const deadline = Date.now() + 120_000;
   for (;;) {
     try {
@@ -49,6 +59,9 @@ export async function setup(): Promise<void> {
 }
 
 export async function teardown(): Promise<void> {
-  if (server?.pid) spawnSync(`taskkill /pid ${server.pid} /T /F`, { shell: true, stdio: 'ignore' });
+  if (server?.pid) {
+    if (isWindows) spawnSync(`taskkill /pid ${server.pid} /T /F`, { shell: true, stdio: 'ignore' });
+    else { try { process.kill(-server.pid, 'SIGKILL'); } catch { /* đã tắt */ } freePort(); }
+  }
   server = null;
 }

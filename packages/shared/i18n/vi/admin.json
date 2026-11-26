@@ -33,7 +33,8 @@
     "homeActions": "Nút hành động trang chủ",
     "footerLinks": "Liên kết chân trang",
     "streetSlots": "Cửa hàng trên Phố 3D",
-    "groupHome": "Trang chủ & Phố 3D"
+    "groupHome": "Trang chủ & Phố 3D",
+    "shop": "Gói & vật phẩm"
   },
   "login": {
     "title": "Đăng nhập quản trị",
@@ -483,5 +484,42 @@
     "composePlaceholder": "Chữ gợi ý trong ô đăng bài",
     "feedFilters": "Các chip lọc bảng tin trang chủ (mỗi dòng: loại + emoji)",
     "feedFiltersHint": "Loại: all, story, brag, revenue, deal, wish. Ví dụ: revenue 💰"
+  },
+  "shop": {
+    "title": "Gói thành viên và vật phẩm",
+    "note": "Nội dung hai trang công khai Bảng giá và Vật phẩm 3D. Giá chỉ để hiển thị (chưa có thanh toán).",
+    "saved": "Đã lưu bảng giá và vật phẩm.",
+    "plans": "Gói thành viên",
+    "plansHint": "Tên và giá hiển thị tự do, ví dụ \"29k/tháng\". Gói có mã \"free\" hiện chữ \"Có\" ở hàng nút đăng ký.",
+    "planName": "Tên gói",
+    "planPrice": "Giá hiển thị",
+    "addPlan": "Thêm gói",
+    "removePlan": "Xóa gói",
+    "features": "Quyền lợi theo gói",
+    "featureLabel": "Nội dung quyền lợi",
+    "addFeature": "Thêm quyền lợi",
+    "removeFeature": "Xóa quyền lợi",
+    "revenue": "Nguồn thu tham khảo",
+    "revenueName": "Nguồn thu",
+    "revenuePrice": "Giá tham khảo",
+    "revenuePriority": "Ưu tiên",
+    "addRevenue": "Thêm nguồn thu",
+    "removeRevenue": "Xóa nguồn thu",
+    "items": "Vật phẩm 3D",
+    "itemName": "Tên vật phẩm",
+    "itemPrice": "Giá",
+    "itemImage": "Ảnh",
+    "itemActive": "Hiện trên trang công khai",
+    "addItem": "Thêm vật phẩm",
+    "removeItem": "Xóa vật phẩm",
+    "images": {
+      "vp-cay": "Cây tài lộc",
+      "vp-hoa-dao": "Hoa đào",
+      "vp-than-tai": "Thần Tài",
+      "vp-cong": "Cổng cửa hàng",
+      "vp-van-phong": "Văn phòng",
+      "vp-dai-phun": "Đài phun nước",
+      "vp-den-long": "Đèn lồng"
+    }
   }
 }

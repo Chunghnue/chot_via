@@ -6,102 +6,18 @@
     "principle": "Không bán vía, không thu phí để nhận lời chúc tốt hơn, không cam kết trả tiền sẽ tăng may mắn.",
     "soon": "Sắp ra mắt",
     "featureCol": "Quyền lợi",
-    "plans": {
-      "free": {
-        "name": "Free",
-        "price": "0đ"
-      },
-      "plus": {
-        "name": "Plus",
-        "price": "29k/tháng"
-      },
-      "business": {
-        "name": "Business",
-        "price": "149k/tháng"
-      }
-    },
-    "features": {
-      "core": "Xin vía, kể khổ, khoe, ghé phố, gửi vía",
-      "shop": "Cửa hàng 3D cơ bản, chia sẻ thẻ vía",
-      "collection": "Bộ sưu tập Thần Tài, vật phẩm riêng",
-      "diary": "Nhật ký cá nhân, không quảng cáo",
-      "brand": "Cửa hàng thương hiệu, logo, liên hệ",
-      "stats": "Link bán hàng, thống kê lượt ghé"
-    },
     "yes": "Có",
     "no": "—",
     "revenueTitle": "Nguồn thu tham khảo",
     "revenueCol": "Nguồn thu",
     "priceCol": "Giá tham khảo",
-    "priorityCol": "Ưu tiên",
-    "revenue": {
-      "premium": {
-        "name": "Xin Vía Premium",
-        "price": "19–39k/tháng",
-        "p": "P1"
-      },
-      "items": {
-        "name": "Vật phẩm 3D",
-        "price": "9–99k/vật phẩm",
-        "p": "P1"
-      },
-      "brandShop": {
-        "name": "Cửa hàng 3D thương hiệu",
-        "price": "99–299k/tháng",
-        "p": "P1"
-      },
-      "sponsor": {
-        "name": "Tài trợ sự kiện/thử thách",
-        "price": "5–50 triệu/chiến dịch",
-        "p": "P2"
-      },
-      "jobs": {
-        "name": "Tuyển dụng sale",
-        "price": "199–999k/tin hoặc gói",
-        "p": "P2"
-      },
-      "affiliate": {
-        "name": "Affiliate",
-        "price": "Theo hoa hồng đối tác",
-        "p": "P2"
-      }
-    }
+    "priorityCol": "Ưu tiên"
   },
   "items": {
     "title": "Vật phẩm 3D",
     "sub": "Trang trí cửa hàng và phố của bạn. Giá đề xuất.",
     "soon": "Sắp ra mắt",
     "season": "Bộ sưu tập theo mùa",
-    "seasonText": "Tết, ngày Thần Tài, Black Friday, Noel, Trung thu, cuối tháng chạy KPI. Bán vật phẩm trực tiếp; không đặt cược hoặc hộp quà ngẫu nhiên trả phí.",
-    "list": {
-      "cay": {
-        "name": "Cây tài lộc",
-        "price": "19.000đ"
-      },
-      "hoaDao": {
-        "name": "Cây hoa đào",
-        "price": "39.000đ"
-      },
-      "thanTai": {
-        "name": "Skin Thần Tài",
-        "price": "59.000đ"
-      },
-      "cong": {
-        "name": "Cổng cửa hàng",
-        "price": "49.000đ"
-      },
-      "vanPhong": {
-        "name": "Văn phòng VIP",
-        "price": "99.000đ"
-      },
-      "daiPhun": {
-        "name": "Đài phun nước",
-        "price": "49.000đ"
-      },
-      "denLong": {
-        "name": "Bộ trang trí Tết",
-        "price": "79.000đ"
-      }
-    }
+    "seasonText": "Tết, ngày Thần Tài, Black Friday, Noel, Trung thu, cuối tháng chạy KPI. Bán vật phẩm trực tiếp; không đặt cược hoặc hộp quà ngẫu nhiên trả phí."
   }
 }
