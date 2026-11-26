@@ -40,7 +40,14 @@ export function StoryFilters({ value, onChange }: { value: StoryFilterState; onC
   );
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" role="group" aria-label={t('tabs.hot')}>
-      {tab(isSort('hot'), <span className="inline-flex items-center gap-1.5">{t('tabs.hot')}<Flame className="size-4 text-wish" aria-hidden /></span>, () => onChange({ sort: 'hot', has: null, hashtag: null }))}
+      {tab(
+        isSort('hot'),
+        <span className="inline-flex items-center gap-1.5">
+          {t('tabs.hot')}
+          <Flame className="size-4 text-wish" aria-hidden />
+        </span>,
+        () => onChange({ sort: 'hot', has: null, hashtag: null }),
+      )}
       {tab(isSort('new'), t('tabs.new'), () => onChange({ sort: 'new', has: null, hashtag: null }))}
       {tab(value.has === 'photo', t('tabs.photo'), () => onChange({ ...value, has: value.has === 'photo' ? null : 'photo' }))}
       {tab(value.has === 'poll', t('tabs.poll'), () => onChange({ ...value, has: value.has === 'poll' ? null : 'poll' }))}
@@ -49,11 +56,16 @@ export function StoryFilters({ value, onChange }: { value: StoryFilterState; onC
         <span aria-hidden>{value.hashtag ? `#${value.hashtag}` : t('tabs.topic')}</span>
         <ChevronDown className="size-4" aria-hidden />
         <select
-          className="absolute inset-0 cursor-pointer opacity-0" value={value.hashtag ?? ''}
+          className="absolute inset-0 cursor-pointer opacity-0"
+          value={value.hashtag ?? ''}
           onChange={(e) => onChange({ ...value, hashtag: e.target.value === '' ? null : e.target.value })}
         >
           <option value="">{t('allTopics')}</option>
-          {tags?.map((h) => <option key={h.tag} value={h.tag}>#{h.tag}</option>)}
+          {tags?.map((h) => (
+            <option key={h.tag} value={h.tag}>
+              #{h.tag}
+            </option>
+          ))}
         </select>
       </label>
     </div>

@@ -38,8 +38,12 @@ export function BottomNav() {
         {item('/', t('home'), <Home className="size-6" strokeWidth={2.4} aria-hidden />)}
         {item('/pho-3d', t('street'), <Store className="size-6" strokeWidth={2.4} aria-hidden />)}
         <div className="flex min-w-0 justify-center">
-          <button type="button" onClick={() => dispatch(composerOpened(undefined))} aria-label={t('post')}
-            className="group -mt-8 flex flex-col items-center gap-1 pb-1.5 text-[0.68rem] font-extrabold text-wish-strong transition active:scale-95">
+          <button
+            type="button"
+            onClick={() => dispatch(composerOpened(undefined))}
+            aria-label={t('post')}
+            className="group -mt-8 flex flex-col items-center gap-1 pb-1.5 text-[0.68rem] font-extrabold text-wish-strong transition active:scale-95"
+          >
             <span className="relative flex size-16 items-center justify-center rounded-full border-4 border-surface bg-linear-to-b from-gold-bright via-gold to-wish text-on-wish shadow-[0_0_0_3px_var(--color-cta-glow),0_10px_20px_rgb(217_45_11/0.5),inset_0_3px_0_rgb(255_255_255/0.55)] transition group-active:translate-y-0.5 animate-glow">
               <Plus className="size-9 drop-shadow" strokeWidth={3.4} aria-hidden />
             </span>

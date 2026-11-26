@@ -28,7 +28,11 @@ test.describe('web admin', () => {
     await expect(toggle).toBeVisible();
     await toggle.click();
     await page.getByRole('button', { name: /Lưu/ }).first().click();
-    await expect.poll(async () => (await request.get('http://localhost:3101/api/v1/places')).json().then((j: { data: unknown[] }) => j.data.filter((p) => (p as { isDemo: boolean }).isDemo).length)).toBe(0);
+    await expect
+      .poll(async () =>
+        (await request.get('http://localhost:3101/api/v1/places')).json().then((j: { data: unknown[] }) => j.data.filter((p) => (p as { isDemo: boolean }).isDemo).length),
+      )
+      .toBe(0);
     await page.goto('/', { waitUntil: 'networkidle' });
     await expect(page.getByText('Lan Anh')).toHaveCount(0);
 

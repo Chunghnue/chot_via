@@ -21,18 +21,39 @@ export function Person({ palette, x, z, shirt, facing, seated = false }: PersonP
     <group position={[x, 0, z]} rotation={[0, facing, 0]}>
       {seated ? (
         <>
-          <mesh position={[0, 0.58, 0.22]}><boxGeometry args={[0.34, 0.16, 0.5]} /><meshStandardMaterial color={palette['scene-metal']} /></mesh>
-          <mesh position={[0, 0.3, 0.46]}><boxGeometry args={[0.3, 0.5, 0.14]} /><meshStandardMaterial color={palette['scene-metal']} /></mesh>
+          <mesh position={[0, 0.58, 0.22]}>
+            <boxGeometry args={[0.34, 0.16, 0.5]} />
+            <meshStandardMaterial color={palette['scene-metal']} />
+          </mesh>
+          <mesh position={[0, 0.3, 0.46]}>
+            <boxGeometry args={[0.3, 0.5, 0.14]} />
+            <meshStandardMaterial color={palette['scene-metal']} />
+          </mesh>
         </>
       ) : (
         <>
-          <mesh position={[-0.11, 0.4, 0]}><capsuleGeometry args={[0.1, 0.5, 6, 10]} /><meshStandardMaterial color={palette['scene-metal']} /></mesh>
-          <mesh position={[0.11, 0.4, 0]}><capsuleGeometry args={[0.1, 0.5, 6, 10]} /><meshStandardMaterial color={palette['scene-metal']} /></mesh>
+          <mesh position={[-0.11, 0.4, 0]}>
+            <capsuleGeometry args={[0.1, 0.5, 6, 10]} />
+            <meshStandardMaterial color={palette['scene-metal']} />
+          </mesh>
+          <mesh position={[0.11, 0.4, 0]}>
+            <capsuleGeometry args={[0.1, 0.5, 6, 10]} />
+            <meshStandardMaterial color={palette['scene-metal']} />
+          </mesh>
         </>
       )}
-      <mesh position={[0, lift + 0.42, 0]}><capsuleGeometry args={[0.26, 0.5, 8, 14]} /><meshStandardMaterial color={palette[shirt]} roughness={0.7} /></mesh>
-      <mesh position={[0, lift + 1.05, 0]}><sphereGeometry args={[0.24, 18, 16]} /><meshStandardMaterial color={palette['scene-person-skin']} roughness={0.6} /></mesh>
-      <mesh position={[0, lift + 1.12, -0.03]} scale={[1, 0.85, 1]}><sphereGeometry args={[0.255, 18, 12, 0, Math.PI * 2, 0, Math.PI / 1.9]} /><meshStandardMaterial color={palette['scene-person-hair']} /></mesh>
+      <mesh position={[0, lift + 0.42, 0]}>
+        <capsuleGeometry args={[0.26, 0.5, 8, 14]} />
+        <meshStandardMaterial color={palette[shirt]} roughness={0.7} />
+      </mesh>
+      <mesh position={[0, lift + 1.05, 0]}>
+        <sphereGeometry args={[0.24, 18, 16]} />
+        <meshStandardMaterial color={palette['scene-person-skin']} roughness={0.6} />
+      </mesh>
+      <mesh position={[0, lift + 1.12, -0.03]} scale={[1, 0.85, 1]}>
+        <sphereGeometry args={[0.255, 18, 12, 0, Math.PI * 2, 0, Math.PI / 1.9]} />
+        <meshStandardMaterial color={palette['scene-person-hair']} />
+      </mesh>
     </group>
   );
 }
@@ -75,9 +96,15 @@ export function BlossomTree({ palette, x, z, scale = 1 }: { palette: Palette; x:
   ];
   return (
     <group position={[x, 0, z]} scale={scale}>
-      <mesh position={[0, 1.2, 0]}><cylinderGeometry args={[0.2, 0.36, 2.4, 10]} /><meshStandardMaterial color={palette['scene-trunk']} roughness={0.9} /></mesh>
+      <mesh position={[0, 1.2, 0]}>
+        <cylinderGeometry args={[0.2, 0.36, 2.4, 10]} />
+        <meshStandardMaterial color={palette['scene-trunk']} roughness={0.9} />
+      </mesh>
       {puffs.map(([px, py, pz, r, dark]) => (
-        <mesh key={`${px}${py}`} position={[px, py, pz]}><sphereGeometry args={[r, 18, 16]} /><meshStandardMaterial color={dark ? palette['scene-blossom-dark'] : palette['scene-blossom']} roughness={0.85} /></mesh>
+        <mesh key={`${px}${py}`} position={[px, py, pz]}>
+          <sphereGeometry args={[r, 18, 16]} />
+          <meshStandardMaterial color={dark ? palette['scene-blossom-dark'] : palette['scene-blossom']} roughness={0.85} />
+        </mesh>
       ))}
     </group>
   );
@@ -120,7 +147,12 @@ export function Ground({ palette }: { palette: Palette }) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}><ringGeometry args={[10.1, 10.5, 72]} /><meshStandardMaterial color={palette['scene-tile-ring']} roughness={0.8} /></mesh>
       {Array.from({ length: 16 }, (_, i) => {
         const a = (i / 16) * Math.PI * 2;
-        return <mesh key={i} position={[Math.cos(a) * 7.5, 0.04, Math.sin(a) * 7.5]} rotation={[-Math.PI / 2, 0, -a]}><planeGeometry args={[1.6, 0.14]} /><meshStandardMaterial color={palette['scene-tile-ring']} roughness={0.8} /></mesh>;
+        return (
+          <mesh key={i} position={[Math.cos(a) * 7.5, 0.04, Math.sin(a) * 7.5]} rotation={[-Math.PI / 2, 0, -a]}>
+            <planeGeometry args={[1.6, 0.14]} />
+            <meshStandardMaterial color={palette['scene-tile-ring']} roughness={0.8} />
+          </mesh>
+        );
       })}
     </group>
   );

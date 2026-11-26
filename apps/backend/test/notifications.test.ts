@@ -27,7 +27,17 @@ describe('thông báo (chuông)', () => {
     await put(`/users/${owner.userId}/follow`, {}, { token: other.token });
 
     const cat = await catalog();
-    const place = await post<Detail>('/places', { kind: 'store', title: 'Tiệm nhận vía', categoryId: cat.categories.find((c) => c.kind === 'store')?.id, sceneTemplateId: cat.sceneTemplates.find((t) => t.kind === 'store')?.id, autoReplyEnabled: true }, { token: owner.token });
+    const place = await post<Detail>(
+      '/places',
+      {
+        kind: 'store',
+        title: 'Tiệm nhận vía',
+        categoryId: cat.categories.find((c) => c.kind === 'store')?.id,
+        sceneTemplateId: cat.sceneTemplates.find((t) => t.kind === 'store')?.id,
+        autoReplyEnabled: true,
+      },
+      { token: owner.token },
+    );
     await post(`/places/${place.data.id}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { token: other.token, ip: freshIp() });
 
     const r = await list(owner.token);

@@ -32,12 +32,24 @@ export function TabletSideNav() {
           {link('/', t('home'), <Home className={icon} aria-hidden />)}
           {link('/pho-3d', t('tabletStreet'), <Store className={icon} aria-hidden />)}
           {link('/bang-tin', t('tabletFeed'), <MessageCircle className={icon} aria-hidden />)}
-          <button type="button" className={item} onClick={() => dispatch(composerOpened(undefined))}><PlusSquare className={icon} aria-hidden />{t('post')}</button>
+          <button type="button" className={item} onClick={() => dispatch(composerOpened(undefined))}>
+            <PlusSquare className={icon} aria-hidden />
+            {t('post')}
+          </button>
           {link('/bang-tin?type=story', t('story'), <Flame className={icon} aria-hidden />)}
           {link('/bang-tin?type=brag', t('brag'), <Handshake className={icon} aria-hidden />)}
-          <button type="button" className={item} onClick={() => dispatch(wishRequested())}><Sparkles className={icon} aria-hidden />{t('tabletWish')}</button>
-          <button type="button" className={item} onClick={() => void request('burn')}><Flame className={icon} aria-hidden />{t('tabletBurn')}</button>
-          <button type="button" className={item} onClick={() => void request('invoke')}><Gift className={icon} aria-hidden />{t('tabletInvoke')}</button>
+          <button type="button" className={item} onClick={() => dispatch(wishRequested())}>
+            <Sparkles className={icon} aria-hidden />
+            {t('tabletWish')}
+          </button>
+          <button type="button" className={item} onClick={() => void request('burn')}>
+            <Flame className={icon} aria-hidden />
+            {t('tabletBurn')}
+          </button>
+          <button type="button" className={item} onClick={() => void request('invoke')}>
+            <Gift className={icon} aria-hidden />
+            {t('tabletInvoke')}
+          </button>
           {link('/su-kien', t('challenge'), <Target className={icon} aria-hidden />)}
           {link('/bang-xep-hang', t('leaderboard'), <BarChart3 className={icon} aria-hidden />)}
           {link('/tao-diem', t('tabletCreateStore'), <Store className={icon} aria-hidden />)}
@@ -47,10 +59,17 @@ export function TabletSideNav() {
       <Card className="overflow-hidden">
         <div className="bg-linear-to-b from-primary-soft to-surface px-2 pb-1 pt-2 text-center">
           <img src="/images/cua-hang-mau.webp" alt="" aria-hidden className="mx-auto w-full max-w-[6.5rem] object-contain" draggable={false} />
-          <h2 className="mt-1 font-display text-base font-extrabold leading-tight text-primary-strong">{t('createStoreTitleLine1')}<br />{t('createStoreTitleLine2')}</h2>
+          <h2 className="mt-1 font-display text-base font-extrabold leading-tight text-primary-strong">
+            {t('createStoreTitleLine1')}
+            <br />
+            {t('createStoreTitleLine2')}
+          </h2>
         </div>
         <div className="p-2">
-          <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full btn-glossy font-bold')}>{t('createStoreCta')}<ArrowRight className="size-4" aria-hidden /></Link>
+          <Link href="/tao-diem" className={cn(buttonClass({ variant: 'primary', size: 'md' }), 'w-full btn-glossy font-bold')}>
+            {t('createStoreCta')}
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
         </div>
       </Card>
     </div>

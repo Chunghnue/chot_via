@@ -67,17 +67,47 @@ function Deity({ colors, reducedMotion, label, hint, onSelect }: { colors: Scene
   });
   return (
     <group
-      position={[0, 0, PLAZA_Z]} onClick={(e) => { e.stopPropagation(); onSelect(); }}
-      onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+      position={[0, 0, PLAZA_Z]}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect();
+      }}
+      onPointerOver={() => {
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto';
+      }}
     >
-      <mesh position={[0, 0.1, 0]}><cylinderGeometry args={[4.4, 4.6, 0.2, 40]} /><meshStandardMaterial color={colors.plaza} /></mesh>
-      <mesh position={[0, 0.35, 0]}><cylinderGeometry args={[1.5, 1.8, 0.5, 24]} /><meshStandardMaterial color={colors.deityGold} /></mesh>
+      <mesh position={[0, 0.1, 0]}>
+        <cylinderGeometry args={[4.4, 4.6, 0.2, 40]} />
+        <meshStandardMaterial color={colors.plaza} />
+      </mesh>
+      <mesh position={[0, 0.35, 0]}>
+        <cylinderGeometry args={[1.5, 1.8, 0.5, 24]} />
+        <meshStandardMaterial color={colors.deityGold} />
+      </mesh>
       <group ref={body}>
-        <mesh position={[0, 1.7, 0]}><sphereGeometry args={[1.25, 24, 24]} /><meshStandardMaterial color={colors.deityRobe} /></mesh>
-        <mesh position={[0, 3.15, 0]}><sphereGeometry args={[0.85, 24, 24]} /><meshStandardMaterial color={colors.deitySkin} /></mesh>
-        <mesh position={[0, 3.85, 0]}><cylinderGeometry args={[0.55, 0.8, 0.7, 20]} /><meshStandardMaterial color={colors.deityHat} /></mesh>
-        <mesh position={[0, 3.55, 0]}><torusGeometry args={[0.82, 0.07, 8, 24]} rotation-x={Math.PI / 2} /><meshStandardMaterial color={colors.deityGold} /></mesh>
-        <mesh ref={ingot} position={[0, 1.95, 1.15]} scale={[1, 0.55, 0.7]}><sphereGeometry args={[0.6, 20, 20]} /><meshStandardMaterial color={colors.deityGold} emissive={colors.deityGold} emissiveIntensity={0.35} /></mesh>
+        <mesh position={[0, 1.7, 0]}>
+          <sphereGeometry args={[1.25, 24, 24]} />
+          <meshStandardMaterial color={colors.deityRobe} />
+        </mesh>
+        <mesh position={[0, 3.15, 0]}>
+          <sphereGeometry args={[0.85, 24, 24]} />
+          <meshStandardMaterial color={colors.deitySkin} />
+        </mesh>
+        <mesh position={[0, 3.85, 0]}>
+          <cylinderGeometry args={[0.55, 0.8, 0.7, 20]} />
+          <meshStandardMaterial color={colors.deityHat} />
+        </mesh>
+        <mesh position={[0, 3.55, 0]}>
+          <torusGeometry args={[0.82, 0.07, 8, 24]} rotation-x={Math.PI / 2} />
+          <meshStandardMaterial color={colors.deityGold} />
+        </mesh>
+        <mesh ref={ingot} position={[0, 1.95, 1.15]} scale={[1, 0.55, 0.7]}>
+          <sphereGeometry args={[0.6, 20, 20]} />
+          <meshStandardMaterial color={colors.deityGold} emissive={colors.deityGold} emissiveIntensity={0.35} />
+        </mesh>
       </group>
       <pointLight position={[0, 4, 2]} intensity={14} color={colors.deityGold} distance={14} />
       <Html position={[0, 5.4, 0]} center distanceFactor={14} zIndexRange={[20, 0]} style={{ pointerEvents: 'none' }}>

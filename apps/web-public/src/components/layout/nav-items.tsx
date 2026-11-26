@@ -1,7 +1,27 @@
 import { Briefcase, Flame, Home, MessageCircle, Trophy, Users, Store, Handshake, CalendarDays, UserRound } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-export interface NavItem { key: string; href: string; icon: ReactNode; /** Nhãn đầy đủ dùng khi màn đủ rộng (thiết kế desktop ghi "Bảng xếp hạng"). */ fullLabelKey?: NavItem['labelKey']; labelKey: 'home' | 'street' | 'streetFull' | 'feed' | 'events' | 'leaderboard' | 'profile' | 'story' | 'brag' | 'community' | 'eventsShort' | 'leaderboardShort' | 'streetVisit' | 'challenge' }
+export interface NavItem {
+  key: string;
+  href: string;
+  icon: ReactNode;
+  /** Nhãn đầy đủ dùng khi màn đủ rộng (thiết kế desktop ghi "Bảng xếp hạng"). */ fullLabelKey?: NavItem['labelKey'];
+  labelKey:
+    | 'home'
+    | 'street'
+    | 'streetFull'
+    | 'feed'
+    | 'events'
+    | 'leaderboard'
+    | 'profile'
+    | 'story'
+    | 'brag'
+    | 'community'
+    | 'eventsShort'
+    | 'leaderboardShort'
+    | 'streetVisit'
+    | 'challenge';
+}
 
 const icon = 'size-5';
 export const TOP_NAV: NavItem[] = [

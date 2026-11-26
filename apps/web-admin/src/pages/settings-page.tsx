@@ -29,14 +29,28 @@ function RangeEditor({ form, name, title }: { form: UseFormReturn<AppSettings>; 
       <div className="flex flex-col gap-2">
         {fields.map((f, i) => (
           <div key={f.id} className="grid grid-cols-[5rem_1fr_1fr_auto] items-end gap-2">
-            <div><Label className="text-xs">{t('fields.rangeCode')}</Label><Input {...form.register(`${name}.${i}.code`)} /></div>
-            <div><Label className="text-xs">{t('fields.minVnd')}</Label><Input type="number" {...form.register(`${name}.${i}.minVnd`, { setValueAs: nullableNumber })} /></div>
-            <div><Label className="text-xs">{t('fields.maxVnd')}</Label><Input type="number" {...form.register(`${name}.${i}.maxVnd`, { setValueAs: nullableNumber })} /></div>
-            <Button variant="ghost" size="icon" aria-label={t('fields.removeRange')} onClick={() => remove(i)}><Trash2 className="size-4" aria-hidden /></Button>
+            <div>
+              <Label className="text-xs">{t('fields.rangeCode')}</Label>
+              <Input {...form.register(`${name}.${i}.code`)} />
+            </div>
+            <div>
+              <Label className="text-xs">{t('fields.minVnd')}</Label>
+              <Input type="number" {...form.register(`${name}.${i}.minVnd`, { setValueAs: nullableNumber })} />
+            </div>
+            <div>
+              <Label className="text-xs">{t('fields.maxVnd')}</Label>
+              <Input type="number" {...form.register(`${name}.${i}.maxVnd`, { setValueAs: nullableNumber })} />
+            </div>
+            <Button variant="ghost" size="icon" aria-label={t('fields.removeRange')} onClick={() => remove(i)}>
+              <Trash2 className="size-4" aria-hidden />
+            </Button>
           </div>
         ))}
       </div>
-      <Button variant="soft" size="sm" className="mt-2" onClick={() => append({ code: `r${fields.length + 1}`, minVnd: null, maxVnd: null })}><Plus className="size-4" aria-hidden />{t('fields.addRange')}</Button>
+      <Button variant="soft" size="sm" className="mt-2" onClick={() => append({ code: `r${fields.length + 1}`, minVnd: null, maxVnd: null })}>
+        <Plus className="size-4" aria-hidden />
+        {t('fields.addRange')}
+      </Button>
     </div>
   );
 }
@@ -56,7 +70,12 @@ export function SettingsPage() {
     try { await save(values).unwrap(); toast.success(t('saved')); } catch (e) { toastApi.error(e); }
   });
 
-  const section = (title: string, children: React.ReactNode) => <Card className="flex flex-col gap-3 p-5"><h2 className="font-display text-xl font-extrabold">{title}</h2><div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{children}</div></Card>;
+  const section = (title: string, children: React.ReactNode) => (
+    <Card className="flex flex-col gap-3 p-5">
+      <h2 className="font-display text-xl font-extrabold">{title}</h2>
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{children}</div>
+    </Card>
+  );
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); void submit(); }} className="flex flex-col gap-4" noValidate>

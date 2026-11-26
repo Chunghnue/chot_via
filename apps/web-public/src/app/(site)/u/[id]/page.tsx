@@ -34,18 +34,55 @@ export default function UserPage() {
         </div>
         {data.bio ? <p className="max-w-md text-ink-muted">{data.bio}</p> : null}
         <dl className="grid w-full grid-cols-3 gap-2">
-          {([['posts', data.counts.posts], ['followers', data.counts.followers], ['following', data.counts.following]] as const).map(([k, v]) => (
-            <div key={k} className="rounded-2xl bg-surface-muted py-2"><dt className="text-xs text-ink-muted">{t(`stats.${k}`)}</dt><dd className="font-display text-2xl font-extrabold">{v}</dd></div>
+          {(
+            [
+              ['posts', data.counts.posts],
+              ['followers', data.counts.followers],
+              ['following', data.counts.following],
+            ] as const
+          ).map(([k, v]) => (
+            <div key={k} className="rounded-2xl bg-surface-muted py-2">
+              <dt className="text-xs text-ink-muted">{t(`stats.${k}`)}</dt>
+              <dd className="font-display text-2xl font-extrabold">{v}</dd>
+            </div>
           ))}
         </dl>
         {!own ? (
           <div className="flex gap-2">
-            <Button variant={data.viewer?.following ? 'soft' : 'primary'} onClick={() => { if (require('follow')) void follow({ id: data.id, on: !data.viewer?.following }).unwrap().catch(toast.error); }}>{data.viewer?.following ? t('unfollow') : t('follow')}</Button>
-            <Button variant="outline" onClick={() => { if (require('block')) void block({ id: data.id, on: !data.viewer?.blocked }).unwrap().catch(toast.error); }}>{data.viewer?.blocked ? t('unblockUser') : t('blockUser')}</Button>
+            <Button
+              variant={data.viewer?.following ? 'soft' : 'primary'}
+              onClick={() => {
+                if (require('follow')) void follow({ id: data.id, on: !data.viewer?.following }).unwrap().catch(toast.error);
+              }}
+            >
+              {data.viewer?.following ? t('unfollow') : t('follow')}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (require('block')) void block({ id: data.id, on: !data.viewer?.blocked }).unwrap().catch(toast.error);
+              }}
+            >
+              {data.viewer?.blocked ? t('unblockUser') : t('blockUser')}
+            </Button>
           </div>
         ) : null}
       </Card>
-      {data.badges.length ? <Card className="p-4"><h2 className="mb-2 font-display text-lg font-bold">{t('badges')}</h2><ul className="flex flex-wrap gap-2">{data.badges.map((b) => <li key={b.id}><Badge tone="gold"><AppIcon iconKey={b.iconKey} />{b.name}</Badge></li>)}</ul></Card> : null}
+      {data.badges.length ? (
+        <Card className="p-4">
+          <h2 className="mb-2 font-display text-lg font-bold">{t('badges')}</h2>
+          <ul className="flex flex-wrap gap-2">
+            {data.badges.map((b) => (
+              <li key={b.id}>
+                <Badge tone="gold">
+                  <AppIcon iconKey={b.iconKey} />
+                  {b.name}
+                </Badge>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
       <FeedList query={{ authorId: data.id }} />
     </div>
   );

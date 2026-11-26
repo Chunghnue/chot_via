@@ -61,30 +61,78 @@ export function useShareCard(): (spec: ShareCardSpec, caption: string) => Promis
   };
 }
 
-export function ShareButtons({ text, className, card, link: shareLink, onShared }: { text: string; className?: string; card?: ShareCardSpec; /** Link cần chia sẻ (mặc định trang chủ). */ link?: string; /** Gọi sau khi người dùng chọn một cách chia sẻ. */ onShared?: () => void }) {
+export function ShareButtons({
+  text,
+  className,
+  card,
+  link: shareLink,
+  onShared,
+}: {
+  text: string;
+  className?: string;
+  card?: ShareCardSpec;
+  /** Link cần chia sẻ (mặc định trang chủ). */ link?: string;
+  /** Gọi sau khi người dùng chọn một cách chia sẻ. */ onShared?: () => void;
+}) {
   const t = useTranslations('wish.share');
   const shareCard = useShareCard();
   const canNative = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
-  const btn = 'grid size-9 place-items-center rounded-full bg-surface text-ink shadow-card ring-1 ring-border/60 transition hover:bg-primary-soft hover:text-primary-strong hover:ring-primary active:scale-90';
+  const btn =
+    'grid size-9 place-items-center rounded-full bg-surface text-ink shadow-card ring-1 ring-border/60 transition hover:bg-primary-soft hover:text-primary-strong hover:ring-primary active:scale-90';
   /** Nhãn gạch chân hiện khi rê chuột vào biểu tượng, giống kiểu liên kết (ví dụ "Gửi vía cho cửa hàng khác"). */
-  const link = 'pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface px-1.5 py-0.5 text-xs font-bold text-primary-strong underline opacity-0 shadow-card transition group-hover:opacity-100 group-focus-visible:opacity-100';
+  const link =
+    'pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface px-1.5 py-0.5 text-xs font-bold text-primary-strong underline opacity-0 shadow-card transition group-hover:opacity-100 group-focus-visible:opacity-100';
 
   const shareTo = useShareTo();
   const system = async (): Promise<void> => {
-    try { await navigator.share({ text, url: shareLink ?? siteUrl() }); onShared?.(); } catch { /* người dùng đóng menu chia sẻ */ }
+    try {
+      await navigator.share({ text, url: shareLink ?? siteUrl() });
+      onShared?.();
+    } catch {
+      /* người dùng đóng menu chia sẻ */
+    }
   };
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)} data-testid="share-buttons">
       <span className="text-xs font-bold text-ink-muted">{t('label')}</span>
       {TARGETS.map((target) => (
-        <button key={target} type="button" aria-label={t(`aria.${target}`)} title={t(`aria.${target}`)} onClick={() => { void shareTo(target, text, shareLink); onShared?.(); }} className={cn(btn, 'group relative')}>
+        <button
+          key={target}
+          type="button"
+          aria-label={t(`aria.${target}`)}
+          title={t(`aria.${target}`)}
+          onClick={() => {
+            void shareTo(target, text, shareLink);
+            onShared?.();
+          }}
+          className={cn(btn, 'group relative')}
+        >
           {target === 'messenger' ? <BrandIcon brand="messenger" /> : <SocialIcon label={target} />}
-          <span aria-hidden className={link}>{t(`name.${target}`)}</span>
+          <span aria-hidden className={link}>
+            {t(`name.${target}`)}
+          </span>
         </button>
       ))}
-      {card ? <button type="button" aria-label={t('aria.card')} title={t('aria.card')} onClick={() => { void shareCard(shareLink ? { ...card, link: shareLink } : card, text); onShared?.(); }} className={btn}><ImageDown className="size-4" aria-hidden /></button> : null}
-      {canNative ? <button type="button" aria-label={t('aria.system')} onClick={() => void system()} className={btn}><Share2 className="size-4" aria-hidden /></button> : null}
+      {card ? (
+        <button
+          type="button"
+          aria-label={t('aria.card')}
+          title={t('aria.card')}
+          onClick={() => {
+            void shareCard(shareLink ? { ...card, link: shareLink } : card, text);
+            onShared?.();
+          }}
+          className={btn}
+        >
+          <ImageDown className="size-4" aria-hidden />
+        </button>
+      ) : null}
+      {canNative ? (
+        <button type="button" aria-label={t('aria.system')} onClick={() => void system()} className={btn}>
+          <Share2 className="size-4" aria-hidden />
+        </button>
+      ) : null}
     </div>
   );
 }

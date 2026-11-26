@@ -67,9 +67,20 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
           <div key={g.title}>
             <p className="mb-1 px-3 text-[0.7rem] font-bold uppercase tracking-wide text-ink-subtle">{g.title}</p>
             {items.map((x) => (
-              <NavLink key={x.to} to={x.to} end={x.end} onClick={() => dispatch(sidebarToggled(false))}
-                className={({ isActive }) => cn('flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition', isActive ? 'bg-primary text-on-primary' : 'text-ink-muted hover:bg-surface-muted')}>
-                {x.icon}{x.label}
+              <NavLink
+                key={x.to}
+                to={x.to}
+                end={x.end}
+                onClick={() => dispatch(sidebarToggled(false))}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition',
+                    isActive ? 'bg-primary text-on-primary' : 'text-ink-muted hover:bg-surface-muted',
+                  )
+                }
+              >
+                {x.icon}
+                {x.label}
               </NavLink>
             ))}
           </div>
@@ -81,7 +92,10 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
       <aside className="sticky top-0 hidden h-dvh flex-col border-r border-border bg-surface lg:flex">
-        <div className="flex items-center gap-2 border-b border-border p-4"><img src="/logo-than-tai.webp" alt="" aria-hidden className="size-9 object-contain" draggable={false} /><span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span></div>
+        <div className="flex items-center gap-2 border-b border-border p-4">
+          <img src="/logo-than-tai.webp" alt="" aria-hidden className="size-9 object-contain" draggable={false} />
+          <span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span>
+        </div>
         {nav}
       </aside>
 
@@ -89,8 +103,12 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
         <div className="fixed inset-0 z-50 lg:hidden">
           <button type="button" aria-label={t('nav.closeMenu')} className="absolute inset-0 animate-fade-in bg-overlay" onClick={() => dispatch(sidebarToggled(false))} />
           <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] animate-sheet-up flex-col bg-surface shadow-pop">
-            <div className="flex items-center justify-between border-b border-border p-4"><span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span>
-              <button type="button" aria-label={t('nav.closeMenu')} onClick={() => dispatch(sidebarToggled(false))}><X className="size-5" /></button></div>
+            <div className="flex items-center justify-between border-b border-border p-4">
+              <span className="font-display text-lg font-extrabold text-primary-strong">{t('appName')}</span>
+              <button type="button" aria-label={t('nav.closeMenu')} onClick={() => dispatch(sidebarToggled(false))}>
+                <X className="size-5" />
+              </button>
+            </div>
             {nav}
           </aside>
         </div>
@@ -98,15 +116,32 @@ export function AdminLayout({ isAdmin }: { isAdmin: boolean }) {
 
       <div className="min-w-0">
         <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-border bg-surface/90 px-4 backdrop-blur">
-          <button type="button" aria-label={t('nav.menu')} className="flex size-10 items-center justify-center rounded-full hover:bg-surface-muted lg:hidden" onClick={() => dispatch(sidebarToggled(true))}><Menu className="size-5" /></button>
+          <button
+            type="button"
+            aria-label={t('nav.menu')}
+            className="flex size-10 items-center justify-center rounded-full hover:bg-surface-muted lg:hidden"
+            onClick={() => dispatch(sidebarToggled(true))}
+          >
+            <Menu className="size-5" />
+          </button>
           <Shield className="hidden size-5 text-primary sm:block" aria-hidden />
           <span className="font-display text-lg font-bold lg:hidden">{t('appName')}</span>
           <div className="ml-auto flex items-center gap-2">
-            {user ? <span className="hidden items-center gap-2 text-sm font-semibold sm:flex"><Avatar src={user.avatarUrl} name={user.displayName} size={32} />{user.displayName}</span> : null}
-            <Button variant="outline" size="sm" onClick={() => void logout()}><LogOut className="size-4" aria-hidden />{t('login.logout')}</Button>
+            {user ? (
+              <span className="hidden items-center gap-2 text-sm font-semibold sm:flex">
+                <Avatar src={user.avatarUrl} name={user.displayName} size={32} />
+                {user.displayName}
+              </span>
+            ) : null}
+            <Button variant="outline" size="sm" onClick={() => void logout()}>
+              <LogOut className="size-4" aria-hidden />
+              {t('login.logout')}
+            </Button>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-[1500px] p-4 lg:p-6"><Outlet /></main>
+        <main className="mx-auto w-full max-w-[1500px] p-4 lg:p-6">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

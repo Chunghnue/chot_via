@@ -2,7 +2,20 @@ import { describe, expect, it } from 'vitest';
 import postgres from 'postgres';
 import { adminLogin, catalog, del, freshIp, get, login, post, put } from './support/api';
 
-interface PostRow { id: string; type: string; role: string | null; body: string; hashtags: string[]; pinned: boolean; media: unknown[]; poll: { options: { id: string; votes: number }[] } | null; author: { displayName: string; jobTitle: string | null }; counts: { reactions: number; comments: number; shares: number }; achievement: { displayMode: string; amount: number | null } | null; viewer: { reaction: string | null; saved: boolean } | null }
+interface PostRow {
+  id: string;
+  type: string;
+  role: string | null;
+  body: string;
+  hashtags: string[];
+  pinned: boolean;
+  media: unknown[];
+  poll: { options: { id: string; votes: number }[] } | null;
+  author: { displayName: string; jobTitle: string | null };
+  counts: { reactions: number; comments: number; shares: number };
+  achievement: { displayMode: string; amount: number | null } | null;
+  viewer: { reaction: string | null; saved: boolean } | null;
+}
 
 describe('bảng tin', () => {
   it('khách đọc được bảng tin chung; Kể khổ và Khoe xen kẽ trong cùng một feed', async () => {

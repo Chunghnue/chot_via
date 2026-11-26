@@ -31,7 +31,20 @@ test.describe('khung điều hướng theo kích thước (RESP-01)', () => {
         const side = page.getByRole('navigation', { name: 'Menu chính' });
         await expect(side).toBeVisible();
         const text = await side.innerText();
-        for (const label of ['Trang chủ', 'Ghé phố 3D', 'Bảng tin chung', 'Đăng bài', 'Kể khổ', 'Khoe doanh thu / Deal', 'Xin vía Thần Tài', 'Thử thách', 'Bảng xếp hạng', 'Tạo cửa hàng 3D', 'Cá nhân']) expect(text).toContain(label);
+        for (const label of [
+          'Trang chủ',
+          'Ghé phố 3D',
+          'Bảng tin chung',
+          'Đăng bài',
+          'Kể khổ',
+          'Khoe doanh thu / Deal',
+          'Xin vía Thần Tài',
+          'Thử thách',
+          'Bảng xếp hạng',
+          'Tạo cửa hàng 3D',
+          'Cá nhân',
+        ])
+          expect(text).toContain(label);
       } else {
         const nav = page.locator('header nav').first();
         await expect(nav).toBeVisible();

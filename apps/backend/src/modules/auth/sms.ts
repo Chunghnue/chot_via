@@ -117,6 +117,13 @@ export const SMS = Symbol('SMS_PROVIDER');
 export function createSmsProvider(): SmsProvider {
   if (env.SMS_PROVIDER === 'speedsms') return new SpeedSmsProvider();
   if (env.SMS_PROVIDER === 'esms') return new EsmsProvider();
-  if (env.SMS_PROVIDER === 'ghdc') return new GhdcSmsProvider({ baseUrl: env.GHDC_SMS_BASE_URL, email: env.GHDC_SMS_EMAIL, password: env.GHDC_SMS_PASSWORD, cpId: env.GHDC_SMS_CP_ID, tempId: env.GHDC_SMS_TEMP_ID });
+  if (env.SMS_PROVIDER === 'ghdc')
+    return new GhdcSmsProvider({
+      baseUrl: env.GHDC_SMS_BASE_URL,
+      email: env.GHDC_SMS_EMAIL,
+      password: env.GHDC_SMS_PASSWORD,
+      cpId: env.GHDC_SMS_CP_ID,
+      tempId: env.GHDC_SMS_TEMP_ID,
+    });
   return new DevSmsProvider();
 }

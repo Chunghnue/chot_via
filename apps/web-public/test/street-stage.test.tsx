@@ -6,8 +6,25 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StreetStage } from '../src/components/home/street-stage';
 
 const place = (modelKey: PlaceSummary['modelKey'], title: string, wishCount: number): PlaceSummary => ({
-  id: `id-${modelKey}`, slug: modelKey, kind: modelKey === 'sale_office' ? 'sale_office' : 'store', title, tagline: null, categoryId: 'c', categoryName: 'x', coverUrl: null, sceneTemplateId: 's', modelKey,
-  isDemo: true, ownerName: null, wishCount, likeCount: 0, followCount: 0, visitCount: 0, autoReplyEnabled: true, sortOrder: 0, createdAt: new Date().toISOString(),
+  id: `id-${modelKey}`,
+  slug: modelKey,
+  kind: modelKey === 'sale_office' ? 'sale_office' : 'store',
+  title,
+  tagline: null,
+  categoryId: 'c',
+  categoryName: 'x',
+  coverUrl: null,
+  sceneTemplateId: 's',
+  modelKey,
+  isDemo: true,
+  ownerName: null,
+  wishCount,
+  likeCount: 0,
+  followCount: 0,
+  visitCount: 0,
+  autoReplyEnabled: true,
+  sortOrder: 0,
+  createdAt: new Date().toISOString(),
 });
 const labels = { deity: 'Thần Tài', deityHint: 'hint', demo: 'Mẫu', open: (p: string) => `Mở ${p}`, wishCount: (n: number) => `${n} vía` };
 const places = [place('cafe', 'Quán Cafe An Nhiên', 12500), place('fashion', 'Shop Thời Trang', 1), place('sale_office', 'Team Sale', 3800)];

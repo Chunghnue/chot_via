@@ -52,7 +52,8 @@ const EnvSchema = z.object({
 }).refine((e) => !(e.NODE_ENV === 'production' && e.SMS_PROVIDER === 'dev'), {
   message: 'SMS_PROVIDER=dev không được dùng ở production (OTP không được ghi log)',
 }).superRefine((e, ctx) => {
-  if (e.COOKIE_DOMAIN !== '' && !/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(e.COOKIE_DOMAIN)) ctx.addIssue({ code: 'custom', path: ['COOKIE_DOMAIN'], message: 'COOKIE_DOMAIN phải là tên miền hợp lệ (ví dụ chotvia.example.com)' });
+  if (e.COOKIE_DOMAIN !== '' && !/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(e.COOKIE_DOMAIN))
+    ctx.addIssue({ code: 'custom', path: ['COOKIE_DOMAIN'], message: 'COOKIE_DOMAIN phải là tên miền hợp lệ (ví dụ chotvia.example.com)' });
   if (e.SMS_PROVIDER !== 'ghdc') return;
   const required = ['GHDC_SMS_EMAIL', 'GHDC_SMS_PASSWORD', 'GHDC_SMS_CP_ID', 'GHDC_SMS_TEMP_ID'] as const;
   for (const key of required) {

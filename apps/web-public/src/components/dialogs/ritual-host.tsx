@@ -55,18 +55,32 @@ function RitualOffer() {
   };
   const icon: Record<RitualKind, string> = { invoke: '/images/ic-pray.webp', burn: '/images/ic-fire.webp' };
   return (
-    <Sheet open={offer !== null} onOpenChange={(open) => { if (!open) dispatch(ritualOfferClosed()); }} title={t('readyTitle')} closeLabel={t('closeAria')} tone="wish">
+    <Sheet
+      open={offer !== null}
+      onOpenChange={(open) => {
+        if (!open) dispatch(ritualOfferClosed());
+      }}
+      title={t('readyTitle')}
+      closeLabel={t('closeAria')}
+      tone="wish"
+    >
       {offer ? (
         <div className="flex flex-col items-center gap-4 pb-2 text-center" data-testid="ritual-offer">
-          <div className="w-32"><DeityAvatar glow src="/images/than-tai-nhan-via.webp" /></div>
+          <div className="w-32">
+            <DeityAvatar glow src="/images/than-tai-nhan-via.webp" />
+          </div>
           <p className="text-base font-medium text-ink">{t('readyHint', { place: offer.title })}</p>
           <div className="flex w-full flex-col gap-3">
             {kinds.map((kind, i) => (
               <button
-                key={kind} type="button" onClick={() => begin(kind, offer)} data-testid={`ritual-start-${kind}`}
+                key={kind}
+                type="button"
+                onClick={() => begin(kind, offer)}
+                data-testid={`ritual-start-${kind}`}
                 className={cn(
                   'animate-glow relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border-4 border-surface bg-linear-to-b px-6 font-display font-extrabold shadow-cta transition active:scale-95',
-                  i === 0 ? 'h-[4.25rem] text-2xl' : 'h-14 text-xl', style[kind],
+                  i === 0 ? 'h-[4.25rem] text-2xl' : 'h-14 text-xl',
+                  style[kind],
                 )}
               >
                 <img src={icon[kind]} alt="" aria-hidden className="size-[1.6em] object-contain" draggable={false} />
@@ -74,7 +88,9 @@ function RitualOffer() {
               </button>
             ))}
           </div>
-          <button type="button" onClick={() => dispatch(ritualOfferClosed())} className="text-sm font-semibold text-ink-muted hover:underline">{t('later')}</button>
+          <button type="button" onClick={() => dispatch(ritualOfferClosed())} className="text-sm font-semibold text-ink-muted hover:underline">
+            {t('later')}
+          </button>
         </div>
       ) : null}
     </Sheet>
@@ -143,7 +159,9 @@ function RitualPlay() {
       {burstKey !== 0 ? <Burst key={burstKey} /> : null}
       {show && ritual ? (
         <p
-          role="status" aria-live="polite" data-testid="ritual-caption"
+          role="status"
+          aria-live="polite"
+          data-testid="ritual-caption"
           className="pointer-events-none fixed inset-x-3 bottom-24 z-60 mx-auto w-fit max-w-[92vw] animate-pop-in rounded-full bg-surface/95 px-5 py-2 text-center text-sm font-bold text-primary-strong shadow-card md:bottom-10 md:text-base"
         >
           {t(`caption.${captionFor(ritual.kind, elapsed)}`)}
@@ -151,9 +169,18 @@ function RitualPlay() {
       ) : null}
       {card ? (
         <div className="pointer-events-none fixed inset-x-0 top-20 z-60 flex justify-center px-3">
-          <div role="status" aria-live="polite" data-testid="ritual-card" className="pointer-events-auto relative flex w-full max-w-md animate-pop-in items-center gap-3 rounded-3xl bg-linear-to-b from-gold-soft to-surface p-3 pr-9 shadow-card ring-2 ring-wish/40">
+          <div
+            role="status"
+            aria-live="polite"
+            data-testid="ritual-card"
+            className="pointer-events-auto relative flex w-full max-w-md animate-pop-in items-center gap-3 rounded-3xl bg-linear-to-b from-gold-soft to-surface p-3 pr-9 shadow-card ring-2 ring-wish/40"
+          >
             <div className="w-16 shrink-0 sm:w-20">
-              {card.kind === 'invoke' ? <DeityAvatar glow src="/images/than-tai-nhan-via.webp" /> : <img src="/images/ic-fire.webp" alt="" aria-hidden className="w-full object-contain" draggable={false} />}
+              {card.kind === 'invoke' ? (
+                <DeityAvatar glow src="/images/than-tai-nhan-via.webp" />
+              ) : (
+                <img src="/images/ic-fire.webp" alt="" aria-hidden className="w-full object-contain" draggable={false} />
+              )}
             </div>
             <div className="flex min-w-0 flex-col gap-1">
               <h3 className="font-display text-xl font-extrabold leading-tight text-wish-strong">{card.title}</h3>
@@ -161,7 +188,12 @@ function RitualPlay() {
               <ShareButtons text={card.text} card={{ kind: 'receive' }} link={`${siteUrl()}/?via=${HOME_SHARE_VIA.receive}`} />
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>
-            <button type="button" aria-label={t('closeAria')} onClick={() => setCard(null)} className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted">
+            <button
+              type="button"
+              aria-label={t('closeAria')}
+              onClick={() => setCard(null)}
+              className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted"
+            >
               <X className="size-4" aria-hidden />
             </button>
           </div>

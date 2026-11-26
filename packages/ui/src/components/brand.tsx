@@ -24,7 +24,11 @@ export function CloverMark({ className }: { className?: string }) {
 export function Logo({ name, tagline, compact, markSrc }: { name: string; tagline: string; compact?: boolean; markSrc?: string }) {
   return (
     <span className="flex items-center gap-2">
-      {markSrc ? <img src={markSrc} alt="" aria-hidden className={compact ? 'size-9 object-contain' : 'size-[4.1rem] object-contain'} draggable={false} /> : <CloverMark className={compact ? 'size-8' : 'size-10'} />}
+      {markSrc ? (
+        <img src={markSrc} alt="" aria-hidden className={compact ? 'size-9 object-contain' : 'size-[4.1rem] object-contain'} draggable={false} />
+      ) : (
+        <CloverMark className={compact ? 'size-8' : 'size-10'} />
+      )}
       <span className="flex flex-col leading-none">
         <span className={cn('font-display font-extrabold text-primary-strong', compact ? 'text-2xl' : 'text-[2.6rem] italic tracking-tight text-outline')}>{name}</span>
         {compact ? null : <span className="mt-1 text-[0.8rem] font-bold italic tracking-tight text-ink">{tagline}</span>}
@@ -63,9 +67,24 @@ export function BrandIcon({ brand, className }: { brand: BrandKey; className?: s
       </svg>
     );
   }
-  if (brand === 'facebook') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
-  if (brand === 'tiktok') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M16.6 5.8c-.9-.6-1.5-1.5-1.7-2.6h-3v12.1c0 1.4-1.1 2.5-2.5 2.5S7 16.7 7 15.3s1.1-2.5 2.5-2.5c.3 0 .5 0 .8.1V9.8c-.3 0-.5-.1-.8-.1-2.9 0-5.3 2.4-5.3 5.6S6.6 21 9.5 21s5.7-2.4 5.7-5.7V9.5c1.1.8 2.4 1.2 3.8 1.2V7.6c-.9 0-1.7-.3-2.4-.8z" /></svg>;
-  if (brand === 'messenger') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M12 2C6.5 2 2 6.2 2 11.4c0 2.9 1.4 5.5 3.6 7.2V22l3.3-1.8c.9.2 1.9.4 3.1.4 5.5 0 10-4.2 10-9.4S17.500 2 12 2zm1 12.600-2.500-2.700-4.900 2.700 5.400-5.700 2.600 2.700 4.800-2.700z" /></svg>;
+  if (brand === 'facebook')
+    return (
+      <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden>
+        <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" />
+      </svg>
+    );
+  if (brand === 'tiktok')
+    return (
+      <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden>
+        <path d="M16.6 5.8c-.9-.6-1.5-1.5-1.7-2.6h-3v12.1c0 1.4-1.1 2.5-2.5 2.5S7 16.7 7 15.3s1.1-2.5 2.5-2.5c.3 0 .5 0 .8.1V9.8c-.3 0-.5-.1-.8-.1-2.9 0-5.3 2.4-5.3 5.6S6.6 21 9.5 21s5.7-2.4 5.7-5.7V9.5c1.1.8 2.4 1.2 3.8 1.2V7.6c-.9 0-1.7-.3-2.4-.8z" />
+      </svg>
+    );
+  if (brand === 'messenger')
+    return (
+      <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden>
+        <path d="M12 2C6.5 2 2 6.2 2 11.4c0 2.9 1.4 5.5 3.6 7.2V22l3.3-1.8c.9.2 1.9.4 3.1.4 5.5 0 10-4.2 10-9.4S17.500 2 12 2zm1 12.600-2.500-2.700-4.900 2.700 5.400-5.700 2.600 2.700 4.800-2.700z" />
+      </svg>
+    );
   if (brand === 'zalo') return <span aria-hidden className={cn('text-[0.7rem] font-extrabold leading-none', className)}>Zalo</span>;
   return <span aria-hidden className={cn('text-lg leading-none', className)}></span>;
 }
@@ -81,7 +100,10 @@ export function OAuthButtons({ providers, enabled, hrefFor, label, onUnavailable
   return (
     <>
       {providers.map((p) => {
-        const cls = cn('flex h-12 items-center justify-center gap-3 rounded-full text-sm font-bold transition active:scale-[0.98]', p === 'facebook' ? 'bg-brand-facebook text-on-primary hover:brightness-110' : 'border border-border bg-surface text-ink shadow-card hover:bg-surface-muted');
+        const cls = cn(
+          'flex h-12 items-center justify-center gap-3 rounded-full text-sm font-bold transition active:scale-[0.98]',
+          p === 'facebook' ? 'bg-brand-facebook text-on-primary hover:brightness-110' : 'border border-border bg-surface text-ink shadow-card hover:bg-surface-muted',
+        );
         const inner = <><BrandIcon brand={p} />{label(p)}</>;
         return enabled?.[p] === true
           ? <a key={p} href={hrefFor(p)} className={cls}>{inner}</a>

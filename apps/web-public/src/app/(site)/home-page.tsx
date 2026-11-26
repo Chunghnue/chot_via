@@ -33,19 +33,34 @@ export function HomePage() {
   useEffect(() => { track('home_view', { member: isMember, device: deviceClass() }); }, [isMember]);
 
   const feedSection = (
-    <section className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none" aria-labelledby="feed-title">
+    <section
+      className="flex min-w-0 flex-col gap-3 rounded-sheet border border-border/70 bg-surface-muted/70 p-3 shadow-card sm:p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none"
+      aria-labelledby="feed-title"
+    >
       <div className="contents xl:flex xl:flex-col xl:gap-3.5 xl:rounded-3xl xl:bg-surface xl:p-5 xl:shadow-card xl:ring-1 xl:ring-border/40">
         <div className="flex items-center gap-2">
           <img src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-8 shrink-0 object-contain xl:size-11" draggable={false} />
-          <h2 id="feed-title" className="min-w-0 truncate font-display text-[1.05rem] font-extrabold leading-none text-primary-strong sm:text-[1.5rem] xl:overflow-visible xl:text-2xl xl:text-ink xl:after:mt-1.5 xl:after:block xl:after:h-[3px] xl:after:w-72 xl:after:rounded-full xl:after:bg-linear-to-r xl:after:from-primary xl:after:to-transparent">{t('feedTitle')}</h2>
+          <h2
+            id="feed-title"
+            className="min-w-0 truncate font-display text-[1.05rem] font-extrabold leading-none text-primary-strong sm:text-[1.5rem] xl:overflow-visible xl:text-2xl xl:text-ink xl:after:mt-1.5 xl:after:block xl:after:h-[3px] xl:after:w-72 xl:after:rounded-full xl:after:bg-linear-to-r xl:after:from-primary xl:after:to-transparent"
+          >
+            {t('feedTitle')}
+          </h2>
           <HomeSortControl variant="icon" />
-          <Button type="button" size="sm" className="ml-auto shrink-0 md:hidden" onClick={() => dispatch(composerOpened(undefined))}><Pencil className="size-4" aria-hidden />{t('extras.postNow')}</Button>
+          <Button type="button" size="sm" className="ml-auto shrink-0 md:hidden" onClick={() => dispatch(composerOpened(undefined))}>
+            <Pencil className="size-4" aria-hidden />
+            {t('extras.postNow')}
+          </Button>
         </div>
         <HomeFeedFilters />
-        <div className="hidden xl:block"><ComposeBar /></div>
+        <div className="hidden xl:block">
+          <ComposeBar />
+        </div>
       </div>
       <FeedList variant="compact" query={{ type: filters.type, sort: filters.sort, pinned: 'first', ...(filters.role ? { role: filters.role } : {}) }} infinite={false} />
-      <Link href="/bang-tin" className="self-center rounded-full bg-primary-soft px-6 py-2.5 text-sm font-bold text-primary-strong">{t('seeFullFeed')} →</Link>
+      <Link href="/bang-tin" className="self-center rounded-full bg-primary-soft px-6 py-2.5 text-sm font-bold text-primary-strong">
+        {t('seeFullFeed')} →
+      </Link>
     </section>
   );
 

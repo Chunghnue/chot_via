@@ -11,10 +11,15 @@ export function DashboardPage() {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader title={t('title')} sub={t('note')} />
-      {isLoading || !data ? <Skeleton className="h-48" /> : (
+      {isLoading || !data ? (
+        <Skeleton className="h-48" />
+      ) : (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
           {KEYS.map((k) => (
-            <Card key={k} className="p-4"><p className="text-xs font-semibold text-ink-muted">{t(k)}</p><p className="mt-1 font-display text-3xl font-extrabold text-primary-strong">{formatNumber(data[k])}</p></Card>
+            <Card key={k} className="p-4">
+              <p className="text-xs font-semibold text-ink-muted">{t(k)}</p>
+              <p className="mt-1 font-display text-3xl font-extrabold text-primary-strong">{formatNumber(data[k])}</p>
+            </Card>
           ))}
         </div>
       )}

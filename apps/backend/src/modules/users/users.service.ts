@@ -110,7 +110,11 @@ export class UsersService {
     if (blockerId === blockedId) throw new DomainError('USER_SELF_ACTION');
     if (on) {
       await this.db.insert(userBlocks).values({ blockerId, blockedId }).onConflictDoNothing();
-      await this.db.delete(userFollows).where(or(and(eq(userFollows.followerId, blockerId), eq(userFollows.followeeId, blockedId)), and(eq(userFollows.followerId, blockedId), eq(userFollows.followeeId, blockerId))));
+      await this.db
+        .delete(userFollows)
+        .where(
+          or(and(eq(userFollows.followerId, blockerId), eq(userFollows.followeeId, blockedId)), and(eq(userFollows.followerId, blockedId), eq(userFollows.followeeId, blockerId))),
+        );
     } else {
       await this.db.delete(userBlocks).where(and(eq(userBlocks.blockerId, blockerId), eq(userBlocks.blockedId, blockedId)));
     }

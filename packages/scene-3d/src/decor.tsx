@@ -18,9 +18,25 @@ function Hedge({ p, colors }: { p: V3; colors: SceneColors }) {
 function Planter({ p, colors }: { p: V3; colors: SceneColors }) {
   return (
     <group position={p}>
-      <mesh position={[0, 0.3, 0]}><cylinderGeometry args={[0.6, 0.5, 0.6, 12]} /><Mat c={colors.stone} /></mesh>
-      <mesh position={[0, 0.7, 0]}><sphereGeometry args={[0.55, 10, 8]} /><Mat c={colors.leafLight} /></mesh>
-      {[[-0.3, 1, 0.1], [0.3, 1.05, -0.1], [0, 1.2, 0.2], [0.1, 0.95, 0.35]].map((q, i) => <mesh key={i} position={q as V3}><sphereGeometry args={[0.2, 8, 6]} /><Mat c={i % 2 ? colors.blossomDark : colors.blossom} /></mesh>)}
+      <mesh position={[0, 0.3, 0]}>
+        <cylinderGeometry args={[0.6, 0.5, 0.6, 12]} />
+        <Mat c={colors.stone} />
+      </mesh>
+      <mesh position={[0, 0.7, 0]}>
+        <sphereGeometry args={[0.55, 10, 8]} />
+        <Mat c={colors.leafLight} />
+      </mesh>
+      {[
+        [-0.3, 1, 0.1],
+        [0.3, 1.05, -0.1],
+        [0, 1.2, 0.2],
+        [0.1, 0.95, 0.35],
+      ].map((q, i) => (
+        <mesh key={i} position={q as V3}>
+          <sphereGeometry args={[0.2, 8, 6]} />
+          <Mat c={i % 2 ? colors.blossomDark : colors.blossom} />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -62,8 +78,20 @@ function Rocks({ p, colors }: { p: V3; colors: SceneColors }) {
 function MaiTree({ p, colors }: { p: V3; colors: SceneColors }) {
   return (
     <group position={p} scale={1.6}>
-      <mesh position={[0, 0.9, 0]}><cylinderGeometry args={[0.13, 0.2, 1.8, 7]} /><Mat c={colors.trunk} /></mesh>
-      {[[0, 2.2, 0, 0.9], [-0.55, 1.8, 0.1, 0.62], [0.55, 1.9, -0.1, 0.65]].map(([x, y, z, r], i) => <mesh key={i} position={[x ?? 0, y ?? 0, z ?? 0]}><icosahedronGeometry args={[r ?? 0.6, 1]} /><Mat c={colors.mai} /></mesh>)}
+      <mesh position={[0, 0.9, 0]}>
+        <cylinderGeometry args={[0.13, 0.2, 1.8, 7]} />
+        <Mat c={colors.trunk} />
+      </mesh>
+      {[
+        [0, 2.2, 0, 0.9],
+        [-0.55, 1.8, 0.1, 0.62],
+        [0.55, 1.9, -0.1, 0.65],
+      ].map(([x, y, z, r], i) => (
+        <mesh key={i} position={[x ?? 0, y ?? 0, z ?? 0]}>
+          <icosahedronGeometry args={[r ?? 0.6, 1]} />
+          <Mat c={colors.mai} />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -85,11 +113,30 @@ function TableSet({ p, colors }: { p: V3; colors: SceneColors }) {
 function Stall({ p, colors }: { p: V3; colors: SceneColors }) {
   return (
     <group position={p}>
-      <mesh position={[0, 0.6, 0]}><boxGeometry args={[2.4, 1.2, 1.1]} /><Mat c={colors.bench} /></mesh>
-      {[-1.1, 1.1].map((x) => <mesh key={x} position={[x, 1.6, 0.45]}><cylinderGeometry args={[0.05, 0.05, 2.2, 6]} /><Mat c={colors.metal} /></mesh>)}
-      {[-0.75, -0.25, 0.25, 0.75].map((x, i) => <mesh key={x} position={[x, 2.75, 0.2]} rotation={[0.35, 0, 0]}><boxGeometry args={[0.5, 0.06, 1.5]} /><Mat c={i % 2 ? colors.stripe : colors.red} /></mesh>)}
-      <mesh position={[-0.5, 1.35, 0.1]}><boxGeometry args={[0.4, 0.3, 0.4]} /><Mat c={colors.red} /></mesh>
-      <mesh position={[0.5, 1.3, 0.1]}><sphereGeometry args={[0.25, 8, 8]} /><Mat c={colors.deityGold} /></mesh>
+      <mesh position={[0, 0.6, 0]}>
+        <boxGeometry args={[2.4, 1.2, 1.1]} />
+        <Mat c={colors.bench} />
+      </mesh>
+      {[-1.1, 1.1].map((x) => (
+        <mesh key={x} position={[x, 1.6, 0.45]}>
+          <cylinderGeometry args={[0.05, 0.05, 2.2, 6]} />
+          <Mat c={colors.metal} />
+        </mesh>
+      ))}
+      {[-0.75, -0.25, 0.25, 0.75].map((x, i) => (
+        <mesh key={x} position={[x, 2.75, 0.2]} rotation={[0.35, 0, 0]}>
+          <boxGeometry args={[0.5, 0.06, 1.5]} />
+          <Mat c={i % 2 ? colors.stripe : colors.red} />
+        </mesh>
+      ))}
+      <mesh position={[-0.5, 1.35, 0.1]}>
+        <boxGeometry args={[0.4, 0.3, 0.4]} />
+        <Mat c={colors.red} />
+      </mesh>
+      <mesh position={[0.5, 1.3, 0.1]}>
+        <sphereGeometry args={[0.25, 8, 8]} />
+        <Mat c={colors.deityGold} />
+      </mesh>
     </group>
   );
 }
@@ -116,10 +163,29 @@ function Gate({ z, colors }: { z: number; colors: SceneColors }) {
 function Gazebo({ p, colors }: { p: V3; colors: SceneColors }) {
   return (
     <group position={p}>
-      <mesh position={[0, 0.15, 0]}><cylinderGeometry args={[2.6, 2.8, 0.3, 8]} /><Mat c={colors.tileA} /></mesh>
-      {[[-1.9, -1.9], [1.9, -1.9], [-1.9, 1.9], [1.9, 1.9]].map(([x, z], i) => <mesh key={i} position={[x ?? 0, 1.7, z ?? 0]}><cylinderGeometry args={[0.13, 0.13, 3, 6]} /><Mat c={colors.red} /></mesh>)}
-      <mesh position={[0, 3.9, 0]}><coneGeometry args={[3.5, 1.6, 8]} /><Mat c={colors.bench} /></mesh>
-      <mesh position={[0, 4.8, 0]}><sphereGeometry args={[0.2, 8, 6]} /><Mat c={colors.deityGold} /></mesh>
+      <mesh position={[0, 0.15, 0]}>
+        <cylinderGeometry args={[2.6, 2.8, 0.3, 8]} />
+        <Mat c={colors.tileA} />
+      </mesh>
+      {[
+        [-1.9, -1.9],
+        [1.9, -1.9],
+        [-1.9, 1.9],
+        [1.9, 1.9],
+      ].map(([x, z], i) => (
+        <mesh key={i} position={[x ?? 0, 1.7, z ?? 0]}>
+          <cylinderGeometry args={[0.13, 0.13, 3, 6]} />
+          <Mat c={colors.red} />
+        </mesh>
+      ))}
+      <mesh position={[0, 3.9, 0]}>
+        <coneGeometry args={[3.5, 1.6, 8]} />
+        <Mat c={colors.bench} />
+      </mesh>
+      <mesh position={[0, 4.8, 0]}>
+        <sphereGeometry args={[0.2, 8, 6]} />
+        <Mat c={colors.deityGold} />
+      </mesh>
     </group>
   );
 }

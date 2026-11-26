@@ -21,8 +21,15 @@ function MyPlaces() {
       {data.map((p) => (
         <Link key={p.id} href={`/diem/${p.slug}/cai-dat`}>
           <Card className="flex items-center gap-3 p-3 hover:bg-surface-muted">
-            <span className="w-20 shrink-0 rounded-xl bg-linear-to-b from-scene-sky to-scene-ground p-1"><PlaceIllustration modelKey={p.modelKey} /></span>
-            <span className="min-w-0 flex-1"><span className="block truncate font-display text-lg font-bold">{p.title}</span><span className="text-xs text-ink-muted">{p.categoryName} · {t(`kind.${p.kind}`)}</span></span>
+            <span className="w-20 shrink-0 rounded-xl bg-linear-to-b from-scene-sky to-scene-ground p-1">
+              <PlaceIllustration modelKey={p.modelKey} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-display text-lg font-bold">{p.title}</span>
+              <span className="text-xs text-ink-muted">
+                {p.categoryName} · {t(`kind.${p.kind}`)}
+              </span>
+            </span>
             <Badge tone="success">{p.wishCount} 🙏</Badge>
           </Card>
         </Link>
@@ -56,15 +63,27 @@ export default function CreatePlacePage() {
         <div className="flex flex-col gap-3 p-5">
           <ul className="flex flex-col gap-2">
             {perks.map((text) => (
-              <li key={text} className="flex items-center gap-2.5 text-base font-semibold text-ink"><Check className="size-5 shrink-0 rounded-full bg-primary p-0.5 text-on-primary" aria-hidden />{text}</li>
+              <li key={text} className="flex items-center gap-2.5 text-base font-semibold text-ink">
+                <Check className="size-5 shrink-0 rounded-full bg-primary p-0.5 text-on-primary" aria-hidden />
+                {text}
+              </li>
             ))}
           </ul>
-          <Button size="lg" className="w-full btn-glossy font-bold" onClick={start}>{t('heroCta')}</Button>
+          <Button size="lg" className="w-full btn-glossy font-bold" onClick={start}>
+            {t('heroCta')}
+          </Button>
           {isMember ? null : <p className="text-center text-xs text-ink-muted">{t('loginHint')}</p>}
         </div>
       </Card>
       {isMember ? <MyPlaces /> : null}
-      {isMember && showForm ? <div ref={formRef}><Card className="p-5"><h2 className="mb-3 font-display text-xl font-extrabold">{t('createTitle')}</h2><PlaceForm /></Card></div> : null}
+      {isMember && showForm ? (
+        <div ref={formRef}>
+          <Card className="p-5">
+            <h2 className="mb-3 font-display text-xl font-extrabold">{t('createTitle')}</h2>
+            <PlaceForm />
+          </Card>
+        </div>
+      ) : null}
     </div>
   );
 }

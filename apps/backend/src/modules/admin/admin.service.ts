@@ -73,9 +73,27 @@ export class AdminService {
     const map = new Map<string, AdminReportDto['preview']>();
     const ids = (t: ReportTarget): string[] => targets.filter((x) => x.type === t).map((x) => x.id);
     const [p, c, pl] = await Promise.all([
-      ids('post').length ? this.db.select({ id: posts.id, text: posts.body, name: users.displayName, status: posts.status }).from(posts).innerJoin(users, eq(posts.authorId, users.id)).where(inArray(posts.id, ids('post'))) : [],
-      ids('comment').length ? this.db.select({ id: comments.id, text: comments.body, name: users.displayName, status: comments.status }).from(comments).innerJoin(users, eq(comments.userId, users.id)).where(inArray(comments.id, ids('comment'))) : [],
-      ids('place').length ? this.db.select({ id: places.id, text: places.title, name: users.displayName, status: places.status }).from(places).leftJoin(users, eq(places.ownerId, users.id)).where(inArray(places.id, ids('place'))) : [],
+      ids('post').length
+        ? this.db
+            .select({ id: posts.id, text: posts.body, name: users.displayName, status: posts.status })
+            .from(posts)
+            .innerJoin(users, eq(posts.authorId, users.id))
+            .where(inArray(posts.id, ids('post')))
+        : [],
+      ids('comment').length
+        ? this.db
+            .select({ id: comments.id, text: comments.body, name: users.displayName, status: comments.status })
+            .from(comments)
+            .innerJoin(users, eq(comments.userId, users.id))
+            .where(inArray(comments.id, ids('comment')))
+        : [],
+      ids('place').length
+        ? this.db
+            .select({ id: places.id, text: places.title, name: users.displayName, status: places.status })
+            .from(places)
+            .leftJoin(users, eq(places.ownerId, users.id))
+            .where(inArray(places.id, ids('place')))
+        : [],
     ]);
     for (const row of [...p, ...c, ...pl]) map.set(row.id, { text: row.text, authorName: row.name, status: row.status });
     return map;
@@ -140,7 +158,18 @@ export class AdminService {
     if (query.status === 'published' || query.status === 'hidden') where.push(eq(comments.status, query.status));
     const rows = await this.db.select({ c: comments, author }).from(comments).innerJoin(users, eq(comments.userId, users.id))
       .where(and(...where)).orderBy(desc(comments.createdAt)).limit(query.pageSize + 1).offset(offsetOf(query.page, query.pageSize));
-    return paged(rows.map((r): AdminCommentDto => ({ id: r.c.id, postId: r.c.postId, body: r.c.body, author: userSummary(r.author, levels), status: r.c.status, createdAt: iso(r.c.createdAt) })), query.page, query.pageSize);
+    return paged(
+      rows.map((r): AdminCommentDto => ({
+        id: r.c.id,
+        postId: r.c.postId,
+        body: r.c.body,
+        author: userSummary(r.author, levels),
+        status: r.c.status,
+        createdAt: iso(r.c.createdAt),
+      })),
+      query.page,
+      query.pageSize,
+    );
   }
 
   async setCommentStatus(id: string, status: 'published' | 'hidden', actorId: string): Promise<void> {
@@ -185,6 +214,10 @@ export class AdminService {
   async auditList(page: number, pageSize: number): Promise<ApiPaged<AuditLogDto>> {
     const rows = await this.db.select({ a: auditLogs, actor: users.displayName }).from(auditLogs).leftJoin(users, eq(auditLogs.actorId, users.id))
       .orderBy(desc(auditLogs.createdAt)).limit(pageSize + 1).offset(offsetOf(page, pageSize));
-    return paged(rows.map((r): AuditLogDto => ({ id: r.a.id, actorName: r.actor, action: r.a.action, objectType: r.a.objectType, objectId: r.a.objectId, createdAt: iso(r.a.createdAt) })), page, pageSize);
+    return paged(
+      rows.map((r): AuditLogDto => ({ id: r.a.id, actorName: r.actor, action: r.a.action, objectType: r.a.objectType, objectId: r.a.objectId, createdAt: iso(r.a.createdAt) })),
+      page,
+      pageSize,
+    );
   }
 }

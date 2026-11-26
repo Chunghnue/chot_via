@@ -74,15 +74,28 @@ function SendWishForm({ place, onDone }: { place: PlaceDetail; onDone: () => voi
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <img src={SHOP_IMAGES[place.modelKey]} alt="" aria-hidden className="size-14 shrink-0 rounded-2xl bg-linear-to-b from-scene-sky to-scene-ground object-contain p-1" draggable={false} />
+        <img
+          src={SHOP_IMAGES[place.modelKey]}
+          alt=""
+          aria-hidden
+          className="size-14 shrink-0 rounded-2xl bg-linear-to-b from-scene-sky to-scene-ground object-contain p-1"
+          draggable={false}
+        />
         <p className="font-display text-xl font-extrabold text-ink">{place.title}</p>
       </div>
       <div>
         <h3 className="mb-2 text-sm font-bold text-ink">{t('chooseType')}</h3>
         <div className="grid grid-cols-3 gap-2">
           {catalog?.wishTypes.map((w) => (
-            <ToggleTile key={w.id} tone="solid" active={typeId === w.id} onClick={() => setTypeId(w.id)} className="flex flex-col items-center gap-1 rounded-2xl border-2 px-2 py-3 text-center text-xs font-bold">
-              <AppIcon iconKey={w.iconKey} className="text-3xl" />{w.name}
+            <ToggleTile
+              key={w.id}
+              tone="solid"
+              active={typeId === w.id}
+              onClick={() => setTypeId(w.id)}
+              className="flex flex-col items-center gap-1 rounded-2xl border-2 px-2 py-3 text-center text-xs font-bold"
+            >
+              <AppIcon iconKey={w.iconKey} className="text-3xl" />
+              {w.name}
             </ToggleTile>
           ))}
         </div>
@@ -92,7 +105,14 @@ function SendWishForm({ place, onDone }: { place: PlaceDetail; onDone: () => voi
           <h3 className="mb-2 text-sm font-bold text-ink">{t('chooseSticker')}</h3>
           <div className="flex gap-2">
             {catalog.stickers.map((s) => (
-              <ToggleTile key={s.id} tone="outline" aria-label={s.name} active={stickerId === s.id} onClick={() => setStickerId(stickerId === s.id ? null : s.id)} className="flex size-14 items-center justify-center rounded-2xl border-2">
+              <ToggleTile
+                key={s.id}
+                tone="outline"
+                aria-label={s.name}
+                active={stickerId === s.id}
+                onClick={() => setStickerId(stickerId === s.id ? null : s.id)}
+                className="flex size-14 items-center justify-center rounded-2xl border-2"
+              >
                 <AppIcon iconKey={s.iconKey} className="text-3xl" />
               </ToggleTile>
             ))}
@@ -101,10 +121,14 @@ function SendWishForm({ place, onDone }: { place: PlaceDetail; onDone: () => voi
       ) : null}
       <div>
         <Textarea value={text} maxLength={settings.wishMessageMaxChars} onChange={(e) => setText(e.target.value)} placeholder={t('messagePlaceholder')} className="min-h-20" />
-        <p className="mt-1 text-right text-xs text-ink-subtle">{text.length}/{settings.wishMessageMaxChars}</p>
+        <p className="mt-1 text-right text-xs text-ink-subtle">
+          {text.length}/{settings.wishMessageMaxChars}
+        </p>
       </div>
       <FieldError message={error ?? undefined} />
-      <Button size="lg" loading={isLoading} onClick={() => void submit()}>{t('sendNow')}</Button>
+      <Button size="lg" loading={isLoading} onClick={() => void submit()}>
+        {t('sendNow')}
+      </Button>
     </div>
   );
 }
@@ -129,9 +153,18 @@ export function PlaceSheet() {
   }, [placeId, place, visit]);
 
   return (
-    <Sheet open={placeId !== null} onOpenChange={(o) => { if (!o) dispatch(placeSheetClosed()); }} size="lg"
-      title={step === 'wish' && place ? t('sendWishTo', { place: place.title }) : (place?.title ?? tc('loading'))} closeLabel={tc('close')}>
-      {isLoading || !place ? <Skeleton className="h-64" /> : step === 'wish' ? (
+    <Sheet
+      open={placeId !== null}
+      onOpenChange={(o) => {
+        if (!o) dispatch(placeSheetClosed());
+      }}
+      size="lg"
+      title={step === 'wish' && place ? t('sendWishTo', { place: place.title }) : (place?.title ?? tc('loading'))}
+      closeLabel={tc('close')}
+    >
+      {isLoading || !place ? (
+        <Skeleton className="h-64" />
+      ) : step === 'wish' ? (
         <SendWishForm place={place} onDone={() => dispatch(placeSheetClosed())} />
       ) : (
         <div className="flex flex-col gap-4">
@@ -143,14 +176,28 @@ export function PlaceSheet() {
           </div>
           {place.tagline ? <p className="text-ink-muted">{place.tagline}</p> : null}
           <dl className="grid grid-cols-3 gap-2 text-center">
-            {([['visits', place.visitCount], ['followers', place.followCount], ['wishes', place.wishCount]] as const).map(([key, value]) => (
-              <div key={key} className="rounded-2xl bg-surface-muted py-2"><dt className="text-xs text-ink-muted">{t(`stats.${key}`)}</dt><dd className="font-display text-xl font-extrabold text-ink">{compactCount(value)}</dd></div>
+            {(
+              [
+                ['visits', place.visitCount],
+                ['followers', place.followCount],
+                ['wishes', place.wishCount],
+              ] as const
+            ).map(([key, value]) => (
+              <div key={key} className="rounded-2xl bg-surface-muted py-2">
+                <dt className="text-xs text-ink-muted">{t(`stats.${key}`)}</dt>
+                <dd className="font-display text-xl font-extrabold text-ink">{compactCount(value)}</dd>
+              </div>
             ))}
           </dl>
           {place.isDemo ? <p className="rounded-xl bg-gold-soft px-3 py-2 text-xs text-gold-strong">{t('demoNote')}</p> : null}
           <div className="flex gap-2">
-            <Button className="flex-1" size="lg" onClick={() => dispatch(placeSheetStepChanged('wish'))}><span aria-hidden>🙏</span>{t('sendWishCta')}</Button>
-            <Link href={`/diem/${place.slug}`} onClick={() => dispatch(placeSheetClosed())} className={cn(buttonClass({ variant: 'outline', size: 'lg' }), 'flex-1')}>{t('visit')}</Link>
+            <Button className="flex-1" size="lg" onClick={() => dispatch(placeSheetStepChanged('wish'))}>
+              <span aria-hidden>🙏</span>
+              {t('sendWishCta')}
+            </Button>
+            <Link href={`/diem/${place.slug}`} onClick={() => dispatch(placeSheetClosed())} className={cn(buttonClass({ variant: 'outline', size: 'lg' }), 'flex-1')}>
+              {t('visit')}
+            </Link>
           </div>
         </div>
       )}

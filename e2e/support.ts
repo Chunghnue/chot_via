@@ -33,7 +33,11 @@ export async function loginViaUi(page: Page, phone: string = newPhone()): Promis
 
 export const API = 'http://localhost:3101/api/v1';
 let ipSeq = Math.floor(Math.random() * 200) + 20;
-export const headers = (): Record<string, string> => ({ 'x-requested-with': 'chotvia', 'content-type': 'application/json', 'x-forwarded-for': `10.77.${ipSeq++ % 250}.${Math.floor(Math.random() * 250) + 1}` });
+export const headers = (): Record<string, string> => ({
+  'x-requested-with': 'chotvia',
+  'content-type': 'application/json',
+  'x-forwarded-for': `10.77.${ipSeq++ % 250}.${Math.floor(Math.random() * 250) + 1}`,
+});
 
 /** Đăng nhập OTP thẳng vào API test; cookie phiên được lưu vào chính `request` (dùng chung với trình duyệt nếu là `page.context().request`). */
 export async function apiLogin(request: APIRequestContext): Promise<{ token: string; userId: string }> {

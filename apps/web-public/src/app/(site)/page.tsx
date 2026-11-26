@@ -17,7 +17,14 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   return {
     alternates: { canonical: '/' },
     title: preview.title,
-    openGraph: { type: 'website', url: `/?via=${via}`, title: preview.title, description: viMessages.common.meta.ogDescription, siteName: brand, images: [{ url: preview.image, width: 1200, height: 630, alt: preview.title }] },
+    openGraph: {
+      type: 'website',
+      url: `/?via=${via}`,
+      title: preview.title,
+      description: viMessages.common.meta.ogDescription,
+      siteName: brand,
+      images: [{ url: preview.image, width: 1200, height: 630, alt: preview.title }],
+    },
     twitter: { card: 'summary_large_image', title: preview.title, description: viMessages.common.meta.twitterDescription, images: [preview.image] },
   };
 }

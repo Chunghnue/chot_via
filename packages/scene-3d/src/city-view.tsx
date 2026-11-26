@@ -65,8 +65,18 @@ export function CityView({ fallback, className, onSelectPlace, onSelectDeity, co
         <Boundary fallback={fallback}>
           <Suspense fallback={null}>
             <CityStreet
-              {...rest} config={config} quality={q.quality} maxFps={q.maxFps} active={visible} reducedMotion={capability.reducedMotion}
-              resetTick={resetTick} autoRotate={false} onSelectPlace={pickPlace} onSelectDeity={pickDeity} onReady={() => setSceneReady(true)} className={cn('absolute inset-0 transition-opacity duration-500', sceneReady ? 'opacity-100' : 'opacity-0')}
+              {...rest}
+              config={config}
+              quality={q.quality}
+              maxFps={q.maxFps}
+              active={visible}
+              reducedMotion={capability.reducedMotion}
+              resetTick={resetTick}
+              autoRotate={false}
+              onSelectPlace={pickPlace}
+              onSelectDeity={pickDeity}
+              onReady={() => setSceneReady(true)}
+              className={cn('absolute inset-0 transition-opacity duration-500', sceneReady ? 'opacity-100' : 'opacity-0')}
             />
           </Suspense>
         </Boundary>

@@ -74,7 +74,19 @@ export const StreetSlotInputSchema = z.object({
 });
 export type StreetSlotInput = z.infer<typeof StreetSlotInputSchema>;
 
-export const HomeActionDtoSchema = HomeActionInputSchema.pick({ code: true, label: true, subLabel: true, iconUrl: true, kind: true, href: true, showMobile: true, showTablet: true, showDesktop: true, sortTablet: true, sortDesktop: true });
+export const HomeActionDtoSchema = HomeActionInputSchema.pick({
+  code: true,
+  label: true,
+  subLabel: true,
+  iconUrl: true,
+  kind: true,
+  href: true,
+  showMobile: true,
+  showTablet: true,
+  showDesktop: true,
+  sortTablet: true,
+  sortDesktop: true,
+});
 export type HomeActionDto = z.infer<typeof HomeActionDtoSchema>;
 export const FooterLinkDtoSchema = FooterLinkInputSchema.pick({ groupName: true, label: true, href: true });
 export type FooterLinkDto = z.infer<typeof FooterLinkDtoSchema>;
@@ -98,10 +110,14 @@ export type HomeLayout = z.infer<typeof HomeLayoutSchema>;
 const M = '/3d/models/';
 /** Bố cục vật trang trí mặc định theo gói 3D v2: cây hai bên, đèn đường dọc vỉa hè, ghế, quà cạnh Thần Tài, đài phun nước cuối phố. */
 const DEFAULT_HOME_PROPS: HomeProp[] = [
-  ...[8, -2, -12, -22].flatMap((z, i) => [-1, 1].map((side) => ({ glbUrl: `${M}${(i + (side > 0 ? 1 : 0)) % 2 === 0 ? 'tree_green' : 'tree_blossom'}.glb`, x: side * 17, z, rotationDeg: 0, scale: 1.7 }))),
+  ...[8, -2, -12, -22].flatMap((z, i) =>
+    [-1, 1].map((side) => ({ glbUrl: `${M}${(i + (side > 0 ? 1 : 0)) % 2 === 0 ? 'tree_green' : 'tree_blossom'}.glb`, x: side * 17, z, rotationDeg: 0, scale: 1.7 })),
+  ),
   ...[11, 1, -9, -19].flatMap((z) => [-1, 1].map((side) => ({ glbUrl: `${M}street_lamp.glb`, x: side * 5.8, z, rotationDeg: 0, scale: 1.3 }))),
-  { glbUrl: `${M}bench.glb`, x: -7.4, z: -0.5, rotationDeg: 90, scale: 1.3 }, { glbUrl: `${M}bench.glb`, x: 7.4, z: -0.5, rotationDeg: -90, scale: 1.3 },
-  { glbUrl: `${M}gift.glb`, x: -3, z: 5, rotationDeg: 20, scale: 1.5 }, { glbUrl: `${M}gift.glb`, x: 3.2, z: 5.2, rotationDeg: -30, scale: 1.3 },
+  { glbUrl: `${M}bench.glb`, x: -7.4, z: -0.5, rotationDeg: 90, scale: 1.3 },
+  { glbUrl: `${M}bench.glb`, x: 7.4, z: -0.5, rotationDeg: -90, scale: 1.3 },
+  { glbUrl: `${M}gift.glb`, x: -3, z: 5, rotationDeg: 20, scale: 1.5 },
+  { glbUrl: `${M}gift.glb`, x: 3.2, z: 5.2, rotationDeg: -30, scale: 1.3 },
   { glbUrl: `${M}fountain.glb`, x: 0, z: -26, rotationDeg: 0, scale: 2.4 },
 ];
 

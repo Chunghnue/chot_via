@@ -50,15 +50,32 @@ export function ImageInput({ value, onChange, label }: { value: string | null; o
   const { error: toastError } = useApiToast();
   return (
     <div className="flex items-center gap-3">
-      {value ? <img src={value} alt="" className="h-16 w-24 rounded-xl bg-surface-muted object-cover" /> : <span className="flex h-16 w-24 items-center justify-center rounded-xl bg-surface-muted text-xs text-ink-subtle">—</span>}
+      {value ? (
+        <img src={value} alt="" className="h-16 w-24 rounded-xl bg-surface-muted object-cover" />
+      ) : (
+        <span className="flex h-16 w-24 items-center justify-center rounded-xl bg-surface-muted text-xs text-ink-subtle">—</span>
+      )}
       <label className="cursor-pointer rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-surface-muted">
         {isLoading ? t('uploading') : label}
-        <input type="file" accept="image/*" className="sr-only" onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) void upload(file).unwrap().then((m) => onChange(m.url)).catch(toastError);
-        }} />
+        <input
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file)
+              void upload(file)
+                .unwrap()
+                .then((m) => onChange(m.url))
+                .catch(toastError);
+          }}
+        />
       </label>
-      {value ? <Button type="button" variant="ghost" size="sm" onClick={() => onChange(null)}>{t('removeImage')}</Button> : null}
+      {value ? (
+        <Button type="button" variant="ghost" size="sm" onClick={() => onChange(null)}>
+          {t('removeImage')}
+        </Button>
+      ) : null}
     </div>
   );
 }
@@ -140,24 +157,100 @@ export function ResourcePage<Item extends { id: string }, I extends FieldValues>
             return (
               <div key={f.name}>
                 {f.kind === 'switch' ? (
-                  <Controller control={form.control} name={f.name} render={({ field }) => <SwitchField label={f.label} checked={field.value === true} onCheckedChange={field.onChange} />} />
+                  <Controller
+                    control={form.control}
+                    name={f.name}
+                    render={({ field }) => <SwitchField label={f.label} checked={field.value === true} onCheckedChange={field.onChange} />}
+                  />
                 ) : (
                   <FormField label={f.label} htmlFor={f.name} error={err ? text(err.message) || t('required') : undefined}>
                     {f.kind === 'text' ? <Input id={f.name} {...form.register(f.name)} /> : null}
-                    {f.kind === 'nullableText' ? <Controller control={form.control} name={f.name} render={({ field }) => <Input id={f.name} value={text(field.value)} onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)} />} /> : null}
+                    {f.kind === 'nullableText' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => <Input id={f.name} value={text(field.value)} onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)} />}
+                      />
+                    ) : null}
                     {f.kind === 'textarea' ? <Textarea id={f.name} {...form.register(f.name)} /> : null}
                     {f.kind === 'number' ? <Input id={f.name} type="number" {...form.register(f.name, { valueAsNumber: true })} /> : null}
-                    {f.kind === 'nullableNumber' ? <Input id={f.name} type="number" {...form.register(f.name, { setValueAs: (v: unknown) => (v === '' || v === null || v === undefined ? null : Number(v)) })} /> : null}
-                    {f.kind === 'select' ? <Select id={f.name} {...form.register(f.name)}>{f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select> : null}
-                    {f.kind === 'nullableSelect' ? (
-                      <Controller control={form.control} name={f.name} render={({ field }) => (
-                        <Select id={f.name} value={text(field.value)} onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)}>{f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select>
-                      )} />
+                    {f.kind === 'nullableNumber' ? (
+                      <Input id={f.name} type="number" {...form.register(f.name, { setValueAs: (v: unknown) => (v === '' || v === null || v === undefined ? null : Number(v)) })} />
                     ) : null}
-                    {f.kind === 'image' ? <Controller control={form.control} name={f.name} render={({ field }) => <ImageInput label={f.label} value={typeof field.value === 'string' ? field.value : null} onChange={field.onChange} />} /> : null}
-                    {f.kind === 'asset' ? <Controller control={form.control} name={f.name} render={({ field }) => <AssetInput id={f.name} accept=".glb,image/*" value={typeof field.value === 'string' ? field.value : null} onChange={field.onChange} />} /> : null}
-                    {f.kind === 'tags' ? <Controller control={form.control} name={f.name} render={({ field }) => <Input id={f.name} value={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={(e) => field.onChange(e.target.value.split(',').map((x) => x.trim().replace(/^#/, '')).filter((x) => x !== ''))} />} /> : null}
-                    {f.kind === 'datetime' ? <Controller control={form.control} name={f.name} render={({ field }) => <Input id={f.name} type="datetime-local" value={toLocalInput(field.value)} onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value).toISOString() : '')} />} /> : null}
+                    {f.kind === 'select' ? (
+                      <Select id={f.name} {...form.register(f.name)}>
+                        {f.options?.map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </Select>
+                    ) : null}
+                    {f.kind === 'nullableSelect' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => (
+                          <Select id={f.name} value={text(field.value)} onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)}>
+                            {f.options?.map((o) => (
+                              <option key={o.value} value={o.value}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                    ) : null}
+                    {f.kind === 'image' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => <ImageInput label={f.label} value={typeof field.value === 'string' ? field.value : null} onChange={field.onChange} />}
+                      />
+                    ) : null}
+                    {f.kind === 'asset' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => (
+                          <AssetInput id={f.name} accept=".glb,image/*" value={typeof field.value === 'string' ? field.value : null} onChange={field.onChange} />
+                        )}
+                      />
+                    ) : null}
+                    {f.kind === 'tags' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => (
+                          <Input
+                            id={f.name}
+                            value={Array.isArray(field.value) ? field.value.join(', ') : ''}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value
+                                  .split(',')
+                                  .map((x) => x.trim().replace(/^#/, ''))
+                                  .filter((x) => x !== ''),
+                              )
+                            }
+                          />
+                        )}
+                      />
+                    ) : null}
+                    {f.kind === 'datetime' ? (
+                      <Controller
+                        control={form.control}
+                        name={f.name}
+                        render={({ field }) => (
+                          <Input
+                            id={f.name}
+                            type="datetime-local"
+                            value={toLocalInput(field.value)}
+                            onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value).toISOString() : '')}
+                          />
+                        )}
+                      />
+                    ) : null}
                   </FormField>
                 )}
               </div>

@@ -26,5 +26,7 @@ export function Pager({ page, hasMore, onPage }: { page: number; hasMore: boolea
 export function TableShell({ children }: { children: ReactNode }) {
   return <div className="overflow-x-auto rounded-card bg-surface shadow-card"><table className="w-full min-w-[40rem] text-left text-sm">{children}</table></div>;
 }
-export const Th = ({ children }: { children?: ReactNode }) => <th className="whitespace-nowrap border-b border-border px-4 py-3 text-xs font-bold uppercase tracking-wide text-ink-subtle">{children}</th>;
+export const Th = ({ children }: { children?: ReactNode }) => (
+  <th className="whitespace-nowrap border-b border-border px-4 py-3 text-xs font-bold uppercase tracking-wide text-ink-subtle">{children}</th>
+);
 export const Td = ({ children, className }: { children?: ReactNode; className?: string }) => <td className={`border-b border-border px-4 py-3 align-top ${className ?? ''}`}>{children}</td>;

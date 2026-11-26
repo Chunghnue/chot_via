@@ -35,10 +35,26 @@ export class HomeLayoutService {
     ]);
     return {
       config,
-      actions: actions.map((a) => ({ code: a.code, label: a.label, subLabel: a.subLabel, iconUrl: a.iconUrl, kind: a.kind, href: a.href, showMobile: a.showMobile, showTablet: a.showTablet, showDesktop: a.showDesktop, sortTablet: a.sortTablet, sortDesktop: a.sortDesktop })),
+      actions: actions.map((a) => ({
+        code: a.code,
+        label: a.label,
+        subLabel: a.subLabel,
+        iconUrl: a.iconUrl,
+        kind: a.kind,
+        href: a.href,
+        showMobile: a.showMobile,
+        showTablet: a.showTablet,
+        showDesktop: a.showDesktop,
+        sortTablet: a.sortTablet,
+        sortDesktop: a.sortDesktop,
+      })),
       footerLinks: links.map((l) => ({ groupName: l.groupName, label: l.label, href: l.href })),
       street: slots.map(({ s, t }) => ({
-        id: s.id, label: s.label, placeId: s.placeId, modelKey: t.modelKey, modelScale: t.modelScale,
+        id: s.id,
+        label: s.label,
+        placeId: s.placeId,
+        modelKey: t.modelKey,
+        modelScale: t.modelScale,
         glb: { high: t.glbUrl, lod1: t.glbLod1Url, lod2: t.glbLod2Url },
         region: { x: s.imageX, y: s.imageY, w: s.imageW, h: s.imageH },
         position: { x: s.posX, z: s.posZ, rotationDeg: s.rotationDeg },

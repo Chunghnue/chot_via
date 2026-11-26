@@ -80,7 +80,18 @@ describe('tài khoản mẫu và bài mẫu', () => {
     const a = await adminLogin();
     const users = await get<DemoUser[]>('/admin/demo/users', { token: a.token });
     const author = users.data.find((u) => u.displayName === 'Tuấn Anh') ?? users.data[0];
-    const body = { authorId: author?.id, type: 'story', body: `Bài mẫu thử ${Date.now()}`, hashtags: ['thu'], imageUrl: null, pinned: true, reactionCount: 9999, commentCount: 3, shareCount: 2, hoursAgo: 0.1 };
+    const body = {
+      authorId: author?.id,
+      type: 'story',
+      body: `Bài mẫu thử ${Date.now()}`,
+      hashtags: ['thu'],
+      imageUrl: null,
+      pinned: true,
+      reactionCount: 9999,
+      commentCount: 3,
+      shareCount: 2,
+      hoursAgo: 0.1,
+    };
     expect((await post('/admin/demo/posts', body, { token: a.token })).status).toBe(201);
     const list = await get<DemoPost[]>('/admin/demo/posts', { token: a.token });
     const mine = list.data.find((p) => p.body === body.body);

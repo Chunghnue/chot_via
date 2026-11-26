@@ -103,25 +103,44 @@ export function WishBurst() {
       {current ? (
         <div className="pointer-events-none fixed inset-x-0 top-20 z-60 flex justify-center px-3">
           <div
-            role="status" aria-live="polite" data-testid="wish-card"
-            onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
+            role="status"
+            aria-live="polite"
+            data-testid="wish-card"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
             className="pointer-events-auto relative flex w-full max-w-md animate-pop-in items-center gap-3 rounded-3xl bg-linear-to-b from-gold-soft to-surface p-3 pr-9 shadow-card ring-2 ring-wish/40"
           >
-            <div className="w-16 shrink-0 sm:w-20"><DeityAvatar glow src="/images/than-tai-nhan-via.webp" /></div>
+            <div className="w-16 shrink-0 sm:w-20">
+              <DeityAvatar glow src="/images/than-tai-nhan-via.webp" />
+            </div>
             <div className="flex min-w-0 flex-col gap-1">
               <h3 className="font-display text-xl font-extrabold leading-tight text-wish-strong">{t('received')}</h3>
               <p className="text-base font-medium leading-snug text-ink">{current.text}</p>
               <div className="flex flex-wrap items-center gap-1.5">
                 {current.offline ? <Badge tone="warning">{t('offlineBadge')}</Badge> : null}
-                {current.pointsAwarded && user ? <Badge tone="success"><Check className="size-3" aria-hidden />{t('pointEarned')}</Badge> : null}
+                {current.pointsAwarded && user ? (
+                  <Badge tone="success">
+                    <Check className="size-3" aria-hidden />
+                    {t('pointEarned')}
+                  </Badge>
+                ) : null}
                 <span className="text-xs font-semibold text-ink-muted">{t('count', { count })}</span>
               </div>
               {current.offline ? <p className="text-xs text-warning">{t('offlineNote')}</p> : null}
               <ShareButtons text={current.text} card={{ kind: 'receive' }} link={`${siteUrl()}/?via=${HOME_SHARE_VIA.receive}`} />
-              <Link href="/pho-3d" onClick={() => dispatch(currentCleared())} className="w-fit text-sm font-bold text-primary-strong hover:underline">{t('suggest')} →</Link>
+              <Link href="/pho-3d" onClick={() => dispatch(currentCleared())} className="w-fit text-sm font-bold text-primary-strong hover:underline">
+                {t('suggest')} →
+              </Link>
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>
-            <button type="button" aria-label={t('dismiss')} onClick={() => dispatch(currentCleared())} className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted">
+            <button
+              type="button"
+              aria-label={t('dismiss')}
+              onClick={() => dispatch(currentCleared())}
+              className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted"
+            >
               <X className="size-4" aria-hidden />
             </button>
           </div>

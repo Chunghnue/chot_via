@@ -113,5 +113,20 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { wishRequested, ritualAsked, ritualOffered, ritualOfferClosed, ritualStarted, ritualPlaying, ritualEnded, loginRequested, loginDismissed, placeSheetOpened, placeSheetStepChanged, placeSheetClosed, reportRequested, reportDismissed } = uiSlice.actions;
+export const {
+  wishRequested,
+  ritualAsked,
+  ritualOffered,
+  ritualOfferClosed,
+  ritualStarted,
+  ritualPlaying,
+  ritualEnded,
+  loginRequested,
+  loginDismissed,
+  placeSheetOpened,
+  placeSheetStepChanged,
+  placeSheetClosed,
+  reportRequested,
+  reportDismissed,
+} = uiSlice.actions;
 export const { selectWishRequest, selectRitual, selectRitualOffer, selectRitualPending, selectLogin, selectPlaceSheet, selectReport } = uiSlice.selectors;

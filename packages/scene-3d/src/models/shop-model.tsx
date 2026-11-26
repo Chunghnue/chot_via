@@ -75,9 +75,20 @@ function RoofIcon({ kind, palette, theme }: { kind: ShopKind; palette: Palette; 
     case 'minimart':
       return (
         <group position={[-2.5, 0.9, 0.2]}>
-          <mesh position={[0, 0.35, 0]}><boxGeometry args={[0.9, 0.5, 0.5]} /><meshStandardMaterial color={white} /></mesh>
-          <mesh position={[-0.55, 0.65, 0]} rotation={[0, 0, 0.5]}><boxGeometry args={[0.5, 0.06, 0.06]} /><meshStandardMaterial color={white} /></mesh>
-          {[-0.3, 0.3].map((wx) => <mesh key={wx} position={[wx, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]}><cylinderGeometry args={[0.13, 0.13, 0.08, 12]} /><meshStandardMaterial color={white} /></mesh>)}
+          <mesh position={[0, 0.35, 0]}>
+            <boxGeometry args={[0.9, 0.5, 0.5]} />
+            <meshStandardMaterial color={white} />
+          </mesh>
+          <mesh position={[-0.55, 0.65, 0]} rotation={[0, 0, 0.5]}>
+            <boxGeometry args={[0.5, 0.06, 0.06]} />
+            <meshStandardMaterial color={white} />
+          </mesh>
+          {[-0.3, 0.3].map((wx) => (
+            <mesh key={wx} position={[wx, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.13, 0.13, 0.08, 12]} />
+              <meshStandardMaterial color={white} />
+            </mesh>
+          ))}
         </group>
       );
     case 'sale':
@@ -102,45 +113,105 @@ export function ShopModel({ kind, palette, signText, onSelect }: ShopModelProps)
 
   return (
     <group
-      onClick={(e) => { e.stopPropagation(); onSelect?.(); }}
-      onPointerOver={() => { if (onSelect) document.body.style.cursor = 'pointer'; }}
-      onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect?.();
+      }}
+      onPointerOver={() => {
+        if (onSelect) document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto';
+      }}
     >
       {isSale ? (
         <group>
           {/* Văn phòng: khung nhà xanh, mặt tiền kính trong suốt, thấy bàn làm việc và nhân viên */}
-          <mesh position={[0, height / 2, -1.2]}><boxGeometry args={[width, height, 2.2]} /><meshStandardMaterial color={palette[theme.wall]} roughness={0.7} /></mesh>
-          {[-1, 1].map((s) => <mesh key={s} position={[s * (width / 2 - 0.1), height / 2, 1.15]}><boxGeometry args={[0.2, height, 2.5]} /><meshStandardMaterial color={palette[theme.wall]} roughness={0.7} /></mesh>)}
-          <mesh position={[0, 0.08, 1.15]}><boxGeometry args={[width, 0.16, 2.5]} /><meshStandardMaterial color={palette['shopm-desk']} /></mesh>
-          <mesh position={[0, height + 0.12, 0.3]}><boxGeometry args={[width + 0.4, 0.28, 4.4]} /><meshStandardMaterial color={palette[theme.sign]} roughness={0.6} /></mesh>
-          <mesh position={[0, height / 2 + 0.2, 2.36]}><boxGeometry args={[width - 0.3, height - 0.4, 0.06]} /><meshStandardMaterial color={palette['shopm-glass']} transparent opacity={0.32} roughness={0.1} metalness={0.1} /></mesh>
+          <mesh position={[0, height / 2, -1.2]}>
+            <boxGeometry args={[width, height, 2.2]} />
+            <meshStandardMaterial color={palette[theme.wall]} roughness={0.7} />
+          </mesh>
+          {[-1, 1].map((s) => (
+            <mesh key={s} position={[s * (width / 2 - 0.1), height / 2, 1.15]}>
+              <boxGeometry args={[0.2, height, 2.5]} />
+              <meshStandardMaterial color={palette[theme.wall]} roughness={0.7} />
+            </mesh>
+          ))}
+          <mesh position={[0, 0.08, 1.15]}>
+            <boxGeometry args={[width, 0.16, 2.5]} />
+            <meshStandardMaterial color={palette['shopm-desk']} />
+          </mesh>
+          <mesh position={[0, height + 0.12, 0.3]}>
+            <boxGeometry args={[width + 0.4, 0.28, 4.4]} />
+            <meshStandardMaterial color={palette[theme.sign]} roughness={0.6} />
+          </mesh>
+          <mesh position={[0, height / 2 + 0.2, 2.36]}>
+            <boxGeometry args={[width - 0.3, height - 0.4, 0.06]} />
+            <meshStandardMaterial color={palette['shopm-glass']} transparent opacity={0.32} roughness={0.1} metalness={0.1} />
+          </mesh>
           {[-1.7, 0, 1.7].map((dx, i) => (
             <group key={dx}>
-              <mesh position={[dx, 0.82, 1.5]}><boxGeometry args={[1.5, 0.08, 0.9]} /><meshStandardMaterial color={palette['shopm-desk']} /></mesh>
-              <mesh position={[dx, 1.05, 1.35]} rotation={[-0.3, 0, 0]}><boxGeometry args={[0.6, 0.4, 0.04]} /><meshStandardMaterial color={palette['shopm-screen']} emissive={palette['shopm-screen']} emissiveIntensity={0.6} /></mesh>
+              <mesh position={[dx, 0.82, 1.5]}>
+                <boxGeometry args={[1.5, 0.08, 0.9]} />
+                <meshStandardMaterial color={palette['shopm-desk']} />
+              </mesh>
+              <mesh position={[dx, 1.05, 1.35]} rotation={[-0.3, 0, 0]}>
+                <boxGeometry args={[0.6, 0.4, 0.04]} />
+                <meshStandardMaterial color={palette['shopm-screen']} emissive={palette['shopm-screen']} emissiveIntensity={0.6} />
+              </mesh>
               <Person palette={palette} x={dx} z={0.6} shirt={(['scene-person-a', 'scene-person-b', 'scene-person-d'] as const)[i] ?? 'scene-person-a'} facing={Math.PI} seated />
             </group>
           ))}
-          <mesh position={[0, height - 0.5, 2.3]}><boxGeometry args={[width - 0.3, 0.22, 0.16]} /><meshStandardMaterial color={palette[theme.accent]} /></mesh>
-          <mesh position={[width / 2 - 1.1, 1.2, 2.4]}><boxGeometry args={[1.1, 2.3, 0.1]} /><meshStandardMaterial color={palette['shopm-glass']} transparent opacity={0.5} /></mesh>
+          <mesh position={[0, height - 0.5, 2.3]}>
+            <boxGeometry args={[width - 0.3, 0.22, 0.16]} />
+            <meshStandardMaterial color={palette[theme.accent]} />
+          </mesh>
+          <mesh position={[width / 2 - 1.1, 1.2, 2.4]}>
+            <boxGeometry args={[1.1, 2.3, 0.1]} />
+            <meshStandardMaterial color={palette['shopm-glass']} transparent opacity={0.5} />
+          </mesh>
         </group>
       ) : (
         <group>
-          <mesh position={[0, height / 2, 0]}><boxGeometry args={[width, height, 4.6]} /><meshStandardMaterial color={palette[theme.wall]} roughness={0.8} /></mesh>
-          <mesh position={[0, 0.5, 0.02]}><boxGeometry args={[width + 0.04, 1.0, 4.64]} /><meshStandardMaterial color={palette[theme.sign]} roughness={0.8} /></mesh>
-          <mesh position={[0, height + 0.15, 0.15]}><boxGeometry args={[width + 0.6, 0.32, 5.0]} /><meshStandardMaterial color={palette[theme.sign]} roughness={0.7} /></mesh>
+          <mesh position={[0, height / 2, 0]}>
+            <boxGeometry args={[width, height, 4.6]} />
+            <meshStandardMaterial color={palette[theme.wall]} roughness={0.8} />
+          </mesh>
+          <mesh position={[0, 0.5, 0.02]}>
+            <boxGeometry args={[width + 0.04, 1.0, 4.64]} />
+            <meshStandardMaterial color={palette[theme.sign]} roughness={0.8} />
+          </mesh>
+          <mesh position={[0, height + 0.15, 0.15]}>
+            <boxGeometry args={[width + 0.6, 0.32, 5.0]} />
+            <meshStandardMaterial color={palette[theme.sign]} roughness={0.7} />
+          </mesh>
           {[-1, 1].map((s) => (
-            <mesh key={s} position={[s * (width / 2 - 0.08), height / 2, 2.34]}><boxGeometry args={[0.2, height, 0.2]} /><meshStandardMaterial color={palette[theme.sign]} /></mesh>
+            <mesh key={s} position={[s * (width / 2 - 0.08), height / 2, 2.34]}>
+              <boxGeometry args={[0.2, height, 0.2]} />
+              <meshStandardMaterial color={palette[theme.sign]} />
+            </mesh>
           ))}
           {[-1, 1].map((s) => (
             <group key={s} position={[s * (width / 4 + 0.35), 1.7, 2.31]}>
-              <mesh><boxGeometry args={[width / 2 - 1.0, 1.7, 0.1]} /><meshStandardMaterial color={palette[theme.sign]} /></mesh>
-              <mesh position={[0, 0, 0.06]}><boxGeometry args={[width / 2 - 1.25, 1.45, 0.05]} /><meshStandardMaterial {...glow} /></mesh>
+              <mesh>
+                <boxGeometry args={[width / 2 - 1.0, 1.7, 0.1]} />
+                <meshStandardMaterial color={palette[theme.sign]} />
+              </mesh>
+              <mesh position={[0, 0, 0.06]}>
+                <boxGeometry args={[width / 2 - 1.25, 1.45, 0.05]} />
+                <meshStandardMaterial {...glow} />
+              </mesh>
             </group>
           ))}
           <group position={[0, 1.4, 2.32]}>
-            <mesh><boxGeometry args={[kind === 'minimart' ? 1.9 : 1.3, 2.3, 0.12]} /><meshStandardMaterial color={palette[theme.sign]} /></mesh>
-            <mesh position={[0, 0.2, 0.07]}><boxGeometry args={[kind === 'minimart' ? 1.6 : 0.95, 1.7, 0.05]} /><meshStandardMaterial {...glow} /></mesh>
+            <mesh>
+              <boxGeometry args={[kind === 'minimart' ? 1.9 : 1.3, 2.3, 0.12]} />
+              <meshStandardMaterial color={palette[theme.sign]} />
+            </mesh>
+            <mesh position={[0, 0.2, 0.07]}>
+              <boxGeometry args={[kind === 'minimart' ? 1.6 : 0.95, 1.7, 0.05]} />
+              <meshStandardMaterial {...glow} />
+            </mesh>
           </group>
           <Awning palette={palette} theme={theme} width={width} y={3.1} z={2.28} slats={Math.round(width * 1.4)} />
         </group>
@@ -148,16 +219,25 @@ export function ShopModel({ kind, palette, signText, onSelect }: ShopModelProps)
 
       {/* Biển hiệu + biểu tượng */}
       <group position={[0, signY, isSale ? 1.5 : 0.7]} rotation={[-0.08, 0, 0]}>
-        <mesh geometry={signBack}><meshStandardMaterial color={palette['cafe-sign-trim']} metalness={0.3} roughness={0.5} /></mesh>
-        <mesh geometry={signFront} position={[0, 0, 0.1]}><meshStandardMaterial color={palette[theme.sign]} roughness={0.65} /></mesh>
-        <group position={[0.35, -0.02, 0.37]}><SignText text={signText} color={palette['shopm-white']} shadow={palette['cafe-wood-dark']} width={width - 2.4} height={1.0} /></group>
+        <mesh geometry={signBack}>
+          <meshStandardMaterial color={palette['cafe-sign-trim']} metalness={0.3} roughness={0.5} />
+        </mesh>
+        <mesh geometry={signFront} position={[0, 0, 0.1]}>
+          <meshStandardMaterial color={palette[theme.sign]} roughness={0.65} />
+        </mesh>
+        <group position={[0.35, -0.02, 0.37]}>
+          <SignText text={signText} color={palette['shopm-white']} shadow={palette['cafe-wood-dark']} width={width - 2.4} height={1.0} />
+        </group>
         <RoofIcon kind={kind} palette={palette} theme={theme} />
       </group>
 
       {/* Đồ trưng bày / sân trước theo loại */}
       {kind === 'fashion' ? (
         <group>
-          <group position={[0, 0, 0.9]}><Mannequin palette={palette} x={-1.5} color={palette['shopm-fashion-awning-a']} /><Mannequin palette={palette} x={1.5} color={palette['shopm-fashion-accent']} /></group>
+          <group position={[0, 0, 0.9]}>
+            <Mannequin palette={palette} x={-1.5} color={palette['shopm-fashion-awning-a']} />
+            <Mannequin palette={palette} x={1.5} color={palette['shopm-fashion-accent']} />
+          </group>
           <Plant palette={palette} x={-3.0} z={3.4} />
           <Plant palette={palette} x={3.0} z={3.4} />
           <Person palette={palette} x={-1.1} z={4.3} shirt="scene-person-d" facing={0.4} />
@@ -165,7 +245,12 @@ export function ShopModel({ kind, palette, signText, onSelect }: ShopModelProps)
       ) : null}
       {kind === 'restaurant' ? (
         <group>
-          {[-1.1, 1.1].map((lx) => <mesh key={lx} position={[lx * 2.2, 2.55, 2.5]}><sphereGeometry args={[0.28, 14, 14]} /><meshStandardMaterial color={palette['shopm-restaurant-awning-a']} emissive={palette['shopm-restaurant-awning-a']} emissiveIntensity={0.5} /></mesh>)}
+          {[-1.1, 1.1].map((lx) => (
+            <mesh key={lx} position={[lx * 2.2, 2.55, 2.5]}>
+              <sphereGeometry args={[0.28, 14, 14]} />
+              <meshStandardMaterial color={palette['shopm-restaurant-awning-a']} emissive={palette['shopm-restaurant-awning-a']} emissiveIntensity={0.5} />
+            </mesh>
+          ))}
           <Table palette={palette} x={-1.8} z={4.4} parasol={false} />
           <Table palette={palette} x={1.9} z={4.6} parasol={false} />
           <Plant palette={palette} x={-3.6} z={3.2} />
@@ -176,8 +261,22 @@ export function ShopModel({ kind, palette, signText, onSelect }: ShopModelProps)
         <group>
           {[-2.6, 2.6].map((cx) => (
             <group key={cx} position={[cx, 0, 3.3]}>
-              <mesh position={[0, 0.3, 0]}><boxGeometry args={[1.3, 0.6, 0.9]} /><meshStandardMaterial color={palette['shopm-crate']} roughness={0.9} /></mesh>
-              {([['shopm-fruit-a', -0.4], ['shopm-fruit-b', 0], ['shopm-fruit-c', 0.4]] as const).map(([c, fx]) => <mesh key={c} position={[fx, 0.68, 0]}><sphereGeometry args={[0.2, 12, 12]} /><meshStandardMaterial color={palette[c]} /></mesh>)}
+              <mesh position={[0, 0.3, 0]}>
+                <boxGeometry args={[1.3, 0.6, 0.9]} />
+                <meshStandardMaterial color={palette['shopm-crate']} roughness={0.9} />
+              </mesh>
+              {(
+                [
+                  ['shopm-fruit-a', -0.4],
+                  ['shopm-fruit-b', 0],
+                  ['shopm-fruit-c', 0.4],
+                ] as const
+              ).map(([c, fx]) => (
+                <mesh key={c} position={[fx, 0.68, 0]}>
+                  <sphereGeometry args={[0.2, 12, 12]} />
+                  <meshStandardMaterial color={palette[c]} />
+                </mesh>
+              ))}
             </group>
           ))}
           <Person palette={palette} x={0.5} z={4.2} shirt="scene-person-c" facing={0.2} />

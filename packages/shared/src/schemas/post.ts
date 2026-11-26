@@ -8,7 +8,15 @@ import { UserSummarySchema } from './user';
 import { WishTypeSchema } from './catalog';
 
 /** Số lượt gửi vía theo từng loại trên một bài (6 biểu tượng); `mine` = người xem đã gửi loại này. */
-export const WishCountSchema = z.object({ wishTypeId: IdSchema, code: z.string(), name: z.string(), iconKey: WishTypeSchema.shape.iconKey, sortOrder: z.number().int(), count: z.number().int(), mine: z.boolean() });
+export const WishCountSchema = z.object({
+  wishTypeId: IdSchema,
+  code: z.string(),
+  name: z.string(),
+  iconKey: WishTypeSchema.shape.iconKey,
+  sortOrder: z.number().int(),
+  count: z.number().int(),
+  mine: z.boolean(),
+});
 export type WishCountDto = z.infer<typeof WishCountSchema>;
 
 export const MediaSchema = z.object({ id: IdSchema, url: z.string(), width: z.number().int().nullable(), height: z.number().int().nullable() });
@@ -105,7 +113,11 @@ export function metricAllowedForRole(role: (typeof MEMBER_ROLES)[number], metric
 }
 
 export const SetReactionBodySchema = z.object({ type: z.enum(REACTION_TYPES) });
-export const ReactionResultSchema = z.object({ reactions: z.number().int(), mine: z.enum(REACTION_TYPES).nullable(), reactionCounts: z.object({ like: z.number().int(), love: z.number().int(), haha: z.number().int() }) });
+export const ReactionResultSchema = z.object({
+  reactions: z.number().int(),
+  mine: z.enum(REACTION_TYPES).nullable(),
+  reactionCounts: z.object({ like: z.number().int(), love: z.number().int(), haha: z.number().int() }),
+});
 export const VotePollBodySchema = z.object({ optionId: z.string().min(1).max(20) });
 
 export const CommentSchema = z.object({ id: IdSchema, body: z.string(), author: UserSummarySchema, createdAt: IsoDateSchema, isOwn: z.boolean() });

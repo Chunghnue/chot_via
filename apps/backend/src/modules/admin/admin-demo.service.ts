@@ -22,7 +22,16 @@ export class AdminDemoService {
   async createUser(body: DemoUserInput): Promise<DemoUserItem> {
     const [row] = await this.db.insert(users).values({ ...body, isDemo: true }).returning();
     if (!row) throw new DomainError('COMMON_NOT_FOUND');
-    return { id: row.id, displayName: row.displayName, memberRole: row.memberRole, jobTitle: row.jobTitle, province: row.province, avatarUrl: row.avatarUrl, status: row.status, createdAt: row.createdAt.toISOString() };
+    return {
+      id: row.id,
+      displayName: row.displayName,
+      memberRole: row.memberRole,
+      jobTitle: row.jobTitle,
+      province: row.province,
+      avatarUrl: row.avatarUrl,
+      status: row.status,
+      createdAt: row.createdAt.toISOString(),
+    };
   }
 
   async updateUser(id: string, body: DemoUserInput): Promise<void> {
@@ -36,7 +45,12 @@ export class AdminDemoService {
   }
 
   async listPosts(): Promise<DemoPostItem[]> {
-    const rows = await this.db.select({ post: posts, authorName: users.displayName }).from(posts).innerJoin(users, eq(posts.authorId, users.id)).where(eq(posts.isDemo, true)).orderBy(desc(posts.createdAt));
+    const rows = await this.db
+      .select({ post: posts, authorName: users.displayName })
+      .from(posts)
+      .innerJoin(users, eq(posts.authorId, users.id))
+      .where(eq(posts.isDemo, true))
+      .orderBy(desc(posts.createdAt));
     const ids = rows.map((r) => r.post.id);
     const media = ids.length ? await this.db.select().from(postMedia).where(inArray(postMedia.postId, ids)).orderBy(asc(postMedia.position)) : [];
     return rows.map(({ post, authorName }): DemoPostItem => ({

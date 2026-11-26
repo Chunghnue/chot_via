@@ -19,8 +19,16 @@ function QrCode({ value }: { value: string }) {
   }, [value]);
   const pad = 2;
   return (
-    <svg viewBox={`${-pad} ${-pad} ${cells.n + pad * 2} ${cells.n + pad * 2}`} className="size-36 shrink-0 rounded-xl bg-white p-1 text-ink shadow-card ring-1 ring-border/60" role="img" aria-label={value} shapeRendering="crispEdges">
-      {cells.dark.map(([x, y]) => <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="currentColor" />)}
+    <svg
+      viewBox={`${-pad} ${-pad} ${cells.n + pad * 2} ${cells.n + pad * 2}`}
+      className="size-36 shrink-0 rounded-xl bg-white p-1 text-ink shadow-card ring-1 ring-border/60"
+      role="img"
+      aria-label={value}
+      shapeRendering="crispEdges"
+    >
+      {cells.dark.map(([x, y]) => (
+        <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="currentColor" />
+      ))}
     </svg>
   );
 }

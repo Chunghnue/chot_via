@@ -70,7 +70,10 @@ export class PlacesService {
     const levels = await this.levels.all();
     const ownerIds = [...new Set(rows.flatMap((r) => (r.p.ownerId ? [r.p.ownerId] : [])))];
     const owners = ownerIds.length
-      ? await this.db.select({ id: users.id, displayName: users.displayName, avatarUrl: users.avatarUrl, memberRole: users.memberRole, jobTitle: users.jobTitle, points: users.points }).from(users).where(inArray(users.id, ownerIds))
+      ? await this.db
+          .select({ id: users.id, displayName: users.displayName, avatarUrl: users.avatarUrl, memberRole: users.memberRole, jobTitle: users.jobTitle, points: users.points })
+          .from(users)
+          .where(inArray(users.id, ownerIds))
       : [];
     const items = rows.map((r): PlaceDetail => {
       const owner = owners.find((o) => o.id === r.p.ownerId);
@@ -117,7 +120,11 @@ export class PlacesService {
     const levels = await this.levels.all();
     let owner = null;
     if (row.p.ownerId) {
-      const [o] = await this.db.select({ id: users.id, displayName: users.displayName, avatarUrl: users.avatarUrl, memberRole: users.memberRole, jobTitle: users.jobTitle, points: users.points }).from(users).where(eq(users.id, row.p.ownerId)).limit(1);
+      const [o] = await this.db
+        .select({ id: users.id, displayName: users.displayName, avatarUrl: users.avatarUrl, memberRole: users.memberRole, jobTitle: users.jobTitle, points: users.points })
+        .from(users)
+        .where(eq(users.id, row.p.ownerId))
+        .limit(1);
       owner = o ? userSummary(o, levels) : null;
     }
     let viewer: PlaceDetail['viewer'] = null;

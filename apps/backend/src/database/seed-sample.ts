@@ -26,7 +26,19 @@ for (const p of demoPlaces) {
   const scene = scenes.find((s) => s.modelKey === p.model);
   const cat = cats.find((c) => c.code === p.cat);
   if (!scene || !cat) continue;
-  await db.insert(places).values({ slug: p.slug, kind: p.kind, title: p.title, tagline: p.tagline, categoryId: cat.id, sceneTemplateId: scene.id, isDemo: true, autoReplyEnabled: true, sortOrder: sort });
+  await db
+    .insert(places)
+    .values({
+      slug: p.slug,
+      kind: p.kind,
+      title: p.title,
+      tagline: p.tagline,
+      categoryId: cat.id,
+      sceneTemplateId: scene.id,
+      isDemo: true,
+      autoReplyEnabled: true,
+      sortOrder: sort,
+    });
   sort += 1;
 }
 

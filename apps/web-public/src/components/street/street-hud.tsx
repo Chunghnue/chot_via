@@ -23,11 +23,20 @@ export function StreetBadges({ wishesTotal, place }: { wishesTotal: number | nul
   return (
     <>
       {wishesTotal !== null ? (
-        <p className="pointer-events-none absolute right-3 top-3 z-10 hidden items-center gap-1.5 rounded-full bg-surface/95 px-3 py-1.5 text-sm font-bold text-ink shadow-card xl:flex"><span aria-hidden>🔥</span>{t('wishersBadge', { count: compactCount(wishesTotal) })}</p>
+        <p className="pointer-events-none absolute right-3 top-3 z-10 hidden items-center gap-1.5 rounded-full bg-surface/95 px-3 py-1.5 text-sm font-bold text-ink shadow-card xl:flex">
+          <span aria-hidden>🔥</span>
+          {t('wishersBadge', { count: compactCount(wishesTotal) })}
+        </p>
       ) : null}
       {place ? (
         <p className="pointer-events-none absolute left-4 top-16 z-10 hidden max-w-60 items-center gap-2 rounded-2xl bg-surface/95 px-3 py-2 text-sm font-bold text-ink shadow-card xl:flex">
-          <span className="min-w-0 flex-1"><span className="block truncate">{place.title}</span><span className="block text-xs font-semibold text-danger"><span aria-hidden>🔥 </span>{t('bubbleWish', { count: compactCount(place.wishCount) })}</span></span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate">{place.title}</span>
+            <span className="block text-xs font-semibold text-danger">
+              <span aria-hidden>🔥 </span>
+              {t('bubbleWish', { count: compactCount(place.wishCount) })}
+            </span>
+          </span>
         </p>
       ) : null}
     </>
@@ -39,7 +48,9 @@ export function StreetControls({ fullscreen, onFullscreen }: { fullscreen: boole
   const t = useTranslations('street.hud');
   return (
     <div className="absolute right-3 top-1/3 z-10 hidden xl:block">
-      <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>{fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}</button>
+      <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>
+        {fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}
+      </button>
     </div>
   );
 }
@@ -50,17 +61,39 @@ export function StreetTiles() {
   const dispatch = useAppDispatch();
   const { request } = useRitual();
   // Kiểu ô theo ảnh thiết kế trang chủ: viên thuốc bo tròn, nền trắng ngả tím nhạt có viền sáng, biểu tượng lớn bên trái, chữ đậm.
-  const tile = 'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.98rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
+  const tile =
+    'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.98rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
   const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 shrink-0 object-contain drop-shadow" draggable={false} />;
   return (
     <div className="absolute inset-x-4 bottom-3 z-10 hidden gap-2 xl:flex">
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>{img('/images/ic-laugh.webp')}<span className="min-w-0 leading-tight">{t('story')}</span></button>
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>{img('/images/ic-trophy.webp')}<span className="min-w-0 leading-tight">{t('brag')}</span></button>
-      <button type="button" className={tile} onClick={() => void request('burn')}>{img('/images/ic-fire.webp')}<span className="min-w-0 leading-tight">{t('send')}</span></button>
-      <button type="button" className={tile} onClick={() => void request('invoke')}>{img('/images/ic-pray.webp')}<span className="min-w-0 leading-tight">{t('receive')}</span></button>
-      <Link href="/tao-diem" className={tile}>{img('/images/ic-home.webp')}<span className="min-w-0 leading-tight">{t('create')}</span></Link>
-      <Link href="/bang-xep-hang" className={tile}>{img('/images/ic-crown.webp')}<span className="min-w-0 leading-tight">{t('rank')}</span></Link>
-      <Link href="/su-kien" className={tile}>{img('/images/ic-medal-1.webp')}<span className="min-w-0 leading-tight">{t('challenge')}</span></Link>
+      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>
+        {img('/images/ic-laugh.webp')}
+        <span className="min-w-0 leading-tight">{t('story')}</span>
+      </button>
+      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>
+        {img('/images/ic-trophy.webp')}
+        <span className="min-w-0 leading-tight">{t('brag')}</span>
+      </button>
+      <button type="button" className={tile} onClick={() => void request('burn')}>
+        {img('/images/ic-fire.webp')}
+        <span className="min-w-0 leading-tight">{t('send')}</span>
+      </button>
+      <button type="button" className={tile} onClick={() => void request('invoke')}>
+        {img('/images/ic-pray.webp')}
+        <span className="min-w-0 leading-tight">{t('receive')}</span>
+      </button>
+      <Link href="/tao-diem" className={tile}>
+        {img('/images/ic-home.webp')}
+        <span className="min-w-0 leading-tight">{t('create')}</span>
+      </Link>
+      <Link href="/bang-xep-hang" className={tile}>
+        {img('/images/ic-crown.webp')}
+        <span className="min-w-0 leading-tight">{t('rank')}</span>
+      </Link>
+      <Link href="/su-kien" className={tile}>
+        {img('/images/ic-medal-1.webp')}
+        <span className="min-w-0 leading-tight">{t('challenge')}</span>
+      </Link>
     </div>
   );
 }
@@ -83,11 +116,24 @@ export function ShopPanel({ place, onOpen }: { place: PlaceSummary | null; onOpe
           <h2 className="truncate font-display text-lg font-extrabold text-ink">{place.title}</h2>
           <p className="text-xs font-semibold text-ink-muted">{place.isDemo ? t('demo') : place.categoryName}</p>
         </div>
-        <p className="flex items-center gap-4 text-sm font-bold text-ink"><span><span aria-hidden>🔥 </span>{t('wishes', { count: compactCount(place.wishCount) })}</span><span>{t('visits', { count: compactCount(place.visitCount) })}</span></p>
-        <Button variant="primary" size="md" onClick={() => onOpen(place.id)}><span aria-hidden>🙏</span>{t('send')}</Button>
+        <p className="flex items-center gap-4 text-sm font-bold text-ink">
+          <span>
+            <span aria-hidden>🔥 </span>
+            {t('wishes', { count: compactCount(place.wishCount) })}
+          </span>
+          <span>{t('visits', { count: compactCount(place.visitCount) })}</span>
+        </p>
+        <Button variant="primary" size="md" onClick={() => onOpen(place.id)}>
+          <span aria-hidden>🙏</span>
+          {t('send')}
+        </Button>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1" disabled={isLoading} onClick={doFollow}>{t('follow')}</Button>
-          <Link href={`/diem/${place.slug}`} className={cn(buttonClass({ variant: 'outline', size: 'sm' }), 'flex-1')}>{t('more')}</Link>
+          <Button variant="outline" size="sm" className="flex-1" disabled={isLoading} onClick={doFollow}>
+            {t('follow')}
+          </Button>
+          <Link href={`/diem/${place.slug}`} className={cn(buttonClass({ variant: 'outline', size: 'sm' }), 'flex-1')}>
+            {t('more')}
+          </Link>
         </div>
       </div>
     </Card>
@@ -139,9 +185,15 @@ export function DailyPanel({ points }: { points: { x: number; z: number }[] }) {
             const done = m.progress !== null && m.progress >= m.target;
             return (
               <li key={m.id} className="flex items-center gap-2 text-sm text-ink">
-                <span className={cn('grid size-5 shrink-0 place-items-center rounded-full', done ? 'bg-primary text-on-primary' : 'bg-surface-muted text-ink-subtle')}><Check className="size-3.5" aria-hidden /></span>
+                <span className={cn('grid size-5 shrink-0 place-items-center rounded-full', done ? 'bg-primary text-on-primary' : 'bg-surface-muted text-ink-subtle')}>
+                  <Check className="size-3.5" aria-hidden />
+                </span>
                 <span className="min-w-0 flex-1 truncate">{m.name}</span>
-                {m.progress !== null ? <span className="text-xs font-bold text-ink-muted">{Math.min(m.progress, m.target)}/{m.target}</span> : null}
+                {m.progress !== null ? (
+                  <span className="text-xs font-bold text-ink-muted">
+                    {Math.min(m.progress, m.target)}/{m.target}
+                  </span>
+                ) : null}
               </li>
             );
           })}
@@ -162,17 +214,31 @@ function FeedMini() {
     <Card className="flex flex-col gap-2 p-3">
       <h2 className="font-display text-lg font-extrabold text-ink">{t('feed')}</h2>
       <div className="flex flex-wrap gap-1.5">
-        <Link href="/bang-tin" className={cn(chip, 'btn-glossy text-on-primary hover:brightness-105')}>{t('all')}</Link>
-        <Link href="/bang-tin?type=story" className={chip}>{t('story')}</Link>
-        <Link href="/bang-tin?type=brag" className={chip}>{t('brag')}</Link>
+        <Link href="/bang-tin" className={cn(chip, 'btn-glossy text-on-primary hover:brightness-105')}>
+          {t('all')}
+        </Link>
+        <Link href="/bang-tin?type=story" className={chip}>
+          {t('story')}
+        </Link>
+        <Link href="/bang-tin?type=brag" className={chip}>
+          {t('brag')}
+        </Link>
       </div>
       {post ? (
         <Link href={`/bai/${post.id}`} className="flex flex-col gap-1.5 rounded-2xl bg-surface-muted/60 p-2.5">
-          <span className="flex items-center gap-2"><Avatar src={post.author.avatarUrl} name={post.author.displayName} size={32} /><span className="min-w-0 flex-1 truncate text-sm font-bold text-ink">{post.author.displayName}</span></span>
+          <span className="flex items-center gap-2">
+            <Avatar src={post.author.avatarUrl} name={post.author.displayName} size={32} />
+            <span className="min-w-0 flex-1 truncate text-sm font-bold text-ink">{post.author.displayName}</span>
+          </span>
           <span className="line-clamp-3 text-sm text-ink">{post.body}</span>
-          <span className="flex gap-3 text-xs font-bold text-ink-muted"><span>👍 {post.counts.reactions}</span><span>💬 {post.counts.comments}</span></span>
+          <span className="flex gap-3 text-xs font-bold text-ink-muted">
+            <span>👍 {post.counts.reactions}</span>
+            <span>💬 {post.counts.comments}</span>
+          </span>
         </Link>
-      ) : <p className="text-sm text-ink-muted">{t('empty')}</p>}
+      ) : (
+        <p className="text-sm text-ink-muted">{t('empty')}</p>
+      )}
     </Card>
   );
 }
@@ -189,17 +255,31 @@ function ProfileMini() {
       <h2 className="font-display text-lg font-extrabold text-ink">{t('profile')}</h2>
       {me ? (
         <>
-          <Link href="/ca-nhan" className="flex items-center gap-2"><Avatar src={me.avatarUrl} name={me.displayName} size={44} /><span className="min-w-0 flex-1 truncate font-bold text-ink">{me.displayName}</span></Link>
+          <Link href="/ca-nhan" className="flex items-center gap-2">
+            <Avatar src={me.avatarUrl} name={me.displayName} size={44} />
+            <span className="min-w-0 flex-1 truncate font-bold text-ink">{me.displayName}</span>
+          </Link>
           <div className="grid grid-cols-3 gap-1 text-center">
-            <div className="rounded-xl bg-surface-muted p-1.5"><p className="font-bold text-ink">{compactCount(stats?.points ?? me.points)}</p><p className="text-[0.65rem] font-semibold text-ink-muted">{t('points')}</p></div>
-            <div className="rounded-xl bg-surface-muted p-1.5"><p className="font-bold text-ink">{stats?.counts.posts ?? 0}</p><p className="text-[0.65rem] font-semibold text-ink-muted">{t('posts')}</p></div>
-            <div className="rounded-xl bg-surface-muted p-1.5"><p className="font-bold text-ink">{stats?.counts.followers ?? 0}</p><p className="text-[0.65rem] font-semibold text-ink-muted">{t('followers')}</p></div>
+            <div className="rounded-xl bg-surface-muted p-1.5">
+              <p className="font-bold text-ink">{compactCount(stats?.points ?? me.points)}</p>
+              <p className="text-[0.65rem] font-semibold text-ink-muted">{t('points')}</p>
+            </div>
+            <div className="rounded-xl bg-surface-muted p-1.5">
+              <p className="font-bold text-ink">{stats?.counts.posts ?? 0}</p>
+              <p className="text-[0.65rem] font-semibold text-ink-muted">{t('posts')}</p>
+            </div>
+            <div className="rounded-xl bg-surface-muted p-1.5">
+              <p className="font-bold text-ink">{stats?.counts.followers ?? 0}</p>
+              <p className="text-[0.65rem] font-semibold text-ink-muted">{t('followers')}</p>
+            </div>
           </div>
         </>
       ) : (
         <>
           <p className="text-sm font-medium text-ink">{t('guest')}</p>
-          <Button variant="primary" size="md" onClick={() => dispatch(loginRequested('follow'))}>{t('login')}</Button>
+          <Button variant="primary" size="md" onClick={() => dispatch(loginRequested('follow'))}>
+            {t('login')}
+          </Button>
         </>
       )}
     </Card>

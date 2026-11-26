@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test';
 import { apiLogin, expectNoHorizontalScroll } from './support';
 
 test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, chân trang', () => {
-  test('hàng nút hành động: khách cũng thấy Kể khổ, Đốt vía, Thỉnh Thần Tài và Khoe doanh thu / Deal (Đốt vía và Thỉnh Thần Tài luôn hiện, bấm vào mời đăng nhập); không còn Thử thách, Tạo cửa hàng 3D', async ({ page }) => {
+  test('hàng nút hành động: khách cũng thấy Kể khổ, Đốt vía, Thỉnh Thần Tài và Khoe doanh thu / Deal (Đốt vía và Thỉnh Thần Tài luôn hiện, bấm vào mời đăng nhập); không còn Thử thách, Tạo cửa hàng 3D', async ({
+    page,
+  }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
     await expect(row.locator('a:visible, button:visible')).toHaveCount(4);

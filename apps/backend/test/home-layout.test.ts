@@ -50,7 +50,21 @@ describe('trang chủ: bố cục do admin nhập', () => {
 
   it('nút hành động: thêm, ẩn trên iPad, xuất hiện ở trang chủ, xóa', async () => {
     const a = await adminLogin();
-    const body = { code: 'thu_nghiem', label: 'Nút thử', subLabel: '', iconUrl: null, kind: 'link', href: '/bang-tin', showMobile: true, showTablet: false, showDesktop: true, sortOrder: 99, sortTablet: null, sortDesktop: null, active: true };
+    const body = {
+      code: 'thu_nghiem',
+      label: 'Nút thử',
+      subLabel: '',
+      iconUrl: null,
+      kind: 'link',
+      href: '/bang-tin',
+      showMobile: true,
+      showTablet: false,
+      showDesktop: true,
+      sortOrder: 99,
+      sortTablet: null,
+      sortDesktop: null,
+      active: true,
+    };
     const c = await post<Item>('/admin/catalog/home-actions', body, { token: a.token });
     expect(c.status).toBeLessThan(300);
     const found = (await get<{ layout: HomeLayout }>('/home')).data.layout.actions.find((x) => x.code === 'thu_nghiem');

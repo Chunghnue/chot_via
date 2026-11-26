@@ -20,7 +20,16 @@ test.describe('PWA trên bản production', () => {
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await page.reload({ waitUntil: 'networkidle' }); // lần tải này đã do service worker kiểm soát: lưu vỏ app, file chạy và gói lời chúc offline
     await expect.poll(async () => page.evaluate(async () => (await caches.keys()).length)).toBeGreaterThan(0);
-    await expect.poll(async () => page.evaluate(async () => { const c = await caches.keys(); let hit = false; for (const k of c) if (await (await caches.open(k)).match('/api/v1/wishes/offline-pack')) hit = true; return hit; })).toBe(true);
+    await expect
+      .poll(async () =>
+        page.evaluate(async () => {
+          const c = await caches.keys();
+          let hit = false;
+          for (const k of c) if (await (await caches.open(k)).match('/api/v1/wishes/offline-pack')) hit = true;
+          return hit;
+        }),
+      )
+      .toBe(true);
 
     await context.setOffline(true);
     await page.reload({ waitUntil: 'domcontentloaded' });

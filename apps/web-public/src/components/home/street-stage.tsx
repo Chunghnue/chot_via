@@ -85,13 +85,26 @@ export function StreetStage({ places, labels, onSelectPlace, onSelectDeity, sele
     const style: CSSProperties = { left: `${layer.left}%`, width: `${layer.width}%`, bottom: `${layer.bottom}%`, aspectRatio: String(layer.ratio) };
     const selected = place !== undefined && place.id === selectedId;
     const img = (
-      <img src={layer.src} alt="" aria-hidden draggable={false}
-        className={cn('size-full select-none object-contain drop-shadow-[0_10px_12px_rgba(0,0,0,0.18)] transition', dimmed && 'opacity-35 grayscale', selected && '[filter:drop-shadow(0_0_14px_var(--color-gold))]')} />
+      <img
+        src={layer.src}
+        alt=""
+        aria-hidden
+        draggable={false}
+        className={cn(
+          'size-full select-none object-contain drop-shadow-[0_10px_12px_rgba(0,0,0,0.18)] transition',
+          dimmed && 'opacity-35 grayscale',
+          selected && '[filter:drop-shadow(0_0_14px_var(--color-gold))]',
+        )}
+      />
     );
     if (!place) return <div key={layer.key} className="absolute" style={style}>{img}</div>;
     return (
       <button
-        key={layer.key} type="button" aria-label={labels.open(place.title)} style={style} onClick={() => onSelectPlace(place.id)}
+        key={layer.key}
+        type="button"
+        aria-label={labels.open(place.title)}
+        style={style}
+        onClick={() => onSelectPlace(place.id)}
         className="group absolute origin-bottom outline-offset-2 transition duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-primary"
       >
         {img}
@@ -123,15 +136,38 @@ export function StreetStage({ places, labels, onSelectPlace, onSelectDeity, sele
     <div className="absolute left-1/2 top-0 h-full -translate-x-1/2 [container-type:inline-size]" style={{ aspectRatio: String(STAGE_RATIO) }}>
       <img src="/images/pho-nen.webp" alt="" aria-hidden className="absolute inset-0 size-full select-none object-cover" draggable={false} fetchPriority="high" />
       {BACK_SHOPS.map(renderShop)}
-      {hero ? <div aria-hidden className="pointer-events-none absolute left-[24%] top-[-10%] aspect-square w-[52%] rounded-full opacity-95 [background:repeating-conic-gradient(color-mix(in_srgb,var(--color-gold)_75%,white)_0deg_6deg,transparent_6deg_15deg)] [mask-image:radial-gradient(circle,black_30%,transparent_72%)] md:hidden" /> : null}
+      {hero ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-[24%] top-[-10%] aspect-square w-[52%] rounded-full opacity-95 [background:repeating-conic-gradient(color-mix(in_srgb,var(--color-gold)_75%,white)_0deg_6deg,transparent_6deg_15deg)] [mask-image:radial-gradient(circle,black_30%,transparent_72%)] md:hidden"
+        />
+      ) : null}
       <button
-        type="button" aria-label={labels.deity} onClick={onSelectDeity}
-        className={cn('absolute origin-bottom outline-offset-2 transition duration-200 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-primary',
-          hero && 'left-[36%] bottom-[27%] w-[28%] aspect-[1100/834] md:left-[40%] md:bottom-[17%] md:w-[20%] md:aspect-[797/900]')}
+        type="button"
+        aria-label={labels.deity}
+        onClick={onSelectDeity}
+        className={cn(
+          'absolute origin-bottom outline-offset-2 transition duration-200 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-primary',
+          hero && 'left-[36%] bottom-[27%] w-[28%] aspect-[1100/834] md:left-[40%] md:bottom-[17%] md:w-[20%] md:aspect-[797/900]',
+        )}
         style={hero ? undefined : { left: '40%', width: '20%', bottom: '17%', aspectRatio: String(797 / 900) }}
       >
-        {hero ? <img src="/images/than-tai.webp" alt="" aria-hidden className="size-full animate-float select-none object-contain drop-shadow-[0_12px_14px_rgba(0,0,0,0.2)] md:hidden" draggable={false} /> : null}
-        <img src="/images/than-tai-bo-dung.webp" alt="" aria-hidden className={cn('size-full animate-float select-none object-contain drop-shadow-[0_12px_14px_rgba(0,0,0,0.2)]', hero && 'hidden md:block')} draggable={false} />
+        {hero ? (
+          <img
+            src="/images/than-tai.webp"
+            alt=""
+            aria-hidden
+            className="size-full animate-float select-none object-contain drop-shadow-[0_12px_14px_rgba(0,0,0,0.2)] md:hidden"
+            draggable={false}
+          />
+        ) : null}
+        <img
+          src="/images/than-tai-bo-dung.webp"
+          alt=""
+          aria-hidden
+          className={cn('size-full animate-float select-none object-contain drop-shadow-[0_12px_14px_rgba(0,0,0,0.2)]', hero && 'hidden md:block')}
+          draggable={false}
+        />
       </button>
       {FRONT_SHOPS.map(renderShop)}
       {showChips ? chip('cafe', '/images/ic-laugh.webp', { left: '11%', bottom: '9%' }) : null}

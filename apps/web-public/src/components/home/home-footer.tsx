@@ -32,7 +32,12 @@ export function SocialIcon({ label }: { label: string }) {
 function FooterSocialIcon({ label }: { label: string }) {
   const key = label.trim().toLowerCase();
   if (key === 'facebook') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-facebook text-on-primary"><BrandIcon brand="facebook" className="size-6" /></span>;
-  if (key === 'zalo') return <span aria-hidden className="grid size-9 place-items-center rounded-[0.7rem] border-[2.5px] border-brand-zalo bg-surface text-[0.6rem] text-brand-zalo"><BrandIcon brand="zalo" className="text-[0.6rem]" /></span>;
+  if (key === 'zalo')
+    return (
+      <span aria-hidden className="grid size-9 place-items-center rounded-[0.7rem] border-[2.5px] border-brand-zalo bg-surface text-[0.6rem] text-brand-zalo">
+        <BrandIcon brand="zalo" className="text-[0.6rem]" />
+      </span>
+    );
   if (key === 'tiktok') return <span aria-hidden className="grid size-9 place-items-center rounded-full bg-brand-tiktok text-on-primary"><BrandIcon brand="tiktok" /></span>;
   return <span aria-hidden className="grid size-9 place-items-center text-ink"><Link2 className="size-7" strokeWidth={2.4} /></span>;
 }
@@ -62,8 +67,14 @@ function InstallAndShare({ social, stacked = false }: { social: readonly { label
   return (
     <div className={stacked ? 'flex w-full flex-col items-stretch gap-3' : 'flex shrink-0 flex-wrap items-center gap-4'}>
       <div className="flex flex-col items-center gap-1">
-        <button type="button" onClick={() => { if (installEvent) void installEvent.prompt(); else setShowHelp((v) => !v); }}
-          className={`flex items-center justify-center gap-3 rounded-[2rem] bg-surface px-7 py-3 shadow-card ring-1 ring-surface transition hover:shadow-md active:scale-[0.98] ${stacked ? 'w-full' : ''}`}>
+        <button
+          type="button"
+          onClick={() => {
+            if (installEvent) void installEvent.prompt();
+            else setShowHelp((v) => !v);
+          }}
+          className={`flex items-center justify-center gap-3 rounded-[2rem] bg-surface px-7 py-3 shadow-card ring-1 ring-surface transition hover:shadow-md active:scale-[0.98] ${stacked ? 'w-full' : ''}`}
+        >
           <MonitorMark />
           <span className="whitespace-nowrap text-[0.95rem] font-bold text-ink">{t('installApp')}</span>
         </button>
@@ -74,15 +85,50 @@ function InstallAndShare({ social, stacked = false }: { social: readonly { label
         <div className="flex items-center gap-4">
           {social.map((s) => {
             // Liên kết mẫu '#': chưa có địa chỉ thật thì bấm là chia sẻ Xin Vía lên mạng đó (sao chép nội dung + mở cửa sổ chia sẻ).
-            if (s.href === '#') return <button key={s.label} type="button" aria-label={s.label} title={s.label} className="transition hover:scale-110 active:scale-95" onClick={() => { const target = shareTarget(s.label); if (target) void shareTo(target, t('shareText')); }}><FooterSocialIcon label={s.label} /></button>;
+            if (s.href === '#')
+              return (
+                <button
+                  key={s.label}
+                  type="button"
+                  aria-label={s.label}
+                  title={s.label}
+                  className="transition hover:scale-110 active:scale-95"
+                  onClick={() => {
+                    const target = shareTarget(s.label);
+                    if (target) void shareTo(target, t('shareText'));
+                  }}
+                >
+                  <FooterSocialIcon label={s.label} />
+                </button>
+              );
             return (
-              <a key={s.href + s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} title={s.label} className="transition hover:scale-110 active:scale-95">
+              <a
+                key={s.href + s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                title={s.label}
+                className="transition hover:scale-110 active:scale-95"
+              >
                 <FooterSocialIcon label={s.label} />
               </a>
             );
           })}
-          <button type="button" aria-label={t('copyLink')} title={t('copyLink')} className="transition hover:scale-110 active:scale-95"
-            onClick={() => { void navigator.clipboard.writeText(siteUrl()).then(() => toast.success(t('linkCopied'))).catch(() => undefined); }}><FooterSocialIcon label="link" /></button>
+          <button
+            type="button"
+            aria-label={t('copyLink')}
+            title={t('copyLink')}
+            className="transition hover:scale-110 active:scale-95"
+            onClick={() => {
+              void navigator.clipboard
+                .writeText(siteUrl())
+                .then(() => toast.success(t('linkCopied')))
+                .catch(() => undefined);
+            }}
+          >
+            <FooterSocialIcon label="link" />
+          </button>
         </div>
       </div>
     </div>
@@ -103,45 +149,51 @@ export function HomeFooter() {
   }, [data]);
   return (
     <>
-    {/* Điện thoại: chân trang đầy đủ bị ẩn nên có thẻ riêng ngay cuối trang chủ để cài ứng dụng và chia sẻ Xin Vía. */}
-    <section aria-label={t('installApp')} className="mx-auto w-full px-3 pb-28 md:hidden">
-      <div className="flex flex-col items-center gap-3 rounded-3xl bg-linear-to-b from-surface to-primary-soft p-4 shadow-card ring-1 ring-surface">
-        <Link href="/" className="flex items-center gap-2" aria-label={tn('home')}>
-          <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
-          <span className="font-display text-2xl font-extrabold italic text-primary-strong">Xin Vía</span>
-        </Link>
-        <InstallAndShare social={social} stacked />
-        {links.length > 0 ? (
-          <nav aria-label={t('footerLinks')} className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm font-semibold text-ink">
-            {links.map((l) => <Link key={l.href + l.label} href={l.href} className="hover:text-primary-strong">{l.label}</Link>)}
-          </nav>
-        ) : null}
-        <LegalLinks />
-      </div>
-    </section>
-    <footer className="mx-auto hidden w-full max-w-[1800px] rounded-t-[2.5rem] border-t border-primary/20 bg-linear-to-b from-surface via-primary-soft/70 to-primary-soft px-6 py-6 md:block 3xl:max-w-[2200px]">
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 min-[1440px]:flex-nowrap">
-        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={tn('home')}>
-          <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-3xl font-extrabold italic text-primary-strong">Xin Vía</span>
-            <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>
-          </span>
-        </Link>
-        {links.length > 0 ? (
-          <nav aria-label={t('footerLinks')} className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink min-[1440px]:flex-1 min-[1440px]:justify-center">
-            {links.map((l, i) => (
-              <span key={l.href + l.label} className="flex items-center gap-4">
-                {i > 0 ? <span aria-hidden className="h-4 w-px bg-border" /> : null}
-                <Link href={l.href} className="hover:text-primary-strong">{l.label}</Link>
-              </span>
-            ))}
-          </nav>
-        ) : null}
-        <InstallAndShare social={social} />
-      </div>
-      <LegalLinks className="mt-4 border-t border-primary/20 pt-3" />
-    </footer>
+      {/* Điện thoại: chân trang đầy đủ bị ẩn nên có thẻ riêng ngay cuối trang chủ để cài ứng dụng và chia sẻ Xin Vía. */}
+      <section aria-label={t('installApp')} className="mx-auto w-full px-3 pb-28 md:hidden">
+        <div className="flex flex-col items-center gap-3 rounded-3xl bg-linear-to-b from-surface to-primary-soft p-4 shadow-card ring-1 ring-surface">
+          <Link href="/" className="flex items-center gap-2" aria-label={tn('home')}>
+            <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
+            <span className="font-display text-2xl font-extrabold italic text-primary-strong">Xin Vía</span>
+          </Link>
+          <InstallAndShare social={social} stacked />
+          {links.length > 0 ? (
+            <nav aria-label={t('footerLinks')} className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm font-semibold text-ink">
+              {links.map((l) => (
+                <Link key={l.href + l.label} href={l.href} className="hover:text-primary-strong">
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
+          <LegalLinks />
+        </div>
+      </section>
+      <footer className="mx-auto hidden w-full max-w-[1800px] rounded-t-[2.5rem] border-t border-primary/20 bg-linear-to-b from-surface via-primary-soft/70 to-primary-soft px-6 py-6 md:block 3xl:max-w-[2200px]">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 min-[1440px]:flex-nowrap">
+          <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={tn('home')}>
+            <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
+            <span className="flex flex-col leading-tight">
+              <span className="font-display text-3xl font-extrabold italic text-primary-strong">Xin Vía</span>
+              <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>
+            </span>
+          </Link>
+          {links.length > 0 ? (
+            <nav aria-label={t('footerLinks')} className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink min-[1440px]:flex-1 min-[1440px]:justify-center">
+              {links.map((l, i) => (
+                <span key={l.href + l.label} className="flex items-center gap-4">
+                  {i > 0 ? <span aria-hidden className="h-4 w-px bg-border" /> : null}
+                  <Link href={l.href} className="hover:text-primary-strong">
+                    {l.label}
+                  </Link>
+                </span>
+              ))}
+            </nav>
+          ) : null}
+          <InstallAndShare social={social} />
+        </div>
+        <LegalLinks className="mt-4 border-t border-primary/20 pt-3" />
+      </footer>
     </>
   );
 }

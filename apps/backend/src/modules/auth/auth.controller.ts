@@ -79,7 +79,11 @@ export class AuthController {
   }
 
   @Get('oauth/:provider/start')
-  async oauthStart(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string; app?: 'web' | 'admin' }) {
+  async oauthStart(
+    @Res() reply: FastifyReply,
+    @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider },
+    @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string; app?: 'web' | 'admin' },
+  ) {
     const state = await this.oauth.signState(params.provider, this.oauth.safeReturnTo(query.returnTo), query.app ?? 'web');
     const url = await this.oauth.authorizeUrl(params.provider, state);
     // Với @Res() không trả lại đối tượng reply (Nest sẽ gửi đè 200 rỗng); chỉ chuyển hướng rồi kết thúc.
@@ -87,13 +91,21 @@ export class AuthController {
   }
 
   @Get('oauth/:provider/callback')
-  oauthCallbackGet(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthCallbackQuerySchema)) query: z.infer<typeof CallbackBody>) {
+  oauthCallbackGet(
+    @Res() reply: FastifyReply,
+    @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider },
+    @Query(new ZodPipe(OAuthCallbackQuerySchema)) query: z.infer<typeof CallbackBody>,
+  ) {
     return this.finishOAuth(reply, params.provider, query);
   }
 
   /** Apple dùng response_mode=form_post nên gọi lại bằng POST. */
   @Post('oauth/:provider/callback')
-  oauthCallbackPost(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Body(new ZodPipe(CallbackBody)) body: z.infer<typeof CallbackBody>) {
+  oauthCallbackPost(
+    @Res() reply: FastifyReply,
+    @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider },
+    @Body(new ZodPipe(CallbackBody)) body: z.infer<typeof CallbackBody>,
+  ) {
     return this.finishOAuth(reply, params.provider, body);
   }
 
@@ -101,7 +113,10 @@ export class AuthController {
     const { returnTo, app } = await this.oauth.readState(input.state, provider);
     const base = app === 'admin' ? env.PUBLIC_ADMIN_URL : env.PUBLIC_WEB_URL;
     const target = (flag: string): string => `${base}${returnTo}${returnTo.includes('?') ? '&' : '?'}${flag}`;
-    if (!input.code || input.error) { await reply.status(302).redirect(target('login=failed')); return; }
+    if (!input.code || input.error) {
+      await reply.status(302).redirect(target('login=failed'));
+      return;
+    }
     try {
       const profile = await this.oauth.exchange(provider, input.code, input.user);
       const result: SessionResult = await this.auth.loginWithIdentity(provider, profile.providerUserId, profile.name, profile.avatarUrl);
@@ -109,7 +124,10 @@ export class AuthController {
       await reply.status(302).redirect(target('login=ok'));
       return;
     } catch {
-      { await reply.status(302).redirect(target('login=failed')); return; }
+      {
+        await reply.status(302).redirect(target('login=failed'));
+        return;
+      }
     }
   }
 }

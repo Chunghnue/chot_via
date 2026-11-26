@@ -71,13 +71,19 @@ export interface MenuItem { key: string; label: string; onSelect: () => void; da
 export function Menu({ trigger, items, label }: { trigger: ReactNode; items: MenuItem[]; label: string }) {
   return (
     <DropdownPrimitive.Root>
-      <DropdownPrimitive.Trigger asChild aria-label={label}>{trigger}</DropdownPrimitive.Trigger>
+      <DropdownPrimitive.Trigger asChild aria-label={label}>
+        {trigger}
+      </DropdownPrimitive.Trigger>
       <DropdownPrimitive.Portal>
         <DropdownPrimitive.Content align="end" sideOffset={6} className="z-50 min-w-48 animate-pop-in rounded-2xl bg-surface p-1.5 shadow-pop">
           {items.map((item) => (
             <DropdownPrimitive.Item
-              key={item.key} onSelect={item.onSelect}
-              className={cn('flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium outline-none data-[highlighted]:bg-surface-muted', item.danger ? 'text-danger' : 'text-ink')}
+              key={item.key}
+              onSelect={item.onSelect}
+              className={cn(
+                'flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium outline-none data-[highlighted]:bg-surface-muted',
+                item.danger ? 'text-danger' : 'text-ink',
+              )}
             >
               {item.icon}
               {item.label}

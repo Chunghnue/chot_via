@@ -48,7 +48,10 @@ export class WishesService {
     const settings = await this.settings.get();
     const rows = await this.db.select({ at: wishEvents.createdAt }).from(wishEvents)
       .where(and(eq(wishEvents.source, 'deity'), eq(wishEvents.actorUserId, userId), gte(wishEvents.createdAt, vnDayStart(new Date())))).orderBy(asc(wishEvents.createdAt));
-    return rows.map((r, i) => ({ at: r.at.toISOString(), titleCode: resolveWishTitleCode({ sequence: i + 1, bucket: getTimeBucket(r.at, settings.timeWindows), campaignMode: settings.campaignMode }) }));
+    return rows.map((r, i) => ({
+      at: r.at.toISOString(),
+      titleCode: resolveWishTitleCode({ sequence: i + 1, bucket: getTimeBucket(r.at, settings.timeWindows), campaignMode: settings.campaignMode }),
+    }));
   }
 
   /** FR-02/FR-03: xin vía Thần Tài tức thì cho khách; thành viên được +1 điểm. */

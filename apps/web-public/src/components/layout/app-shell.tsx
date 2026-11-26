@@ -15,7 +15,16 @@ import { TabletSideNav } from './tablet-side-nav';
 function RailSwitch() {
   const pathname = usePathname();
   const params = useSearchParams();
-  const variant: RailVariant = pathname === '/' ? 'home' : pathname.startsWith('/bang-xep-hang') ? 'ranking' : pathname.startsWith('/su-kien') ? 'events' : pathname === '/bang-tin' && params.get('type') === 'story' && !params.get('hashtag') ? 'story' : 'default';
+  const variant: RailVariant =
+    pathname === '/'
+      ? 'home'
+      : pathname.startsWith('/bang-xep-hang')
+        ? 'ranking'
+        : pathname.startsWith('/su-kien')
+          ? 'events'
+          : pathname === '/bang-tin' && params.get('type') === 'story' && !params.get('hashtag')
+            ? 'story'
+            : 'default';
   return <RightRail variant={variant} />;
 }
 

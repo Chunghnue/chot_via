@@ -14,7 +14,11 @@ export const placesApi = baseApi.injectEndpoints({
       transformResponse: unwrapPaged(PlaceSummarySchema),
       providesTags: ['Places'],
     }),
-    getPlaceLeaderboard: b.query({ query: (args: Partial<PlaceRankQuery>) => ({ url: '/places/leaderboard', params: args }), transformResponse: unwrap(PlaceLeaderboardSchema), providesTags: ['Places'] }),
+    getPlaceLeaderboard: b.query({
+      query: (args: Partial<PlaceRankQuery>) => ({ url: '/places/leaderboard', params: args }),
+      transformResponse: unwrap(PlaceLeaderboardSchema),
+      providesTags: ['Places'],
+    }),
     getRandomPlace: b.query({ query: (_arg: void) => '/places/random', transformResponse: unwrap(PlaceSummarySchema), keepUnusedDataFor: 0 }),
     getMyPlaces: b.query({ query: (_arg: void) => '/places/mine', transformResponse: unwrap(z.array(PlaceSummarySchema)), providesTags: ['Places'] }),
     getPlace: b.query<z.output<typeof PlaceDetailSchema>, string>({

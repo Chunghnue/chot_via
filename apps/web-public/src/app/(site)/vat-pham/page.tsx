@@ -25,15 +25,22 @@ export default function ItemsPage() {
         {ITEMS.map((it) => (
           <li key={it.key}>
             <Card className="flex h-full flex-col items-center gap-2 bg-linear-to-b from-surface to-primary-soft/60 p-3 text-center">
-              <div className="grid h-28 w-full place-items-center"><img loading="lazy" decoding="async" src={it.img} alt={t(`list.${it.key}.name`)} className="max-h-28 w-auto object-contain drop-shadow" draggable={false} /></div>
+              <div className="grid h-28 w-full place-items-center">
+                <img loading="lazy" decoding="async" src={it.img} alt={t(`list.${it.key}.name`)} className="max-h-28 w-auto object-contain drop-shadow" draggable={false} />
+              </div>
               <h2 className="font-display text-base font-extrabold text-ink">{t(`list.${it.key}.name`)}</h2>
               <p className="text-sm font-bold text-wish-strong">{t(`list.${it.key}.price`)}</p>
-              <span className="mt-auto inline-flex h-9 items-center rounded-full bg-surface px-4 text-xs font-bold text-ink-muted shadow-card ring-1 ring-border/60">{t('soon')}</span>
+              <span className="mt-auto inline-flex h-9 items-center rounded-full bg-surface px-4 text-xs font-bold text-ink-muted shadow-card ring-1 ring-border/60">
+                {t('soon')}
+              </span>
             </Card>
           </li>
         ))}
       </ul>
-      <Card className="bg-gold-soft p-4"><h2 className="font-display text-lg font-extrabold text-ink">{t('season')}</h2><p className="text-sm text-ink">{t('seasonText')}</p></Card>
+      <Card className="bg-gold-soft p-4">
+        <h2 className="font-display text-lg font-extrabold text-ink">{t('season')}</h2>
+        <p className="text-sm text-ink">{t('seasonText')}</p>
+      </Card>
     </div>
   );
 }

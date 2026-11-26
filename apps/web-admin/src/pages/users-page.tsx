@@ -22,25 +22,98 @@ export function UsersPage({ isAdmin }: { isAdmin: boolean }) {
     <div className="flex flex-col gap-4">
       <PageHeader title={t('title')} />
       <div className="flex flex-wrap items-center gap-2">
-        <Input className="max-w-sm" placeholder={t('searchPlaceholder')} value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} />
-        {(['active', 'banned'] as const).map((s) => <Chip key={s} active={status === s} onClick={() => { setStatus(status === s ? undefined : s); setPage(1); }}>{t(s)}</Chip>)}
+        <Input
+          className="max-w-sm"
+          placeholder={t('searchPlaceholder')}
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setPage(1);
+          }}
+        />
+        {(['active', 'banned'] as const).map((s) => (
+          <Chip
+            key={s}
+            active={status === s}
+            onClick={() => {
+              setStatus(status === s ? undefined : s);
+              setPage(1);
+            }}
+          >
+            {t(s)}
+          </Chip>
+        ))}
       </div>
-      {isLoading ? <Skeleton className="h-48" /> : (
+      {isLoading ? (
+        <Skeleton className="h-48" />
+      ) : (
         <TableShell>
-          <thead><tr><Th>{t('name')}</Th><Th>{t('phone')}</Th><Th>{t('role')}</Th><Th>{t('points')}</Th><Th>{tc('status')}</Th><Th>{tc('createdAt')}</Th><Th>{tc('actions')}</Th></tr></thead>
+          <thead>
+            <tr>
+              <Th>{t('name')}</Th>
+              <Th>{t('phone')}</Th>
+              <Th>{t('role')}</Th>
+              <Th>{t('points')}</Th>
+              <Th>{tc('status')}</Th>
+              <Th>{tc('createdAt')}</Th>
+              <Th>{tc('actions')}</Th>
+            </tr>
+          </thead>
           <tbody>
             {data?.items.map((u) => (
               <tr key={u.id}>
-                <Td><b>{u.displayName}</b>{u.memberRole ? <p className="text-xs text-ink-subtle">{t('memberRole')}: {u.memberRole}</p> : null}</Td>
+                <Td>
+                  <b>{u.displayName}</b>
+                  {u.memberRole ? (
+                    <p className="text-xs text-ink-subtle">
+                      {t('memberRole')}: {u.memberRole}
+                    </p>
+                  ) : null}
+                </Td>
                 <Td>{u.phoneMasked ?? tc('none')}</Td>
-                <Td>{isAdmin ? (
-                  <Select className="h-10 min-w-40 text-sm" value={u.accountRole} onChange={(e) => { const role = ACCOUNT_ROLES.find((r) => r === e.target.value); if (role) void update({ id: u.id, body: { accountRole: role } }).unwrap().then(saved).catch(toastApi.error); }}>
-                    {ACCOUNT_ROLES.map((r) => <option key={r} value={r}>{t(`roles.${r}`)}</option>)}
-                  </Select>) : t(`roles.${u.accountRole}`)}</Td>
+                <Td>
+                  {isAdmin ? (
+                    <Select
+                      className="h-10 min-w-40 text-sm"
+                      value={u.accountRole}
+                      onChange={(e) => {
+                        const role = ACCOUNT_ROLES.find((r) => r === e.target.value);
+                        if (role)
+                          void update({ id: u.id, body: { accountRole: role } })
+                            .unwrap()
+                            .then(saved)
+                            .catch(toastApi.error);
+                      }}
+                    >
+                      {ACCOUNT_ROLES.map((r) => (
+                        <option key={r} value={r}>
+                          {t(`roles.${r}`)}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : (
+                    t(`roles.${u.accountRole}`)
+                  )}
+                </Td>
                 <Td>{u.points}</Td>
-                <Td><Badge tone={u.status === 'active' ? 'success' : 'danger'}>{t(u.status)}</Badge></Td>
+                <Td>
+                  <Badge tone={u.status === 'active' ? 'success' : 'danger'}>{t(u.status)}</Badge>
+                </Td>
                 <Td>{f.date(u.createdAt)}</Td>
-                <Td><Button size="sm" variant={u.status === 'active' ? 'danger' : 'soft'} onClick={() => { void update({ id: u.id, body: { status: u.status === 'active' ? 'banned' : 'active' } }).unwrap().then(saved).catch(toastApi.error); }}>{u.status === 'active' ? t('ban') : t('unban')}</Button></Td>
+                <Td>
+                  <Button
+                    size="sm"
+                    variant={u.status === 'active' ? 'danger' : 'soft'}
+                    onClick={() => {
+                      void update({ id: u.id, body: { status: u.status === 'active' ? 'banned' : 'active' } })
+                        .unwrap()
+                        .then(saved)
+                        .catch(toastApi.error);
+                    }}
+                  >
+                    {u.status === 'active' ? t('ban') : t('unban')}
+                  </Button>
+                </Td>
               </tr>
             ))}
           </tbody>

@@ -16,8 +16,14 @@ const TOPIC_TONES = ['bg-gold text-on-gold', 'bg-info text-on-primary', 'bg-prim
 function PanelHeader({ icon, title, link }: { icon: string; title: string; link: { href: string; label: string } }) {
   return (
     <SectionTitle
-      icon={icon} title={title}
-      action={<Link href={link.href} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-ink hover:text-primary-strong">{link.label}<ArrowRight className="size-3.5" aria-hidden /></Link>}
+      icon={icon}
+      title={title}
+      action={
+        <Link href={link.href} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-ink hover:text-primary-strong">
+          {link.label}
+          <ArrowRight className="size-3.5" aria-hidden />
+        </Link>
+      }
     />
   );
 }
@@ -35,7 +41,10 @@ export function HotTopicsPanel() {
       <ol className="flex flex-col gap-2.5">
         {data.map((topic, i) => (
           <li key={topic.id}>
-            <Link href={topic.hashtag ? `/bang-tin?hashtag=${encodeURIComponent(topic.hashtag)}` : `/tim-kiem?q=${encodeURIComponent(topic.title)}`} className="flex items-center gap-3 text-[0.92rem] text-ink hover:text-primary-strong">
+            <Link
+              href={topic.hashtag ? `/bang-tin?hashtag=${encodeURIComponent(topic.hashtag)}` : `/tim-kiem?q=${encodeURIComponent(topic.title)}`}
+              className="flex items-center gap-3 text-[0.92rem] text-ink hover:text-primary-strong"
+            >
               <span className={cn('flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold', TOPIC_TONES[i % TOPIC_TONES.length])}>{i + 1}</span>
               <span className="min-w-0 flex-1">{topic.title}</span>
             </Link>
@@ -71,14 +80,20 @@ export function FunPollPanel() {
           return (
             <li key={o.id}>
               <button
-                type="button" className="block w-full text-left"
+                type="button"
+                className="block w-full text-left"
                 onClick={() => {
                   if (!require('poll')) return;
                   void vote({ postId: data.id, optionId: o.id }).unwrap().then(setPoll).catch(toast.error);
                 }}
               >
-                <span className="flex items-center justify-between gap-2 text-sm font-medium text-ink"><span>{o.text}</span><span className={cn('text-xs font-bold', poll.myVoteId === o.id ? 'text-primary-strong' : 'text-ink-muted')}>{percent}%</span></span>
-                <span className="mt-1 block h-2 overflow-hidden rounded-full bg-surface-muted"><span className="block h-full rounded-full bg-primary" style={{ width: `${percent}%` }} /></span>
+                <span className="flex items-center justify-between gap-2 text-sm font-medium text-ink">
+                  <span>{o.text}</span>
+                  <span className={cn('text-xs font-bold', poll.myVoteId === o.id ? 'text-primary-strong' : 'text-ink-muted')}>{percent}%</span>
+                </span>
+                <span className="mt-1 block h-2 overflow-hidden rounded-full bg-surface-muted">
+                  <span className="block h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
+                </span>
               </button>
             </li>
           );
@@ -99,14 +114,28 @@ export function TopStoryAuthorsPanel() {
     <Card className="relative overflow-hidden bg-linear-to-b from-story-soft to-surface p-4">
       <img src="/images/ic-laugh.webp" alt="" aria-hidden className="absolute -right-1 -top-2 size-16 object-contain" draggable={false} />
       <SectionTitle icon="/images/ic-crown.webp" title={t('topAuthors')} className="mb-1" />
-      <Link href="/bang-xep-hang" className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-story hover:underline">{t('seeLeaderboard')}<ArrowRight className="size-3.5" aria-hidden /></Link>
+      <Link href="/bang-xep-hang" className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-story hover:underline">
+        {t('seeLeaderboard')}
+        <ArrowRight className="size-3.5" aria-hidden />
+      </Link>
       <ol className="flex flex-col gap-2">
         {data.map((row) => (
           <li key={row.user.id}>
             <RankRow
-              rank={row.rank} avatar={{ src: row.user.avatarUrl, name: row.user.displayName }} title={row.user.displayName}
-              value={<>{compactCount(row.hearts)} <span aria-hidden>❤️</span></>} valueClassName="font-sans text-sm font-semibold text-ink"
-              render={(className, children) => <Link href={`/u/${row.user.id}`} className={className}>{children}</Link>}
+              rank={row.rank}
+              avatar={{ src: row.user.avatarUrl, name: row.user.displayName }}
+              title={row.user.displayName}
+              value={
+                <>
+                  {compactCount(row.hearts)} <span aria-hidden>❤️</span>
+                </>
+              }
+              valueClassName="font-sans text-sm font-semibold text-ink"
+              render={(className, children) => (
+                <Link href={`/u/${row.user.id}`} className={className}>
+                  {children}
+                </Link>
+              )}
             />
           </li>
         ))}

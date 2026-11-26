@@ -53,7 +53,12 @@ export function WeeklyBoard({ variant }: { variant: 'rail' | 'page' }) {
         <Tabs size="sm" value={tab} onChange={setTab} items={tabs.map((x) => ({ key: x, label: label(x) }))} className="mb-3" />
         {tab === 'community' ? null : <PlaceRows kind={tab} limit={variant === 'page' ? 10 : 3} big={variant === 'page'} />}
         {tab !== 'community' && variant === 'page' ? <p className="mt-3 text-center text-xs text-ink-subtle">{t('weekHint')}</p> : null}
-        {variant === 'rail' ? <Link href="/bang-xep-hang" className="mt-3 flex items-center justify-center gap-1 text-sm font-bold text-primary-strong hover:underline">{t('seeFull')}<ArrowRight className="size-4" aria-hidden /></Link> : null}
+        {variant === 'rail' ? (
+          <Link href="/bang-xep-hang" className="mt-3 flex items-center justify-center gap-1 text-sm font-bold text-primary-strong hover:underline">
+            {t('seeFull')}
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        ) : null}
       </Card>
       {tab === 'community' ? <Leaderboard variant="page" /> : null}
     </div>

@@ -12,7 +12,9 @@ const textColumns = await db.execute(sql`select table_name, column_name from inf
 for (const row of textColumns as unknown as { table_name: string; column_name: string }[]) {
   const t = sql.identifier(row.table_name);
   const c = sql.identifier(row.column_name);
-  await db.execute(sql`update ${t} set ${c} = replace(replace(replace(${c}, 'Chốt Vía', 'Xin Vía'), 'Chốt vía', 'Xin Vía'), 'CHỐT VÍA', 'XIN VÍA') where ${c} like '%Chốt V%a%' or ${c} like '%CHỐT VÍA%'`);
+  await db.execute(
+    sql`update ${t} set ${c} = replace(replace(replace(${c}, 'Chốt Vía', 'Xin Vía'), 'Chốt vía', 'Xin Vía'), 'CHỐT VÍA', 'XIN VÍA') where ${c} like '%Chốt V%a%' or ${c} like '%CHỐT VÍA%'`,
+  );
 }
 
 /** Dữ liệu trang chủ theo thiết kế: file 3D (GLB v2, 3 mức chi tiết), hàng nút hành động, chân trang, các ô cửa hàng trên phố. Chạy lại nhiều lần vẫn an toàn. */
@@ -37,7 +39,19 @@ if (pharmacyScene && pharmacyCat) {
   const [existing] = await db.select({ id: places.id }).from(places).where(eq(places.slug, 'nha-thuoc-binh-an')).limit(1);
   if (!existing) {
     const [sortMax] = await db.select({ n: count() }).from(places);
-    await db.insert(places).values({ slug: 'nha-thuoc-binh-an', kind: 'store', title: 'Nhà thuốc Bình An', tagline: 'Chăm sóc sức khỏe mỗi ngày', categoryId: pharmacyCat.id, sceneTemplateId: pharmacyScene.id, isDemo: true, autoReplyEnabled: true, sortOrder: sortMax?.n ?? 6 });
+    await db
+      .insert(places)
+      .values({
+        slug: 'nha-thuoc-binh-an',
+        kind: 'store',
+        title: 'Nhà thuốc Bình An',
+        tagline: 'Chăm sóc sức khỏe mỗi ngày',
+        categoryId: pharmacyCat.id,
+        sceneTemplateId: pharmacyScene.id,
+        isDemo: true,
+        autoReplyEnabled: true,
+        sortOrder: sortMax?.n ?? 6,
+      });
   }
 }
 
@@ -60,7 +74,20 @@ const ACTIONS: { code: string; label: string; subLabel: string; icon: string; ki
 ];
 if (storedVersion < SEED_VERSION) {
   for (const x of ACTIONS) {
-    const v = { label: x.label, subLabel: x.subLabel, iconUrl: `/images/${x.icon}.webp`, kind: x.kind, href: x.href, showMobile: true, showTablet: true, showDesktop: true, active: x.active, sortOrder: x.order, sortTablet: x.order, sortDesktop: x.order };
+    const v = {
+      label: x.label,
+      subLabel: x.subLabel,
+      iconUrl: `/images/${x.icon}.webp`,
+      kind: x.kind,
+      href: x.href,
+      showMobile: true,
+      showTablet: true,
+      showDesktop: true,
+      active: x.active,
+      sortOrder: x.order,
+      sortTablet: x.order,
+      sortDesktop: x.order,
+    };
     const [found] = await db.select({ id: homeActions.id }).from(homeActions).where(eq(homeActions.code, x.code)).limit(1);
     if (found) await db.update(homeActions).set(v).where(eq(homeActions.id, found.id));
     else await db.insert(homeActions).values({ code: x.code, ...v });
@@ -108,12 +135,27 @@ const existingSlots = await db.select().from(streetSlots);
 for (const [i, s] of SLOTS.entries()) {
   const scene = scenes.find((x) => x.modelKey === s.model);
   if (!scene) continue;
-  const values = { label: s.label, placeId: placeRows.find((p) => p.sceneTemplateId === scene.id)?.id ?? null, sceneTemplateId: scene.id, imageX: s.img[0], imageY: s.img[1], imageW: s.img[2], imageH: s.img[3], posX: s.x, posZ: s.z, rotationDeg: s.rot, sortOrder: i };
+  const values = {
+    label: s.label,
+    placeId: placeRows.find((p) => p.sceneTemplateId === scene.id)?.id ?? null,
+    sceneTemplateId: scene.id,
+    imageX: s.img[0],
+    imageY: s.img[1],
+    imageW: s.img[2],
+    imageH: s.img[3],
+    posX: s.x,
+    posZ: s.z,
+    rotationDeg: s.rot,
+    sortOrder: i,
+  };
   const found = existingSlots.find((x) => x.label === s.label);
   if (!found) await db.insert(streetSlots).values(values);
   else if (storedVersion < LAYOUT_VERSION) await db.update(streetSlots).set({ posX: s.x, posZ: s.z, rotationDeg: s.rot, sortOrder: i }).where(eq(streetSlots.id, found.id));
 }
 
-await db.insert(appSettings).values({ key: 'home_seed_version', value: { v: SEED_VERSION } }).onConflictDoUpdate({ target: appSettings.key, set: { value: { v: SEED_VERSION }, updatedAt: new Date() } });
+await db
+  .insert(appSettings)
+  .values({ key: 'home_seed_version', value: { v: SEED_VERSION } })
+  .onConflictDoUpdate({ target: appSettings.key, set: { value: { v: SEED_VERSION }, updatedAt: new Date() } });
 console.log('Đã nạp dữ liệu trang chủ.');
 await close();

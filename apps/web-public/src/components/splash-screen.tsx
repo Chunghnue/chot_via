@@ -44,7 +44,8 @@ export function SplashScreen() {
   }, []);
   return (
     <div
-      id="splash" aria-hidden
+      id="splash"
+      aria-hidden
       className={`fixed inset-0 z-100 flex flex-col items-center justify-center gap-5 bg-linear-to-b from-primary-soft via-app to-gold-soft transition-opacity duration-500 ease-out ${fading ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
     >
       <img src="/images/logo-than-tai.webp" alt="" width={160} height={160} className="size-36 animate-float object-contain drop-shadow-lg sm:size-44" fetchPriority="high" />

@@ -92,7 +92,20 @@ describe('SectionTitle và RankRow', () => {
   });
 
   it('RankRow: top 3 là huy chương, từ hạng 4 là số; có liên kết do app truyền vào', () => {
-    const row = (rank: number) => <RankRow key={rank} rank={rank} avatar={{ src: null, name: `Người ${rank}` }} title={`Người ${rank}`} value={`${rank * 10} điểm`} render={(className, children) => <a href={`/u/${rank}`} className={className}>{children}</a>} />;
+    const row = (rank: number) => (
+      <RankRow
+        key={rank}
+        rank={rank}
+        avatar={{ src: null, name: `Người ${rank}` }}
+        title={`Người ${rank}`}
+        value={`${rank * 10} điểm`}
+        render={(className, children) => (
+          <a href={`/u/${rank}`} className={className}>
+            {children}
+          </a>
+        )}
+      />
+    );
     const { container } = render(<>{[1, 3, 4].map(row)}</>);
     expect(container.querySelectorAll('img[src*="ic-medal"]')).toHaveLength(2);
     expect(screen.getByRole('link', { name: /Người 4/ }).textContent).toContain('4');

@@ -12,21 +12,98 @@ import { FooterLinkInputSchema, HomeActionInputSchema, StreetSlotInputSchema } f
 const withId = <T extends z.ZodRawShape>(shape: T) => z.object({ id: IdSchema, ...shape });
 
 /* ---- Các tài nguyên CRUD đơn giản (một controller dùng chung ở backend) ---- */
-export const WishTypeInputSchema = z.object({ code: z.string().trim().min(2).max(40).regex(/^[a-z0-9_]+$/, 'invalid_string'), name: z.string().trim().min(2).max(60), iconKey: z.enum(ICON_KEYS), sortOrder: z.number().int(), active: z.boolean() });
+export const WishTypeInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(2)
+    .max(40)
+    .regex(/^[a-z0-9_]+$/, 'invalid_string'),
+  name: z.string().trim().min(2).max(60),
+  iconKey: z.enum(ICON_KEYS),
+  sortOrder: z.number().int(),
+  active: z.boolean(),
+});
 export const WishStickerInputSchema = WishTypeInputSchema;
 export const WishTemplateInputSchema = z.object({
   source: z.enum(WISH_TEMPLATE_SOURCES), timeBucket: z.enum(TIME_BUCKETS).nullable(), wishTypeId: IdSchema.nullable(),
   roleTarget: z.enum(MEMBER_ROLES).nullable(), text: z.string().trim().min(2).max(300), animationKey: z.enum(ANIMATION_KEYS), active: z.boolean(),
 });
-export const PlaceCategoryInputSchema = z.object({ code: z.string().trim().min(2).max(40).regex(/^[a-z0-9_]+$/, 'invalid_string'), name: z.string().trim().min(2).max(60), iconKey: z.enum(ICON_KEYS), kind: z.enum(PLACE_KINDS), sortOrder: z.number().int(), active: z.boolean() });
-export const SceneTemplateInputSchema = z.object({ name: z.string().trim().min(2).max(60), kind: z.enum(PLACE_KINDS), modelKey: z.enum(SCENE_MODEL_KEYS), thumbnailUrl: z.string().max(500).nullable(), glbUrl: z.string().max(500).nullable(), glbLod1Url: z.string().max(500).nullable(), glbLod2Url: z.string().max(500).nullable(), modelScale: z.number().min(0.1).max(20), active: z.boolean() });
+export const PlaceCategoryInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(2)
+    .max(40)
+    .regex(/^[a-z0-9_]+$/, 'invalid_string'),
+  name: z.string().trim().min(2).max(60),
+  iconKey: z.enum(ICON_KEYS),
+  kind: z.enum(PLACE_KINDS),
+  sortOrder: z.number().int(),
+  active: z.boolean(),
+});
+export const SceneTemplateInputSchema = z.object({
+  name: z.string().trim().min(2).max(60),
+  kind: z.enum(PLACE_KINDS),
+  modelKey: z.enum(SCENE_MODEL_KEYS),
+  thumbnailUrl: z.string().max(500).nullable(),
+  glbUrl: z.string().max(500).nullable(),
+  glbLod1Url: z.string().max(500).nullable(),
+  glbLod2Url: z.string().max(500).nullable(),
+  modelScale: z.number().min(0.1).max(20),
+  active: z.boolean(),
+});
 export const KeywordInputSchema = z.object({ keyword: z.string().trim().min(2).max(60), action: z.enum(KEYWORD_ACTIONS) });
 export const HotTopicInputSchema = z.object({ title: z.string().trim().min(2).max(80), hashtag: HashtagSchema.nullable(), sortOrder: z.number().int(), active: z.boolean() });
-export const MissionInputSchema = z.object({ code: z.string().trim().min(2).max(40).regex(/^[a-z0-9_]+$/, 'invalid_string'), name: z.string().trim().min(2).max(80), description: z.string().trim().max(200), period: z.enum(MISSION_PERIODS), action: z.enum(MISSION_ACTIONS), target: z.number().int().positive().max(1000), rewardPoints: z.number().int().min(0).max(1000), sortOrder: z.number().int(), active: z.boolean() });
-export const ChallengeInputSchema = z.object({ name: z.string().trim().min(2).max(80), description: z.string().trim().max(200), action: z.enum(MISSION_ACTIONS), target: z.number().int().positive().max(100000), scope: z.enum(CHALLENGE_SCOPES), startsAt: IsoDateSchema, endsAt: IsoDateSchema, active: z.boolean() });
-export const EventInputSchema = z.object({ title: z.string().trim().min(2).max(100), description: z.string().trim().max(500), coverUrl: z.string().max(500).nullable(), startsAt: IsoDateSchema, endsAt: IsoDateSchema, active: z.boolean() });
+export const MissionInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(2)
+    .max(40)
+    .regex(/^[a-z0-9_]+$/, 'invalid_string'),
+  name: z.string().trim().min(2).max(80),
+  description: z.string().trim().max(200),
+  period: z.enum(MISSION_PERIODS),
+  action: z.enum(MISSION_ACTIONS),
+  target: z.number().int().positive().max(1000),
+  rewardPoints: z.number().int().min(0).max(1000),
+  sortOrder: z.number().int(),
+  active: z.boolean(),
+});
+export const ChallengeInputSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  description: z.string().trim().max(200),
+  action: z.enum(MISSION_ACTIONS),
+  target: z.number().int().positive().max(100000),
+  scope: z.enum(CHALLENGE_SCOPES),
+  startsAt: IsoDateSchema,
+  endsAt: IsoDateSchema,
+  active: z.boolean(),
+});
+export const EventInputSchema = z.object({
+  title: z.string().trim().min(2).max(100),
+  description: z.string().trim().max(500),
+  coverUrl: z.string().max(500).nullable(),
+  startsAt: IsoDateSchema,
+  endsAt: IsoDateSchema,
+  active: z.boolean(),
+});
 export const LevelInputSchema = z.object({ level: z.number().int().positive().max(100), name: z.string().trim().min(2).max(60), minPoints: z.number().int().nonnegative() });
-export const BadgeInputSchema = z.object({ code: z.string().trim().min(2).max(40).regex(/^[a-z0-9_]+$/, 'invalid_string'), name: z.string().trim().min(2).max(60), description: z.string().trim().max(200), iconKey: z.enum(ICON_KEYS), conditionType: z.enum(BADGE_CONDITIONS), threshold: z.number().int().positive(), active: z.boolean() });
+export const BadgeInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(2)
+    .max(40)
+    .regex(/^[a-z0-9_]+$/, 'invalid_string'),
+  name: z.string().trim().min(2).max(60),
+  description: z.string().trim().max(200),
+  iconKey: z.enum(ICON_KEYS),
+  conditionType: z.enum(BADGE_CONDITIONS),
+  threshold: z.number().int().positive(),
+  active: z.boolean(),
+});
 
 export const ADMIN_RESOURCES = {
   'wish-types': WishTypeInputSchema,
@@ -151,7 +228,9 @@ export type DemoPostInput = z.infer<typeof DemoPostInputSchema>;
 export const DemoPostItemSchema = DemoPostInputSchema.omit({ hoursAgo: true }).extend({ id: IdSchema, authorName: z.string(), createdAt: IsoDateSchema });
 export type DemoPostItem = z.infer<typeof DemoPostItemSchema>;
 
-export const AdminPostUpdateSchema = z.object({ status: z.enum(POST_STATUSES).optional(), pinned: z.boolean().optional() }).refine((v) => v.status !== undefined || v.pinned !== undefined, { message: 'required' });
+export const AdminPostUpdateSchema = z
+  .object({ status: z.enum(POST_STATUSES).optional(), pinned: z.boolean().optional() })
+  .refine((v) => v.status !== undefined || v.pinned !== undefined, { message: 'required' });
 export type AdminPostUpdate = z.infer<typeof AdminPostUpdateSchema>;
 export const AdminCommentSchema = z.object({ id: IdSchema, postId: IdSchema, body: z.string(), author: UserSummarySchema, status: z.enum(COMMENT_STATUSES), createdAt: IsoDateSchema });
 export type AdminCommentDto = z.infer<typeof AdminCommentSchema>;

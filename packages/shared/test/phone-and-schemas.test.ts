@@ -6,7 +6,13 @@ import {
 import { viMessages } from '../src/i18n';
 
 describe('số điện thoại Việt Nam', () => {
-  it.each([['0912345678', '0912345678'], ['+84 912 345 678', '0912345678'], ['84912345678', '0912345678'], ['091.234.5678', '0912345678'], ['0339999999', '0339999999']])('chuẩn hóa %s', (raw, out) => {
+  it.each([
+    ['0912345678', '0912345678'],
+    ['+84 912 345 678', '0912345678'],
+    ['84912345678', '0912345678'],
+    ['091.234.5678', '0912345678'],
+    ['0339999999', '0339999999'],
+  ])('chuẩn hóa %s', (raw, out) => {
     expect(normalizeVnPhone(raw)).toBe(out);
   });
   it.each(['', '12345', '0212345678', '091234567', '09123456789', 'abc'])('từ chối %s', (raw) => { expect(normalizeVnPhone(raw)).toBeNull(); });
@@ -59,7 +65,18 @@ describe('DTO bài đăng', () => {
     expect(PostListQuerySchema.safeParse({ has: 'video' }).success).toBe(false);
   });
   it('bài mẫu của admin kiểm tra giới hạn', () => {
-    const ok = { authorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7', type: 'story', body: 'xin chào', hashtags: [], imageUrl: null, pinned: false, reactionCount: 1, commentCount: 0, shareCount: 0, hoursAgo: 2 };
+    const ok = {
+      authorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+      type: 'story',
+      body: 'xin chào',
+      hashtags: [],
+      imageUrl: null,
+      pinned: false,
+      reactionCount: 1,
+      commentCount: 0,
+      shareCount: 0,
+      hoursAgo: 2,
+    };
     expect(DemoPostInputSchema.safeParse(ok).success).toBe(true);
     expect(DemoPostInputSchema.safeParse({ ...ok, reactionCount: -1 }).success).toBe(false);
     expect(DemoPostInputSchema.safeParse({ ...ok, type: 'wish_share' }).success).toBe(false);

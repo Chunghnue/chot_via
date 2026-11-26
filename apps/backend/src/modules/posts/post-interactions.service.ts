@@ -28,16 +28,33 @@ export class PostInteractionsService {
     let fresh = false;
     await this.db.transaction(async (tx) => {
       if (type) {
-        const prev = await tx.select({ t: reactions.type }).from(reactions).where(and(eq(reactions.postId, postId), eq(reactions.userId, userId))).limit(1);
-        await tx.insert(reactions).values({ postId, userId, type }).onConflictDoUpdate({ target: [reactions.postId, reactions.userId], set: { type } });
+        const prev = await tx
+          .select({ t: reactions.type })
+          .from(reactions)
+          .where(and(eq(reactions.postId, postId), eq(reactions.userId, userId)))
+          .limit(1);
+        await tx
+          .insert(reactions)
+          .values({ postId, userId, type })
+          .onConflictDoUpdate({ target: [reactions.postId, reactions.userId], set: { type } });
         await this.points.awardPostEngagement(tx, post.authorId, userId, postId);
         if (prev.length === 0) {
           fresh = true;
-          await tx.update(posts).set({ reactionCount: sql`${posts.reactionCount} + 1` }).where(eq(posts.id, postId));
+          await tx
+            .update(posts)
+            .set({ reactionCount: sql`${posts.reactionCount} + 1` })
+            .where(eq(posts.id, postId));
         }
       } else {
-        const del = await tx.delete(reactions).where(and(eq(reactions.postId, postId), eq(reactions.userId, userId))).returning({ id: reactions.postId });
-        if (del.length) await tx.update(posts).set({ reactionCount: sql`greatest(${posts.reactionCount} - 1, 0)` }).where(eq(posts.id, postId));
+        const del = await tx
+          .delete(reactions)
+          .where(and(eq(reactions.postId, postId), eq(reactions.userId, userId)))
+          .returning({ id: reactions.postId });
+        if (del.length)
+          await tx
+            .update(posts)
+            .set({ reactionCount: sql`greatest(${posts.reactionCount} - 1, 0)` })
+            .where(eq(posts.id, postId));
       }
     });
     if (fresh && post.authorId !== userId) {
@@ -45,7 +62,11 @@ export class PostInteractionsService {
       await this.notifications.push(post.authorId, 'post_reacted', { postId, actorName: actor?.n ?? '' });
     }
     const [after] = await this.db.select({ n: posts.reactionCount }).from(posts).where(eq(posts.id, postId));
-    const kinds = await this.db.select({ type: reactions.type, n: sql<number>`count(*)::int` }).from(reactions).where(eq(reactions.postId, postId)).groupBy(reactions.type);
+    const kinds = await this.db
+      .select({ type: reactions.type, n: sql<number>`count(*)::int` })
+      .from(reactions)
+      .where(eq(reactions.postId, postId))
+      .groupBy(reactions.type);
     const of = (k: ReactionType): number => kinds.find((x) => x.type === k)?.n ?? 0;
     return { reactions: after?.n ?? 0, mine: type, reactionCounts: { like: of('like'), love: of('love'), haha: of('haha') } };
   }
@@ -61,7 +82,11 @@ export class PostInteractionsService {
   async share(ctx: RequestContext, postId: string): Promise<number> {
     await this.postsService.assertPublished(postId);
     const ins = await this.db.insert(postShares).values({ postId, actorKey: ctx.actorKey }).onConflictDoNothing().returning({ id: postShares.postId });
-    if (ins.length) await this.db.update(posts).set({ shareCount: sql`${posts.shareCount} + 1` }).where(eq(posts.id, postId));
+    if (ins.length)
+      await this.db
+        .update(posts)
+        .set({ shareCount: sql`${posts.shareCount} + 1` })
+        .where(eq(posts.id, postId));
     const [after] = await this.db.select({ n: posts.shareCount }).from(posts).where(eq(posts.id, postId));
     return after?.n ?? 0;
   }
@@ -72,16 +97,29 @@ export class PostInteractionsService {
     await this.rate.assert(`wish:${ctx.actorKey}`, s.rateLimits.wishPerMinute, 60);
     const post = await this.postsService.assertPublished(postId);
     if (wishTypeId) {
-      const [t] = await this.db.select({ id: wishTypes.id }).from(wishTypes).where(and(eq(wishTypes.id, wishTypeId), eq(wishTypes.active, true))).limit(1);
+      const [t] = await this.db
+        .select({ id: wishTypes.id })
+        .from(wishTypes)
+        .where(and(eq(wishTypes.id, wishTypeId), eq(wishTypes.active, true)))
+        .limit(1);
       if (!t) throw new DomainError('WISH_TYPE_INVALID');
     }
     const actor = ctx.user ? eq(wishEvents.actorUserId, ctx.user.id) : eq(wishEvents.guestHash, ctx.guestHash);
     const sameType = wishTypeId ? eq(wishEvents.wishTypeId, wishTypeId) : isNull(wishEvents.wishTypeId);
-    const [seen] = await this.db.select({ id: wishEvents.id }).from(wishEvents).where(and(eq(wishEvents.source, 'post'), eq(wishEvents.targetPostId, postId), actor, sameType)).limit(1);
+    const [seen] = await this.db
+      .select({ id: wishEvents.id })
+      .from(wishEvents)
+      .where(and(eq(wishEvents.source, 'post'), eq(wishEvents.targetPostId, postId), actor, sameType))
+      .limit(1);
     if (!seen) {
       await this.db.transaction(async (tx) => {
-        await tx.insert(wishEvents).values({ source: 'post', actorUserId: ctx.user?.id ?? null, guestHash: ctx.user ? null : ctx.guestHash, targetPostId: postId, wishTypeId: wishTypeId ?? null });
-        await tx.update(posts).set({ wishCount: sql`${posts.wishCount} + 1` }).where(eq(posts.id, postId));
+        await tx
+          .insert(wishEvents)
+          .values({ source: 'post', actorUserId: ctx.user?.id ?? null, guestHash: ctx.user ? null : ctx.guestHash, targetPostId: postId, wishTypeId: wishTypeId ?? null });
+        await tx
+          .update(posts)
+          .set({ wishCount: sql`${posts.wishCount} + 1` })
+          .where(eq(posts.id, postId));
         if (ctx.user) await this.points.awardPostEngagement(tx, post.authorId, ctx.user.id, postId);
       });
     }

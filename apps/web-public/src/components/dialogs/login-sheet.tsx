@@ -88,33 +88,73 @@ export function LoginSheet() {
           <form onSubmit={phoneForm.handleSubmit(sendOtp)} className="flex flex-col gap-3" noValidate>
             <div>
               <Label htmlFor="login-phone">{t('phoneLabel')}</Label>
-              <Input id="login-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder={t('phonePlaceholder')} aria-invalid={!!phoneForm.formState.errors.phone} {...phoneForm.register('phone')} />
+              <Input
+                id="login-phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder={t('phonePlaceholder')}
+                aria-invalid={!!phoneForm.formState.errors.phone}
+                {...phoneForm.register('phone')}
+              />
               <FieldError message={phoneForm.formState.errors.phone ? message('AUTH_INVALID_PHONE') : undefined} />
             </div>
             <div ref={turnstile.containerRef} />
             <FieldError message={serverError ?? undefined} />
-            <Button type="submit" size="lg" loading={requesting} disabled={!turnstile.ready}>{t('sendOtp')}</Button>
+            <Button type="submit" size="lg" loading={requesting} disabled={!turnstile.ready}>
+              {t('sendOtp')}
+            </Button>
           </form>
         ) : (
           <form onSubmit={codeForm.handleSubmit(verify)} className="flex flex-col gap-3" noValidate>
             <h3 className="font-display text-xl font-bold text-ink">{t('otpTitle')}</h3>
             <p className="text-sm text-ink-muted">{t('otpSent', { phone })}</p>
-            <Input inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder={t('otpPlaceholder')} className="text-center font-display text-2xl tracking-[0.5em]" aria-label={t('otpTitle')} {...codeForm.register('code')} />
+            <Input
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              placeholder={t('otpPlaceholder')}
+              className="text-center font-display text-2xl tracking-[0.5em]"
+              aria-label={t('otpTitle')}
+              {...codeForm.register('code')}
+            />
             {catalog?.devOtpHint ? <Notice>{t('devHint', { code: catalog.devOtpHint })}</Notice> : null}
             <FieldError message={serverError ?? undefined} />
-            <Button type="submit" size="lg" loading={verifying}>{t('verify')}</Button>
+            <Button type="submit" size="lg" loading={verifying}>
+              {t('verify')}
+            </Button>
             <div className="flex items-center justify-between text-sm">
-              <button type="button" className="font-semibold text-primary-strong disabled:text-ink-subtle" disabled={secondsLeft > 0 || requesting} onClick={() => void sendOtp({ phone })}>
+              <button
+                type="button"
+                className="font-semibold text-primary-strong disabled:text-ink-subtle"
+                disabled={secondsLeft > 0 || requesting}
+                onClick={() => void sendOtp({ phone })}
+              >
                 {secondsLeft > 0 ? t('resendIn', { seconds: secondsLeft }) : t('resend')}
               </button>
-              <button type="button" className="text-ink-muted" onClick={() => { setPhone(null); setServerError(null); }}>{t('changePhone')}</button>
+              <button
+                type="button"
+                className="text-ink-muted"
+                onClick={() => {
+                  setPhone(null);
+                  setServerError(null);
+                }}
+              >
+                {t('changePhone')}
+              </button>
             </div>
           </form>
         )}
 
         <div className="flex flex-col gap-2">
           <p className="text-center text-xs text-ink-subtle">{t('socialDivider')}</p>
-          <OAuthButtons providers={PROVIDERS.filter((p) => p !== 'apple' || catalog?.authProviders.apple)} enabled={catalog?.authProviders} hrefFor={(p) => `/api/v1/auth/oauth/${p}/start?returnTo=${encodeURIComponent(returnTo)}`} label={(p) => (p === 'google' ? t('google') : p === 'facebook' ? t('facebook') : t('apple'))} onUnavailable={(p) => toast(t('providerOff', { name: p === 'google' ? 'Google' : p === 'facebook' ? 'Facebook' : 'Apple' }))} />
+          <OAuthButtons
+            providers={PROVIDERS.filter((p) => p !== 'apple' || catalog?.authProviders.apple)}
+            enabled={catalog?.authProviders}
+            hrefFor={(p) => `/api/v1/auth/oauth/${p}/start?returnTo=${encodeURIComponent(returnTo)}`}
+            label={(p) => (p === 'google' ? t('google') : p === 'facebook' ? t('facebook') : t('apple'))}
+            onUnavailable={(p) => toast(t('providerOff', { name: p === 'google' ? 'Google' : p === 'facebook' ? 'Facebook' : 'Apple' }))}
+          />
         </div>
         <p className="text-center text-xs text-ink-subtle">{t('privacy')}</p>
       </div>

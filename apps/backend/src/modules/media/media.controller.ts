@@ -37,7 +37,11 @@ export class MediaController {
 
     let output: { data: Buffer; info: OutputInfo };
     try {
-      output = await sharp(input, { animated: false }).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toBuffer({ resolveWithObject: true });
+      output = await sharp(input, { animated: false })
+        .rotate()
+        .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 82 })
+        .toBuffer({ resolveWithObject: true });
     } catch {
       throw new DomainError('MEDIA_TYPE_INVALID');
     }

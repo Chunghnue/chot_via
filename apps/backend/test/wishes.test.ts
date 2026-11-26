@@ -95,9 +95,17 @@ describe('gửi vía cho cửa hàng / sale', () => {
   it('khi chủ tắt tự động gửi vía: phản hồi hệ thống trung tính, không giả làm chủ cửa hàng', async () => {
     const s = await login();
     const cat = await catalog();
-    const mine = await post<{ id: string; slug: string }>('/places', {
-      kind: 'store', title: 'Tiệm tắt auto', categoryId: cat.categories.find((c) => c.kind === 'store')?.id, sceneTemplateId: cat.sceneTemplates.find((t) => t.kind === 'store')?.id, autoReplyEnabled: false,
-    }, { token: s.token });
+    const mine = await post<{ id: string; slug: string }>(
+      '/places',
+      {
+        kind: 'store',
+        title: 'Tiệm tắt auto',
+        categoryId: cat.categories.find((c) => c.kind === 'store')?.id,
+        sceneTemplateId: cat.sceneTemplates.find((t) => t.kind === 'store')?.id,
+        autoReplyEnabled: false,
+      },
+      { token: s.token },
+    );
     expect(mine.status).toBe(201);
     const r = await post<PlaceWishResult>(`/places/${mine.data.id}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { ip: freshIp() });
     expect(r.data.reply.kind).toBe('system');

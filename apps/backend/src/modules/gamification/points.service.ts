@@ -39,7 +39,11 @@ export class PointsService {
     const [used] = await tx.select({ n: sql<number>`coalesce(sum(${pointLedger.points}), 0)::int` }).from(pointLedger)
       .where(and(eq(pointLedger.userId, authorId), eq(pointLedger.action, 'post_engagement'), gte(pointLedger.createdAt, vnDayStart(new Date()))));
     const points = (used?.n ?? 0) < POST_ENGAGEMENT_DAILY_CAP ? 1 : 0;
-    const inserted = await tx.insert(pointLedger).values({ userId: authorId, action: 'post_engagement', points, sourcePostId: postId, sourceActorId: actorId }).onConflictDoNothing().returning({ id: pointLedger.id });
+    const inserted = await tx
+      .insert(pointLedger)
+      .values({ userId: authorId, action: 'post_engagement', points, sourcePostId: postId, sourceActorId: actorId })
+      .onConflictDoNothing()
+      .returning({ id: pointLedger.id });
     if (inserted.length === 0 || points === 0) return null;
     const [row] = await tx.update(users).set({ points: sql`${users.points} + ${points}`, pointsUpdatedAt: new Date() }).where(eq(users.id, authorId)).returning({ points: users.points });
     return row?.points ?? null;

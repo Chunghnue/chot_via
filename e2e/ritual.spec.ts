@@ -10,7 +10,19 @@ async function memberWithStore(page: Page): Promise<void> {
   const category = catalog.data.categories.find((c) => c.kind === 'store');
   const template = catalog.data.sceneTemplates.find((s) => s.kind === 'store');
   expect(category && template).toBeTruthy();
-  const made = await request.post(`${API}/places`, { headers: h, data: { kind: 'store', title: 'Quán Cafe Phước Lộc', tagline: '', description: '', province: '', categoryId: category?.id, sceneTemplateId: template?.id, autoReplyEnabled: false } });
+  const made = await request.post(`${API}/places`, {
+    headers: h,
+    data: {
+      kind: 'store',
+      title: 'Quán Cafe Phước Lộc',
+      tagline: '',
+      description: '',
+      province: '',
+      categoryId: category?.id,
+      sceneTemplateId: template?.id,
+      autoReplyEnabled: false,
+    },
+  });
   expect(made.status()).toBe(201);
 }
 

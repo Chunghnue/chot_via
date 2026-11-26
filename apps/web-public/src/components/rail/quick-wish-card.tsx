@@ -30,7 +30,13 @@ export function QuickWishCard() {
           const done = entries.some((e) => e.titleCode === code);
           const active = code === titleCode;
           return (
-            <li key={code} className={cn('relative flex flex-col items-center gap-1 rounded-2xl px-1 pb-1.5 pt-2 text-center text-[0.7rem] font-semibold whitespace-nowrap', cn(tones[code], 'text-ink', active && 'ring-2 ring-primary'))}>
+            <li
+              key={code}
+              className={cn(
+                'relative flex flex-col items-center gap-1 rounded-2xl px-1 pb-1.5 pt-2 text-center text-[0.7rem] font-semibold whitespace-nowrap',
+                cn(tones[code], 'text-ink', active && 'ring-2 ring-primary'),
+              )}
+            >
               {done ? <Check className="absolute right-1 top-1 size-3.5 rounded-full bg-surface p-0.5 text-success" aria-hidden /> : null}
               <img src={icons[code]} alt="" aria-hidden className="size-9 object-contain" draggable={false} />
               {t(`slot.${code}`)}
