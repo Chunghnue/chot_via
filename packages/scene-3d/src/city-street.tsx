@@ -40,6 +40,8 @@ export interface CityStreetProps {
   onReady?: (() => void) | undefined;
   /** Nửa bề ngang (mét) luôn phải thấy được; bỏ trống thì tự chọn theo tỉ lệ khung (khung hẹp chỉ cần thấy phần giữa). */
   fitHalfWidth?: number | undefined;
+  /** Tên thật hiện trên đầu người đi lại (thành viên đang hoạt động) và nhãn cho nhóm đông; bỏ trống thì không hiện tên. */
+  walkers?: { names: readonly string[]; groupLabel: string } | undefined;
   selectedPlaceId?: string | null | undefined;
   /** Khi lọc/tìm: chỉ các cửa hàng có id trong tập này sáng và bấm được. null = không lọc. */
   visiblePlaceIds?: ReadonlySet<string> | null | undefined;
@@ -347,18 +349,13 @@ function FloatingCoin({ index, reducedMotion, alphaCover }: { index: number; red
   );
 }
 
-/** Tên người đi lại (tự đặt): chẵn là nam, lẻ là nữ để tỉ lệ nam nữ bằng nhau; cả nhóm khách đông là một nhóm bạn. */
-const WALKER_NAMES = { male: ['Minh', 'Hùng', 'Nam', 'Đức', 'Tuấn', 'Long', 'Khánh', 'Bảo'], female: ['Lan', 'Hương', 'Mai', 'Linh', 'Thảo', 'Ngọc', 'Trang', 'Vy'] } as const;
-const GROUP_NAME = 'Nhóm bạn';
-
 /** Người đi lại: thân trên là ảnh tách từ bộ thiết kế, hai chân là khối 3D thật nên bước chân vung được. */
-function CityWalker({ index, colors, reducedMotion, alphaCover }: { index: number; colors: SceneColors; reducedMotion: boolean; alphaCover: boolean }) {
+function CityWalker({ index, colors, reducedMotion, alphaCover, names, groupLabel }: { index: number; colors: SceneColors; reducedMotion: boolean; alphaCover: boolean; names: readonly string[]; groupLabel: string }) {
   const [shopkeeper, seller, buyer, crowd] = CITY_IMAGES.walkers;
   // Chẵn = nam (ảnh chủ quán), lẻ = nữ (hai ảnh nữ xen kẽ); một nhóm đông ở vị trí 3.
   const isMale = index % 2 === 0;
   const src = index === 3 ? crowd : isMale ? shopkeeper : (Math.floor(index / 2) % 2 === 0 ? seller : buyer) ?? seller;
-  const nameList = isMale ? WALKER_NAMES.male : WALKER_NAMES.female;
-  const name = index === 3 ? GROUP_NAME : nameList[Math.floor(index / 2) % nameList.length] ?? '';
+  const name = index === 3 ? groupLabel : names.length > 0 ? names[index % names.length] ?? '' : '';
   const tex = useSprite(src);
   const root = useRef<Group>(null);
   const face = useRef<Group>(null);
@@ -629,7 +626,7 @@ function Scene({ props }: { props: CityStreetProps }): ReactNode {
         <Suspense fallback={null}>{Array.from({ length: quality === 'low' ? 4 : 8 }, (_, i) => <FloatingCoin key={i} index={i} reducedMotion={reducedMotion} alphaCover={alphaCover} />)}</Suspense>
       ) : null}
       {Array.from({ length: walkers }, (_, i) => (
-        <Suspense key={i} fallback={null}><CityWalker index={i} colors={colors} reducedMotion={reducedMotion} alphaCover={alphaCover} /></Suspense>
+        <Suspense key={i} fallback={null}><CityWalker index={i} colors={colors} reducedMotion={reducedMotion} alphaCover={alphaCover} names={props.walkers?.names ?? []} groupLabel={props.walkers?.groupLabel ?? ''} /></Suspense>
       ))}
       {quality === 'low' ? null : <Petals count={quality === 'high' ? 140 : 80} color={colors.blossom} reducedMotion={reducedMotion} />}
       <OrbitControls

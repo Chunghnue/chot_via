@@ -12,6 +12,7 @@ import { PlaceGrid } from '@/components/place/place-list';
 import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls, StreetTiles } from '@/components/street/street-hud';
 import { useStreetLabels } from '@/components/place/use-street-labels';
 import { useRitualScene } from '@/features/ritual/use-ritual-scene';
+import { useWalkers } from '@/lib/use-walkers';
 import { categoryChanged, placeFocused, searchChanged, selectStreet, tabChanged, type StreetTab } from '@/features/street/streetSlice';
 import { placeSheetOpened, selectWishRequest, wishRequested, loginRequested } from '@/features/ui/uiSlice';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
@@ -31,6 +32,7 @@ export default function StreetPage() {
   const isMember = useAppSelector(selectIsMember);
   const wishRequest = useAppSelector(selectWishRequest);
   const ritualScene = useRitualScene();
+  const walkers = useWalkers();
   const labels = useStreetLabels();
   const { data: home } = useGetHomeQuery();
   const toast = useApiToast();
@@ -155,6 +157,7 @@ export default function StreetPage() {
                     selectedPlaceId={street.selectedId}
                     visiblePlaceIds={visibleIds}
                     burstTick={wishRequest}
+                    walkers={walkers}
                     {...ritualScene}
                     onSelectPlace={select}
                     onSelectDeity={() => dispatch(wishRequested())}
