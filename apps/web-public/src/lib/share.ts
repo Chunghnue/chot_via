@@ -9,16 +9,16 @@ export function siteUrl(): string {
 export type ShareTarget = 'facebook' | 'zalo' | 'tiktok' | 'messenger';
 
 /** Nội dung chia sẻ: lời chúc kèm link trang chủ. */
-export function shareMessage(text: string): string {
-  return `${text}\n${siteUrl()}`;
+export function shareMessage(text: string, link: string = siteUrl()): string {
+  return `${text}\n${link}`;
 }
 
 /**
  * Địa chỉ mở cửa sổ chia sẻ của từng mạng. Facebook và Zalo chỉ nhận link: ảnh và chữ hiện ra lấy từ thẻ xem trước (Open Graph) của trang
  * (`app/layout.tsx`), `quote`/`t` chỉ là gợi ý. TikTok không có đường chia sẻ chữ từ web nên chỉ mở TikTok, người dùng dán lời chúc đã được sao chép.
  */
-export function shareUrl(target: ShareTarget, text: string): string {
-  const link = encodeURIComponent(siteUrl());
+export function shareUrl(target: ShareTarget, text: string, url: string = siteUrl()): string {
+  const link = encodeURIComponent(url);
   const quote = encodeURIComponent(text);
   switch (target) {
     case 'facebook': return `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=${quote}&hashtag=${encodeURIComponent('#XinVia')}`;

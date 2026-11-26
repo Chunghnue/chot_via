@@ -33,21 +33,24 @@ export function ZaloShareHost() {
   const t = useTranslations('wish.share.zalo');
   const tc = useTranslations('common');
   const [text, setText] = useState<string | null>(null);
+  const [target, setTarget] = useState<string>(siteUrl());
 
   useEffect(() => {
     const open = (e: Event): void => {
       const detail: unknown = e instanceof CustomEvent ? e.detail : null;
       const wish = detail && typeof detail === 'object' && 'text' in detail && typeof detail.text === 'string' ? detail.text : '';
+      const url = detail && typeof detail === 'object' && 'link' in detail && typeof detail.link === 'string' && detail.link !== '' ? detail.link : siteUrl();
+      setTarget(url);
       setText(wish);
-      void navigator.clipboard.writeText(shareMessage(wish)).catch(() => undefined);
+      void navigator.clipboard.writeText(shareMessage(wish, url)).catch(() => undefined);
     };
     window.addEventListener(ZALO_SHARE_EVENT, open);
     return () => window.removeEventListener(ZALO_SHARE_EVENT, open);
   }, []);
 
-  const link = text === null ? '' : siteUrl();
+  const link = text === null ? '' : target;
   const copy = async (): Promise<void> => {
-    try { await navigator.clipboard.writeText(shareMessage(text ?? '')); toast.success(t('linkCopied')); } catch { /* trình duyệt chặn: người dùng tự chép */ }
+    try { await navigator.clipboard.writeText(shareMessage(text ?? '', target)); toast.success(t('linkCopied')); } catch { /* trình duyệt chặn: người dùng tự chép */ }
   };
   return (
     <Sheet open={text !== null} onOpenChange={(open) => { if (!open) setText(null); }} title={t('title')} closeLabel={tc('close')}>

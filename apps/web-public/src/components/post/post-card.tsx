@@ -18,7 +18,8 @@ import { Burst } from '@/components/dialogs/wish-burst';
 import { reportRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { PostContent, kindTone, useKindLabel } from './post-content';
-import { shareCardImage, wrapLines } from '@/lib/share-card';
+import { ShareButtons } from '@/components/common/share-buttons';
+import { postSnippet } from '@/lib/post-share';
 
 /** Khối bên trái nút Chia sẻ: các biểu tượng vía đã có lượt (tối đa 6, nhiều lượt nhất trước) chồng nhau kèm tổng lượt gửi vía của bài. */
 function WishSummary({ breakdown, total, label }: { breakdown: readonly WishCountDto[]; total: number; label: string }) {
@@ -66,26 +67,19 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const [poll, setPoll] = useState<PollDto | null>(post.poll);
   const [hidden, setHidden] = useState(false);
   const tcard = useTranslations('wish.card');
+  const tpost = useTranslations('wish.postShare');
 
   if (hidden) return null;
   const isOwn = post.viewer?.isOwn ?? false;
   const roleLabel = post.author.memberRole ? roleName(post.author.memberRole) : null;
   const heading = post.author.jobTitle ?? roleLabel;
 
-  const doShare = async (): Promise<void> => {
-    const url = `${window.location.origin}/bai/${post.id}`;
-    try {
-      // Bài Kể khổ / Khoe: chia sẻ thẻ ảnh theo mẫu (kèm QR về đúng bài) nếu thiết bị chia sẻ được ảnh; không thì chia sẻ link như cũ.
-      const kind = post.type === 'story' ? 'story' : post.type === 'achievement' ? 'brag' : null;
-      const probe = new File([''], 'x.png', { type: 'image/png' });
-      if (kind && typeof navigator.canShare === 'function' && navigator.canShare({ files: [probe] })) {
-        await shareCardImage({ brand: tcard('brand'), tagline: tcard('tagline'), scan: tcard('scan'), title: tcard(`${kind}.title`), lines: wrapLines(post.body || tcard(`${kind}.l1`)) }, url, post.body.slice(0, 120));
-      } else if (typeof navigator.share === 'function') await navigator.share({ url });
-      else { await navigator.clipboard.writeText(url); toast.success(t('actions.linkCopied')); }
-      const r = await share(post.id).unwrap();
-      setShares(r.shares);
-      track('feed_engagement', { post_type: post.type, action: 'share' });
-    } catch { /* người dùng hủy chia sẻ */ }
+  const postUrl = typeof window === 'undefined' ? '' : `${window.location.origin}/bai/${post.id}`;
+  // Câu chia sẻ mẫu theo loại bài (kể khổ / khoe / xin vía) kèm trích ngắn nội dung; link là link riêng của bài.
+  const shareText = tpost(post.type, { name: post.author.displayName, snippet: postSnippet(post.body), brand: tcard('brand') });
+  const shareKind = post.type === 'story' ? 'story' : post.type === 'achievement' ? 'brag' : 'receive';
+  const countShare = (): void => {
+    void share(post.id).unwrap().then((r) => { setShares(r.shares); track('feed_engagement', { post_type: post.type, action: 'share' }); }).catch(() => undefined);
   };
 
   const sendWish = async (wishTypeId: string, at?: { x: number; y: number }): Promise<void> => {
@@ -183,7 +177,9 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
       <footer className={cn('flex flex-wrap items-center gap-1.5 text-sm font-semibold text-ink-muted', compact || wide ? 'mt-1' : 'mt-4 border-t border-border pt-3')}>
         <WishSummary breakdown={breakdown} total={wishTotal} label={t('actions.wishTotal', { count: wishTotal })} />
         <Link href={`/bai/${post.id}`} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}><MessageCircle className="size-5" aria-hidden />{post.counts.comments}<span className="sr-only">{t('actions.commentShort')}</span></Link>
-        <button type="button" onClick={() => void doShare()} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>
+        <Popover trigger={<button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>}>
+          <ShareButtons text={shareText} link={postUrl} card={{ kind: shareKind, link: postUrl, body: post.body }} onShared={countShare} className="w-64" />
+        </Popover>
         <div className="ml-auto">
           <Popover align="end" trigger={
             <button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full border border-primary px-4 text-primary-strong hover:bg-primary-soft', wishedAny && 'bg-primary-soft')}>
