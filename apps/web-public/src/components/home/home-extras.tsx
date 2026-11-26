@@ -92,7 +92,7 @@ export function ChallengeTasks() {
                 <span
                   className={cn(
                     'grid size-6 shrink-0 place-items-center rounded-full ring-2 ring-surface',
-                    done ? 'bg-linear-to-b from-sign-check to-sign-check-dark text-on-primary' : 'bg-linear-to-b from-sign-check to-sign-check-dark text-on-primary',
+                    done ? 'bg-linear-to-b from-sign-check to-sign-check-dark text-on-primary' : 'bg-surface-muted text-transparent ring-border',
                   )}
                 >
                   <Check className="size-4" strokeWidth={3.5} aria-hidden />
