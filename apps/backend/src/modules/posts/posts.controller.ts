@@ -115,7 +115,7 @@ export class PostsController {
 
   @Post('posts/:id/wishes')
   async wish(@Ctx() ctx: RequestContext, @Param(IdParam) params: { id: string }, @Body(new ZodPipe(PostWishBodySchema)) body: { wishTypeId?: string }) {
-    return ok('WISH_SENT', { wishes: await this.posts.wishPost(ctx, params.id, body.wishTypeId) });
+    return ok('WISH_SENT', await this.posts.wishPost(ctx, params.id, body.wishTypeId));
   }
 
   @Post('posts/:id/poll/vote')

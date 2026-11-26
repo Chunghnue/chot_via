@@ -2,7 +2,7 @@ import { eq, sql } from 'drizzle-orm';
 import type { MemberRole, MetricType, PostType } from '@chot-via/shared';
 import { createDb } from './database';
 import { vnWeekStart } from '@chot-via/shared';
-import { achievements, challenges, events, hotTopics, missions, notifications, places, pollVotes, postMedia, posts, users, wishEvents } from './schema';
+import { achievements, challenges, comments, events, hotTopics, missions, notifications, places, pollVotes, postMedia, posts, users, wishEvents } from './schema';
 
 const { db, close } = createDb();
 const HOUR = 3_600_000;
@@ -96,6 +96,56 @@ for (const [name, points] of SAMPLE_POINTS) {
   const id = ids.get(name);
   if (id) await db.update(users).set({ points, pointsUpdatedAt: new Date() }).where(sql`${users.id} = ${id} and ${users.points} = 0 and ${users.isDemo} = true`);
 }
+
+/** Bình luận mẫu tự nhiên cho từng loại bài (nội dung khác nhau, không lặp máy móc). */
+const COMMENT_POOLS: Record<'story' | 'achievement' | 'wish_share', string[]> = {
+  story: [
+    'Trời ơi đúng cảnh nhà em luôn, đọc mà thấy mình trong đó 😭', 'Cố lên chị ơi, tháng sau khách sẽ về nườm nượp thôi!', 'Gửi vía đông khách cho bạn nè 🙏', 'Nghề này ai chưa khóc vì khách "để em suy nghĩ" thì chưa phải sale thật sự 😂',
+    'Em cũng vừa gặp y chang hôm qua, thôi coi như luyện tâm vậy anh ơi.', 'Giữ vững tinh thần nha, vía lành sắp tới rồi.', 'Đọc xong thấy được an ủi ghê, cảm ơn bạn đã chia sẻ.', 'Mình bán hàng 5 năm rồi, cứ kiên nhẫn là có khách thôi bạn.',
+    'Chốt được đơn đầu tiên là cả ngày vui luôn, chúc bạn sớm có đơn!', 'Ôi thương quá, ôm một cái ❤️', 'Hôm nay Thần Tài cho vía rồi, chắc chắn chiều nay có đơn.', 'Bạn thử đổi cách chào khách xem, bên mình đổi xong tỉ lệ chốt tăng hẳn.',
+    'Cùng cảnh ngộ nè, mình xin vía chung nhé 🍀', 'Khổ trước sướng sau, cố lên!', 'Hay quá, kể thêm đi bạn ơi, nghe mà vừa buồn cười vừa thương.', 'Thôi kệ, ngày mai là một ngày mới, nhiều khách hơn.', 'Sale thì ai chẳng có ngày như vậy, mai lại ổn thôi.',
+    'Nể bạn thật, vẫn vui vẻ kể ra được.', 'Cho mình xin vía luôn với, tháng này cũng chưa có deal nào 😅', 'Xin vía đông khách cho cả nhà nha!',
+  ],
+  achievement: [
+    'Chúc mừng bạn nhé, giỏi quá! 🎉', 'Quán đông vậy là nhờ bạn chăm chút rồi, chúc mừng!', 'Xin chút vía của bạn với, mai mình cũng muốn được như vậy 🙏', 'Đỉnh quá, chia sẻ bí quyết đi bạn ơi!',
+    'Chúc mừng! Năng lượng tích cực lan tỏa tới cả nhóm luôn.', 'Mừng cho bạn thật sự, xứng đáng lắm.', 'Giữ phong độ nhé, tháng sau còn cao hơn nữa!', 'Gửi vía chốt thêm nhiều đơn nữa nha 💰',
+    'Nhìn mà có thêm động lực, cảm ơn bạn đã khoe.', 'Quá tuyệt, mình cũng đang chạy KPI, nhờ bạn truyền lửa.', 'Chúc mừng cả team, vía lành luôn đi cùng bạn!', 'Thần Tài phù hộ, làm ăn phát đạt nhé ✨',
+    'Cho mình hỏi bạn làm kênh nào mà hiệu quả vậy?', 'Vui lây luôn, chúc mừng bạn nhiều nhiều.', 'Cố gắng nhiều rồi mới có kết quả, chúc mừng!', 'Tuyệt vời, tháng này bạn là ngôi sao rồi.', 'Mừng ghê, hôm nay cả nhà ăn mừng thôi!',
+    'Đúng là có công mài sắt có ngày nên kim.', 'Chúc bạn sức khỏe và buôn may bán đắt!', 'Like mạnh cho bạn, tiếp tục phát huy nhé!',
+  ],
+  wish_share: [
+    'Xin vía cùng bạn, chúc cuối tuần đông khách 🙏', 'Thần Tài nghe thấy rồi, sắp có đơn thôi!', 'Mình cũng xin vía sáng nay luôn, chúc cả nhà chốt đơn mỏi tay.', 'Gửi bạn một chút vía may mắn nè 🍀',
+    'Chúc bạn một ngày thật nhiều khách và nhiều niềm vui!', 'Vía lành đã về, chúc bạn buôn may bán đắt.', 'Cảm ơn bạn đã xin vía giúp cả nhóm nhé.', 'Nhờ bài này mà mình nhớ xin vía hôm nay, cảm ơn bạn!',
+    'Chúc cả nhà hôm nay thuận lợi, đơn về như nước ✨', 'Cùng xin vía nào mọi người ơi!', 'Chốt đơn thuận lợi nha bạn.', 'Xin vía cho mình luôn với, hôm nay có buổi gặp khách quan trọng.',
+    'Thần Tài ơi, phù hộ bạn ấy với 🙏', 'Chúc bạn gặp nhiều khách dễ tính.', 'Một ngày mới tràn đầy năng lượng nhé!', 'Mình thấy hôm nay khách đông hơn hẳn sau khi xin vía, tâm lý tốt cũng quan trọng.',
+    'Vía của bạn lan tỏa tới mình rồi, cảm ơn!', 'Chúc mừng ngày mới, đơn hàng ùn ùn!', 'Gửi vía từ Đà Nẵng ra nhé!', 'Xin vía thành công, cùng cố gắng thôi!',
+  ],
+};
+const commenterIds = USERS.filter((u) => u.role !== null).map((u) => ids.get(u.name)).filter((x): x is string => x !== undefined);
+const demoPosts = await db.select({ id: posts.id, type: posts.type, authorId: posts.authorId, createdAt: posts.createdAt }).from(posts).where(eq(posts.isDemo, true)).orderBy(posts.createdAt);
+for (const [i, post] of demoPosts.entries()) {
+  const [has] = await db.select({ n: sql<number>`count(*)::int` }).from(comments).where(eq(comments.postId, post.id));
+  if ((has?.n ?? 0) > 0) continue;
+  const pool = COMMENT_POOLS[post.type];
+  const people = commenterIds.filter((c) => c !== post.authorId);
+  if (people.length === 0) continue;
+  const k = 3 + ((i * 5 + 4) % 13);
+  const rows = Array.from({ length: k }, (_, j) => {
+    const body = pool[(i * 7 + j * 3) % pool.length] ?? pool[0] ?? '';
+    return { postId: post.id, userId: people[(i + j) % people.length] ?? people[0] ?? '', body, createdAt: new Date(Math.min(Date.now() - 60_000, post.createdAt.getTime() + (j + 1) * 41 * 60_000)) };
+  });
+  await db.insert(comments).values(rows);
+  await db.update(posts).set({ commentCount: k }).where(eq(posts.id, post.id));
+}
+
+/** Lượt gửi vía mẫu theo từng loại (6 loại) cho bài mẫu chưa có: số lượt khác nhau giữa các bài và các loại, tính cố định từ mã bài. Cập nhật tổng lượt của bài. */
+await db.execute(sql`insert into wish_events (source, guest_hash, target_post_id, wish_type_id, created_at)
+  select 'post', 'demo-seed', p.id, wt.id, p.created_at + random() * interval '2 days'
+  from posts p cross join wish_types wt
+  cross join lateral generate_series(1, (get_byte(decode(md5(p.id::text || wt.code), 'hex'), 0) % 16)) g
+  where p.is_demo and wt.active
+    and not exists (select 1 from wish_events e where e.source = 'post' and e.target_post_id = p.id and e.guest_hash = 'demo-seed')`);
+await db.execute(sql`update posts set wish_count = (select count(*)::int from wish_events e where e.source = 'post' and e.target_post_id = posts.id) where is_demo`);
 
 const [anyTopic] = await db.select({ id: hotTopics.id }).from(hotTopics).limit(1);
 if (!anyTopic) await db.insert(hotTopics).values(TOPICS.map((title, i) => ({ title, hashtag: null, sortOrder: i })));

@@ -130,7 +130,8 @@
     "unsaved": "Đã bỏ lưu.",
     "more": "Thêm tùy chọn",
     "wishSent": "Đã gửi vía động viên!",
-    "blocked": "Đã chặn người này."
+    "blocked": "Đã chặn người này.",
+    "wishTotal": "{count} lượt gửi vía"
   },
   "comments": {
     "title": "Bình luận",

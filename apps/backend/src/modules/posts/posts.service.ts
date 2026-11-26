@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, desc, eq, ilike, inArray, notInArray, or, sql, type SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, inArray, isNotNull, isNull, notInArray, or, sql, type SQL } from 'drizzle-orm';
 import {
   HashtagCountSchema, HotTopicSchema, RANGE_METRICS, StoryAuthorRankSchema, STORY_STICKERS, metricAllowedForRole, type AppSettings, type CommentDto, type CreatePostBody, type HashtagCount, type HotTopicDto, type StoryAuthorRank,
-  type LevelDto, type PollDto, type PostDto, type PostListQuery, type RangeDef, type ReactionType,
+  type LevelDto, type PollDto, type WishCountDto, type PostDto, type PostListQuery, type RangeDef, type ReactionType,
 } from '@chot-via/shared';
 import { z } from 'zod';
 import type { RequestContext } from '../../common/access';
@@ -152,6 +152,17 @@ export class PostsService {
       this.db.select({ postId: pollVotes.postId, optionId: pollVotes.optionId, n: sql<number>`count(*)::int` }).from(pollVotes).where(inArray(pollVotes.postId, ids)).groupBy(pollVotes.postId, pollVotes.optionId),
     ]);
     const mine = ctx.user ? await this.viewerState(ctx.user.id, ids) : null;
+    const [wishRows, myWishRows, commentRows, allTypes] = await Promise.all([
+      this.db.select({ postId: wishEvents.targetPostId, typeId: wishEvents.wishTypeId, n: sql<number>`count(*)::int` }).from(wishEvents)
+        .where(and(eq(wishEvents.source, 'post'), inArray(wishEvents.targetPostId, ids), isNotNull(wishEvents.wishTypeId))).groupBy(wishEvents.targetPostId, wishEvents.wishTypeId),
+      this.db.select({ postId: wishEvents.targetPostId, typeId: wishEvents.wishTypeId }).from(wishEvents)
+        .where(and(eq(wishEvents.source, 'post'), inArray(wishEvents.targetPostId, ids), isNotNull(wishEvents.wishTypeId), ctx.user ? eq(wishEvents.actorUserId, ctx.user.id) : eq(wishEvents.guestHash, ctx.guestHash))),
+      this.db.select({ postId: comments.postId, n: sql<number>`count(*)::int` }).from(comments).where(and(inArray(comments.postId, ids), eq(comments.status, 'published'))).groupBy(comments.postId),
+      this.db.select().from(wishTypes).where(eq(wishTypes.active, true)).orderBy(asc(wishTypes.sortOrder)),
+    ]);
+    const wishCounts = new Map(wishRows.map((r) => [`${r.postId}|${r.typeId}`, r.n]));
+    const myWishes = new Set(myWishRows.map((r) => `${r.postId}|${r.typeId}`));
+    const commentCounts = new Map(commentRows.map((r) => [r.postId, r.n]));
 
     return rows.map(({ post, author, wt }): PostDto => {
       const ach = achs.find((a) => a.postId === post.id);
@@ -166,7 +177,8 @@ export class PostsService {
         } : null,
         poll: this.pollOf(post, voteCounts, mine?.votes.get(post.id) ?? null),
         author: userSummary(author, levels),
-        counts: { reactions: post.reactionCount, comments: post.commentCount, wishes: post.wishCount, shares: post.shareCount },
+        counts: { reactions: post.reactionCount, comments: commentCounts.get(post.id) ?? 0, wishes: allTypes.reduce((sum, t) => sum + (wishCounts.get(`${post.id}|${t.id}`) ?? 0), 0), shares: post.shareCount },
+        wishBreakdown: allTypes.map((t) => ({ wishTypeId: t.id, code: t.code, name: t.name, iconKey: t.iconKey, sortOrder: t.sortOrder, count: wishCounts.get(`${post.id}|${t.id}`) ?? 0, mine: myWishes.has(`${post.id}|${t.id}`) })),
         viewer: mine ? {
           reaction: mine.reactions.get(post.id) ?? null, saved: mine.saved.has(post.id), wished: mine.wished.has(post.id), isOwn: post.authorId === ctx.user?.id,
         } : null,
@@ -316,8 +328,8 @@ export class PostsService {
     return after?.n ?? 0;
   }
 
-  /** Gửi vía động viên cho bài viết: mỗi người một lần; không cộng điểm (chỉ 3 nguồn điểm đã chốt). */
-  async wishPost(ctx: RequestContext, postId: string, wishTypeId: string | undefined): Promise<number> {
+  /** Gửi vía động viên cho bài viết: mỗi người gửi mỗi loại vía một lần cho mỗi bài (bấm lại loại đã gửi thì không đổi); không cộng điểm (chỉ 3 nguồn điểm đã chốt). */
+  async wishPost(ctx: RequestContext, postId: string, wishTypeId: string | undefined): Promise<{ wishes: number; wishBreakdown: WishCountDto[] }> {
     const s = await this.settings.get();
     await this.rate.assert(`wish:${ctx.actorKey}`, s.rateLimits.wishPerMinute, 60);
     await this.assertPublished(postId);
@@ -326,15 +338,16 @@ export class PostsService {
       if (!t) throw new DomainError('WISH_TYPE_INVALID');
     }
     const actor = ctx.user ? eq(wishEvents.actorUserId, ctx.user.id) : eq(wishEvents.guestHash, ctx.guestHash);
-    const [seen] = await this.db.select({ id: wishEvents.id }).from(wishEvents).where(and(eq(wishEvents.source, 'post'), eq(wishEvents.targetPostId, postId), actor)).limit(1);
+    const sameType = wishTypeId ? eq(wishEvents.wishTypeId, wishTypeId) : isNull(wishEvents.wishTypeId);
+    const [seen] = await this.db.select({ id: wishEvents.id }).from(wishEvents).where(and(eq(wishEvents.source, 'post'), eq(wishEvents.targetPostId, postId), actor, sameType)).limit(1);
     if (!seen) {
       await this.db.transaction(async (tx) => {
         await tx.insert(wishEvents).values({ source: 'post', actorUserId: ctx.user?.id ?? null, guestHash: ctx.user ? null : ctx.guestHash, targetPostId: postId, wishTypeId: wishTypeId ?? null });
         await tx.update(posts).set({ wishCount: sql`${posts.wishCount} + 1` }).where(eq(posts.id, postId));
       });
     }
-    const [after] = await this.db.select({ n: posts.wishCount }).from(posts).where(eq(posts.id, postId));
-    return after?.n ?? 0;
+    const dto = await this.getOne(postId, ctx);
+    return { wishes: dto.counts.wishes, wishBreakdown: dto.wishBreakdown };
   }
 
   async votePoll(userId: string, postId: string, optionId: string, ctx: RequestContext): Promise<PollDto> {

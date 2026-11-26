@@ -7,6 +7,10 @@ import { HashtagSchema, IdSchema, IsoDateSchema, PageQuerySchema } from '../comm
 import { UserSummarySchema } from './user';
 import { WishTypeSchema } from './catalog';
 
+/** Số lượt gửi vía theo từng loại trên một bài (6 biểu tượng); `mine` = người xem đã gửi loại này. */
+export const WishCountSchema = z.object({ wishTypeId: IdSchema, code: z.string(), name: z.string(), iconKey: WishTypeSchema.shape.iconKey, sortOrder: z.number().int(), count: z.number().int(), mine: z.boolean() });
+export type WishCountDto = z.infer<typeof WishCountSchema>;
+
 export const MediaSchema = z.object({ id: IdSchema, url: z.string(), width: z.number().int().nullable(), height: z.number().int().nullable() });
 export type MediaDto = z.infer<typeof MediaSchema>;
 
@@ -44,6 +48,8 @@ export const PostSchema = z.object({
   /** Bài được quản trị viên ghim lên đầu bảng tin trang chủ. */
   pinned: z.boolean(),
   counts: z.object({ reactions: z.number().int(), comments: z.number().int(), wishes: z.number().int(), shares: z.number().int() }),
+  /** Lượt gửi vía chia theo 6 loại (đủ 6 loại, loại chưa ai gửi có `count` = 0). */
+  wishBreakdown: z.array(WishCountSchema),
   viewer: z.object({ reaction: z.enum(REACTION_TYPES).nullable(), saved: z.boolean(), wished: z.boolean(), isOwn: z.boolean() }).nullable(),
   createdAt: IsoDateSchema,
 });

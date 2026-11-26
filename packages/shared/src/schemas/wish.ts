@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ANIMATION_KEYS, TIME_BUCKETS, WISH_TITLE_CODES } from '../enums';
 import { IdSchema, IsoDateSchema, TurnstileTokenSchema } from '../common';
+import { WishCountSchema } from './post';
 
 export const WishTextSchema = z.object({ templateId: IdSchema, text: z.string(), animationKey: z.enum(ANIMATION_KEYS) });
 export type WishText = z.infer<typeof WishTextSchema>;
@@ -47,7 +48,7 @@ export const PlaceWishResultSchema = z.object({
 export type PlaceWishResult = z.infer<typeof PlaceWishResultSchema>;
 
 export const PostWishBodySchema = z.object({ wishTypeId: IdSchema.optional() });
-export const PostWishResultSchema = z.object({ wishes: z.number().int() });
+export const PostWishResultSchema = z.object({ wishes: z.number().int(), wishBreakdown: z.array(WishCountSchema) });
 
 export const PlaceWishItemSchema = z.object({
   id: IdSchema,

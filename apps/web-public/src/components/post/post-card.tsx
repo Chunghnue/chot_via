@@ -1,12 +1,12 @@
 'use client';
 
 import {
-  useBlockUserMutation, useDeletePostMutation, useGetCatalogQuery, usePostWishMutation, useSetReactionMutation, useSetSavedMutation,
+  useBlockUserMutation, useDeletePostMutation, usePostWishMutation, useSetSavedMutation,
   useSharePostMutation, useVotePollMutation,
 } from '@chot-via/api-client';
-import { REACTION_TYPES, type PollDto, type PostDto, type ReactionType } from '@chot-via/shared';
+import type { PollDto, PostDto, WishCountDto } from '@chot-via/shared';
 import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, toast, useConfirm, useFormatters, useRoleLabel, type MenuItem } from '@chot-via/ui';
-import { CornerUpRight, Crown, Flag, Heart, MessageCircle, MoreHorizontal, Share2, ThumbsUp } from 'lucide-react';
+import { CornerUpRight, Crown, Flag, MessageCircle, MoreHorizontal, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -20,14 +20,17 @@ import { useAppDispatch } from '@/store/hooks';
 import { PostContent, kindTone, useKindLabel } from './post-content';
 import { shareCardImage, wrapLines } from '@/lib/share-card';
 
-const REACTION_EMOJI: Record<ReactionType, string> = { like: '👍', love: '❤️', haha: '😆' };
-
-/** Hai biểu tượng cảm xúc chồng nhau (thích + yêu thích) ở hàng thao tác của thẻ gọn/rộng, theo thiết kế. */
-function ReactionStack() {
+/** Khối bên trái nút Chia sẻ: các biểu tượng vía đã có lượt (tối đa 6, nhiều lượt nhất trước) chồng nhau kèm tổng lượt gửi vía của bài. */
+function WishSummary({ breakdown, total, label }: { breakdown: readonly WishCountDto[]; total: number; label: string }) {
+  const shown = breakdown.filter((w) => w.count > 0).sort((x, y) => y.count - x.count || x.sortOrder - y.sortOrder).slice(0, 6);
   return (
-    <span className="flex -space-x-1.5" aria-hidden>
-      <span className="flex size-7 items-center justify-center rounded-full bg-info text-on-primary ring-2 ring-surface"><ThumbsUp className="size-4 fill-current" /></span>
-      <span className="flex size-7 items-center justify-center rounded-full bg-danger text-on-primary ring-2 ring-surface"><Heart className="size-4 fill-current" /></span>
+    <span className="flex h-10 items-center gap-1.5 px-3 font-bold text-ink" aria-label={label} data-testid="wish-summary">
+      {shown.length > 0 ? (
+        <span className="flex -space-x-1.5" aria-hidden>
+          {shown.map((w) => <span key={w.wishTypeId} title={`${w.name}: ${w.count}`} className="flex size-7 items-center justify-center rounded-full bg-surface text-base shadow-card ring-2 ring-surface"><AppIcon iconKey={w.iconKey} /></span>)}
+        </span>
+      ) : <span aria-hidden className="flex size-7 items-center justify-center rounded-full bg-surface-muted text-base opacity-60"><AppIcon iconKey="clover" /></span>}
+      {total}
     </span>
   );
 }
@@ -45,8 +48,6 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const kindLabel = useKindLabel();
   const toastApi = useApiToast();
   const { require } = useRequireMember();
-  const { data: catalog } = useGetCatalogQuery();
-  const [react] = useSetReactionMutation();
   const [save] = useSetSavedMutation();
   const [share] = useSharePostMutation();
   const [wish] = usePostWishMutation();
@@ -55,11 +56,12 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const [remove] = useDeletePostMutation();
   const confirm = useConfirm();
 
-  const [reaction, setReaction] = useState<{ mine: ReactionType | null; count: number }>({ mine: post.viewer?.reaction ?? null, count: post.counts.reactions });
   const [saved, setSaved] = useState(post.viewer?.saved ?? false);
   /** Tiền vàng tung toé từ chỗ vừa bấm khi gửi vía (lớp phủ toàn màn hình, vẽ ngoài thẻ bài bằng portal). */
   const [coins, setCoins] = useState({ id: 0, x: 0, y: 0, on: false });
-  const [wishes, setWishes] = useState({ count: post.counts.wishes, done: post.viewer?.wished ?? false });
+  const [breakdown, setBreakdown] = useState<WishCountDto[]>(post.wishBreakdown ?? []);
+  const wishTotal = breakdown.reduce((sum, w) => sum + w.count, 0);
+  const wishedAny = breakdown.some((w) => w.mine);
   const [shares, setShares] = useState(post.counts.shares);
   const [poll, setPoll] = useState<PollDto | null>(post.poll);
   const [hidden, setHidden] = useState(false);
@@ -69,16 +71,6 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const isOwn = post.viewer?.isOwn ?? false;
   const roleLabel = post.author.memberRole ? roleName(post.author.memberRole) : null;
   const heading = post.author.jobTitle ?? roleLabel;
-
-  const pickReaction = async (type: ReactionType): Promise<void> => {
-    if (!require('react')) return;
-    const next = reaction.mine === type ? null : type;
-    try {
-      const result = await react({ postId: post.id, type: next }).unwrap();
-      setReaction({ mine: result.mine, count: result.reactions });
-      track('feed_engagement', { post_type: post.type, action: 'reaction' });
-    } catch (e) { toastApi.error(e); }
-  };
 
   const doShare = async (): Promise<void> => {
     const url = `${window.location.origin}/bai/${post.id}`;
@@ -104,7 +96,7 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
     }
     try {
       const r = await wish({ postId: post.id, wishTypeId }).unwrap();
-      setWishes({ count: r.wishes, done: true });
+      setBreakdown(r.wishBreakdown);
       toast.success(t('actions.wishSent'));
       track('feed_engagement', { post_type: post.type, action: 'wish' });
     } catch (e) { toastApi.error(e); }
@@ -189,33 +181,19 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
       )}
 
       <footer className={cn('flex flex-wrap items-center gap-1.5 text-sm font-semibold text-ink-muted', compact || wide ? 'mt-1' : 'mt-4 border-t border-border pt-3')}>
-        <Popover trigger={
-          <button type="button" aria-label={t('actions.react')} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink', reaction.mine && 'text-primary-strong')}>
-            {wide || compact ? (
-              <ReactionStack />
-            ) : <span className="text-lg leading-none">{reaction.mine ? REACTION_EMOJI[reaction.mine] : '👍'}</span>}{reaction.count}
-          </button>
-        }>
-          <div className="flex gap-1">
-            {REACTION_TYPES.map((r) => (
-              <PopoverClose key={r} asChild>
-                <button type="button" aria-label={t(`actions.${r}`)} onClick={() => void pickReaction(r)} className={cn('flex size-11 items-center justify-center rounded-full text-2xl transition hover:scale-125', reaction.mine === r && 'bg-primary-soft')}>{REACTION_EMOJI[r]}</button>
-              </PopoverClose>
-            ))}
-          </div>
-        </Popover>
+        <WishSummary breakdown={breakdown} total={wishTotal} label={t('actions.wishTotal', { count: wishTotal })} />
         <Link href={`/bai/${post.id}`} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}><MessageCircle className="size-5" aria-hidden />{post.counts.comments}<span className="sr-only">{t('actions.commentShort')}</span></Link>
         <button type="button" onClick={() => void doShare()} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>
         <div className="ml-auto">
           <Popover align="end" trigger={
-            <button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full border border-primary px-4 text-primary-strong hover:bg-primary-soft', wishes.done && 'bg-primary-soft')}>
-              <img src="/images/logo-co.webp" alt="" aria-hidden className="size-5 object-contain" draggable={false} />{wishes.done ? t('actions.wished') : t('actions.wish')}{wishes.count > 0 && !wide ? ` (${wishes.count})` : ''}
+            <button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full border border-primary px-4 text-primary-strong hover:bg-primary-soft', wishedAny && 'bg-primary-soft')}>
+              <img src="/images/logo-co.webp" alt="" aria-hidden className="size-5 object-contain" draggable={false} />{wishedAny ? t('actions.wished') : t('actions.wish')}
             </button>
           }>
             <div className="grid grid-cols-3 gap-1.5">
-              {catalog?.wishTypes.map((w) => (
-                <PopoverClose key={w.id} asChild>
-                  <button type="button" onClick={(e) => void sendWish(w.id, { x: e.clientX || window.innerWidth / 2, y: e.clientY || window.innerHeight / 2 })} className="flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted"><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}</button>
+              {breakdown.map((w) => (
+                <PopoverClose key={w.wishTypeId} asChild>
+                  <button type="button" onClick={(e) => void sendWish(w.wishTypeId, { x: e.clientX || window.innerWidth / 2, y: e.clientY || window.innerHeight / 2 })} className={cn('relative flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted', w.mine && 'bg-primary-soft ring-1 ring-primary')}><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}{w.count > 0 ? <span className="absolute right-1 top-1 min-w-5 rounded-full bg-wish px-1 text-[0.65rem] leading-5 text-on-wish">{w.count}</span> : null}</button>
                 </PopoverClose>
               ))}
             </div>
