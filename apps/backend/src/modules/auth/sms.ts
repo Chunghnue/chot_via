@@ -6,7 +6,7 @@ import { DomainError } from '../../common/domain-error';
 export interface SmsProvider { send(phone: string, code: string): Promise<void> }
 
 /** Nội dung tin nhắn gửi tới điện thoại (không dấu để tương thích mọi nhà mạng). */
-const otpContent = (code: string): string => `Ma xac thuc Chot Via cua ban la ${code}. Ma co hieu luc 5 phut, khong chia se cho bat ky ai.`;
+const otpContent = (code: string): string => `Ma xac thuc Xin Via cua ban la ${code}. Ma co hieu luc 5 phut, khong chia se cho bat ky ai.`;
 
 /** Dev: chỉ in OTP ra log máy chủ, không gửi SMS thật. Production không bao giờ dùng provider này. */
 class DevSmsProvider implements SmsProvider {

@@ -140,7 +140,7 @@ describe('chọn provider SMS và kiểm tra cấu hình', () => {
     calls = stubFetch(() => json({ status: 'success' }));
     await sms.createSmsProvider().send(PHONE, CODE);
     expect(calls[0]?.url).toBe('https://api.speedsms.vn/index.php/sms/send');
-    expect(String(bodyOf(calls[0]).content)).toBe(`Ma xac thuc Chot Via cua ban la ${CODE}. Ma co hieu luc 5 phut, khong chia se cho bat ky ai.`);
+    expect(String(bodyOf(calls[0]).content)).toBe(`Ma xac thuc Xin Via cua ban la ${CODE}. Ma co hieu luc 5 phut, khong chia se cho bat ky ai.`);
 
     sms = await loadSms({ SMS_PROVIDER: 'esms', ESMS_API_KEY: 'k', ESMS_SECRET_KEY: 's' });
     calls = stubFetch(() => json({ CodeResult: '100' }));

@@ -1,4 +1,4 @@
-# CHỐT VÍA -- TỔNG HỢP SẢN PHẨM, SRS VÀ THIẾT KẾ GIAO DIỆN
+# XIN VÍA -- TỔNG HỢP SẢN PHẨM, SRS VÀ THIẾT KẾ GIAO DIỆN
 
 **Phiên bản:** 1.1\
 **Ngày tổng hợp:** 19/11/2026\
@@ -10,7 +10,7 @@ doanh, doanh nghiệp và nhân viên sale.
 
 ## 1. Tầm nhìn sản phẩm
 
-Chốt Vía là một cộng đồng trực tuyến mang tính giải trí, chia sẻ và động
+Xin Vía là một cộng đồng trực tuyến mang tính giải trí, chia sẻ và động
 viên tinh thần cho người đang kinh doanh hoặc làm công việc bán hàng.
 
 Mục tiêu trải nghiệm:
@@ -27,7 +27,7 @@ Mục tiêu trải nghiệm:
     người dùng tự tạo.
 -   Tạo sự tò mò và cảm giác vui vẻ bằng một khu phố kinh doanh 3D.
 
-Chốt Vía không phải phần mềm quản lý bán hàng và không nên biến thành
+Xin Vía không phải phần mềm quản lý bán hàng và không nên biến thành
 nơi cạnh tranh doanh thu căng thẳng. Yếu tố giải trí, đồng cảm và động
 viên phải được ưu tiên.
 
@@ -337,7 +337,7 @@ Không tách Kể khổ và Khoe thành hai trang feed độc lập.
 
 ### 8.1. Mục tiêu
 
-Phố 3D là yếu tố tạo tò mò và nhận diện riêng của Chốt Vía. Người dùng
+Phố 3D là yếu tố tạo tò mò và nhận diện riêng của Xin Vía. Người dùng
 có thể khám phá các cửa hàng và văn phòng sale, từ đó ghé thăm và gửi
 vía.
 
@@ -797,7 +797,7 @@ quay lại và tương tác cộng đồng có ý nghĩa.
 
 Các mockup đã được tạo theo định hướng:
 
--   Trang chủ Chốt Vía.
+-   Trang chủ Xin Vía.
 -   Xin vía Thần Tài.
 -   Xin vía theo thời điểm.
 -   Phố 3D và cửa hàng/văn phòng sale.
@@ -824,7 +824,7 @@ tiếp vào file vì cần giữ riêng từng tài sản ảnh.
 
 ## 21. Kết luận định hướng sản phẩm
 
-Chốt Vía nên được phát triển như một **cộng đồng giải trí và động viên
+Xin Vía nên được phát triển như một **cộng đồng giải trí và động viên
 tinh thần cho người kinh doanh và nhân viên sale**.
 
 Trải nghiệm quan trọng nhất:
@@ -949,4 +949,4 @@ Phần này bổ sung các hình ảnh concept/mockup đã được tạo trong 
 - Thư viện hiện có gồm concept trang chủ, phố 3D, Kể khổ desktop, feed chung, dashboard, giao diện app mobile và các bảng showcase responsive.
 - Không phải tất cả hình đều là bản cuối cùng hoặc cùng một phiên bản thiết kế; một số hình là phương án khám phá ý tưởng được tạo ở các giai đoạn khác nhau.
 - Hình ảnh không được xem là đặc tả chính xác về kích thước, trạng thái tương tác, nội dung động hoặc logic backend. Khi triển khai cần dùng SRS và chốt lại design system, breakpoint, component và luồng UX.
-- Các ảnh banner AIBAT không thuộc thư viện UI Chốt Vía nên không được gộp vào bộ asset này.
+- Các ảnh banner AIBAT không thuộc thư viện UI Xin Vía nên không được gộp vào bộ asset này.
