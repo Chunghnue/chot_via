@@ -29,6 +29,8 @@ import { NotificationsService } from './modules/notifications/notifications.serv
 import { PlacesController } from './modules/places/places.controller';
 import { PlacesService } from './modules/places/places.service';
 import { PostsController } from './modules/posts/posts.controller';
+import { CommentsService } from './modules/posts/comments.service';
+import { PostInteractionsService } from './modules/posts/post-interactions.service';
 import { PostsService } from './modules/posts/posts.service';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
@@ -46,7 +48,7 @@ import { WishesService } from './modules/wishes/wishes.service';
     { provide: APP_GUARD, useClass: AccessGuard },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     SettingsService, TokenService, RateLimitService, TurnstileService, LevelsService, PointsService, KeywordsService,
-    NotificationsService, ReportsService, WishesService, PlacesService, PostsService, UsersService, AuthService, OAuthService,
+    NotificationsService, ReportsService, WishesService, PlacesService, PostsService, PostInteractionsService, CommentsService, UsersService, AuthService, OAuthService,
     StorageService, HomeLayoutService, AdminService, AdminCatalogService, AdminDemoService,
   ],
 })

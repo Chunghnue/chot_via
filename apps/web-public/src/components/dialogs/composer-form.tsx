@@ -2,8 +2,7 @@
 
 import { parseApiError, useCreatePostMutation, useGetCatalogQuery, useUploadMediaMutation } from '@chot-via/api-client';
 import {
-  CreatePostBodySchema, METRIC_TYPES, MONEY_METRICS, OWNER_METRICS, RANGE_METRICS, SALE_METRICS, STORY_STICKERS, DISPLAY_MODES, MEMBER_ROLES,
-  type AppSettings, type MetricType, type PublicSettings,
+  CreatePostBodySchema, DISPLAY_MODES, MEMBER_ROLES, MONEY_METRICS, OWNER_METRICS, RANGE_METRICS, SALE_METRICS, type MetricType,
 } from '@chot-via/shared';
 import { AppIcon, Button, Chip, FieldError, Input, Label, Notice, RadioOption, Switch, Textarea, cn, pillClass, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,61 +10,16 @@ import { ImagePlus, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'use-intl';
-import { z } from 'zod';
 import { EmojiPicker } from '@/components/common/emoji-picker';
+import { buildSchema, rangesFor, toCandidate } from './composer-schema';
 import { PostContent, type PostContentData } from '@/components/post/post-content';
-import { composerClosed, draftChanged, firstMetric, stepChanged, COMPOSER_KINDS, type ComposerDraft } from '@/features/composer/composerSlice';
+import { composerClosed, draftChanged, firstMetric, stepChanged, type ComposerDraft } from '@/features/composer/composerSlice';
 import { loginRequested } from '@/features/ui/uiSlice';
 import { useWishSettings } from '@/features/wish/use-deity-wish';
 import { track } from '@/lib/analytics';
 import { useApiToast } from '@/lib/use-api-toast';
 import { useRequireMember } from '@/lib/use-member';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-
-type Settings = PublicSettings | AppSettings;
-
-function buildSchema(s: Settings) {
-  return z.object({
-    kind: z.enum(COMPOSER_KINDS),
-    body: z.string(),
-    sticker: z.enum(STORY_STICKERS).nullable(),
-    hashtags: z.array(z.string()),
-    location: z.string(),
-    media: z.array(z.object({ id: z.string(), url: z.string() })),
-    pollEnabled: z.boolean(),
-    pollOptions: z.array(z.string()),
-    role: z.enum(MEMBER_ROLES),
-    metricType: z.enum(METRIC_TYPES),
-    displayMode: z.enum(DISPLAY_MODES),
-    rangeCode: z.string().nullable(),
-    amount: z.string(),
-    wishTypeId: z.string().nullable(),
-  }).superRefine((v, ctx) => {
-    const max = v.kind === 'brag' ? s.achievementMaxChars : s.storyMaxChars;
-    const length = v.body.trim().length;
-    if (length === 0) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['body'], message: 'required' });
-    if (length > max) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['body'], message: 'too_big' });
-    if (v.kind === 'brag' && v.displayMode === 'range' && !v.rangeCode) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rangeCode'], message: 'required' });
-    if (v.kind === 'brag' && v.displayMode === 'exact' && !(Number(v.amount) > 0)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['amount'], message: 'required' });
-    if (v.kind === 'story' && v.pollEnabled && v.pollOptions.filter((o) => o.trim()).length < 2) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['pollOptions'], message: 'required' });
-  });
-}
-
-function toCandidate(v: ComposerDraft): unknown {
-  const body = v.body.trim();
-  const location = v.location.trim() || null;
-  const common = { body, location, hashtags: v.hashtags, mediaIds: v.media.map((m) => m.id) };
-  if (v.kind === 'story') return { type: 'story', ...common, sticker: v.sticker, poll: v.pollEnabled ? { options: v.pollOptions.map((o) => o.trim()).filter(Boolean) } : null };
-  if (v.kind === 'wish') return { type: 'wish_share', ...common, wishTypeId: v.wishTypeId };
-  return {
-    type: 'achievement', ...common, role: v.role, metricType: v.metricType, displayMode: v.displayMode,
-    rangeCode: v.displayMode === 'range' ? v.rangeCode : null, amount: v.displayMode === 'exact' ? Number(v.amount) : null,
-  };
-}
-
-function useRanges(role: ComposerDraft['role'], settings: Settings) {
-  return role === 'owner' ? settings.achievementRanges.ownerRevenue : settings.achievementRanges.saleDeal;
-}
 
 export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview: boolean }) {
   const t = useTranslations('post');
@@ -96,7 +50,7 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
 
   const max = values.kind === 'brag' ? settings.achievementMaxChars : settings.storyMaxChars;
   const metrics: readonly MetricType[] = values.role === 'owner' ? OWNER_METRICS : SALE_METRICS;
-  const ranges = useRanges(values.role, settings);
+  const ranges = rangesFor(values.role, settings);
   const rangeAllowed = RANGE_METRICS.includes(values.metricType);
   const isMoney = MONEY_METRICS.includes(values.metricType);
   const bodyError = form.formState.errors.body?.message;
