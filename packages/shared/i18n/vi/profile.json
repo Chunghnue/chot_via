@@ -62,5 +62,12 @@
     "notifications": "Thông báo",
     "reports": "Báo cáo của tôi"
   },
-  "pointsLine": "{count} điểm vía"
+  "pointsLine": "{count} điểm vía",
+  "engagement": {
+    "title": "Điểm tương tác hôm nay",
+    "unit": "/ {cap} điểm",
+    "remaining": "Bạn còn có thể nhận {count} điểm từ tương tác hôm nay.",
+    "full": "Bạn đã đạt giới hạn điểm tương tác hôm nay. Bộ đếm về 0 vào 00:00 giờ Việt Nam.",
+    "hint": "Chỉ tính điểm từ tương tác của người khác với bài của bạn, không gồm điểm nhiệm vụ và điểm xin vía/gửi vía."
+  }
 }

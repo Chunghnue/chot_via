@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, count, desc, eq, gt, ilike, or, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
 import {
-  maskPhone, type LeaderboardDto, type MeDto, type MeStats, type PublicProfile, type UpdateMeBody, type UserSummary,
+  maskPhone, POST_ENGAGEMENT_DAILY_CAP, vnDayStart, type LeaderboardDto, type MeDto, type MeStats, type PublicProfile, type UpdateMeBody, type UserSummary,
 } from '@chot-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { iso, levelFor, nextLevelFor, userSummary } from '../../common/mappers';
 import { SettingsService } from '../../common/settings.service';
 import { DB, type Db } from '../../database/database';
-import { posts, userBlocks, userFollows, users } from '../../database/schema';
+import { pointLedger, posts, userBlocks, userFollows, users } from '../../database/schema';
 import { LevelsService } from '../gamification/levels.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
@@ -62,7 +62,15 @@ export class UsersService {
     return {
       points: u.points, level: levelFor(levels, u.points), nextLevel: nextLevelFor(levels, u.points), badges,
       rank: await this.rankOf(u.points, u.pointsUpdatedAt, s.leaderboard.maxMembers), wishCounts, counts,
+      engagement: { today: await this.engagementToday(userId), cap: POST_ENGAGEMENT_DAILY_CAP },
     };
+  }
+
+  /** Điểm tương tác bài viết đã nhận trong ngày giờ Việt Nam hiện tại (chỉ nguồn `post_engagement`). */
+  private async engagementToday(userId: string): Promise<number> {
+    const [row] = await this.db.select({ n: sql<number>`coalesce(sum(${pointLedger.points}), 0)::int` }).from(pointLedger)
+      .where(and(eq(pointLedger.userId, userId), eq(pointLedger.action, 'post_engagement'), gte(pointLedger.createdAt, vnDayStart(new Date()))));
+    return row?.n ?? 0;
   }
 
   async publicProfile(id: string, viewerId: string | null): Promise<PublicProfile> {

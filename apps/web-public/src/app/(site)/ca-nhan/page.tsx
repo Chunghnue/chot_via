@@ -1,7 +1,7 @@
 'use client';
 
 import { useGetMeStatsQuery, useLogoutMutation } from '@chot-via/api-client';
-import { AppIcon, Avatar, Badge, Button, Card, Sheet, Skeleton } from '@chot-via/ui';
+import { AppIcon, Avatar, Badge, Button, Card, ProgressBar, Sheet, Skeleton } from '@chot-via/ui';
 import { Bell, CalendarDays, ChevronRight, Flag, LogOut, Settings, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ function Profile() {
   const tc = useTranslations('common');
   const tp = useTranslations('post.roles');
   const me = useCurrentUser();
-  const { data: stats, isLoading } = useGetMeStatsQuery();
+  const { data: stats, isLoading } = useGetMeStatsQuery(undefined, { pollingInterval: 30_000, refetchOnFocus: true });
   const [logout] = useLogoutMutation();
   const [editing, setEditing] = useState(false);
   if (!me) return null;
@@ -50,6 +50,16 @@ function Profile() {
         )}
         <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>{t('edit')}</Button>
       </Card>
+
+      {stats ? (
+        <Card className="p-4" data-testid="engagement-card">
+          <h2 className="text-sm font-bold text-ink-muted">{t('engagement.title')}</h2>
+          <p className="mt-1 flex items-baseline gap-2"><span className="font-display text-4xl font-extrabold text-primary-strong">{stats.engagement.today}</span><span className="font-semibold text-ink-muted">{t('engagement.unit', { cap: stats.engagement.cap })}</span></p>
+          <ProgressBar className="mt-2" value={stats.engagement.today} max={stats.engagement.cap} />
+          <p className="mt-2 text-sm text-ink">{stats.engagement.today >= stats.engagement.cap ? t('engagement.full') : t('engagement.remaining', { count: stats.engagement.cap - stats.engagement.today })}</p>
+          <p className="mt-1 text-xs text-ink-subtle">{t('engagement.hint')}</p>
+        </Card>
+      ) : null}
 
       <nav aria-label={t('shortcuts')} className="grid grid-cols-4 gap-2">
         {tiles.map((x) => (

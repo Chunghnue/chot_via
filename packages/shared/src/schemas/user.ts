@@ -60,6 +60,8 @@ export const MeStatsSchema = z.object({
   rank: z.number().int().nullable(),
   wishCounts: z.object({ deity: z.number().int(), place: z.number().int() }),
   counts: z.object({ posts: z.number().int(), followers: z.number().int(), following: z.number().int() }),
+  /** Điểm nhận từ tương tác bài viết hôm nay (giờ Việt Nam) và trần mỗi ngày; không gồm điểm nhiệm vụ và 3 hành động vía. */
+  engagement: z.object({ today: z.number().int(), cap: z.number().int() }),
 });
 export type MeStats = z.infer<typeof MeStatsSchema>;
 

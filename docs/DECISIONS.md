@@ -142,3 +142,8 @@ Hệ thống điểm gồm 3 nguồn: (1) +1 từ 3 hành động vía, (2) đi�
 - **Giữ nguyên:** không cộng điểm trực tiếp từ ghé phố hay chia sẻ; không đổi điểm lấy vật phẩm; không thêm nguồn điểm khác ngoài 3 nguồn trên. Tổng điểm (`users.points`) là nguồn cho cấp độ, huy hiệu, xếp hạng nên cập nhật cùng giao dịch.
 - **Database (đã được chủ dự án đồng ý):** migration `0007_post_engagement_points` thêm `point_ledger.source_post_id`, `source_actor_id` và chỉ mục duy nhất. Cộng điểm và ghi lịch sử nằm trong cùng một transaction với lượt tương tác; khóa dòng người dùng của chủ bài khi kiểm trần.
 - Bỏ thích không thu hồi điểm đã nhận.
+
+Bổ sung cùng ngày (chủ dự án chốt 3 điểm):
+- **Nút cảm xúc trên thẻ bài:** 👍 Thích · ❤️ Thả tim · 😆 Haha đặt bên trái cùng hàng với khối vía, bình luận, Chia sẻ và nút Gửi vía; chọn một cảm xúc tại một thời điểm (bấm lại để bỏ), hiện số lượt từng loại. Đổi cảm xúc vẫn chỉ đóng góp tối đa +1 cho chủ bài; khách bấm thì mời đăng nhập.
+- **Không cộng bù:** không tính điểm cho tương tác trước ngày kích hoạt, không sửa lịch sử điểm cũ.
+- **Tiến độ trần ngày:** hồ sơ có thẻ "Điểm tương tác hôm nay x / 50" (chỉ tính nguồn tương tác, không gồm điểm nhiệm vụ và 3 hành động vía), tự làm mới mỗi 30 giây và khi quay lại tab, đủ 50 thì báo đã đạt giới hạn, sang ngày mới giờ Việt Nam về 0/50.

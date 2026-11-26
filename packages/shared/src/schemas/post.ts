@@ -47,6 +47,8 @@ export const PostSchema = z.object({
   status: z.enum(POST_STATUSES),
   /** Bài được quản trị viên ghim lên đầu bảng tin trang chủ. */
   pinned: z.boolean(),
+  /** Số lượt từng loại cảm xúc (👍 thích, ❤️ thả tim, 😆 haha) của bài. */
+  reactionCounts: z.object({ like: z.number().int(), love: z.number().int(), haha: z.number().int() }),
   counts: z.object({ reactions: z.number().int(), comments: z.number().int(), wishes: z.number().int(), shares: z.number().int() }),
   /** Lượt gửi vía chia theo 6 loại (đủ 6 loại, loại chưa ai gửi có `count` = 0). */
   wishBreakdown: z.array(WishCountSchema),
@@ -103,7 +105,7 @@ export function metricAllowedForRole(role: (typeof MEMBER_ROLES)[number], metric
 }
 
 export const SetReactionBodySchema = z.object({ type: z.enum(REACTION_TYPES) });
-export const ReactionResultSchema = z.object({ reactions: z.number().int(), mine: z.enum(REACTION_TYPES).nullable() });
+export const ReactionResultSchema = z.object({ reactions: z.number().int(), mine: z.enum(REACTION_TYPES).nullable(), reactionCounts: z.object({ like: z.number().int(), love: z.number().int(), haha: z.number().int() }) });
 export const VotePollBodySchema = z.object({ optionId: z.string().min(1).max(20) });
 
 export const CommentSchema = z.object({ id: IdSchema, body: z.string(), author: UserSummarySchema, createdAt: IsoDateSchema, isOwn: z.boolean() });
@@ -117,3 +119,4 @@ export const StoryAuthorRankSchema = z.object({ rank: z.number().int(), user: Us
 export type StoryAuthorRank = z.infer<typeof StoryAuthorRankSchema>;
 export const HashtagCountSchema = z.object({ tag: z.string(), count: z.number().int() });
 export type HashtagCount = z.infer<typeof HashtagCountSchema>;
+export type ReactionCountsDto = z.infer<typeof ReactionResultSchema>['reactionCounts'];
