@@ -48,5 +48,14 @@
   "moneyThousand": "{value} nghìn",
   "moneyDong": "{value} đ",
   "pageNotFound": "Không tìm thấy trang này.",
-  "goHome": "Về trang chủ"
+  "goHome": "Về trang chủ",
+  "meta": {
+    "title": "Xin Vía – Xin chút vía, thêm tự tin mỗi ngày",
+    "description": "Xin vía may mắn, chốt đơn, chốt deal mỗi ngày. Ghé phố 3D, kể khổ, khoe thành tích và lan tỏa niềm vui cùng cộng đồng Xin Vía.",
+    "ogTitle": "🍀 Xin Vía – Hôm nay bạn đã xin vía chưa?",
+    "ogDescription": "Bán được thì khoe, chưa được thì xin vía. Ghé phố, gặp Thần Tài và nhận lời chúc tích cực mỗi ngày.",
+    "ogImageAlt": "Xin Vía – Xin chút vía, thêm tự tin",
+    "twitterTitle": "Xin Vía – Xin chút vía, thêm tự tin",
+    "twitterDescription": "Ghé phố, xin vía và lan tỏa niềm vui mỗi ngày."
+  }
 }
