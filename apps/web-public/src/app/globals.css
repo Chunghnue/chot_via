@@ -2,3 +2,6 @@
 @import "../../../../packages/ui/src/styles/theme.css";
 @source "../../../../packages/ui/src";
 @source "../../../../packages/scene-3d/src";
+
+/* Màn chờ lần đầu vào web: ẩn hẳn khi phiên này đã xem (thuộc tính do đoạn script sớm đặt) */
+html[data-splash='off'] #splash { display: none; }

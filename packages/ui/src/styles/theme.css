@@ -227,6 +227,7 @@
   --animate-float: float 3.2s ease-in-out infinite;
   --animate-glow: glow 2.2s ease-in-out infinite;
   --animate-coin: coin-fall 1.8s ease-in forwards;
+  --animate-splash-bar: splash-bar 1.2s ease-in-out infinite;
   --animate-burst: burst 1.4s cubic-bezier(0.12, 0.8, 0.3, 1) forwards;
   --animate-shimmer: shimmer 1.4s linear infinite;
 
@@ -235,6 +236,7 @@
   @keyframes sheet-up { from { opacity: 0.6; translate: 0 40px; } to { opacity: 1; translate: 0 0; } }
   @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
   @keyframes glow { 0%, 100% { box-shadow: 0 6px 18px rgb(242 80 26 / 0.35); } 50% { box-shadow: 0 10px 34px rgb(242 80 26 / 0.65); } }
+  @keyframes splash-bar { 0% { translate: -100% 0; } 100% { translate: 250% 0; } }
   @keyframes coin-fall { 0% { opacity: 0; translate: 0 -30px; rotate: 0deg; } 15% { opacity: 1; } 100% { opacity: 0; translate: var(--coin-x, 0px) var(--coin-y, 180px); rotate: 540deg; } }
   @keyframes burst { 0% { opacity: 0; translate: 0 0; scale: 0.2; rotate: 0deg; } 12% { opacity: 1; } 100% { opacity: 0; translate: var(--bx, 0px) var(--by, 0px); scale: 1; rotate: 420deg; } }
   @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }

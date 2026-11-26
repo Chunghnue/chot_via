@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { viMessages } from '@chot-via/shared/i18n';
 import { themeToken } from '@/lib/theme-token';
+import { SPLASH_BOOT_SCRIPT, SplashScreen } from '@/components/splash-screen';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -27,8 +28,12 @@ export const viewport: Viewport = { width: 'device-width', initialScale: 1, view
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="vi">
+    <html lang="vi" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SPLASH_BOOT_SCRIPT }} />
+      </head>
       <body>
+        <SplashScreen />
         <Providers>{children}</Providers>
       </body>
     </html>
