@@ -12,7 +12,7 @@ type NumPath =
   | 'timeWindows.morningStartHour' | 'timeWindows.afternoonStartHour' | 'timeWindows.eveningStartHour' | 'wishCounterTtlHours' | 'storyMaxChars' | 'achievementMaxChars'
   | 'commentMaxChars' | 'wishMessageMaxChars' | 'postMaxImages' | 'imageMaxMb' | 'hashtagMax' | 'hot.halfLifeHours' | 'hot.windowDays' | 'hot.weights.reaction' | 'hot.weights.comment'
   | 'hot.weights.wish' | 'hot.weights.share' | 'leaderboard.maxMembers' | 'leaderboard.defaultVisible' | 'rateLimits.wishPerMinute' | 'rateLimits.postPerHour' | 'rateLimits.commentPerMinute'
-  | 'rateLimits.reportPerDay' | 'moderation.escalateReportCount';
+  | 'rateLimits.reportPerDay' | 'moderation.escalateReportCount' | 'postEngagement.dailyCap' | 'postEngagement.pointsPerInteraction' | 'reflectStartHour' | 'challengeCardCount';
 
 function Num({ form, name, label }: { form: UseFormReturn<AppSettings>; name: NumPath; label: string }) {
   return <FormField label={label} htmlFor={name}><Input id={name} type="number" step="any" {...form.register(name, { valueAsNumber: true })} /></FormField>;
@@ -114,6 +114,14 @@ export function SettingsPage() {
         <Num form={form} name="rateLimits.commentPerMinute" label={tf('commentPerMinute')} /><Num form={form} name="rateLimits.reportPerDay" label={tf('reportPerDay')} />
       </>)}
       {section(ts('moderation'), <Num form={form} name="moderation.escalateReportCount" label={tf('escalateReportCount')} />)}
+      {section(ts('engagement'), <>
+        <Num form={form} name="postEngagement.pointsPerInteraction" label={tf('pointsPerInteraction')} />
+        <Num form={form} name="postEngagement.dailyCap" label={tf('dailyCap')} />
+      </>)}
+      {section(ts('homeCards'), <>
+        <Num form={form} name="reflectStartHour" label={tf('reflectStartHour')} />
+        <Num form={form} name="challengeCardCount" label={tf('challengeCardCount')} />
+      </>)}
       <Button type="submit" size="lg" loading={isLoading} className="self-start">{tc('save')}</Button>
     </form>
   );

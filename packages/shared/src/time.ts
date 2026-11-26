@@ -22,12 +22,12 @@ export function getTimeBucket(date: Date, w: TimeWindows): TimeBucket {
   return 'evening';
 }
 
-/** Giờ bắt đầu khung "Hôm nay thế nào rồi?" (mời khoe doanh thu, deal hoặc kể khổ); kéo dài tới giờ bắt đầu buổi tối. */
+/** Giờ bắt đầu mặc định của khung "Hôm nay thế nào rồi?" (admin chỉnh ở Cài đặt hệ thống: `reflectStartHour`) (mời khoe doanh thu, deal hoặc kể khổ); kéo dài tới giờ bắt đầu buổi tối. */
 export const REFLECT_START_HOUR = 17;
 
-export function isReflectTime(date: Date, w: TimeWindows): boolean {
+export function isReflectTime(date: Date, w: TimeWindows, startHour: number = REFLECT_START_HOUR): boolean {
   const h = vnHour(date);
-  return h >= REFLECT_START_HOUR && h < w.eveningStartHour;
+  return h >= startHour && h < w.eveningStartHour;
 }
 
 /** Đầu ngày theo giờ Việt Nam, trả về mốc UTC. */

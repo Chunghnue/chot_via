@@ -350,7 +350,9 @@
       "hot": "Công thức \"Đang được quan tâm\"",
       "leaderboard": "Bảng xếp hạng",
       "rate": "Chống spam (giới hạn tốc độ)",
-      "moderation": "Kiểm duyệt"
+      "moderation": "Kiểm duyệt",
+      "engagement": "Điểm từ tương tác bài viết",
+      "homeCards": "Thẻ trang chủ"
     },
     "fields": {
       "morningStartHour": "Sáng bắt đầu lúc (giờ)",
@@ -385,7 +387,11 @@
       "commentPerMinute": "Bình luận tối đa mỗi phút / người",
       "reportPerDay": "Báo cáo tối đa mỗi ngày / người",
       "escalateReportCount": "Số báo cáo để đưa lên hàng chờ ưu tiên",
-      "showDemoData": "Hiện dữ liệu mẫu trên app (tài khoản, bài, cửa hàng mẫu)"
+      "showDemoData": "Hiện dữ liệu mẫu trên app (tài khoản, bài, cửa hàng mẫu)",
+      "pointsPerInteraction": "Điểm cho chủ bài mỗi người khác tương tác lần đầu (mỗi bài)",
+      "dailyCap": "Trần điểm tương tác mỗi thành viên mỗi ngày (giờ Việt Nam)",
+      "reflectStartHour": "Thẻ \"Hôm nay thế nào rồi?\" bắt đầu lúc (giờ, kéo dài tới giờ bắt đầu buổi tối)",
+      "challengeCardCount": "Số nhiệm vụ hiện trên thẻ Thử thách tuần"
     },
     "rangeHint": "Để trống \"Từ\" cho mức đầu tiên và \"Đến\" cho mức cuối."
   },

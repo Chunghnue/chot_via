@@ -15,7 +15,7 @@ export function ReflectCard() {
   const settings = useWishSettings();
   const mounted = useMounted();
   const role = useCurrentUser()?.memberRole ?? null;
-  if (!mounted || !isReflectTime(new Date(), settings.timeWindows)) return null;
+  if (!mounted || !isReflectTime(new Date(), settings.timeWindows, settings.reflectStartHour)) return null;
   return (
     <section
       aria-label={t('title')}

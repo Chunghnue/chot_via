@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { wishRequested } from '@/features/ui/uiSlice';
+import { useWishSettings } from '@/features/wish/use-deity-wish';
 import { useMounted } from '@/lib/use-mounted';
 import { useAppDispatch } from '@/store/hooks';
 
@@ -66,6 +67,7 @@ export function DeityBanner({ compact = false }: { compact?: boolean }) {
 export function ChallengeTasks() {
   const t = useTranslations('home.extras');
   const { data, isLoading } = useGetMissionsQuery();
+  const { challengeCardCount } = useWishSettings();
   const mounted = useMounted();
   return (
     <Card className="flex flex-col gap-3 bg-linear-to-b from-surface to-primary-soft/40 p-4 ring-1 ring-surface">
@@ -85,7 +87,7 @@ export function ChallengeTasks() {
         <Skeleton className="h-24" />
       ) : (
         <ul className="flex flex-col gap-2">
-          {(data ?? []).slice(0, 3).map((m) => {
+          {(data ?? []).slice(0, challengeCardCount).map((m) => {
             const done = m.progress !== null && m.progress >= m.target;
             return (
               <li key={m.id} className="flex items-center gap-2 rounded-2xl bg-surface px-2 py-2 shadow-card ring-1 ring-border/40">

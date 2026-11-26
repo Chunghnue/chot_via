@@ -37,6 +37,12 @@ export const AppSettingsSchema = z.object({
     reportPerDay: z.number().int().min(1),
   }),
   moderation: z.object({ escalateReportCount: z.number().int().min(1) }),
+  /** Điểm từ tương tác bài viết (quyết định 26/11/2026): mỗi người khác tương tác lần đầu với bài mang lại `pointsPerInteraction` điểm cho chủ bài, tối đa `dailyCap` điểm/ngày (giờ Việt Nam). */
+  postEngagement: z.object({ dailyCap: z.number().int().min(1).max(1000), pointsPerInteraction: z.number().int().min(0).max(100) }),
+  /** Giờ bắt đầu thẻ "Hôm nay thế nào rồi?" ở trang chủ; kéo dài tới giờ bắt đầu buổi tối. */
+  reflectStartHour: hour,
+  /** Số nhiệm vụ hiện trên thẻ "Thử thách tuần" (trang chủ và Phố 3D). */
+  challengeCardCount: z.number().int().min(1).max(10),
 });
 export type AppSettings = z.infer<typeof AppSettingsSchema>;
 
@@ -44,7 +50,7 @@ export type AppSettings = z.infer<typeof AppSettingsSchema>;
 export const PublicSettingsSchema = AppSettingsSchema.pick({
   timeWindows: true, campaignMode: true, wishCounterTtlHours: true, storyMaxChars: true, achievementMaxChars: true,
   commentMaxChars: true, wishMessageMaxChars: true, postMaxImages: true, imageMaxMb: true, hashtagMax: true,
-  achievementRanges: true, leaderboard: true,
+  achievementRanges: true, leaderboard: true, reflectStartHour: true, challengeCardCount: true,
 });
 export type PublicSettings = z.infer<typeof PublicSettingsSchema>;
 
@@ -84,4 +90,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   leaderboard: { maxMembers: 100, defaultVisible: 5 },
   rateLimits: { wishPerMinute: 20, postPerHour: 20, commentPerMinute: 10, reportPerDay: 20 },
   moderation: { escalateReportCount: 3 },
+  postEngagement: { dailyCap: 50, pointsPerInteraction: 1 },
+  reflectStartHour: 17,
+  challengeCardCount: 3,
 };

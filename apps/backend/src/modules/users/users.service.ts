@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, count, desc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
 import {
-  maskPhone, POST_ENGAGEMENT_DAILY_CAP, vnDayStart, type LeaderboardDto, type MeDto, type MeStats, type PublicProfile, type UpdateMeBody, type UserSummary,
+  maskPhone, vnDayStart, type LeaderboardDto, type MeDto, type MeStats, type PublicProfile, type UpdateMeBody, type UserSummary,
 } from '@chot-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { iso, levelFor, nextLevelFor, userSummary } from '../../common/mappers';
@@ -62,7 +62,7 @@ export class UsersService {
     return {
       points: u.points, level: levelFor(levels, u.points), nextLevel: nextLevelFor(levels, u.points), badges,
       rank: await this.rankOf(u.points, u.pointsUpdatedAt, s.leaderboard.maxMembers), wishCounts, counts,
-      engagement: { today: await this.engagementToday(userId), cap: POST_ENGAGEMENT_DAILY_CAP },
+      engagement: { today: await this.engagementToday(userId), cap: s.postEngagement.dailyCap },
     };
   }
 

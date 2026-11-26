@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, gte, sql } from 'drizzle-orm';
-import { POST_ENGAGEMENT_DAILY_CAP, vnDayStart, type PointAction } from '@chot-via/shared';
+import { vnDayStart, type PointAction } from '@chot-via/shared';
+import { SettingsService } from '../../common/settings.service';
 import type { DbOrTx } from '../../database/database';
 import { pointLedger, users } from '../../database/schema';
 
 @Injectable()
 export class PointsService {
+  constructor(@Inject(SettingsService) private readonly settings: SettingsService) {}
+
   /**
    * +1 điểm cho thành viên khi một hành động vía thành công. Khóa duy nhất theo sự kiện vía
    * đảm bảo không cộng trùng. Trả về tổng điểm mới, hoặc null nếu không cộng (đã ghi trước đó).
@@ -29,8 +32,8 @@ export class PointsService {
   }
 
   /**
-   * Điểm từ tương tác bài viết (mọi loại: thích, thả tim, haha, 6 biểu tượng gửi vía): chủ bài +1 cho mỗi người KHÁC tương tác lần đầu với bài, bất kể loại hay số lần.
-   * Chống trùng: khóa duy nhất (bài, người tương tác). Trần `POST_ENGAGEMENT_DAILY_CAP` điểm/ngày giờ Việt Nam cho chủ bài; khi chạm trần vẫn ghi một dòng 0 điểm để lượt này
+   * Điểm từ tương tác bài viết (mọi loại: thích, thả tim, haha, 6 biểu tượng gửi vía): chủ bài được `pointsPerInteraction` điểm (mặc định 1) cho mỗi người KHÁC tương tác lần đầu với bài, bất kể loại hay số lần.
+   * Chống trùng: khóa duy nhất (bài, người tương tác). Trần `dailyCap` điểm/ngày (Cài đặt hệ thống) giờ Việt Nam cho chủ bài; khi chạm trần vẫn ghi một dòng 0 điểm để lượt này
    * không thể đổi thành điểm vào ngày hôm sau. Khóa dòng người dùng của chủ bài để hai tương tác đồng thời không vượt trần. Trả về tổng điểm mới, hoặc null nếu không cộng.
    */
   async awardPostEngagement(tx: DbOrTx, authorId: string, actorId: string, postId: string): Promise<number | null> {
@@ -38,7 +41,8 @@ export class PointsService {
     await tx.select({ id: users.id }).from(users).where(eq(users.id, authorId)).for('update');
     const [used] = await tx.select({ n: sql<number>`coalesce(sum(${pointLedger.points}), 0)::int` }).from(pointLedger)
       .where(and(eq(pointLedger.userId, authorId), eq(pointLedger.action, 'post_engagement'), gte(pointLedger.createdAt, vnDayStart(new Date()))));
-    const points = (used?.n ?? 0) < POST_ENGAGEMENT_DAILY_CAP ? 1 : 0;
+    const { dailyCap, pointsPerInteraction } = (await this.settings.get()).postEngagement;
+    const points = Math.max(0, Math.min(pointsPerInteraction, dailyCap - (used?.n ?? 0)));
     const inserted = await tx
       .insert(pointLedger)
       .values({ userId: authorId, action: 'post_engagement', points, sourcePostId: postId, sourceActorId: actorId })
