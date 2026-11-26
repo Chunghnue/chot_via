@@ -156,5 +156,17 @@
       "l1": "Ghé cửa hàng của tôi",
       "l2": "và nhận một chút vía may mắn!"
     }
+  },
+  "postShare": {
+    "story": "😂 {name} kể khổ: “{snippet}” Ai làm sale cũng từng như vậy? Vào {brand} gửi vía cho bạn ấy 🙏",
+    "achievement": "💰 {name} vừa khoe: “{snippet}” Gửi vía chúc mừng nhé! Vào {brand} nào 🙏",
+    "wish_share": "🙏 {name} vừa xin vía Thần Tài: “{snippet}” Bạn cũng xin vía hôm nay chưa?",
+    "place": "🏪 Ghé {name} và nhận một chút vía may mắn nhé!",
+    "title": {
+      "story": "{name} kể khổ trên {brand}",
+      "achievement": "{name} vừa khoe trên {brand}",
+      "wish_share": "{name} xin vía trên {brand}"
+    },
+    "label": "Chia sẻ bài viết"
   }
 }
