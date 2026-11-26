@@ -2,21 +2,29 @@
 
 import { useEffect, useState } from 'react';
 
-/** Khóa lưu trong sessionStorage: màn chờ đã hiện trong phiên này (mỗi lần mở lại tab hoặc ứng dụng là một phiên mới). Ghi ngay từ lần hiện đầu tiên, không đợi màn chờ chạy xong. */
+/** Khóa lưu trong sessionStorage: tab này đã có màn chờ (hoặc đã bỏ qua nó) rồi, nên tải lại hay chuyển trang trong tab này không hiện nữa. */
 export const SPLASH_KEY = 'cv_splash_seen';
+/** Khóa localStorage chứa nhịp "còn sống" của từng tab đang mở web (mã tab → giờ báo nhịp gần nhất), và khóa sessionStorage chứa mã của tab này. */
+const ALIVE_KEY = 'cv_tabs';
+const TAB_ID_KEY = 'cv_tab_id';
+/** Nhịp cũ hơn mức này coi là tab đã thoát (trình duyệt tắt đột ngột). Dài vì tab chạy nền bị trình duyệt giãn hẹn giờ (khoảng 1 phút một lần). */
+const ALIVE_TTL_MS = 150_000;
+const BEAT_MS = 20_000;
 
 /**
- * Đoạn chạy rất sớm trong <head>: phiên này đã có màn chờ rồi thì ẩn ngay từ khung hình đầu (bằng thuộc tính trên <html>, không xóa phần tử nên không lệch hydrate);
- * chưa có thì đây là lần đầu: ghi dấu luôn để dù người dùng chuyển trang sớm rồi quay lại trang chủ (tải mới) cũng không hiện lại.
+ * Đoạn chạy rất sớm trong <head> (đồng bộ, trước khung hình đầu, không đợi React) lo toàn bộ việc "web còn mở ở đâu không":
+ * - Quyết định có hiện màn chờ không bằng thuộc tính `data-splash="off"` trên <html> (không xóa phần tử nên không lệch hydrate): không hiện nếu tab này
+ *   đã xem rồi, hoặc còn tab khác của web đang mở (nhịp còn trong TTL). Chỉ hiện khi người dùng vào lại sau khi đã thoát hẳn mọi tab.
+ * - Ghi nhịp của tab này ngay và định kỳ, xóa khi tab đóng (`pagehide`), ghi lại khi tab được khôi phục (`pageshow`) hoặc hiện lại (`visibilitychange`).
  */
-export const SPLASH_BOOT_SCRIPT = `try{if(sessionStorage.getItem('${SPLASH_KEY}')){document.documentElement.setAttribute('data-splash','off')}else{sessionStorage.setItem('${SPLASH_KEY}','1')}}catch(e){}`;
+export const SPLASH_BOOT_SCRIPT = `try{var K='${SPLASH_KEY}',A='${ALIVE_KEY}',I='${TAB_ID_KEY}',n=Date.now(),id=sessionStorage.getItem(I);if(!id){id=n.toString(36)+Math.random().toString(36).slice(2,8);sessionStorage.setItem(I,id)}var rd=function(){try{var v=JSON.parse(localStorage.getItem(A)||'{}');return v&&typeof v==='object'?v:{}}catch(e){return{}}},wr=function(x){try{localStorage.setItem(A,JSON.stringify(x))}catch(e){}},m=rd(),o=0;for(var k in m){if(k!==id&&typeof m[k]==='number'&&n-m[k]<${ALIVE_TTL_MS})o++}if(sessionStorage.getItem(K)||o>0)document.documentElement.setAttribute('data-splash','off');sessionStorage.setItem(K,'1');var beat=function(){var x=rd();x[id]=Date.now();wr(x)},leave=function(){var x=rd();delete x[id];wr(x)};beat();setInterval(beat,${BEAT_MS});addEventListener('pagehide',leave);addEventListener('pageshow',beat);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')beat()})}catch(e){}`;
 
 const MIN_MS = 700;
 const MAX_MS = 3500;
 
 /**
  * Màn chờ lần đầu vào web (đặc biệt trên điện thoại): logo, tên và thanh tiến độ phủ kín màn hình trong lúc trang, ảnh phố và cảnh 3D tải.
- * Chỉ hiện ở lần truy cập đầu tiên của mỗi phiên; chuyển trang hoặc quay lại trang chủ không hiện lại. HTML có sẵn từ máy chủ nên hiện ngay, không đợi JavaScript.
+ * Chỉ hiện khi người dùng vào lại sau khi đã thoát hẳn mọi tab/ứng dụng của web; còn đang mở ở đâu đó (chuyển trang, tab mới, F5, quay lại) thì không hiện. HTML có sẵn từ máy chủ nên hiện ngay, không đợi JavaScript.
  */
 export function SplashScreen() {
   const [fading, setFading] = useState(false);
