@@ -141,7 +141,6 @@ function InstallAndShare({ social, stacked = false }: { social: readonly { label
  */
 export function HomeFooter() {
   const t = useTranslations('home');
-  const tc = useTranslations('common');
   const tn = useTranslations('nav');
   const { data } = useGetHomeQuery();
   const { links, social } = useMemo(() => {
@@ -155,7 +154,7 @@ export function HomeFooter() {
         <div className="flex flex-col items-center gap-3 rounded-3xl bg-linear-to-b from-surface to-primary-soft p-4 shadow-card ring-1 ring-surface">
           <Link href="/" className="flex items-center gap-2" aria-label={tn('home')}>
             <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
-            <span className="font-display text-2xl font-extrabold italic text-primary-strong">{tc('appName')}</span>
+            <span className="font-display text-2xl font-extrabold italic text-primary-strong">Xin Vía</span>
           </Link>
           <InstallAndShare social={social} stacked />
           {links.length > 0 ? (
@@ -175,7 +174,7 @@ export function HomeFooter() {
           <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={tn('home')}>
             <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
             <span className="flex flex-col leading-tight">
-              <span className="font-display text-3xl font-extrabold italic text-primary-strong">{tc('appName')}</span>
+              <span className="font-display text-3xl font-extrabold italic text-primary-strong">Xin Vía</span>
               <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>
             </span>
           </Link>

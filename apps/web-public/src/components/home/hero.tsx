@@ -9,7 +9,6 @@ import { useStreetLabels } from '@/components/place/use-street-labels';
 import { composerOpened } from '@/features/composer/composerSlice';
 import { useRitual } from '@/features/ritual/use-ritual';
 import { useRitualScene } from '@/features/ritual/use-ritual-scene';
-import { useWalkers } from '@/lib/use-walkers';
 import { placeSheetOpened, selectWishRequest, wishRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useWishTitle } from '@/features/wish/use-deity-wish';
@@ -52,7 +51,6 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
   const capability = useSceneCapability();
   const wishRequest = useAppSelector(selectWishRequest);
   const ritualScene = useRitualScene();
-  const walkers = useWalkers();
   const config = home?.layout.config ?? DEFAULT_HOME_CONFIG;
   // Server mới chưa có ô cửa hàng nào thì vẫn hiện phố mặc định (không để phố trống).
   const slots = home && home.layout.street.length > 0 ? home.layout.street : DEFAULT_STREET_SLOTS;
@@ -82,7 +80,6 @@ export function HomeHero({ home }: { home: HomeDto | undefined }) {
           slots={slots}
           fitHalfWidth={16}
           burstTick={wishRequest}
-          walkers={walkers}
           {...ritualScene}
           onSelectPlace={openPlace}
           onSelectDeity={openWish}

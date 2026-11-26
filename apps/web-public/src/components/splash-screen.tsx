@@ -1,6 +1,5 @@
 'use client';
 
-import { viMessages } from '@chot-via/shared/i18n';
 import { useEffect, useState } from 'react';
 
 /** Khóa lưu trong sessionStorage: màn chờ đã hiện trong phiên này (mỗi lần mở lại tab hoặc ứng dụng là một phiên mới). Ghi ngay từ lần hiện đầu tiên, không đợi màn chờ chạy xong. */
@@ -52,8 +51,8 @@ export function SplashScreen() {
       className={`fixed inset-0 z-100 flex flex-col items-center justify-center gap-5 bg-linear-to-b from-primary-soft via-app to-gold-soft transition-opacity duration-500 ease-out ${fading ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
     >
       <img src="/images/logo-than-tai.webp" alt="" width={160} height={160} className="size-36 animate-float object-contain drop-shadow-lg sm:size-44" fetchPriority="high" />
-      <p className="font-display text-4xl font-extrabold italic text-primary-strong">{viMessages.common.appName}</p>
-      <p className="-mt-3 text-sm font-bold italic text-ink">{viMessages.common.tagline}</p>
+      <p className="font-display text-4xl font-extrabold italic text-primary-strong">Xin Vía</p>
+      <p className="-mt-3 text-sm font-bold italic text-ink">Cộng đồng người bán hàng</p>
       <div className="mt-2 h-2 w-44 overflow-hidden rounded-full bg-surface shadow-card ring-1 ring-primary/20">
         <div className="h-full w-2/5 animate-splash-bar rounded-full btn-glossy" />
       </div>
