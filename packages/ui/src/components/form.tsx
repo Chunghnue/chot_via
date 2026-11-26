@@ -1,6 +1,7 @@
 import * as SwitchPrimitive from '@radix-ui/react-switch';
 import type { InputHTMLAttributes, LabelHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
+import { localizeValidationMessage } from '@chot-via/shared';
 import { cn } from '../lib/cn';
 
 const fieldBase = 'w-full rounded-2xl border border-border bg-surface px-4 text-base text-ink placeholder:text-ink-subtle transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary-soft aria-[invalid=true]:border-danger';
@@ -22,7 +23,8 @@ export function Label({ className, ...rest }: LabelHTMLAttributes<HTMLLabelEleme
 }
 
 export function FieldError({ message }: { message?: string | undefined }) {
-  return message ? <p role="alert" className="mt-1 text-sm text-danger">{message}</p> : null;
+  const shown = localizeValidationMessage(message);
+  return shown ? <p role="alert" className="mt-1 text-sm text-danger">{shown}</p> : null;
 }
 
 export function Switch({ checked, onCheckedChange, label, id }: { checked: boolean; onCheckedChange: (value: boolean) => void; label: string; id?: string }) {

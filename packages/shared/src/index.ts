@@ -5,3 +5,4 @@ export * from './settings';
 export * from './time';
 export * from './phone';
 export * from './schemas';
+export * from './zod-vi';
