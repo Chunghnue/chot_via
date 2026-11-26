@@ -21,10 +21,14 @@ test.describe('Phố 3D theo ảnh thiết kế (máy tính)', () => {
     await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 
-  test('dưới 1280px không hiện khối joystick và hàng thẻ dưới (giữ bố cục cũ)', async ({ page, viewport }) => {
+  test('dưới 1280px: hàng 7 chip lối tắt nằm dưới cảnh phố (không biến mất), vẫn không có cột phải và khối "Ghé phố hôm nay"', async ({ page, viewport }) => {
     test.skip((viewport?.width ?? 0) >= 1280, 'chỉ kiểm dưới 1280px');
     await page.goto('/pho-3d', { waitUntil: 'networkidle' });
-    await expect(page.getByRole('group', { name: 'Điều khiển góc nhìn' })).toBeHidden();
+    const tiles = page.getByTestId('street-tiles-below');
+    await expect(tiles).toBeVisible();
+    await expect(tiles.locator('a:visible, button:visible')).toHaveCount(7);
+    for (const name of ['Kể khổ', 'Khoe doanh thu', 'Đốt vía', 'Thỉnh Thần Tài', 'Tạo cửa hàng 3D', 'Bảng xếp hạng', 'Thử thách']) await expect(tiles.getByText(name, { exact: true })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Ghé phố hôm nay' })).toBeHidden();
+    await expect(page.getByTestId('street-tiles')).toBeHidden();
   });
 });

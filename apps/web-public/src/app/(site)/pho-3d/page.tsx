@@ -9,7 +9,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShopLabelStrip, StreetStage } from '@/components/home/street-stage';
 import { PlaceGrid } from '@/components/place/place-list';
-import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls, StreetTiles } from '@/components/street/street-hud';
+import { DailyPanel, DeityPanel, ShopPanel, StreetBadges, StreetBottomCards, StreetControls } from '@/components/street/street-hud';
+import { StreetTiles } from '@/components/street/street-tiles';
 import { useStreetLabels } from '@/components/place/use-street-labels';
 import { useRitualScene } from '@/features/ritual/use-ritual-scene';
 import { categoryChanged, placeFocused, searchChanged, selectStreet, tabChanged, type StreetTab } from '@/features/street/streetSlice';
@@ -178,8 +179,8 @@ export default function StreetPage() {
                 </div>
                 <StreetBadges wishesTotal={home?.stats.wishesTotal ?? null} place={featured} />
                 <StreetControls fullscreen={fullscreen} onFullscreen={toggleFullscreen} />
-                <StreetTiles />
-                <div className="pointer-events-none absolute inset-x-0 bottom-[7%] flex justify-center px-3 md:bottom-[10%] xl:bottom-[26%]">
+                <StreetTiles layout="overlay" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-[15%] flex justify-center px-3 md:bottom-[19%] xl:bottom-[26%]">
                   <Button
                     variant="wish"
                     size="lg"
@@ -192,6 +193,9 @@ export default function StreetPage() {
                     {tw(`titleTail.${titleCode}`)}
                   </Button>
                 </div>
+              </div>
+              <div className="px-2 pb-2 xl:hidden">
+                <StreetTiles layout="below" />
               </div>
             </div>
           )}

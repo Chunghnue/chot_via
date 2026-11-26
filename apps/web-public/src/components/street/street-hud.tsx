@@ -8,9 +8,8 @@ import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { ChallengeTasks, FeaturedEventCard } from '@/components/home/home-extras';
 import { WeeklyBoard } from '@/components/rail/weekly-board';
-import { composerOpened } from '@/features/composer/composerSlice';
-import { useRitual } from '@/features/ritual/use-ritual';
 import { loginRequested, wishRequested } from '@/features/ui/uiSlice';
+import { useWishSettings } from '@/features/wish/use-deity-wish';
 import { useMounted } from '@/lib/use-mounted';
 import { useCurrentUser, useRequireMember } from '@/lib/use-member';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -24,8 +23,7 @@ export function StreetBadges({ wishesTotal, place }: { wishesTotal: number | nul
     <>
       {wishesTotal !== null ? (
         <p className="pointer-events-none absolute right-3 top-3 z-10 hidden items-center gap-1.5 rounded-full bg-surface/95 px-3 py-1.5 text-sm font-bold text-ink shadow-card xl:flex">
-          <span aria-hidden>🔥</span>
-          {t('wishersBadge', { count: compactCount(wishesTotal) })}
+          <span aria-hidden>🔥</span>{t('wishersBadge', { count: compactCount(wishesTotal) })}
         </p>
       ) : null}
       {place ? (
@@ -33,8 +31,7 @@ export function StreetBadges({ wishesTotal, place }: { wishesTotal: number | nul
           <span className="min-w-0 flex-1">
             <span className="block truncate">{place.title}</span>
             <span className="block text-xs font-semibold text-danger">
-              <span aria-hidden>🔥 </span>
-              {t('bubbleWish', { count: compactCount(place.wishCount) })}
+              <span aria-hidden>🔥 </span>{t('bubbleWish', { count: compactCount(place.wishCount) })}
             </span>
           </span>
         </p>
@@ -51,49 +48,6 @@ export function StreetControls({ fullscreen, onFullscreen }: { fullscreen: boole
       <button type="button" aria-label={fullscreen ? t('exitFullscreen') : t('fullscreen')} onClick={onFullscreen} className={round}>
         {fullscreen ? <Minimize2 className="size-5" aria-hidden /> : <Maximize2 className="size-5" aria-hidden />}
       </button>
-    </div>
-  );
-}
-
-/** Hàng ô lối tắt nằm đáy cảnh phố (máy tính): Kể khổ · Khoe doanh thu · Đốt vía · Thỉnh Thần Tài (luôn hiện; chưa đăng nhập thì mời đăng nhập) · Tạo cửa hàng 3D · BXH · Thử thách. */
-export function StreetTiles() {
-  const t = useTranslations('street.hud.tiles');
-  const dispatch = useAppDispatch();
-  const { request } = useRitual();
-  // Kiểu ô theo ảnh thiết kế trang chủ: viên thuốc bo tròn, nền trắng ngả tím nhạt có viền sáng, biểu tượng lớn bên trái, chữ đậm.
-  const tile =
-    'flex h-16 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-linear-to-br from-surface via-surface to-story-soft px-2.5 text-left font-display text-[0.98rem] font-extrabold leading-tight text-ink shadow-[0_6px_14px_rgb(60_40_120/0.18)] ring-2 ring-surface/90 transition hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgb(60_40_120/0.26)] active:scale-95';
-  const img = (src: string) => <img src={src} alt="" aria-hidden className="size-9 shrink-0 object-contain drop-shadow" draggable={false} />;
-  return (
-    <div className="absolute inset-x-4 bottom-3 z-10 hidden gap-2 xl:flex">
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'story' }))}>
-        {img('/images/ic-laugh.webp')}
-        <span className="min-w-0 leading-tight">{t('story')}</span>
-      </button>
-      <button type="button" className={tile} onClick={() => dispatch(composerOpened({ kind: 'brag' }))}>
-        {img('/images/ic-trophy.webp')}
-        <span className="min-w-0 leading-tight">{t('brag')}</span>
-      </button>
-      <button type="button" className={tile} onClick={() => void request('burn')}>
-        {img('/images/ic-fire.webp')}
-        <span className="min-w-0 leading-tight">{t('send')}</span>
-      </button>
-      <button type="button" className={tile} onClick={() => void request('invoke')}>
-        {img('/images/ic-pray.webp')}
-        <span className="min-w-0 leading-tight">{t('receive')}</span>
-      </button>
-      <Link href="/tao-diem" className={tile}>
-        {img('/images/ic-home.webp')}
-        <span className="min-w-0 leading-tight">{t('create')}</span>
-      </Link>
-      <Link href="/bang-xep-hang" className={tile}>
-        {img('/images/ic-crown.webp')}
-        <span className="min-w-0 leading-tight">{t('rank')}</span>
-      </Link>
-      <Link href="/su-kien" className={tile}>
-        {img('/images/ic-medal-1.webp')}
-        <span className="min-w-0 leading-tight">{t('challenge')}</span>
-      </Link>
     </div>
   );
 }
@@ -174,6 +128,7 @@ function MiniMap({ points }: { points: { x: number; z: number }[] }) {
 export function DailyPanel({ points }: { points: { x: number; z: number }[] }) {
   const t = useTranslations('street.hud.daily');
   const { data, isLoading } = useGetMissionsQuery();
+  const { challengeCardCount } = useWishSettings();
   const mounted = useMounted();
   return (
     <Card className="flex flex-col gap-2 p-3">
@@ -181,7 +136,7 @@ export function DailyPanel({ points }: { points: { x: number; z: number }[] }) {
       <MiniMap points={points} />
       {isLoading || !mounted ? <Skeleton className="h-16" /> : (
         <ul className="flex flex-col gap-1.5">
-          {(data ?? []).slice(0, 3).map((m) => {
+          {(data ?? []).slice(0, challengeCardCount).map((m) => {
             const done = m.progress !== null && m.progress >= m.target;
             return (
               <li key={m.id} className="flex items-center gap-2 text-sm text-ink">
