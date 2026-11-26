@@ -9,12 +9,11 @@ import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, pillClas
 import { CornerUpRight, Crown, Flag, MessageCircle, MoreHorizontal, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslations } from 'use-intl';
 import { track } from '@/lib/analytics';
 import { useApiToast } from '@/lib/use-api-toast';
 import { useRequireMember } from '@/lib/use-member';
-import { Burst } from '@/components/dialogs/wish-burst';
+import { WishCoinPop } from './wish-coin-pop';
 import { reportRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { PostContent, kindTone, useKindLabel } from './post-content';
@@ -22,12 +21,13 @@ import { ShareButtons } from '@/components/common/share-buttons';
 import { postSnippet } from '@/lib/post-share';
 
 /** Khối bên trái nút Chia sẻ: các biểu tượng vía đã có lượt (tối đa 6, nhiều lượt nhất trước) chồng nhau kèm tổng lượt gửi vía của bài. */
-function WishSummary({ breakdown, total, label }: { breakdown: readonly WishCountDto[]; total: number; label: string }) {
+function WishSummary({ breakdown, total, label, popId }: { breakdown: readonly WishCountDto[]; total: number; label: string; popId: number }) {
   const shown = breakdown.filter((w) => w.count > 0).sort((x, y) => y.count - x.count || x.sortOrder - y.sortOrder).slice(0, 6);
   return (
-    <span className="flex h-10 items-center gap-1.5 px-3 font-bold text-ink" aria-label={label} data-testid="wish-summary">
+    <span className="relative flex h-10 items-center gap-1.5 px-3 font-bold text-ink" aria-label={label} data-testid="wish-summary">
+      {popId > 0 ? <WishCoinPop key={popId} /> : null}
       {shown.length > 0 ? (
-        <span className="flex -space-x-1.5" aria-hidden>
+        <span key={popId} className={cn('flex -space-x-1.5', popId > 0 && 'motion-safe:animate-wish-pulse')} aria-hidden>
           {shown.map((w) => <span key={w.wishTypeId} title={`${w.name}: ${w.count}`} className="flex size-7 items-center justify-center rounded-full bg-surface text-base shadow-card ring-2 ring-surface"><AppIcon iconKey={w.iconKey} /></span>)}
         </span>
       ) : <span aria-hidden className="flex size-7 items-center justify-center rounded-full bg-surface-muted text-base opacity-60"><AppIcon iconKey="clover" /></span>}
@@ -61,8 +61,8 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const confirm = useConfirm();
 
   const [saved, setSaved] = useState(post.viewer?.saved ?? false);
-  /** Tiền vàng tung toé từ chỗ vừa bấm khi gửi vía (lớp phủ toàn màn hình, vẽ ngoài thẻ bài bằng portal). */
-  const [coins, setCoins] = useState({ id: 0, x: 0, y: 0, on: false });
+  /** Mã lượt gửi vía thành công: mỗi lần tăng thì tiền vàng "bùm" lại ở cụm biểu tượng vía. */
+  const [coinPop, setCoinPop] = useState(0);
   /** Cảm xúc của người xem (chọn một loại tại một thời điểm; bấm lại loại đang chọn thì bỏ) và số lượt từng loại. */
   const [mineReaction, setMineReaction] = useState<ReactionType | null>(post.viewer?.reaction ?? null);
   const [reactionCounts, setReactionCounts] = useState(post.reactionCounts);
@@ -97,15 +97,11 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
     }).catch(toastApi.error);
   };
 
-  const sendWish = async (wishTypeId: string, at?: { x: number; y: number }): Promise<void> => {
-    if (at) {
-      const id = coins.id + 1;
-      setCoins({ id, ...at, on: true });
-      window.setTimeout(() => setCoins((c) => (c.id === id ? { ...c, on: false } : c)), 3400);
-    }
+  const sendWish = async (wishTypeId: string): Promise<void> => {
     try {
       const r = await wish({ postId: post.id, wishTypeId }).unwrap();
       setBreakdown(r.wishBreakdown);
+      setCoinPop((n) => n + 1);
       toast.success(t('actions.wishSent'));
       track('feed_engagement', { post_type: post.type, action: 'wish' });
     } catch (e) { toastApi.error(e); }
@@ -198,7 +194,7 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
             </button>
           ))}
         </div>
-        <WishSummary breakdown={breakdown} total={wishTotal} label={t('actions.wishTotal', { count: wishTotal })} />
+        <WishSummary breakdown={breakdown} total={wishTotal} label={t('actions.wishTotal', { count: wishTotal })} popId={coinPop} />
         <Link href={`/bai/${post.id}`} className={pillClass({}, (compact || wide) ? 'font-bold text-ink' : undefined)}><MessageCircle className="size-5" aria-hidden />{post.counts.comments}<span className="sr-only">{t('actions.commentShort')}</span></Link>
         <Popover trigger={<button type="button" className={pillClass({}, (compact || wide) ? 'font-bold text-ink' : undefined)}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>}>
           <ShareButtons text={shareText} link={postUrl} card={{ kind: shareKind, link: postUrl, body: post.body }} onShared={countShare} className="w-64" />
@@ -212,14 +208,13 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
             <div className="grid grid-cols-3 gap-1.5">
               {breakdown.map((w) => (
                 <PopoverClose key={w.wishTypeId} asChild>
-                  <button type="button" onClick={(e) => void sendWish(w.wishTypeId, { x: e.clientX || window.innerWidth / 2, y: e.clientY || window.innerHeight / 2 })} className={cn('relative flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted', w.mine && 'bg-primary-soft ring-1 ring-primary')}><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}{w.count > 0 ? <span className="absolute right-1 top-1 min-w-5 rounded-full bg-wish px-1 text-[0.65rem] leading-5 text-on-wish">{w.count}</span> : null}</button>
+                  <button type="button" onClick={() => void sendWish(w.wishTypeId)} className={cn('relative flex w-20 flex-col items-center gap-1 rounded-xl p-2 text-center text-[0.7rem] font-bold hover:bg-surface-muted', w.mine && 'bg-primary-soft ring-1 ring-primary')}><AppIcon iconKey={w.iconKey} className="text-2xl" />{w.name}{w.count > 0 ? <span className="absolute right-1 top-1 min-w-5 rounded-full bg-wish px-1 text-[0.65rem] leading-5 text-on-wish">{w.count}</span> : null}</button>
                 </PopoverClose>
               ))}
             </div>
           </Popover>
         </div>
       </footer>
-      {coins.on ? createPortal(<Burst key={coins.id} origin={{ x: coins.x, y: coins.y }} />, document.body) : null}
     </Card>
   );
 }

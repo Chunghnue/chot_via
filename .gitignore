@@ -21,6 +21,7 @@ test-results
 zip
 .next-e2e
 .next-prod
+.next-t
 storage-test
 apps/backend/storage-test
 *.log

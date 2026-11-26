@@ -16,7 +16,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<H
 });
 
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(function Select({ className, ...rest }, ref) {
-  return <select ref={ref} className={cn(fieldBase, 'h-12 appearance-auto pr-3', className)} {...rest} />;
+  return <select ref={ref} className={cn(fieldBase, 'select-arrow h-12', className)} {...rest} />;
 });
 
 export function Label({ className, ...rest }: LabelHTMLAttributes<HTMLLabelElement>) {

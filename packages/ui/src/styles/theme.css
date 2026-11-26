@@ -229,6 +229,8 @@
   --animate-coin: coin-fall 1.8s ease-in forwards;
   --animate-splash-bar: splash-bar 1.2s ease-in-out infinite;
   --animate-burst: burst 1.4s cubic-bezier(0.12, 0.8, 0.3, 1) forwards;
+  --animate-coin-pop: coin-pop 1.25s cubic-bezier(0.15, 0.8, 0.3, 1) forwards;
+  --animate-wish-pulse: wish-pulse 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.4);
   --animate-shimmer: shimmer 1.4s linear infinite;
 
   @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
@@ -239,6 +241,8 @@
   @keyframes splash-bar { 0% { translate: -100% 0; } 100% { translate: 250% 0; } }
   @keyframes coin-fall { 0% { opacity: 0; translate: 0 -30px; rotate: 0deg; } 15% { opacity: 1; } 100% { opacity: 0; translate: var(--coin-x, 0px) var(--coin-y, 180px); rotate: 540deg; } }
   @keyframes burst { 0% { opacity: 0; translate: 0 0; scale: 0.2; rotate: 0deg; } 12% { opacity: 1; } 100% { opacity: 0; translate: var(--bx, 0px) var(--by, 0px); scale: 1; rotate: 420deg; } }
+  @keyframes coin-pop { 0% { opacity: 0; translate: 0 0; scale: 0.3; rotate: 0deg; } 14% { opacity: 1; } 58% { opacity: 1; translate: var(--dx, 0px) var(--dy, 0px); scale: 1.05; rotate: calc(var(--spin, 240deg) * 0.6); } 100% { opacity: 0; translate: calc(var(--dx, 0px) * 1.18) calc(var(--dy, 0px) + 54px); scale: 0.85; rotate: var(--spin, 240deg); } }
+  @keyframes wish-pulse { 0% { scale: 1; } 40% { scale: 1.16; } 100% { scale: 1; } }
   @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
 }
 
@@ -261,6 +265,15 @@
   border: 1.5px solid var(--color-btn-glossy-edge);
 }
 
+/* Ô chọn (select): bỏ mũi tên gốc của trình duyệt (dính sát mép phải), vẽ mũi tên trỏ xuống bằng hai nửa tam giác theo màu chữ phụ và lùi vào cách mép phải 1,25rem. */
+@utility select-arrow {
+  appearance: none;
+  padding-inline-end: 3rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-ink-muted) 50%), linear-gradient(135deg, var(--color-ink-muted) 50%, transparent 50%);
+  background-position: calc(100% - 1.5rem) 50%, calc(100% - 1.125rem) 50%;
+  background-size: 0.4375rem 0.4375rem, 0.4375rem 0.4375rem;
+  background-repeat: no-repeat;
+}
 @utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
 @utility pt-safe { padding-top: env(safe-area-inset-top); }
 @utility scrollbar-none { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
