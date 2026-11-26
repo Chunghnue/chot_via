@@ -1,0 +1,9 @@
+{
+  "note": "File cũ đã vượt 300 dòng trước khi có quy tắc (26/11/2026). Trần = số dòng hiện tại: không được dài thêm. Tách xuống dưới 300 dòng thì xóa khỏi danh sách. Không thêm file mới vào đây.",
+  "files": {
+    "packages/scene-3d/src/city-street.tsx": 676,
+    "packages/scene-3d/src/city-ritual.tsx": 575,
+    "apps/backend/src/database/schema.ts": 450,
+    "packages/scene-3d/src/glb-street.tsx": 382
+  }
+}

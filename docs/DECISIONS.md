@@ -147,3 +147,10 @@ Bổ sung cùng ngày (chủ dự án chốt 3 điểm):
 - **Nút cảm xúc trên thẻ bài:** 👍 Thích · ❤️ Thả tim · 😆 Haha đặt bên trái cùng hàng với khối vía, bình luận, Chia sẻ và nút Gửi vía; chọn một cảm xúc tại một thời điểm (bấm lại để bỏ), hiện số lượt từng loại. Đổi cảm xúc vẫn chỉ đóng góp tối đa +1 cho chủ bài; khách bấm thì mời đăng nhập.
 - **Không cộng bù:** không tính điểm cho tương tác trước ngày kích hoạt, không sửa lịch sử điểm cũ.
 - **Tiến độ trần ngày:** hồ sơ có thẻ "Điểm tương tác hôm nay x / 50" (chỉ tính nguồn tương tác, không gồm điểm nhiệm vụ và 3 hành động vía), tự làm mới mỗi 30 giây và khi quay lại tab, đủ 50 thì báo đã đạt giới hạn, sang ngày mới giờ Việt Nam về 0/50.
+
+## Giới hạn 300 dòng mỗi file mã nguồn (26/11/2026, chủ dự án chốt)
+
+- Mỗi file `.ts`, `.tsx`, `.css` tối đa **300 dòng** (tổng dòng, kể cả dòng trống và chú thích). Không áp dụng cho i18n `.json`, migration SQL (`drizzle/`), `.d.ts` và file tự sinh.
+- Chặn bằng máy: `scripts/check-file-size.mjs` chạy trong `pnpm typecheck`, lệnh riêng `pnpm check:size` và hook `pre-commit` (`.githooks/`, bật bởi `pnpm install` qua script `prepare`).
+- File cũ đã vượt trước ngày chốt được ghi trong `scripts/file-size-allowlist.json` với trần = số dòng lúc đó (`city-street.tsx` 676, `city-ritual.tsx` 575, `schema.ts` 450, `glb-street.tsx` 382): không được dài thêm; tách xuống dưới 300 dòng thì xóa khỏi danh sách. Không thêm file mới vào danh sách.
+- Lý do ghi lại: trước đó quy tắc chỉ được nói miệng nên không có gì chặn, nhiều file đã vượt (có file do các lần sửa gần đây làm dài thêm).

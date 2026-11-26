@@ -1,0 +1,3 @@
+#!/bin/sh
+# Chặn commit khi có file mã nguồn vượt 300 dòng (CLAUDE.md, quy tắc 11).
+exec node scripts/check-file-size.mjs

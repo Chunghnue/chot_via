@@ -29,12 +29,12 @@ pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-vi
 | Migration / dữ liệu khởi tạo + mẫu | `pnpm db:migrate` · `pnpm db:seed` (chạy lần lượt `seed.ts` → `seed-demo-content.ts` → `seed-home.ts`; chỉ dữ liệu trang chủ: `pnpm db:seed:home`) |
 | Sinh migration từ schema Drizzle | `pnpm --filter @chot-via/backend db:generate` (chỉ sau khi chủ dự án duyệt thay đổi DB, xem quy tắc 7) |
 | Chạy | `pnpm dev:backend` · `pnpm dev:web` · `pnpm dev:admin` |
-| Kiểm kiểu toàn bộ | `pnpm typecheck` (hoặc `pnpm --filter <gói> typecheck`) |
+| Kiểm kiểu toàn bộ + giới hạn 300 dòng/file | `pnpm typecheck` (kiểu từng gói: `pnpm --filter <gói> typecheck`; chỉ kiểm dòng: `pnpm check:size`) |
 | Test | `pnpm test` (Vitest) · `pnpm test:e2e` (Playwright) · `pnpm test:e2e:prod` (PWA/offline trên bản `next build`) · `pnpm test:all` |
 | Build | `pnpm build` |
 | Reset DB dev | `pnpm --filter @chot-via/backend db:reset` rồi migrate + seed |
 
-`pnpm test` chạy Vitest theo projects (`packages/shared`, `apps/backend`, `apps/web-public`, mỗi nơi có `vitest.config.mts` riêng); Playwright có `e2e/global-setup.ts`/`global-teardown.ts`. Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck`.
+`pnpm test` chạy Vitest theo projects (`packages/shared`, `apps/backend`, `apps/web-public`, mỗi nơi có `vitest.config.mts` riêng); Playwright có `e2e/global-setup.ts`/`global-teardown.ts`. Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck` (đã gồm kiểm giới hạn 300 dòng).
 
 Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900000000`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
 
@@ -49,6 +49,7 @@ Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900
 8. **RESP-01 – một sản phẩm, một hệ thống:** một codebase giao diện, một API/database, một bộ nghiệp vụ cho mọi thiết bị; không tạo chức năng riêng cho Desktop hay Mobile, chỉ đổi cách bố trí theo kích thước. Trạng thái xin vía của thành viên đồng bộ qua máy chủ.
 9. Điểm chỉ cho thành viên: +1 từ 3 hành động vía (xin vía Thần Tài, gửi vía cho cửa hàng, gửi vía cho sale), điểm thưởng khi hoàn thành nhiệm vụ (hệ số `reward_points` ở từng nhiệm vụ, admin đặt, thưởng một lần mỗi kỳ; chủ dự án đổi 25/11/2026), và +1 cho chủ bài khi mỗi người khác tương tác lần đầu với bài (thích, thả tim, haha, 6 biểu tượng gửi vía; mỗi người tối đa +1/bài, tối đa 50 điểm/ngày giờ VN; chốt 26/11/2026); không thêm nguồn điểm khác. Không xếp hạng theo tiền, không tick xác minh.
 10. Làm **đúng như thiết kế** (`docs/DESIGN-REFERENCE.md`); khi thiết kế mâu thuẫn quyết định đã chốt thì theo quyết định và nêu rõ chỗ lệch cho chủ dự án.
+11. **Mỗi file mã nguồn (`.ts`, `.tsx`, `.css`) tối đa 300 dòng** (tính tổng dòng, kể cả dòng trống và chú thích; không áp dụng cho i18n `.json`, migration SQL, file tự sinh). Thêm tính năng làm file vượt thì phải tách (thành phần, hook, hàm tiện ích, dịch vụ riêng) trước khi hoàn thành. File cũ trong `scripts/file-size-allowlist.json` không được dài thêm và không được thêm file mới vào danh sách đó. `pnpm typecheck` và hook pre-commit (`.githooks/`, tự bật khi `pnpm install`) kiểm tra bằng `scripts/check-file-size.mjs`; sửa file lớn xong chạy `pnpm check:size`.
 
 ## Điều dễ nhầm
 - **Đốt vía / Thỉnh Thần Tài** (hai nút luôn hiện ở trang chủ kể cả khi chưa đăng nhập, bấm vào thì mời đăng nhập; thay "Gửi vía / Nhận vía"): nghi lễ 3D cho cửa hàng của chính mình (10 / 20 giây), chưa có cửa hàng thì dẫn đi tạo; không cộng điểm, không giới hạn lượt, không lưu database (xem `docs/DECISIONS.md`).
