@@ -5,7 +5,7 @@ import {
   useSharePostMutation, useVotePollMutation,
 } from '@chot-via/api-client';
 import { REACTION_TYPES, type PollDto, type PostDto, type ReactionType, type WishCountDto } from '@chot-via/shared';
-import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, toast, useConfirm, useFormatters, useRoleLabel, type MenuItem } from '@chot-via/ui';
+import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, pillClass, toast, useConfirm, useFormatters, useRoleLabel, type MenuItem } from '@chot-via/ui';
 import { CornerUpRight, Crown, Flag, MessageCircle, MoreHorizontal, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -193,14 +193,14 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
         <div className="flex items-center" role="group" aria-label={t('actions.react')}>
           {REACTION_TYPES.map((r) => (
             <button key={r} type="button" aria-pressed={mineReaction === r} aria-label={t(`actions.${r}`)} title={t(`actions.${r}`)} data-testid={`react-${r}`} onClick={() => pickReaction(r)}
-              className={cn('flex h-10 items-center gap-1 rounded-full px-2.5 transition hover:bg-surface-muted active:scale-95', mineReaction === r && 'bg-primary-soft text-primary-strong')}>
+              className={pillClass({ active: mineReaction === r }, 'gap-1 px-2.5 ring-0')}>
               <span aria-hidden className="text-xl leading-none">{REACTION_EMOJI[r]}</span>{reactionCounts[r]}
             </button>
           ))}
         </div>
         <WishSummary breakdown={breakdown} total={wishTotal} label={t('actions.wishTotal', { count: wishTotal })} />
-        <Link href={`/bai/${post.id}`} className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}><MessageCircle className="size-5" aria-hidden />{post.counts.comments}<span className="sr-only">{t('actions.commentShort')}</span></Link>
-        <Popover trigger={<button type="button" className={cn('flex h-10 items-center gap-1.5 rounded-full px-3 hover:bg-surface-muted', (compact || wide) && 'font-bold text-ink')}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>}>
+        <Link href={`/bai/${post.id}`} className={pillClass({}, (compact || wide) ? 'font-bold text-ink' : undefined)}><MessageCircle className="size-5" aria-hidden />{post.counts.comments}<span className="sr-only">{t('actions.commentShort')}</span></Link>
+        <Popover trigger={<button type="button" className={pillClass({}, (compact || wide) ? 'font-bold text-ink' : undefined)}>{compact || wide ? <CornerUpRight className="size-5" aria-hidden /> : <Share2 className="size-5" aria-hidden />}{compact || wide ? null : shares}<span className={compact || wide ? '' : 'sr-only'}>{t('actions.share')}</span></button>}>
           <ShareButtons text={shareText} link={postUrl} card={{ kind: shareKind, link: postUrl, body: post.body }} onShared={countShare} className="w-64" />
         </Popover>
         <div className="ml-auto">

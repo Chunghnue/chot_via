@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import postgres from 'postgres';
 import { adminLogin, catalog, del, freshIp, get, login, post, put } from './support/api';
 
 interface PostRow { id: string; type: string; role: string | null; body: string; hashtags: string[]; pinned: boolean; media: unknown[]; poll: { options: { id: string; votes: number }[] } | null; author: { displayName: string; jobTitle: string | null }; counts: { reactions: number; comments: number; shares: number }; achievement: { displayMode: string; amount: number | null } | null; viewer: { reaction: string | null; saved: boolean } | null }
@@ -180,5 +181,91 @@ describe('báo cáo & kiểm duyệt', () => {
     const p = (await get<PostRow[]>('/posts?pageSize=1')).data[0];
     const r = await post('/reports', { targetType: 'post', targetId: p?.id, reason: 'khac-la' }, { ip: freshIp() });
     expect(r.status).toBe(400);
+  });
+});
+
+describe('điểm từ tương tác bài viết (quyết định 26/11/2026)', () => {
+  interface Stats { points: number; engagement: { today: number; cap: number } }
+  interface Reacted { reactions: number; mine: string | null; reactionCounts: { like: number; love: number; haha: number } }
+  interface Wished { wishes: number; wishBreakdown: { wishTypeId: string; count: number; mine: boolean }[] }
+  const stats = async (token: string): Promise<Stats> => (await get<Stats>('/me/stats', { token })).data;
+  const newPost = async (token: string): Promise<string> => (await post<PostRow>('/posts', { type: 'story', body: `Điểm tương tác ${Date.now()}`, hashtags: [], sticker: null }, { token })).data.id;
+
+  it('mỗi người khác chỉ mang lại tối đa +1 điểm cho chủ bài, bất kể loại hay số lần; chủ bài tự tương tác +0', async () => {
+    const author = await login(); const b = await login(); const c = await login();
+    const cat = await catalog();
+    const pid = await newPost(author.token);
+    const before = await stats(author.token);
+
+    await put(`/posts/${pid}/reaction`, { type: 'love' }, { token: author.token });
+    await post(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { token: author.token });
+    expect((await stats(author.token)).points).toBe(before.points);
+
+    await put(`/posts/${pid}/reaction`, { type: 'love' }, { token: b.token });
+    expect((await stats(author.token)).points).toBe(before.points + 1);
+
+    await put(`/posts/${pid}/reaction`, { type: 'haha' }, { token: b.token });
+    await post(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { token: b.token });
+    await post(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[1]?.id }, { token: b.token });
+    await del(`/posts/${pid}/reaction`, { token: b.token });
+    await put(`/posts/${pid}/reaction`, { type: 'like' }, { token: b.token });
+    expect((await stats(author.token)).points).toBe(before.points + 1);
+
+    await post(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[2]?.id }, { token: c.token });
+    const after = await stats(author.token);
+    expect(after.points).toBe(before.points + 2);
+    expect(after.engagement.today - before.engagement.today).toBe(2);
+    expect((await stats(b.token)).points).toBe(0);
+  });
+
+  it('người tương tác không được điểm; lượt vẫn đếm đủ theo từng loại cảm xúc và từng loại vía', async () => {
+    const author = await login(); const b = await login(); const c = await login();
+    const cat = await catalog();
+    const pid = await newPost(author.token);
+    const r1 = await put<Reacted>(`/posts/${pid}/reaction`, { type: 'like' }, { token: b.token });
+    expect(r1.data.reactionCounts).toEqual({ like: 1, love: 0, haha: 0 });
+    const r2 = await put<Reacted>(`/posts/${pid}/reaction`, { type: 'haha' }, { token: b.token });
+    expect(r2.data.reactionCounts).toEqual({ like: 0, love: 0, haha: 1 });
+    const r3 = await put<Reacted>(`/posts/${pid}/reaction`, { type: 'haha' }, { token: c.token });
+    expect(r3.data.reactionCounts.haha).toBe(2);
+    const w = await post<Wished>(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { token: b.token });
+    const again = await post<Wished>(`/posts/${pid}/wishes`, { wishTypeId: cat.wishTypes[0]?.id }, { token: b.token });
+    expect(again.data.wishes).toBe(w.data.wishes);
+    expect(w.data.wishBreakdown.find((x) => x.wishTypeId === cat.wishTypes[0]?.id)).toMatchObject({ count: 1, mine: true });
+    expect((await stats(b.token)).engagement.today).toBe(0);
+  });
+
+  it('trần 50 điểm/ngày: chạm trần thì tương tác vẫn hoạt động và đếm lượt nhưng không thêm điểm', async () => {
+    const author = await login(); const x = await login(); const y = await login();
+    const pid = await newPost(author.token);
+    const sql = postgres('postgres://chotvia:chotvia@localhost:5432/chotvia_test', { max: 1 });
+    try {
+      // Dựng sẵn 49 điểm tương tác hôm nay: ghép nhiều bài với nhiều người (mỗi cặp bài-người một dòng).
+      const others = await sql<{ id: string }[]>`select id from users where id <> ${author.userId} and id not in (${x.userId}, ${y.userId}) limit 30`;
+      const posts = await sql<{ id: string }[]>`select id from posts where author_id <> ${author.userId} limit 3`;
+      let made = 0;
+      for (const pp of posts) for (const u of others) {
+        if (made >= 49) break;
+        await sql`insert into point_ledger (user_id, action, points, source_post_id, source_actor_id) values (${author.userId}, 'post_engagement', 1, ${pp.id}, ${u.id}) on conflict do nothing`;
+        made++;
+      }
+      expect(made).toBe(49);
+      const filled = (await sql<{ s: number }[]>`select coalesce(sum(points),0)::int s from point_ledger where user_id = ${author.userId} and action = 'post_engagement'`)[0]?.s ?? 0;
+      const need = 50 - filled;
+      expect(need).toBeGreaterThanOrEqual(0);
+      const base = (await stats(author.token)).points;
+
+      await put(`/posts/${pid}/reaction`, { type: 'like' }, { token: x.token });
+      const mid = await stats(author.token);
+      expect(mid.engagement.today).toBe(Math.min(50, filled + 1));
+      await put(`/posts/${pid}/reaction`, { type: 'love' }, { token: y.token });
+      const full = await stats(author.token);
+      expect(full.engagement).toEqual({ today: 50, cap: 50 });
+      const last = await put<Reacted>(`/posts/${pid}/reaction`, { type: 'haha' }, { token: (await login()).token });
+      expect(last.status).toBe(200);
+      expect(last.data.reactions).toBe(3);
+      expect((await stats(author.token)).engagement.today).toBe(50);
+      expect((await stats(author.token)).points).toBeLessThanOrEqual(base + 2);
+    } finally { await sql.end(); }
   });
 });

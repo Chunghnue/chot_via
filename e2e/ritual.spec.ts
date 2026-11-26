@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { API, apiLogin, headers } from './support';
+import { API, apiLogin, headers, loginPhoneField } from './support';
 
 /** Đăng nhập thành viên mới (cookie dùng chung với trình duyệt) và tạo sẵn một cửa hàng cho họ. */
 async function memberWithStore(page: Page): Promise<void> {
@@ -15,15 +15,12 @@ async function memberWithStore(page: Page): Promise<void> {
 }
 
 test.describe('Đốt vía và Thỉnh Thần Tài (cho cửa hàng của chính mình)', () => {
-  test('khách chưa đăng nhập không thấy hai nút ở trang chủ, Phố 3D', async ({ page, viewport }) => {
+  test('khách vẫn thấy hai nút ở trang chủ; bấm vào thì mời đăng nhập (chủ dự án đổi 25/11/2026)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    await expect(page.getByTestId('action-burn')).toHaveCount(0);
-    await expect(page.getByTestId('action-invoke')).toHaveCount(0);
-    if ((viewport?.width ?? 0) >= 1280) {
-      await page.goto('/pho-3d', { waitUntil: 'networkidle' });
-      await expect(page.getByRole('button', { name: 'Đốt vía' })).toHaveCount(0);
-      await expect(page.getByRole('button', { name: 'Thỉnh Thần Tài' })).toHaveCount(0);
-    }
+    await expect(page.getByTestId('action-burn')).toBeVisible();
+    await expect(page.getByTestId('action-invoke')).toBeVisible();
+    await page.getByTestId('action-burn').click();
+    await expect(loginPhoneField(page)).toBeVisible();
   });
 
   test('thành viên chưa có cửa hàng: bấm Đốt vía → dẫn đi tạo cửa hàng → tạo xong hiện hộp có nút bắt đầu → bấm là chạy nghi lễ', async ({ page }) => {

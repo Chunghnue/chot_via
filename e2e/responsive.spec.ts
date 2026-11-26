@@ -15,13 +15,13 @@ test.describe('responsive: không tràn ngang trên mọi trang chính', () => {
 });
 
 test.describe('khung điều hướng theo kích thước (RESP-01)', () => {
-  test('điện thoại: thanh dưới 6 mục có nút (+) Đăng bài ở giữa; từ iPad dọc: menu trên, không có thanh dưới', async ({ page, isMobile, viewport }) => {
+  test('điện thoại: thanh dưới 5 mục có nút (+) Đăng bài ở giữa; từ iPad dọc: menu trên, không có thanh dưới', async ({ page, isMobile, viewport }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const bottom = page.locator('nav[aria-label="Điều hướng chính"].fixed');
     if (isMobile) {
       await expect(bottom).toBeVisible();
       const labels = await bottom.locator('a, button').allInnerTexts();
-      expect(labels.map((l) => l.replace(/[^\p{L}\p{N}\s]/gu, '').trim())).toEqual(['Trang chủ', 'Phố 3D', 'Đăng bài', 'Sự kiện', 'BXH', 'Cá nhân']);
+      expect(labels.map((l) => l.replace(/[^\p{L}\p{N}\s]/gu, '').trim())).toEqual(['Trang chủ', 'Phố 3D', 'Đăng bài', 'Sự kiện', 'Cá nhân']);
     } else {
       await expect(bottom).toBeHidden();
       const w = viewport?.width ?? 0;
@@ -118,11 +118,11 @@ test.describe('header iPad ngang (ảnh thiết kế #15)', () => {
 });
 
 test.describe('bảng tin cộng đồng ở trang chủ (ảnh thiết kế)', () => {
-  test('4 chip lọc cùng một hàng, giữ chữ "Kể khổ"; có đúng một điều khiển sắp xếp hiển thị', async ({ page }) => {
+  test('4 chip lọc (Tất cả, Kể khổ, Khoe doanh thu, Xin vía) cùng một hàng, giữ chữ "Kể khổ"; có đúng một điều khiển sắp xếp hiển thị', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const feed = page.locator('section[aria-labelledby="feed-title"]');
     const tops: number[] = [];
-    for (const name of [/^Tất cả/, /^Kể khổ/, /^Khoe doanh thu/, /^Khoe deal/]) {
+    for (const name of [/^Tất cả/, /^Kể khổ/, /^Khoe doanh thu/, /^Xin vía/]) {
       const chip = feed.getByRole('button', { name }).first();
       await expect(chip).toBeVisible();
       const box = await chip.boundingBox();

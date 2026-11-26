@@ -28,7 +28,7 @@ export function Sheet({ open, onOpenChange, title, closeLabel, description, chil
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 animate-fade-in bg-overlay" />
         <DialogPrimitive.Content
           onInteractOutside={onInteractOutside}
-          aria-describedby={description ? undefined : undefined}
+          {...(description ? {} : { 'aria-describedby': undefined })}
           className={cn(
             'fixed z-50 flex max-h-[92dvh] flex-col overflow-hidden bg-surface shadow-pop outline-none',
             'inset-x-0 bottom-0 animate-sheet-up rounded-t-sheet',

@@ -5,7 +5,7 @@ import {
   CreatePostBodySchema, METRIC_TYPES, MONEY_METRICS, OWNER_METRICS, RANGE_METRICS, SALE_METRICS, STORY_STICKERS, DISPLAY_MODES, MEMBER_ROLES,
   type AppSettings, type MetricType, type PublicSettings,
 } from '@chot-via/shared';
-import { AppIcon, Button, Chip, FieldError, Input, Label, Switch, Textarea, cn, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
+import { AppIcon, Button, Chip, FieldError, Input, Label, Notice, RadioOption, Switch, Textarea, cn, pillClass, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImagePlus, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -208,10 +208,7 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
             <Label>{t('composer.display')}</Label>
             <div className="flex flex-col gap-1.5">
               {DISPLAY_MODES.map((mode) => (
-                <label key={mode} className={cn('flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium', values.displayMode === mode ? 'border-primary bg-primary-soft' : 'border-border', mode === 'range' && !rangeAllowed && 'opacity-50')}>
-                  <input type="radio" className="accent-primary" checked={values.displayMode === mode} disabled={mode === 'range' && !rangeAllowed} onChange={() => form.setValue('displayMode', mode)} />
-                  {t(`display.${mode}`)}
-                </label>
+                <RadioOption key={mode} checked={values.displayMode === mode} disabled={mode === 'range' && !rangeAllowed} onChange={() => form.setValue('displayMode', mode)}>{t(`display.${mode}`)}</RadioOption>
               ))}
               {!rangeAllowed ? <p className="text-xs text-ink-subtle">{t('composer.rangeUnavailable')}</p> : null}
             </div>
@@ -243,7 +240,7 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
         <Textarea aria-label={placeholder} placeholder={placeholder} aria-invalid={!!bodyError} className="min-h-36" {...bodyField} ref={(el) => { bodyField.ref(el); bodyRef.current = el; }} />
         <div className="mt-1.5 flex items-center gap-2">
           <button type="button" aria-label={emojiOpen ? t('composer.emojiClose') : t('composer.emojiOpen')} aria-expanded={emojiOpen} onClick={() => setEmojiOpen((v) => !v)}
-            className={cn('inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-sm font-bold text-ink transition hover:bg-surface-muted', emojiOpen && 'bg-primary-soft ring-1 ring-primary')}><span aria-hidden className="text-xl leading-none">😊</span>{t('composer.emoji')}</button>
+            className={pillClass({ active: emojiOpen, bordered: true }, 'text-sm font-bold text-ink')}><span aria-hidden className="text-xl leading-none">😊</span>{t('composer.emoji')}</button>
         </div>
         {emojiOpen ? <EmojiPicker className="mt-1.5" onPick={insertEmoji} /> : null}
         <div className="mt-1 flex items-start justify-between gap-2">
@@ -303,7 +300,7 @@ export function ComposerForm({ draft, preview }: { draft: ComposerDraft; preview
       ) : null}
 
       <p className="text-xs text-ink-subtle">{t('composer.privacyNote')}</p>
-      {!isMember ? <p className="rounded-xl bg-warning-soft px-3 py-2 text-xs font-semibold text-warning">{t('composer.needLogin')} · {t('composer.draftKept')}</p> : null}
+      {!isMember ? <Notice>{t('composer.needLogin')} · {t('composer.draftKept')}</Notice> : null}
 
       <div className="sticky bottom-0 -mx-5 flex gap-2 border-t border-border bg-surface px-5 pb-1 pt-3">
         <Button variant="outline" className="flex-1" onClick={() => { void form.trigger().then((ok) => { if (ok) dispatch(stepChanged('preview')); }); }}>{t('composer.preview')}</Button>

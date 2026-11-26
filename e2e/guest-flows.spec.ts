@@ -6,7 +6,7 @@ test.describe('khách: vào là xin vía được ngay', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /Xin vía hôm nay/ }).first()).toBeVisible();
-    await expect(shown(page, 'Phố Xin Vía 3D')).toBeVisible();
+    await expect(page.getByRole('region', { name: /Phố Xin Vía 3D/ })).toBeVisible();
   });
 
   test('xin vía Thần Tài một chạm: bấm là nổ ngay, hiện lời chúc nổi và liên kết sang Phố 3D; không hộp thoại, không bước xác nhận, không đòi đăng nhập', async ({ page }) => {
@@ -28,8 +28,9 @@ test.describe('khách: vào là xin vía được ngay', () => {
     page.on('request', (r) => { if (r.method() === 'POST' && r.url().includes('/wishes/deity')) calls += 1; });
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.getByRole('button', { name: /Xin vía (hôm|sáng|chiều|tối) nay/ }).first();
-    await hero.click();
-    await hero.click({ force: true });
+    // Hai lần bấm liên tiếp bắn thẳng lên nút (không bấm theo tọa độ: thẻ lời chúc nổi có thể đè lên nút ở một số kích thước màn hình).
+    await hero.dispatchEvent('click');
+    await hero.dispatchEvent('click');
     await expect(page.getByTestId('wish-card')).toBeVisible();
     expect(calls).toBe(1);
   });
@@ -68,7 +69,8 @@ test.describe('khách: vào là xin vía được ngay', () => {
     await page.goto('/diem/quan-cafe-an-nhien', { waitUntil: 'networkidle' });
     for (const tab of ['Bảng tin', 'Giới thiệu', 'Hình ảnh', 'Thành tích']) await expect(page.getByRole('tab', { name: tab })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Xin vía cho quán' })).toBeVisible();
-    await page.getByRole('button', { name: /^Thích/ }).click();
+    // Nút Thích của cửa hàng có kèm số lượt; các nút Thích trên thẻ bài trong tab Bảng tin chỉ có nhãn "Thích".
+    await page.getByRole('button', { name: /^Thích \S/ }).first().click();
     await expect(loginPhoneField(page)).toBeVisible();
     await expect(page.getByRole('dialog')).toContainText('Đăng nhập để thích điểm này');
   });

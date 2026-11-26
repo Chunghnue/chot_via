@@ -2,7 +2,7 @@
 
 import { useCreateReportMutation } from '@chot-via/api-client';
 import { REPORT_REASONS, type ReportReason } from '@chot-via/shared';
-import { Button, Sheet, Textarea, cn } from '@chot-via/ui';
+import { Button, RadioOption, Sheet, Textarea } from '@chot-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { reportDismissed, selectReport } from '@/features/ui/uiSlice';
@@ -40,10 +40,7 @@ export function ReportDialog() {
         <fieldset className="flex flex-col gap-1.5">
           <legend className="mb-1 text-sm font-semibold">{t('reasonLabel')}</legend>
           {REPORT_REASONS.map((r) => (
-            <label key={r} className={cn('flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium', reason === r ? 'border-primary bg-primary-soft' : 'border-border')}>
-              <input type="radio" name="reason" checked={reason === r} onChange={() => setReason(r)} className="accent-primary" />
-              {t(`reasons.${r}`)}
-            </label>
+            <RadioOption key={r} name="reason" checked={reason === r} onChange={() => setReason(r)}>{t(`reasons.${r}`)}</RadioOption>
           ))}
         </fieldset>
         <Textarea value={detail} maxLength={500} onChange={(e) => setDetail(e.target.value)} placeholder={t('detail')} />

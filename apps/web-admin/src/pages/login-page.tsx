@@ -1,5 +1,5 @@
 import { parseApiError, useGetCatalogQuery, useLogoutMutation, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
-import { Button, Card, FieldError, Input, Label, OAuthButtons, toast, useCodeMessage } from '@chot-via/ui';
+import { Button, Card, FieldError, Input, Label, Notice, OAuthButtons, toast, useCodeMessage } from '@chot-via/ui';
 import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -57,7 +57,7 @@ export function LoginPage() {
           <form onSubmit={codeForm.handleSubmit(verify)} className="flex flex-col gap-3" noValidate>
             <Label htmlFor="otp">{t('otp')}</Label>
             <Input id="otp" inputMode="numeric" maxLength={6} autoComplete="one-time-code" className="text-center font-display text-2xl tracking-[0.5em]" {...codeForm.register('code')} />
-            {catalog?.devOtpHint ? <p className="rounded-xl bg-warning-soft px-3 py-2 text-xs font-semibold text-warning">{t('devHint', { code: catalog.devOtpHint })}</p> : null}
+            {catalog?.devOtpHint ? <Notice>{t('devHint', { code: catalog.devOtpHint })}</Notice> : null}
             <FieldError message={error ?? undefined} />
             <Button type="submit" size="lg" loading={verifying}>{t('verify')}</Button>
             <div className="flex justify-between text-sm">

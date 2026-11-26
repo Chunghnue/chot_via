@@ -1,15 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_SETTINGS, getTimeBucket, resolveWishTitleCode, vnDayStart, vnHour, vnWeekStart } from '../src';
+import { DEFAULT_SETTINGS, getTimeBucket, isReflectTime, resolveWishTitleCode, vnDayStart, vnHour, vnWeekStart } from '../src';
 
 const W = DEFAULT_SETTINGS.timeWindows;
 /** Tạo mốc UTC từ giờ Việt Nam (UTC+7). */
 const vn = (iso: string): Date => new Date(`${iso}+07:00`);
 
 describe('khung giờ xin vía (giờ Việt Nam)', () => {
+  // Khung mặc định theo tài liệu chiến lược: sáng 06:00–10:59, chiều 11:00–20:59, tối 21:00–05:59.
   it.each([
-    ['2026-11-19T04:59:00', 'evening'], ['2026-11-19T05:00:00', 'morning'], ['2026-11-19T11:59:00', 'morning'],
-    ['2026-11-19T12:00:00', 'afternoon'], ['2026-11-19T17:59:00', 'afternoon'], ['2026-11-19T18:00:00', 'evening'], ['2026-11-19T00:00:00', 'evening'],
+    ['2026-11-19T00:00:00', 'evening'], ['2026-11-19T05:59:00', 'evening'], ['2026-11-19T06:00:00', 'morning'], ['2026-11-19T10:59:00', 'morning'],
+    ['2026-11-19T11:00:00', 'afternoon'], ['2026-11-19T20:59:00', 'afternoon'], ['2026-11-19T21:00:00', 'evening'],
   ])('%s → %s', (iso, bucket) => { expect(getTimeBucket(vn(iso), W)).toBe(bucket); });
+
+  it('khung "Hôm nay thế nào rồi?" là 17:00–20:59 giờ Việt Nam', () => {
+    expect(isReflectTime(vn('2026-11-19T16:59:00'), W)).toBe(false);
+    expect(isReflectTime(vn('2026-11-19T17:00:00'), W)).toBe(true);
+    expect(isReflectTime(vn('2026-11-19T20:59:00'), W)).toBe(true);
+    expect(isReflectTime(vn('2026-11-19T21:00:00'), W)).toBe(false);
+  });
 
   it('tính theo giờ Việt Nam chứ không theo UTC', () => {
     expect(vnHour(new Date('2026-11-19T23:00:00Z'))).toBe(6);

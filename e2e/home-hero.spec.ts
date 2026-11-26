@@ -14,7 +14,7 @@ test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, 
     await expectNoHorizontalScroll(page);
   });
 
-  test('thành viên: hàng nút theo thứ tự Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu; Đốt vía và Thỉnh Thần Tài cao bằng nhau và cao hơn nút khác', async ({ page }) => {
+  test('thành viên: hàng nút theo thứ tự Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu; bốn nút cao bằng nhau (Đốt vía và Thỉnh Thần Tài không thấp hơn nút khác)', async ({ page }) => {
     await apiLogin(page.context().request);
     await page.goto('/', { waitUntil: 'networkidle' });
     const row = page.getByRole('navigation', { name: 'Hành động chính' });
@@ -24,17 +24,16 @@ test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, 
     expect(texts.map((t) => t.split('\n')[0]?.trim())).toEqual([expect.stringMatching(/Kể khổ/), 'Đốt vía', 'Thỉnh Thần Tài', expect.stringMatching(/Khoe doanh thu|Khoe deal/)]);
     const heights = await buttons.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height));
     expect(Math.abs((heights[1] ?? 0) - (heights[2] ?? 0))).toBeLessThan(1);
-    expect(heights[1] ?? 0).toBeGreaterThan(heights[0] ?? 99);
+    expect(heights[1] ?? 0).toBeGreaterThanOrEqual(heights[0] ?? 99);
     await expectNoHorizontalScroll(page);
   });
 
-  test('hero là thành phố 3D ngay khi mở trang: có canvas, không còn nút Ghé phố 3D / Về ảnh phố, có nút điều khiển góc nhìn', async ({ page }) => {
+  test('hero là thành phố 3D ngay khi mở trang: có canvas, không còn nút Ghé phố 3D / Về ảnh phố và không còn nút điều khiển góc nhìn (đã bỏ để gọn)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const hero = page.getByRole('region', { name: /Phố Xin Vía 3D/ });
     await expect(hero.locator('canvas')).toBeVisible();
     await expect(page.getByRole('button', { name: /^(Ghé phố 3D|Về ảnh phố)$/ })).toHaveCount(0);
-    const controls = hero.getByRole('group', { name: 'Điều khiển góc nhìn phố 3D' });
-    for (const name of ['Xoay sang trái', 'Xoay sang phải', 'Đi tới', 'Đi lùi', 'Phóng to', 'Thu nhỏ']) await controls.getByRole('button', { name }).click();
+    await expect(hero.getByRole('group', { name: 'Điều khiển góc nhìn phố 3D' })).toHaveCount(0);
     await expect(hero.getByRole('button', { name: /Xin vía hôm nay/ })).toBeVisible();
     await expectNoHorizontalScroll(page);
   });

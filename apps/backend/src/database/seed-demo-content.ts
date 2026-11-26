@@ -147,6 +147,18 @@ await db.execute(sql`insert into wish_events (source, guest_hash, target_post_id
     and not exists (select 1 from wish_events e where e.source = 'post' and e.target_post_id = p.id and e.guest_hash = 'demo-seed')`);
 await db.execute(sql`update posts set wish_count = (select count(*)::int from wish_events e where e.source = 'post' and e.target_post_id = posts.id) where is_demo`);
 
+/**
+ * Bốn bài Kể khổ đầu của thiết kế (đăng cách nhau 1 giờ) phải giữ đúng thứ tự "Đang được quan tâm". Bình luận và lượt vía mẫu giờ lấy từ dữ liệu thật nên khác nhau giữa các bài;
+ * chỉnh lượt chia sẻ mẫu của bốn bài này để điểm tương tác gốc ngang nhau, khi đó bài mới hơn xếp trước (điểm giảm dần theo thời gian).
+ */
+const HOT_BASE_SCORE = 800;
+for (const demo of POSTS.filter((p) => p.type === 'story' && !p.pinned && p.hoursAgo < 6)) {
+  const [row] = await db.select({ id: posts.id, reactions: posts.reactionCount, comments: posts.commentCount, wishes: posts.wishCount }).from(posts).where(eq(posts.body, demo.body)).limit(1);
+  if (!row) continue;
+  const shares = Math.max(0, Math.round((HOT_BASE_SCORE - row.reactions - row.comments * 2 - row.wishes * 1.5) / 3));
+  await db.update(posts).set({ shareCount: shares }).where(eq(posts.id, row.id));
+}
+
 const [anyTopic] = await db.select({ id: hotTopics.id }).from(hotTopics).limit(1);
 if (!anyTopic) await db.insert(hotTopics).values(TOPICS.map((title, i) => ({ title, hashtag: null, sortOrder: i })));
 

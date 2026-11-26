@@ -1,5 +1,5 @@
 import * as SwitchPrimitive from '@radix-ui/react-switch';
-import type { InputHTMLAttributes, LabelHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, LabelHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
 import { localizeValidationMessage } from '@chot-via/shared';
 import { cn } from '../lib/cn';
@@ -25,6 +25,16 @@ export function Label({ className, ...rest }: LabelHTMLAttributes<HTMLLabelEleme
 export function FieldError({ message }: { message?: string | undefined }) {
   const shown = localizeValidationMessage(message);
   return shown ? <p role="alert" className="mt-1 text-sm text-danger">{shown}</p> : null;
+}
+
+/** Một lựa chọn trong nhóm chọn một (radio) dạng thẻ viền; chọn thì viền và nền màu chính. */
+export function RadioOption({ checked, onChange, disabled, name, children, className }: { checked: boolean; onChange: () => void; disabled?: boolean; name?: string; children: ReactNode; className?: string }) {
+  return (
+    <label className={cn('flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium', checked ? 'border-primary bg-primary-soft' : 'border-border', disabled && 'cursor-not-allowed opacity-50', className)}>
+      <input type="radio" name={name} checked={checked} disabled={disabled} onChange={onChange} className="accent-primary" />
+      {children}
+    </label>
+  );
 }
 
 export function Switch({ checked, onCheckedChange, label, id }: { checked: boolean; onCheckedChange: (value: boolean) => void; label: string; id?: string }) {

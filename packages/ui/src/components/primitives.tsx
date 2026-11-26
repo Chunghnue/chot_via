@@ -44,6 +44,23 @@ export function buttonClass(props: VariantProps<typeof buttonVariants>, classNam
   return cn(buttonVariants(props), className);
 }
 
+/** Lớp CSS của nút dạng viên thuốc ở chân thẻ/thanh công cụ (bấm được, nền xám nhạt khi rê chuột); `active` tô nền chính. */
+export function pillClass(options?: { active?: boolean; bordered?: boolean }, className?: string): string {
+  return cn(
+    'inline-flex h-10 items-center gap-1.5 rounded-full px-3 transition hover:bg-surface-muted active:scale-95',
+    options?.bordered && 'border border-border bg-surface',
+    options?.active && 'bg-primary-soft text-primary-strong ring-1 ring-primary',
+    className,
+  );
+}
+
+const noticeTones = { warning: 'bg-warning-soft text-warning', info: 'bg-primary-soft text-primary-strong' } as const;
+
+/** Hộp thông báo nhỏ trong biểu mẫu (nhắc đăng nhập, gợi ý mã OTP khi chạy thử…). */
+export function Notice({ tone = 'warning', className, ...rest }: HTMLAttributes<HTMLParagraphElement> & { tone?: keyof typeof noticeTones }) {
+  return <p className={cn('rounded-xl px-3 py-2 text-xs font-semibold', noticeTones[tone], className)} {...rest} />;
+}
+
 export function Card({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('rounded-card bg-surface shadow-card', className)} {...rest} />;
 }
