@@ -50,6 +50,13 @@
       "when": 1795591314517,
       "tag": "0006_mission_reward_points",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795675530229,
+      "tag": "0007_post_engagement_points",
+      "breakpoints": true
     }
   ]
 }

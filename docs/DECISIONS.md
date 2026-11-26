@@ -130,3 +130,15 @@ Giới hạn ký tự (Kể khổ/Khoe 500, bình luận 300, lời chúc gửi 
 - **Trang `/bang-gia` và `/vat-pham`:** chỉ hiển thị (giá giả định), nút mua/đăng ký "Sắp ra mắt"; chưa có thanh toán.
 - **Điểm không đổi:** vẫn chỉ từ 3 hành động vía và điểm thưởng nhiệm vụ; thưởng ghé phố/chia sẻ làm qua nhiệm vụ nếu cần; không đổi điểm lấy vật phẩm.
 - **Hoãn (chủ dự án quyết sau):** mèo may mắn, chuyển sang AIBAT, cổng thanh toán, gói thành viên thật, vật phẩm bán thật, chuỗi ngày/bộ sưu tập/nhật ký/cấp cửa hàng (cần duyệt đổi database).
+
+## Điểm từ tương tác bài viết (26/11/2026, chủ dự án chốt) — bổ sung quy tắc #18
+
+Hệ thống điểm gồm 3 nguồn: (1) +1 từ 3 hành động vía, (2) điểm thưởng nhiệm vụ, (3) **điểm từ tương tác hợp lệ trên bài viết**.
+
+- **Ai nhận:** chủ bài +1 khi người KHÁC (thành viên đăng nhập) tương tác lần đầu với bài. Người tương tác không nhận điểm; chủ bài tự tương tác +0.
+- **Loại tương tác:** 👍 Thích, ❤️ Thả tim, 😆 Haha và 6 biểu tượng gửi vía (Đông khách, Nhiều đơn, Chốt deal, Đạt KPI, Gặp khách hàng tốt, Buôn may bán đắt).
+- **Chống gian lận (phương án A):** mỗi tài khoản mang lại tối đa **1 điểm cho chủ bài trên mỗi bài**, bất kể số loại hay số lần; đổi loại, bỏ rồi thích lại đều +0. Khóa duy nhất `point_ledger(source_post_id, source_actor_id)` chống trùng cả khi gọi đồng thời/gửi lại.
+- **Trần ngày:** mỗi thành viên nhận tối đa **50 điểm/ngày (giờ Việt Nam)** từ nguồn này (`POST_ENGAGEMENT_DAILY_CAP`); chạm trần thì tương tác vẫn hoạt động và đếm lượt, chỉ không thêm điểm (ghi một dòng 0 điểm để không đổi thành điểm vào hôm sau). Điểm nhiệm vụ và 3 hành động vía không tính vào trần này.
+- **Giữ nguyên:** không cộng điểm trực tiếp từ ghé phố hay chia sẻ; không đổi điểm lấy vật phẩm; không thêm nguồn điểm khác ngoài 3 nguồn trên. Tổng điểm (`users.points`) là nguồn cho cấp độ, huy hiệu, xếp hạng nên cập nhật cùng giao dịch.
+- **Database (đã được chủ dự án đồng ý):** migration `0007_post_engagement_points` thêm `point_ledger.source_post_id`, `source_actor_id` và chỉ mục duy nhất. Cộng điểm và ghi lịch sử nằm trong cùng một transaction với lượt tương tác; khóa dòng người dùng của chủ bài khi kiểm trần.
+- Bỏ thích không thu hồi điểm đã nhận.

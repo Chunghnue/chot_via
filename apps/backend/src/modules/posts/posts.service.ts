@@ -19,6 +19,7 @@ import {
 import { LevelsService } from '../gamification/levels.service';
 import { KeywordsService } from '../moderation/keywords.service';
 import { ReportsService } from '../moderation/reports.service';
+import { PointsService } from '../gamification/points.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
 interface PostRow { post: typeof posts.$inferSelect; author: UserRow; wt: typeof wishTypes.$inferSelect | null }
@@ -36,6 +37,7 @@ export class PostsService {
     @Inject(KeywordsService) private readonly keywords: KeywordsService,
     @Inject(ReportsService) private readonly reports: ReportsService,
     @Inject(NotificationsService) private readonly notifications: NotificationsService,
+    @Inject(PointsService) private readonly points: PointsService,
   ) {}
 
   private select() {
@@ -295,6 +297,7 @@ export class PostsService {
       if (type) {
         const prev = await tx.select({ t: reactions.type }).from(reactions).where(and(eq(reactions.postId, postId), eq(reactions.userId, userId))).limit(1);
         await tx.insert(reactions).values({ postId, userId, type }).onConflictDoUpdate({ target: [reactions.postId, reactions.userId], set: { type } });
+        await this.points.awardPostEngagement(tx, post.authorId, userId, postId);
         if (prev.length === 0) {
           fresh = true;
           await tx.update(posts).set({ reactionCount: sql`${posts.reactionCount} + 1` }).where(eq(posts.id, postId));
@@ -328,11 +331,11 @@ export class PostsService {
     return after?.n ?? 0;
   }
 
-  /** Gửi vía động viên cho bài viết: mỗi người gửi mỗi loại vía một lần cho mỗi bài (bấm lại loại đã gửi thì không đổi); không cộng điểm (chỉ 3 nguồn điểm đã chốt). */
+  /** Gửi vía động viên cho bài viết: mỗi người gửi mỗi loại vía một lần cho mỗi bài (bấm lại loại đã gửi thì không đổi); chủ bài được +1 điểm khi người KHÁC (thành viên) tương tác lần đầu với bài (xem `awardPostEngagement`). */
   async wishPost(ctx: RequestContext, postId: string, wishTypeId: string | undefined): Promise<{ wishes: number; wishBreakdown: WishCountDto[] }> {
     const s = await this.settings.get();
     await this.rate.assert(`wish:${ctx.actorKey}`, s.rateLimits.wishPerMinute, 60);
-    await this.assertPublished(postId);
+    const post = await this.assertPublished(postId);
     if (wishTypeId) {
       const [t] = await this.db.select({ id: wishTypes.id }).from(wishTypes).where(and(eq(wishTypes.id, wishTypeId), eq(wishTypes.active, true))).limit(1);
       if (!t) throw new DomainError('WISH_TYPE_INVALID');
@@ -344,6 +347,7 @@ export class PostsService {
       await this.db.transaction(async (tx) => {
         await tx.insert(wishEvents).values({ source: 'post', actorUserId: ctx.user?.id ?? null, guestHash: ctx.user ? null : ctx.guestHash, targetPostId: postId, wishTypeId: wishTypeId ?? null });
         await tx.update(posts).set({ wishCount: sql`${posts.wishCount} + 1` }).where(eq(posts.id, postId));
+        if (ctx.user) await this.points.awardPostEngagement(tx, post.authorId, ctx.user.id, postId);
       });
     }
     const dto = await this.getOne(postId, ctx);

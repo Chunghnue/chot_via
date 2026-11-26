@@ -290,8 +290,11 @@ export const pointLedger = pgTable('point_ledger', {
   /** Điểm thưởng nhiệm vụ: mỗi (người dùng, nhiệm vụ, kỳ) ghi đúng một lần; `periodKey` là ngày bắt đầu kỳ (ISO). */
   missionId: uuid('mission_id').references(() => missions.id, { onDelete: 'cascade' }),
   periodKey: text('period_key'),
+  /** Điểm từ tương tác bài viết: bài được tương tác và người tương tác; mỗi cặp (bài, người) chỉ ghi đúng một dòng (kể cả dòng 0 điểm khi chạm trần ngày) nên không bao giờ cộng trùng. */
+  sourcePostId: uuid('source_post_id').references(() => posts.id, { onDelete: 'cascade' }),
+  sourceActorId: uuid('source_actor_id').references(() => users.id, { onDelete: 'cascade' }),
   createdAt: createdAt(),
-}, (t) => [index('point_ledger_user_idx').on(t.userId, t.action), uniqueIndex('point_ledger_mission_unique').on(t.userId, t.missionId, t.periodKey)]);
+}, (t) => [index('point_ledger_user_idx').on(t.userId, t.action), uniqueIndex('point_ledger_mission_unique').on(t.userId, t.missionId, t.periodKey), uniqueIndex('point_ledger_engagement_unique').on(t.sourcePostId, t.sourceActorId)]);
 
 export const reports = pgTable('reports', {
   id: id(),

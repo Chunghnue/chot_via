@@ -47,7 +47,7 @@ Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900
 6. Test: không viết/chạy test trong lúc làm chức năng; test sinh và chạy một lượt khi xong toàn bộ chức năng, rồi sửa đến khi xanh. Trong lúc làm chỉ `typecheck`.
 7. **Mọi thay đổi cấu trúc database (thêm/sửa cột, thêm bảng, thêm chỉ mục) phải hỏi chủ dự án và được cho phép trước khi làm.**
 8. **RESP-01 – một sản phẩm, một hệ thống:** một codebase giao diện, một API/database, một bộ nghiệp vụ cho mọi thiết bị; không tạo chức năng riêng cho Desktop hay Mobile, chỉ đổi cách bố trí theo kích thước. Trạng thái xin vía của thành viên đồng bộ qua máy chủ.
-9. Điểm chỉ cho thành viên: +1 từ 3 hành động vía (xin vía Thần Tài, gửi vía cho cửa hàng, gửi vía cho sale), và điểm thưởng khi hoàn thành nhiệm vụ (hệ số `reward_points` ở từng nhiệm vụ, admin đặt, thưởng một lần mỗi kỳ; chủ dự án đổi 25/11/2026); không thêm nguồn điểm khác. Không xếp hạng theo tiền, không tick xác minh.
+9. Điểm chỉ cho thành viên: +1 từ 3 hành động vía (xin vía Thần Tài, gửi vía cho cửa hàng, gửi vía cho sale), điểm thưởng khi hoàn thành nhiệm vụ (hệ số `reward_points` ở từng nhiệm vụ, admin đặt, thưởng một lần mỗi kỳ; chủ dự án đổi 25/11/2026), và +1 cho chủ bài khi mỗi người khác tương tác lần đầu với bài (thích, thả tim, haha, 6 biểu tượng gửi vía; mỗi người tối đa +1/bài, tối đa 50 điểm/ngày giờ VN; chốt 26/11/2026); không thêm nguồn điểm khác. Không xếp hạng theo tiền, không tick xác minh.
 10. Làm **đúng như thiết kế** (`docs/DESIGN-REFERENCE.md`); khi thiết kế mâu thuẫn quyết định đã chốt thì theo quyết định và nêu rõ chỗ lệch cho chủ dự án.
 
 ## Điều dễ nhầm
