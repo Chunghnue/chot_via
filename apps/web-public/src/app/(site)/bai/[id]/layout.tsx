@@ -2,7 +2,7 @@ import { viMessages } from '@chot-via/shared/i18n';
 import type { PostDto } from '@chot-via/shared';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { POST_SHARE_IMAGE, postSnippet } from '@/lib/post-share';
+import { postShareImage, postSnippet } from '@/lib/post-share';
 
 const BACKEND = process.env['BACKEND_URL'] ?? 'http://localhost:3001';
 const fill = (text: string, params: Record<string, string>): string => text.replace(/\{(\w+)\}/g, (_, k: string) => params[k] ?? '');
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const brand = viMessages.common.appName;
     const title = fill(viMessages.wish.postShare.title[post.type], { name: post.author.displayName, brand });
     const description = postSnippet(post.body, 140) || viMessages.common.tagline;
-    const image = POST_SHARE_IMAGE[post.type];
+    const image = postShareImage(post);
     return {
       title, description,
       openGraph: { type: 'article', url: `/bai/${id}`, title, description, siteName: brand, images: [{ url: image, width: 1200, height: 630, alt: title }] },

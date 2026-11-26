@@ -167,6 +167,11 @@
       "achievement": "{name} vừa khoe trên {brand}",
       "wish_share": "{name} xin vía trên {brand}"
     },
-    "label": "Chia sẻ bài viết"
+    "label": "Chia sẻ bài viết",
+    "placeDescription": "Ghé phố {brand}, gửi vía cho cửa hàng và nhận chút vía may mắn mỗi ngày."
+  },
+  "shareCards": {
+    "today": "Hôm nay bạn đã xin vía chưa?",
+    "receive": "Thần Tài phát vía – Tự tin hết cỡ!"
   }
 }

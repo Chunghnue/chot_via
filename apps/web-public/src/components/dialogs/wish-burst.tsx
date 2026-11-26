@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShareButtons } from '@/components/common/share-buttons';
+import { HOME_SHARE_VIA } from '@/lib/post-share';
+import { siteUrl } from '@/lib/share';
 import { track } from '@/lib/analytics';
 import { currentCleared, selectCurrentWish } from '@/features/wish/wishSlice';
 import { useDeityWish } from '@/features/wish/use-deity-wish';
@@ -115,7 +117,7 @@ export function WishBurst() {
                 <span className="text-xs font-semibold text-ink-muted">{t('count', { count })}</span>
               </div>
               {current.offline ? <p className="text-xs text-warning">{t('offlineNote')}</p> : null}
-              <ShareButtons text={current.text} card={{ kind: 'receive' }} />
+              <ShareButtons text={current.text} card={{ kind: 'receive' }} link={`${siteUrl()}/?via=${HOME_SHARE_VIA.receive}`} />
               <Link href="/pho-3d" onClick={() => dispatch(currentCleared())} className="w-fit text-sm font-bold text-primary-strong hover:underline">{t('suggest')} →</Link>
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>

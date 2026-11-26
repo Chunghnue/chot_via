@@ -6,6 +6,8 @@ import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShareButtons } from '@/components/common/share-buttons';
+import { HOME_SHARE_VIA } from '@/lib/post-share';
+import { siteUrl } from '@/lib/share';
 import { Burst } from '@/components/dialogs/wish-burst';
 import { useRitual } from '@/features/ritual/use-ritual';
 import { ritualEnded, ritualOfferClosed, ritualPlaying, selectRitual, selectRitualOffer, selectRitualPending } from '@/features/ui/uiSlice';
@@ -156,7 +158,7 @@ function RitualPlay() {
             <div className="flex min-w-0 flex-col gap-1">
               <h3 className="font-display text-xl font-extrabold leading-tight text-wish-strong">{card.title}</h3>
               <p className="text-base font-medium leading-snug text-ink">{card.text}</p>
-              <ShareButtons text={card.text} card={{ kind: 'receive' }} />
+              <ShareButtons text={card.text} card={{ kind: 'receive' }} link={`${siteUrl()}/?via=${HOME_SHARE_VIA.receive}`} />
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>
             <button type="button" aria-label={t('closeAria')} onClick={() => setCard(null)} className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted">
