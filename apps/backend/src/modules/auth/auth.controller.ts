@@ -81,7 +81,9 @@ export class AuthController {
   @Get('oauth/:provider/start')
   async oauthStart(@Res() reply: FastifyReply, @Param(new ZodPipe(OAuthParamSchema)) params: { provider: OAuthProvider }, @Query(new ZodPipe(OAuthStartQuerySchema)) query: { returnTo?: string; app?: 'web' | 'admin' }) {
     const state = await this.oauth.signState(params.provider, this.oauth.safeReturnTo(query.returnTo), query.app ?? 'web');
-    return reply.redirect(await this.oauth.authorizeUrl(params.provider, state));
+    const url = await this.oauth.authorizeUrl(params.provider, state);
+    // Với @Res() không trả lại đối tượng reply (Nest sẽ gửi đè 200 rỗng); chỉ chuyển hướng rồi kết thúc.
+    await reply.status(302).redirect(url);
   }
 
   @Get('oauth/:provider/callback')
@@ -99,14 +101,15 @@ export class AuthController {
     const { returnTo, app } = await this.oauth.readState(input.state, provider);
     const base = app === 'admin' ? env.PUBLIC_ADMIN_URL : env.PUBLIC_WEB_URL;
     const target = (flag: string): string => `${base}${returnTo}${returnTo.includes('?') ? '&' : '?'}${flag}`;
-    if (!input.code || input.error) return reply.redirect(target('login=failed'));
+    if (!input.code || input.error) { await reply.status(302).redirect(target('login=failed')); return; }
     try {
       const profile = await this.oauth.exchange(provider, input.code, input.user);
       const result: SessionResult = await this.auth.loginWithIdentity(provider, profile.providerUserId, profile.name, profile.avatarUrl);
       setRefreshCookie(reply, result.refreshToken);
-      return reply.redirect(target('login=ok'));
+      await reply.status(302).redirect(target('login=ok'));
+      return;
     } catch {
-      return reply.redirect(target('login=failed'));
+      { await reply.status(302).redirect(target('login=failed')); return; }
     }
   }
 }
