@@ -1,6 +1,7 @@
 'use client';
 
 import { useFollowPlaceMutation, useGetPlaceQuery, useGetPostsQuery, useGetProfileQuery, useLikePlaceMutation, useVisitPlaceMutation } from '@chot-via/api-client';
+import { ShareButtons } from '@/components/common/share-buttons';
 import { Avatar, Badge, Button, Card, EmptyState, IconButton, Skeleton, Tabs, cn, compactCount, toast } from '@chot-via/ui';
 import { ArrowLeft, Crown, Heart, Settings, Share2, UserPlus, UserCheck } from 'lucide-react';
 import Link from 'next/link';
@@ -116,6 +117,7 @@ export default function PlacePage() {
             <span aria-hidden>🙏</span>{place.kind === 'sale_office' ? t('sendWishOffice') : t('sendWishPlace')}
           </Button>
         </div>
+        <ShareButtons className="mt-3" text={place.title} card={{ kind: 'visit', link: typeof window === 'undefined' ? '' : window.location.href }} />
         <dl className="mt-4 grid grid-cols-3 divide-x divide-border text-center">
           {([['wishes', compactCount(place.wishCount).toUpperCase()], ['followers', compactCount(place.followCount).toUpperCase()], ['posts', String(owner?.counts.posts ?? 0)]] as const).map(([k, v]) => (
             <div key={k} className="px-2"><dd className="font-display text-2xl font-extrabold text-ink">{v}</dd><dt className="text-xs text-ink-muted">{t(`pageStats.${k}`)}</dt></div>

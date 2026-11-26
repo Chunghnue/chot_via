@@ -50,7 +50,7 @@ export function PlaceIllustration({ modelKey, className }: { modelKey: SceneMode
 }
 
 /** Biểu tượng nhà cung cấp đăng nhập / mạng xã hội dùng chung (web, admin, chân trang): Google, Facebook, Zalo, TikTok. */
-export type BrandKey = 'google' | 'facebook' | 'zalo' | 'tiktok' | 'apple';
+export type BrandKey = 'google' | 'facebook' | 'zalo' | 'tiktok' | 'messenger' | 'apple';
 
 export function BrandIcon({ brand, className }: { brand: BrandKey; className?: string }) {
   if (brand === 'google') {
@@ -65,13 +65,14 @@ export function BrandIcon({ brand, className }: { brand: BrandKey; className?: s
   }
   if (brand === 'facebook') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z" /></svg>;
   if (brand === 'tiktok') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M16.6 5.8c-.9-.6-1.5-1.5-1.7-2.6h-3v12.1c0 1.4-1.1 2.5-2.5 2.5S7 16.7 7 15.3s1.1-2.5 2.5-2.5c.3 0 .5 0 .8.1V9.8c-.3 0-.5-.1-.8-.1-2.9 0-5.3 2.4-5.3 5.6S6.6 21 9.5 21s5.7-2.4 5.7-5.7V9.5c1.1.8 2.4 1.2 3.8 1.2V7.6c-.9 0-1.7-.3-2.4-.8z" /></svg>;
+  if (brand === 'messenger') return <svg viewBox="0 0 24 24" className={cn('size-5 shrink-0 fill-current', className)} aria-hidden><path d="M12 2C6.5 2 2 6.2 2 11.4c0 2.9 1.4 5.5 3.6 7.2V22l3.3-1.8c.9.2 1.9.4 3.1.4 5.5 0 10-4.2 10-9.4S17.500 2 12 2zm1 12.600-2.500-2.700-4.900 2.700 5.400-5.700 2.600 2.700 4.800-2.700z" /></svg>;
   if (brand === 'zalo') return <span aria-hidden className={cn('text-[0.7rem] font-extrabold leading-none', className)}>Zalo</span>;
   return <span aria-hidden className={cn('text-lg leading-none', className)}></span>;
 }
 
 /** Nhóm nút đăng nhập Google/Facebook (và Apple nếu bật) dùng chung cho web và admin. Chưa bật ở máy chủ thì nút vẫn hiện, bấm thì báo `onUnavailable`. */
 export function OAuthButtons({ providers, enabled, hrefFor, label, onUnavailable }: {
-  providers: readonly Exclude<BrandKey, 'zalo' | 'tiktok'>[];
+  providers: readonly Exclude<BrandKey, 'zalo' | 'tiktok' | 'messenger'>[];
   enabled: Partial<Record<string, boolean>> | undefined;
   hrefFor: (provider: string) => string;
   label: (provider: string) => string;

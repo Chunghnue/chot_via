@@ -56,19 +56,23 @@
       "facebook": "Chia sẻ lên Facebook",
       "zalo": "Chia sẻ lên Zalo",
       "tiktok": "Mở TikTok để dán lời chúc",
-      "system": "Chia sẻ bằng ứng dụng khác"
+      "system": "Chia sẻ bằng ứng dụng khác",
+      "messenger": "Chia sẻ qua Messenger",
+      "card": "Tải thẻ ảnh để chia sẻ"
     },
     "copied": {
       "facebook": "Đã sao chép lời chúc và link. Nếu Facebook chưa điền sẵn chữ, bạn dán vào nhé!",
       "zalo": "Đã sao chép lời chúc và link. Nếu Zalo chưa điền sẵn chữ, bạn dán vào nhé!",
-      "tiktok": "Đã sao chép lời chúc và link. Mở TikTok rồi dán vào bài đăng của bạn nhé!"
+      "tiktok": "Đã sao chép lời chúc và link. Mở TikTok rồi dán vào bài đăng của bạn nhé!",
+      "messenger": "Đã sao chép lời chúc và link. Mở Messenger rồi dán vào cuộc trò chuyện nhé!"
     },
     "copyFailed": "Không sao chép được lời chúc, bạn hãy tự chép nhé.",
     "name": {
       "facebook": "Facebook",
       "zalo": "Zalo",
       "tiktok": "TikTok",
-      "system": "Khác"
+      "system": "Khác",
+      "messenger": "Messenger"
     },
     "zalo": {
       "title": "Chia sẻ qua Zalo",
@@ -77,7 +81,9 @@
       "openWeb": "Mở Zalo Web",
       "copyLink": "Sao chép link",
       "linkCopied": "Đã sao chép link Chốt Vía"
-    }
+    },
+    "cardSaved": "Đã lưu thẻ ảnh Chốt Vía",
+    "cardFail": "Chưa tạo được thẻ ảnh, bạn thử lại nhé."
   },
   "ritual": {
     "burn": "Đốt vía",
@@ -124,6 +130,31 @@
         "n3": "Đốt vía xong là hết hạn xui: {place} chốt deal đều tay, doanh thu tăng đều!",
         "n4": "Lửa hồng đón may: {place} hết điều xui, mở hàng là có lộc!"
       }
+    }
+  },
+  "card": {
+    "brand": "Chốt Vía",
+    "tagline": "Bán được thì khoe – Chưa được thì xin vía",
+    "scan": "Quét mã để xin vía",
+    "receive": {
+      "title": "THẦN TÀI ĐÃ CHO VÍA",
+      "l1": "Chúc bạn hôm nay",
+      "l2": "chốt đơn mỏi tay!"
+    },
+    "brag": {
+      "title": "KHOE THÀNH TÍCH",
+      "l1": "Hôm nay đã hoàn thành mục tiêu.",
+      "l2": "Gửi vía cho mọi người!"
+    },
+    "story": {
+      "title": "GÓC KỂ KHỔ",
+      "l1": "Khách bảo chốt rồi,",
+      "l2": "nhưng vẫn chưa chuyển khoản."
+    },
+    "visit": {
+      "title": "GHÉ PHỐ CHỐT VÍA",
+      "l1": "Ghé cửa hàng của tôi",
+      "l2": "và nhận một chút vía may mắn!"
     }
   }
 }

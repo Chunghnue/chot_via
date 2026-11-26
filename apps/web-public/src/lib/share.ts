@@ -6,7 +6,7 @@ export function siteUrl(): string {
   return base.replace(/\/+$/, '');
 }
 
-export type ShareTarget = 'facebook' | 'zalo' | 'tiktok';
+export type ShareTarget = 'facebook' | 'zalo' | 'tiktok' | 'messenger';
 
 /** Nội dung chia sẻ: lời chúc kèm link trang chủ. */
 export function shareMessage(text: string): string {
@@ -24,6 +24,8 @@ export function shareUrl(target: ShareTarget, text: string): string {
     case 'facebook': return `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=${quote}&hashtag=${encodeURIComponent('#ChotVia')}`;
     case 'zalo': return `https://zalo.me/share?u=${link}&t=${quote}`;
     case 'tiktok': return 'https://www.tiktok.com/';
+    // Điện thoại mở thẳng ứng dụng Messenger kèm link; máy tính không có đường chia sẻ nên mở messenger.com (link đã được sao chép để dán).
+    case 'messenger': return isDesktopPointer() ? 'https://www.messenger.com/' : `fb-messenger://share/?link=${link}`;
   }
 }
 

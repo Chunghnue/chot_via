@@ -7,6 +7,7 @@ import { useTranslations } from 'use-intl';
 import { ActionCards, HomeHero } from '@/components/home/hero';
 import { ComposeBar, FeedList, HomeFeedFilters, HomeSortControl } from '@/components/post/feed';
 import { composerOpened } from '@/features/composer/composerSlice';
+import { ReflectCard } from '@/components/home/reflect-card';
 import { CommunityCard, ChallengeTasks, CreateStoreCard, DeityBanner, FeaturedEventCard, MobileShortcutCards } from '@/components/home/home-extras';
 import { QuickWishCard } from '@/components/rail/quick-wish-card';
 import { ChallengeCard } from '@/components/rail/side-cards';
@@ -54,6 +55,7 @@ export default function HomePage() {
         <HomeHero home={home} />
         <ActionCards actions={home?.layout.actions ?? []} />
       </div>
+      <ReflectCard />
       {/* Điện thoại (ảnh thiết kế mobile): banner Xin vía Thần Tài ngay dưới hàng nút. */}
       <div className="md:hidden"><DeityBanner /></div>
       {/* iPad dọc: cột phải của desktop/iPad ngang được đưa vào luồng trang để chức năng không bị mất (RESP-01). */}

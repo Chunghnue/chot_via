@@ -66,6 +66,12 @@ if ((hasLinks?.n ?? 0) === 0) {
   ]);
 }
 
+// Hai trang theo tài liệu chiến lược (bảng giá, vật phẩm 3D): thêm vào chân trang nếu chưa có (kiểm theo đường dẫn nên chạy lặp không nhân đôi, và không đè chỉnh sửa của admin).
+for (const [label, href, order] of [['Bảng giá', '/bang-gia', 4], ['Vật phẩm 3D', '/vat-pham', 5]] as const) {
+  const [has] = await db.select({ n: count() }).from(homeFooterLinks).where(eq(homeFooterLinks.href, href));
+  if ((has?.n ?? 0) === 0) await db.insert(homeFooterLinks).values({ groupName: 'Khám phá', label, href, sortOrder: order });
+}
+
 // Mạng xã hội: liên kết mẫu '#' (bấm không phản ứng). Admin thay bằng địa chỉ thật ở menu "Liên kết chân trang"; chỉ thêm khi nhóm này chưa có.
 const [hasSocial] = await db.select({ n: count() }).from(homeFooterLinks).where(eq(homeFooterLinks.groupName, 'Mạng xã hội'));
 if ((hasSocial?.n ?? 0) === 0) {

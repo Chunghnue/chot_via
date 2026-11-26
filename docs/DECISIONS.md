@@ -122,3 +122,11 @@ Giới hạn ký tự (Kể khổ/Khoe 500, bình luận 300, lời chúc gửi 
 ## Hàng nút trang chủ còn 4 nút (21/11/2026)
 - Hàng nút dưới hero (mọi cỡ màn giống nhau): **Kể khổ → Đốt vía → Thỉnh Thần Tài → Khoe doanh thu / Deal**. Bỏ Ghé phố 3D, Thử thách, Tạo cửa hàng 3D khỏi hàng này (vẫn có ở menu trên, menu trái và thẻ "Tạo cửa hàng 3D"). Đốt vía và Thỉnh Thần Tài cao bằng nhau, nền đỏ cam viền vàng, cao hơn hai nút còn lại; khách chưa đăng nhập chỉ thấy Kể khổ và Khoe doanh thu / Deal.
 - Dữ liệu: `seed-home` bản 5 và bước đầu của `seed.ts` (chạy một lần, đánh dấu `app_settings.home_actions_layout`) đặt thứ tự và tắt 3 nút cũ (`active=false`); admin vẫn sửa được về sau.
+
+## Chiến lược giữ chân và doanh thu — giai đoạn 1 (26/11/2026, theo `ChotVia_Strategy_01-07/CHOT-VIA-RETENTION-MONETIZATION.md`)
+
+- **Khung giờ:** sáng 06–11h, chiều 11–21h, tối 21–06h (mặc định, admin chỉnh được); 17–21h hiện thẻ "Hôm nay thế nào rồi?" mời khoe doanh thu/deal hoặc kể khổ.
+- **Thẻ chia sẻ ảnh** theo 4 mẫu (nhận vía, khoe, kể khổ, mời ghé phố) có QR về đúng trang; thêm Messenger. Chia sẻ bằng menu của thiết bị hoặc tải ảnh.
+- **Trang `/bang-gia` và `/vat-pham`:** chỉ hiển thị (giá giả định), nút mua/đăng ký "Sắp ra mắt"; chưa có thanh toán.
+- **Điểm không đổi:** vẫn chỉ từ 3 hành động vía và điểm thưởng nhiệm vụ; thưởng ghé phố/chia sẻ làm qua nhiệm vụ nếu cần; không đổi điểm lấy vật phẩm.
+- **Hoãn (chủ dự án quyết sau):** mèo may mắn, chuyển sang AIBAT, cổng thanh toán, gói thành viên thật, vật phẩm bán thật, chuỗi ngày/bộ sưu tập/nhật ký/cấp cửa hàng (cần duyệt đổi database).

@@ -51,7 +51,7 @@ export type PublicSettings = z.infer<typeof PublicSettingsSchema>;
 const M = 1_000_000;
 /** Giá trị khởi tạo: mức thành tích theo quyết định C5, còn lại là giá trị mặc định kỹ thuật (admin chỉnh được). */
 export const DEFAULT_SETTINGS: AppSettings = {
-  timeWindows: { morningStartHour: 5, afternoonStartHour: 12, eveningStartHour: 18 },
+  timeWindows: { morningStartHour: 6, afternoonStartHour: 11, eveningStartHour: 21 },
   campaignMode: false,
   showDemoData: true,
   wishCounterTtlHours: 24,

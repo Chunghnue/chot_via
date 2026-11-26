@@ -18,6 +18,7 @@ import { Burst } from '@/components/dialogs/wish-burst';
 import { reportRequested } from '@/features/ui/uiSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { PostContent, kindTone, useKindLabel } from './post-content';
+import { shareCardImage, wrapLines } from '@/lib/share-card';
 
 const REACTION_EMOJI: Record<ReactionType, string> = { like: '👍', love: '❤️', haha: '😆' };
 
@@ -62,6 +63,7 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const [shares, setShares] = useState(post.counts.shares);
   const [poll, setPoll] = useState<PollDto | null>(post.poll);
   const [hidden, setHidden] = useState(false);
+  const tcard = useTranslations('wish.card');
 
   if (hidden) return null;
   const isOwn = post.viewer?.isOwn ?? false;
@@ -81,7 +83,12 @@ export function PostCard({ post, variant = 'default' }: { post: PostDto; variant
   const doShare = async (): Promise<void> => {
     const url = `${window.location.origin}/bai/${post.id}`;
     try {
-      if (typeof navigator.share === 'function') await navigator.share({ url });
+      // Bài Kể khổ / Khoe: chia sẻ thẻ ảnh theo mẫu (kèm QR về đúng bài) nếu thiết bị chia sẻ được ảnh; không thì chia sẻ link như cũ.
+      const kind = post.type === 'story' ? 'story' : post.type === 'achievement' ? 'brag' : null;
+      const probe = new File([''], 'x.png', { type: 'image/png' });
+      if (kind && typeof navigator.canShare === 'function' && navigator.canShare({ files: [probe] })) {
+        await shareCardImage({ brand: tcard('brand'), tagline: tcard('tagline'), scan: tcard('scan'), title: tcard(`${kind}.title`), lines: wrapLines(post.body || tcard(`${kind}.l1`)) }, url, post.body.slice(0, 120));
+      } else if (typeof navigator.share === 'function') await navigator.share({ url });
       else { await navigator.clipboard.writeText(url); toast.success(t('actions.linkCopied')); }
       const r = await share(post.id).unwrap();
       setShares(r.shares);

@@ -156,7 +156,7 @@ function RitualPlay() {
             <div className="flex min-w-0 flex-col gap-1">
               <h3 className="font-display text-xl font-extrabold leading-tight text-wish-strong">{card.title}</h3>
               <p className="text-base font-medium leading-snug text-ink">{card.text}</p>
-              <ShareButtons text={card.text} />
+              <ShareButtons text={card.text} card={{ kind: 'receive' }} />
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>
             <button type="button" aria-label={t('closeAria')} onClick={() => setCard(null)} className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ink-muted hover:bg-surface-muted">

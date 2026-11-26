@@ -115,7 +115,7 @@ export function WishBurst() {
                 <span className="text-xs font-semibold text-ink-muted">{t('count', { count })}</span>
               </div>
               {current.offline ? <p className="text-xs text-warning">{t('offlineNote')}</p> : null}
-              <ShareButtons text={current.text} />
+              <ShareButtons text={current.text} card={{ kind: 'receive' }} />
               <Link href="/pho-3d" onClick={() => dispatch(currentCleared())} className="w-fit text-sm font-bold text-primary-strong hover:underline">{t('suggest')} →</Link>
               <p className="text-[0.68rem] leading-snug text-ink-subtle">{tc('disclaimer')}</p>
             </div>

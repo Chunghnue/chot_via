@@ -14,12 +14,20 @@ export function vnHour(date: Date): number {
   return new Date(date.getTime() + VN_OFFSET_MS).getUTCHours();
 }
 
-/** Sáng 05:00–11:59, chiều 12:00–17:59, tối 18:00–04:59 (SRS mục 5); khung giờ cấu hình được. */
+/** Mặc định theo tài liệu chiến lược giữ chân: sáng 06:00–10:59, chiều 11:00–20:59 (17:00–20:59 là giờ "Hôm nay thế nào rồi?"), tối 21:00–05:59; khung giờ cấu hình được. */
 export function getTimeBucket(date: Date, w: TimeWindows): TimeBucket {
   const h = vnHour(date);
   if (h >= w.morningStartHour && h < w.afternoonStartHour) return 'morning';
   if (h >= w.afternoonStartHour && h < w.eveningStartHour) return 'afternoon';
   return 'evening';
+}
+
+/** Giờ bắt đầu khung "Hôm nay thế nào rồi?" (mời khoe doanh thu, deal hoặc kể khổ); kéo dài tới giờ bắt đầu buổi tối. */
+export const REFLECT_START_HOUR = 17;
+
+export function isReflectTime(date: Date, w: TimeWindows): boolean {
+  const h = vnHour(date);
+  return h >= REFLECT_START_HOUR && h < w.eveningStartHour;
 }
 
 /** Đầu ngày theo giờ Việt Nam, trả về mốc UTC. */

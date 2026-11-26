@@ -110,5 +110,11 @@
     "rewardPoints": "+{points} điểm"
   },
   "copyLink": "Sao chép link Chốt Vía",
-  "linkCopied": "Đã sao chép link Chốt Vía"
+  "linkCopied": "Đã sao chép link Chốt Vía",
+  "reflect": {
+    "title": "Hôm nay thế nào rồi?",
+    "sub": "Khoe doanh thu, deal hoặc kể chuyện không vui, bạn sẽ nhận được động viên.",
+    "brag": "Khoe doanh thu / Deal",
+    "story": "Kể khổ"
+  }
 }

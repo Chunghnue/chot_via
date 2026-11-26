@@ -110,6 +110,11 @@ export function HomeFooter() {
           <span className="font-display text-2xl font-extrabold italic text-primary-strong">Chốt Vía</span>
         </Link>
         <InstallAndShare social={social} stacked />
+        {links.length > 0 ? (
+          <nav aria-label={t('footerLinks')} className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm font-semibold text-ink">
+            {links.map((l) => <Link key={l.href + l.label} href={l.href} className="hover:text-primary-strong">{l.label}</Link>)}
+          </nav>
+        ) : null}
       </div>
     </section>
     <footer className="mx-auto hidden w-full max-w-[1800px] rounded-t-[2.5rem] border-t border-primary/20 bg-linear-to-b from-surface via-primary-soft/70 to-primary-soft px-6 py-6 md:block 3xl:max-w-[2200px]">
