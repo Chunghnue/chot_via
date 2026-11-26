@@ -6,7 +6,7 @@ test.describe('khách: vào là xin vía được ngay', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /Xin vía hôm nay/ }).first()).toBeVisible();
-    await expect(shown(page, 'Phố Chốt Vía 3D')).toBeVisible();
+    await expect(shown(page, 'Phố Xin Vía 3D')).toBeVisible();
   });
 
   test('xin vía Thần Tài một chạm: bấm là nổ ngay, hiện lời chúc nổi và liên kết sang Phố 3D; không hộp thoại, không bước xác nhận, không đòi đăng nhập', async ({ page }) => {
@@ -60,7 +60,7 @@ test.describe('khách: vào là xin vía được ngay', () => {
     await page.getByRole('tab', { name: 'Sale' }).click();
     await expect(shown(page, /Team Sale|Văn phòng Sale/)).toBeVisible();
     await page.getByRole('tab', { name: 'Cộng đồng' }).click();
-    await expect(shown(page, 'TOP THÀNH VIÊN CHỐT VÍA')).toBeVisible();
+    await expect(shown(page, 'TOP THÀNH VIÊN XIN VÍA')).toBeVisible();
     await expectNoHorizontalScroll(page);
   });
 

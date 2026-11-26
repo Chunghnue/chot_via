@@ -25,7 +25,7 @@ function renderStage(extra: Partial<Parameters<typeof StreetStage>[0]> = {}) {
 
 afterEach(cleanup);
 
-describe('cảnh Phố Chốt Vía (StreetStage)', () => {
+describe('cảnh Phố Xin Vía (StreetStage)', () => {
   it('chạm cửa hàng mở đúng điểm; chạm Thần Tài mở popup xin vía', () => {
     const { onSelectPlace, onSelectDeity } = renderStage();
     fireEvent.click(screen.getByRole('button', { name: 'Mở Quán Cafe An Nhiên' }));

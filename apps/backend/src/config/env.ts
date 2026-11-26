@@ -48,7 +48,7 @@ const EnvSchema = z.object({
   APPLE_PRIVATE_KEY: optional,
   SENTRY_DSN: optional,
   SEED_ADMIN_PHONE: z.string().default('0900000000'),
-  SEED_ADMIN_NAME: z.string().default('Quản trị Chốt Vía'),
+  SEED_ADMIN_NAME: z.string().default('Quản trị Xin Vía'),
 }).refine((e) => !(e.NODE_ENV === 'production' && e.SMS_PROVIDER === 'dev'), {
   message: 'SMS_PROVIDER=dev không được dùng ở production (OTP không được ghi log)',
 }).superRefine((e, ctx) => {

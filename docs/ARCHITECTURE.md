@@ -1,4 +1,4 @@
-# Kiến trúc Chốt Vía
+# Kiến trúc Xin Vía
 
 ## Tổng quan
 ```

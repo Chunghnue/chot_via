@@ -80,9 +80,9 @@
       "qrHint": "Quét mã bằng Zalo trên điện thoại để gửi cho bạn bè",
       "openWeb": "Mở Zalo Web",
       "copyLink": "Sao chép link",
-      "linkCopied": "Đã sao chép link Chốt Vía"
+      "linkCopied": "Đã sao chép link Xin Vía"
     },
-    "cardSaved": "Đã lưu thẻ ảnh Chốt Vía",
+    "cardSaved": "Đã lưu thẻ ảnh Xin Vía",
     "cardFail": "Chưa tạo được thẻ ảnh, bạn thử lại nhé."
   },
   "ritual": {
@@ -133,7 +133,7 @@
     }
   },
   "card": {
-    "brand": "Chốt Vía",
+    "brand": "Xin Vía",
     "tagline": "Bán được thì khoe – Chưa được thì xin vía",
     "scan": "Quét mã để xin vía",
     "receive": {
@@ -152,7 +152,7 @@
       "l2": "nhưng vẫn chưa chuyển khoản."
     },
     "visit": {
-      "title": "GHÉ PHỐ CHỐT VÍA",
+      "title": "GHÉ PHỐ XIN VÍA",
       "l1": "Ghé cửa hàng của tôi",
       "l2": "và nhận một chút vía may mắn!"
     }

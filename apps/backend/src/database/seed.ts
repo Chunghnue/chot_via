@@ -131,12 +131,12 @@ await db.insert(challenges).values({
 await db.insert(levels).values([
   { level: 1, name: 'Tân binh', minPoints: 1 }, { level: 2, name: 'Ghé phố', minPoints: 5 }, { level: 3, name: 'Bạn của phố', minPoints: 15 },
   { level: 4, name: 'Gương mặt quen', minPoints: 35 }, { level: 5, name: 'Kết nối cộng đồng', minPoints: 70 }, { level: 6, name: 'Lan tỏa may mắn', minPoints: 120 },
-  { level: 7, name: 'Đại sứ Chốt Vía', minPoints: 200 },
+  { level: 7, name: 'Đại sứ Xin Vía', minPoints: 200 },
 ]).onConflictDoNothing();
 await db.insert(badges).values([
   { code: 'via_dau_tien', name: 'Vía đầu tiên', description: 'Đạt 1 điểm vía.', iconKey: 'clover', conditionType: 'total_points', threshold: 1 },
   { code: 'via_25', name: 'Tích vía', description: 'Đạt 25 điểm vía.', iconKey: 'gold', conditionType: 'total_points', threshold: 25 },
-  { code: 'via_100', name: 'Sao Chốt Vía', description: 'Đạt 100 điểm vía.', iconKey: 'star', conditionType: 'total_points', threshold: 100 },
+  { code: 'via_100', name: 'Sao Xin Vía', description: 'Đạt 100 điểm vía.', iconKey: 'star', conditionType: 'total_points', threshold: 100 },
   { code: 'via_200', name: 'Đại sứ may mắn', description: 'Đạt 200 điểm vía.', iconKey: 'crown', conditionType: 'total_points', threshold: 200 },
   { code: 'xin_via_10', name: 'Ghé Thần Tài', description: 'Xin vía Thần Tài 10 lần.', iconKey: 'sun', conditionType: 'deity_wishes', threshold: 10 },
   { code: 'xin_via_30', name: 'Thân quen Thần Tài', description: 'Xin vía Thần Tài 30 lần.', iconKey: 'sparkles', conditionType: 'deity_wishes', threshold: 30 },

@@ -30,7 +30,7 @@ test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, 
 
   test('hero là thành phố 3D ngay khi mở trang: có canvas, không còn nút Ghé phố 3D / Về ảnh phố, có nút điều khiển góc nhìn', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    const hero = page.getByRole('region', { name: /Phố Chốt Vía 3D/ });
+    const hero = page.getByRole('region', { name: /Phố Xin Vía 3D/ });
     await expect(hero.locator('canvas')).toBeVisible();
     await expect(page.getByRole('button', { name: /^(Ghé phố 3D|Về ảnh phố)$/ })).toHaveCount(0);
     const controls = hero.getByRole('group', { name: 'Điều khiển góc nhìn phố 3D' });
@@ -41,7 +41,7 @@ test.describe('trang chủ theo thiết kế: hero thành phố 3D, hàng nút, 
 
   test('bấm Thần Tài trong cảnh 3D nổ vía ngay (không hộp thoại)', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    const canvas = page.getByRole('region', { name: /Phố Chốt Vía 3D/ }).locator('canvas');
+    const canvas = page.getByRole('region', { name: /Phố Xin Vía 3D/ }).locator('canvas');
     await expect(canvas).toBeVisible();
     await page.waitForTimeout(4000); // chờ ảnh Thần Tài tải vào cảnh
     const box = await canvas.boundingBox();

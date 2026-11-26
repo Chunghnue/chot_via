@@ -1,4 +1,4 @@
-/** Tên miền công khai của Chốt Vía dùng trong link chia sẻ: biến NEXT_PUBLIC_SITE_URL (lúc build) nếu có, không thì chính tên miền đang mở (nên deploy sang server nào cũng đúng). */
+/** Tên miền công khai của Xin Vía dùng trong link chia sẻ: biến NEXT_PUBLIC_SITE_URL (lúc build) nếu có, không thì chính tên miền đang mở (nên deploy sang server nào cũng đúng). */
 const FALLBACK_SITE_URL = 'https://chotvia.divusoft.com';
 export function siteUrl(): string {
   const env = process.env['NEXT_PUBLIC_SITE_URL'];
@@ -21,7 +21,7 @@ export function shareUrl(target: ShareTarget, text: string): string {
   const link = encodeURIComponent(siteUrl());
   const quote = encodeURIComponent(text);
   switch (target) {
-    case 'facebook': return `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=${quote}&hashtag=${encodeURIComponent('#ChotVia')}`;
+    case 'facebook': return `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=${quote}&hashtag=${encodeURIComponent('#XinVia')}`;
     case 'zalo': return `https://zalo.me/share?u=${link}&t=${quote}`;
     case 'tiktok': return 'https://www.tiktok.com/';
     // Điện thoại mở thẳng ứng dụng Messenger kèm link; máy tính không có đường chia sẻ nên mở messenger.com (link đã được sao chép để dán).

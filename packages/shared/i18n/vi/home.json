@@ -1,5 +1,5 @@
 {
-  "heroTitle": "Phố Chốt Vía",
+  "heroTitle": "Phố Xin Vía",
   "heroSubtitle": "Bán được thì khoe – Chưa được thì xin vía",
   "cta": "Xin vía ngay",
   "showcaseCafeSign": "Quán Cafe",
@@ -44,7 +44,7 @@
     "place_wished": "{actor} vừa gửi vía cho {place}",
     "post_published": "{actor} vừa đăng một bài mới"
   },
-  "heroAlt": "Phố Chốt Vía 3D với Thần Tài và các cửa hàng",
+  "heroAlt": "Phố Xin Vía 3D với Thần Tài và các cửa hàng",
   "cards": {
     "street": {
       "title": "Ghé phố 3D",
@@ -79,8 +79,8 @@
   "installApp": "Tải ứng dụng / PWA",
   "tagline": "Cộng đồng người bán hàng",
   "footerLinks": "Liên kết chân trang",
-  "shareApp": "Chia sẻ Chốt Vía",
-  "shareText": "Chốt Vía – cộng đồng giải trí cho chủ kinh doanh và sale. Xin vía Thần Tài mỗi ngày, chốt đơn thần tốc!",
+  "shareApp": "Chia sẻ Xin Vía",
+  "shareText": "Xin Vía – cộng đồng giải trí cho chủ kinh doanh và sale. Xin vía Thần Tài mỗi ngày, chốt đơn thần tốc!",
   "installHelp": "Mở menu trình duyệt và chọn “Thêm vào màn hình chính” để cài ứng dụng.",
   "extras": {
     "deityTitle": "Xin vía Thần Tài",
@@ -100,17 +100,17 @@
     "prev": "Sự kiện trước",
     "next": "Sự kiện sau",
     "until": "Đến {date}",
-    "communityTitle": "Cộng đồng Chốt Vía",
+    "communityTitle": "Cộng đồng Xin Vía",
     "members": "{count} thành viên",
     "communityText": "Nơi chia sẻ, động viên và lan tỏa may mắn cho người kinh doanh!",
     "composerPlaceholder": "Chia sẻ câu chuyện, thành tích, nỗi lòng của bạn…",
     "postNow": "Đăng bài ngay",
     "communityPrefix": "Cộng đồng",
-    "communityBrand": "Chốt Vía",
+    "communityBrand": "Xin Vía",
     "rewardPoints": "+{points} điểm"
   },
-  "copyLink": "Sao chép link Chốt Vía",
-  "linkCopied": "Đã sao chép link Chốt Vía",
+  "copyLink": "Sao chép link Xin Vía",
+  "linkCopied": "Đã sao chép link Xin Vía",
   "reflect": {
     "title": "Hôm nay thế nào rồi?",
     "sub": "Khoe doanh thu, deal hoặc kể chuyện không vui, bạn sẽ nhận được động viên.",

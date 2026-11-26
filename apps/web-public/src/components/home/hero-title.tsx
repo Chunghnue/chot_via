@@ -3,7 +3,7 @@
 import { useId } from 'react';
 
 /**
- * Tiêu đề hero theo ảnh thiết kế ("Phố Chốt Vía 3D"): uốn cong mềm như cầu vồng, các từ đầu trắng ngả xanh ngọc, hai từ cuối ("Vía 3D") vàng chuyển sắc,
+ * Tiêu đề hero theo ảnh thiết kế ("Phố Xin Vía 3D"): uốn cong mềm như cầu vồng, các từ đầu trắng ngả xanh ngọc, hai từ cuối ("Vía 3D") vàng chuyển sắc,
  * hai lớp viền xanh (đậm ngoài, tươi trong) và bóng đổ phía dưới. Vẽ bằng SVG (chữ nằm trên đường cong) nên sắc nét ở mọi cỡ; màu lấy từ token theme.
  */
 export function HeroTitle({ text, className }: { text: string; className?: string }) {

@@ -37,7 +37,7 @@ function Lantern({ p, colors }: { p: V3; colors: SceneColors }) {
   );
 }
 
-/** Cờ phướn "Chốt Vía" (nền đỏ, viền vàng). */
+/** Cờ phướn "Xin Vía" (nền đỏ, viền vàng). */
 function Banner({ p, colors }: { p: V3; colors: SceneColors }) {
   return (
     <group position={p}>

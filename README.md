@@ -1,4 +1,4 @@
-# Chốt Vía
+# Xin Vía
 
 Cộng đồng giải trí cho chủ kinh doanh & nhân viên sale — **Mobile Web / PWA / iPad / Desktop** (P0 + P1).
 Vào là xin vía được ngay, không cần đăng nhập. Chỉ đăng nhập (SMS OTP) khi đăng bài, lưu thành tích, tạo cửa hàng 3D…

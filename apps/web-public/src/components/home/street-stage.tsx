@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useTranslations } from 'use-intl';
 import type { StreetSceneProps } from '@chot-via/scene-3d';
 
-/** Khung cảnh Phố Chốt Vía 3D theo tỷ lệ của thiết kế (rộng : cao = 2,5 : 1). */
+/** Khung cảnh Phố Xin Vía 3D theo tỷ lệ của thiết kế (rộng : cao = 2,5 : 1). */
 export const STAGE_RATIO = 2.5;
 
 interface ShopLayer { key: SceneModelKey; src: string; left: number; width: number; bottom: number; ratio: number }

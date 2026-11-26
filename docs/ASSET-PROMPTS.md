@@ -6,7 +6,7 @@ Dán vào cuộc trò chuyện thiết kế gốc để giữ đúng phong cách
 
 ## Tin nhắn 0 — quy tắc chung (dán trước tiên)
 
-Từ giờ hãy xuất từng ảnh RIÊNG LẺ để dùng làm tài nguyên cho website, giữ NGUYÊN phong cách 3D hoạt hình sáng, tươi, ánh sáng mềm như các ảnh Chốt Vía đã làm. Quy tắc cho mọi ảnh:
+Từ giờ hãy xuất từng ảnh RIÊNG LẺ để dùng làm tài nguyên cho website, giữ NGUYÊN phong cách 3D hoạt hình sáng, tươi, ánh sáng mềm như các ảnh Xin Vía đã làm. Quy tắc cho mọi ảnh:
 1. Nền TRONG SUỐT (PNG alpha). Nếu không xuất được nền trong suốt, dùng nền phẳng một màu xanh lá chuẩn #00FF00, không dùng màu này ở bất kỳ chỗ nào khác trên ảnh.
 2. Độ phân giải lớn nhất có thể, cạnh dài tối thiểu 2048 px, nét, không mờ.
 3. Không chèn chữ thừa, không khung, không bóng đổ ra nền, không watermark.
@@ -14,7 +14,7 @@ Từ giờ hãy xuất từng ảnh RIÊNG LẺ để dùng làm tài nguyên ch
 5. Không dùng mèo thần tài, không có chữ hay logo AIBAT, không vòng quay, không tiền ảo.
 
 ## Ảnh 1 — `than-tai.png`
-Thần Tài đúng như ảnh Thần Tài trên banner "Phố Chốt Vía 3D": mũ đỏ có hai cánh chuồn viền vàng, mặt tròn cười tươi, ria đen, áo đỏ viền vàng, hai tay ôm đĩnh vàng, vài đồng xu vàng bay quanh. Lấy nửa người, nhìn thẳng chính diện. Chỉ có Thần Tài, không nền, không nút, không chữ.
+Thần Tài đúng như ảnh Thần Tài trên banner "Phố Xin Vía 3D": mũ đỏ có hai cánh chuồn viền vàng, mặt tròn cười tươi, ria đen, áo đỏ viền vàng, hai tay ôm đĩnh vàng, vài đồng xu vàng bay quanh. Lấy nửa người, nhìn thẳng chính diện. Chỉ có Thần Tài, không nền, không nút, không chữ.
 
 ## Ảnh 2 — `than-tai-bo-dung.png`
 Cùng nhân vật Thần Tài, nhưng toàn thân, đứng trên bệ vàng tròn nhiều tầng có vòng sáng vàng dưới chân, ôm đĩnh vàng, đồng xu và ngôi sao bay quanh. Nhìn chính diện, dùng đặt giữa quảng trường phố. Không nền.
@@ -23,7 +23,7 @@ Cùng nhân vật Thần Tài, nhưng toàn thân, đứng trên bệ vàng trò
 Cùng nhân vật Thần Tài, nửa người, hai tay giơ nhẹ lên vui mừng, đồng xu vàng và tia sáng tỏa ra xung quanh (dùng cho màn "Thần Tài đã cho vía!"). Không nền.
 
 ## Ảnh 4 — `pho-nen.png`
-Nền toàn cảnh "Phố Chốt Vía 3D", tỷ lệ ngang 3:1 (ví dụ 3072×1024), nhìn từ phía trước. Có: trời xanh, nhà cao tầng phía xa, khinh khí cầu, cây xanh và cây hoa anh đào hai bên, con đường kéo vào xa, quảng trường tròn lát gạch ở giữa phía trước. TUYỆT ĐỐI KHÔNG có cửa hàng nào, không có Thần Tài, không có người, không có chữ. Để trống hai bên đường và quảng trường để tôi ghép cửa hàng và Thần Tài lên sau. Cho phép nền đặc (không cần trong suốt).
+Nền toàn cảnh "Phố Xin Vía 3D", tỷ lệ ngang 3:1 (ví dụ 3072×1024), nhìn từ phía trước. Có: trời xanh, nhà cao tầng phía xa, khinh khí cầu, cây xanh và cây hoa anh đào hai bên, con đường kéo vào xa, quảng trường tròn lát gạch ở giữa phía trước. TUYỆT ĐỐI KHÔNG có cửa hàng nào, không có Thần Tài, không có người, không có chữ. Để trống hai bên đường và quảng trường để tôi ghép cửa hàng và Thần Tài lên sau. Cho phép nền đặc (không cần trong suốt).
 
 ## Ảnh 5 đến 9 — từng cửa hàng (nền trong suốt, nhìn chéo ba phần tư, đứng trên nền đất tối thiểu, có người nhỏ sinh động như ảnh gốc)
 - `shop-quan-cafe.png`: biển gỗ có cốc cà phê "Quán Cafe", mái bạt sọc đỏ trắng, bàn ghế ngoài hiên. Mặt tiền hướng sang PHẢI.

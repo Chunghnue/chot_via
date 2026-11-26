@@ -15,7 +15,7 @@ export type CityViewProps = Omit<CityStreetProps, 'quality' | 'maxFps' | 'active
   sound?: boolean;
 };
 
-/** Thành phố Phố Chốt Vía 3D: cảnh WebGL dựng từ hình tách nền đặt vào không gian ba chiều, kéo xoay / phóng to / đi lại ngay trên trang chủ. */
+/** Thành phố Phố Xin Vía 3D: cảnh WebGL dựng từ hình tách nền đặt vào không gian ba chiều, kéo xoay / phóng to / đi lại ngay trên trang chủ. */
 export function CityView({ fallback, className, onSelectPlace, onSelectDeity, config, resetTick = 0, sound = false, ...rest }: CityViewProps) {
   const capability = useSceneCapability();
   const q = useQuality();

@@ -3,7 +3,7 @@
 Hiện nhân vật là hoạt ảnh bước đi 8 khung hình của chủ dự án (`apps/web-public/public/images/pho/than-tai-di.webp`, phát bởi `packages/scene-3d/src/deity-walker.tsx`). Có file GLB có xương thì chỉ cần điền một cấu hình, không sửa code khác; code tự dùng GLB thay hoạt ảnh.
 
 ## Làm file GLB (một lần)
-1. **Ảnh nguồn:** hình "Thần Tài Chúc mừng" trong `docs/reference/design/Bộ 3D Phố Chốt Vía Rực Rỡ.png` (nên dùng bản độ phân giải cao hơn, tốt nhất có thêm mặt sau và mặt hông).
+1. **Ảnh nguồn:** hình "Thần Tài Chúc mừng" trong `docs/reference/design/Bộ 3D Phố Xin Vía Rực Rỡ.png` (nên dùng bản độ phân giải cao hơn, tốt nhất có thêm mặt sau và mặt hông).
 2. **Tạo model 3D từ ảnh** bằng dịch vụ như Meshy, Tripo hoặc Hunyuan3D (cần tài khoản riêng). Chọn kiểu nhân vật, tư thế chữ A hoặc đứng thẳng nếu có tuỳ chọn; xuất `.glb` hoặc `.fbx`, có texture.
 3. **Gắn xương và animation** bằng Mixamo (cần tài khoản Adobe): tải lên model, đặt các điểm khớp, tải về các clip có kèm skin (định dạng `.fbx`) rồi nối thành một file `.glb` (Blender: nhập các clip, đổi tên, xuất glTF Binary).
 4. **Các clip cần có** (tên có thể khác, điền đúng vào cấu hình): đứng yên (idle), đi bộ (walk, lặp), vẫy tay chúc (wave, một lần), tung vàng (throw, một lần).

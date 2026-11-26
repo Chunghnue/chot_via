@@ -1,4 +1,4 @@
-# Triển khai Chốt Vía (Docker + Caddy)
+# Triển khai Xin Vía (Docker + Caddy)
 
 Một máy chủ Linux chạy Docker. Caddy tự cấp HTTPS; chỉ cổng 80/443 mở ra ngoài.
 

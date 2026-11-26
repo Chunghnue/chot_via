@@ -1,6 +1,6 @@
 {
   "pricing": {
-    "title": "Bảng giá Chốt Vía",
+    "title": "Bảng giá Xin Vía",
     "sub": "Xin vía miễn phí mãi mãi. Kiếm tiền từ trải nghiệm, cá nhân hóa và hệ sinh thái thương mại.",
     "note": "Giá là giả định thử nghiệm, chưa được xác thực.",
     "principle": "Không bán vía, không thu phí để nhận lời chúc tốt hơn, không cam kết trả tiền sẽ tăng may mắn.",
@@ -36,7 +36,7 @@
     "priorityCol": "Ưu tiên",
     "revenue": {
       "premium": {
-        "name": "Chốt Vía Premium",
+        "name": "Xin Vía Premium",
         "price": "19–39k/tháng",
         "p": "P1"
       },

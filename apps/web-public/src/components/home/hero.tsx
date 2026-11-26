@@ -35,7 +35,7 @@ function RegionButton({ slot, onOpen, label }: { slot: StreetSlotDto; onOpen: (p
 }
 
 /**
- * Hero Phố Chốt Vía 3D: luôn là thành phố 3D (cảnh WebGL dựng từ hình tách nền của bộ thiết kế): kéo để xoay đủ 360°, nút +/− để phóng to, nút ▲▼ để đi tới/lui, người đi lại.
+ * Hero Phố Xin Vía 3D: luôn là thành phố 3D (cảnh WebGL dựng từ hình tách nền của bộ thiết kế): kéo để xoay đủ 360°, nút +/− để phóng to, nút ▲▼ để đi tới/lui, người đi lại.
  * Thiết bị không hỗ trợ WebGL thì hiện ảnh phố tĩnh (vùng bấm theo %). Nút Xin vía luôn nổi bật nhất.
  */
 export function HomeHero({ home }: { home: HomeDto | undefined }) {

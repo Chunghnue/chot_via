@@ -1,9 +1,19 @@
-import { count, eq } from 'drizzle-orm';
+import { count, eq, sql } from 'drizzle-orm';
 import type { HomeActionKind, SceneModelKey } from '@chot-via/shared';
 import { createDb } from './database';
 import { appSettings, homeActions, homeFooterLinks, placeCategories, places, sceneTemplates, streetSlots } from './schema';
 
 const { db, close } = createDb();
+
+/** Đổi tên thương hiệu Chốt Vía → Xin Vía trong dữ liệu đã có (bài mẫu, tên tài khoản mẫu, sự kiện, lời chúc…). Chạy mỗi lần deploy, chạy lại không đổi gì thêm. */
+const textColumns = await db.execute(sql`select table_name, column_name from information_schema.columns
+  where table_schema = 'public' and data_type in ('text', 'character varying')
+    and table_name not in ('refresh_tokens', 'auth_identities', 'otp_codes', 'otp_locks', 'audit_logs', 'point_ledger', 'guest_sessions', 'app_settings')`);
+for (const row of textColumns as unknown as { table_name: string; column_name: string }[]) {
+  const t = sql.identifier(row.table_name);
+  const c = sql.identifier(row.column_name);
+  await db.execute(sql`update ${t} set ${c} = replace(replace(replace(${c}, 'Chốt Vía', 'Xin Vía'), 'Chốt vía', 'Xin Vía'), 'CHỐT VÍA', 'XIN VÍA') where ${c} like '%Chốt V%a%' or ${c} like '%CHỐT VÍA%'`);
+}
 
 /** Dữ liệu trang chủ theo thiết kế: file 3D (GLB v2, 3 mức chi tiết), hàng nút hành động, chân trang, các ô cửa hàng trên phố. Chạy lại nhiều lần vẫn an toàn. */
 const SEED_VERSION = 5;

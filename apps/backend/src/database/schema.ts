@@ -429,7 +429,7 @@ export const homeFooterLinks = pgTable('home_footer_links', {
   active: boolean('active').notNull().default(true),
 });
 
-/** Ô cửa hàng trên Phố Chốt Vía: vùng bấm trên ảnh phố (%) và vị trí trong cảnh WebGL. */
+/** Ô cửa hàng trên Phố Xin Vía: vùng bấm trên ảnh phố (%) và vị trí trong cảnh WebGL. */
 export const streetSlots = pgTable('street_slots', {
   id: id(),
   label: text('label').notNull(),

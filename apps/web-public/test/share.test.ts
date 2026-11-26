@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SHARE_SITE_URL, shareMessage, shareUrl } from '../src/lib/share';
 
-describe('chia sẻ Chốt Vía', () => {
+describe('chia sẻ Xin Vía', () => {
   it('nội dung chia sẻ là lời chúc kèm link tên miền cấu hình, không dư dấu gạch cuối', () => {
     expect(SHARE_SITE_URL.endsWith('/')).toBe(false);
     expect(shareMessage('Chúc bạn đông khách')).toBe(`Chúc bạn đông khách\n${SHARE_SITE_URL}`);

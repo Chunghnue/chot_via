@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# Chốt Vía
+# Xin Vía
 
 Cộng đồng giải trí cho chủ kinh doanh và nhân viên sale (Responsive Web + PWA, phạm vi P0 + P1). Cốt lõi: **Xin vía Thần Tài** (không cần đăng nhập), **Phố 3D** (ghé phố – gửi vía – nhận vía), **một bảng tin chung** (Kể khổ + Khoe doanh thu/Deal), bảng xếp hạng, thử thách, hồ sơ, tạo cửa hàng 3D. Không phải phần mềm quản lý bán hàng.
 

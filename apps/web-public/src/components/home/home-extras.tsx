@@ -142,7 +142,7 @@ export function FeaturedEventCard() {
   );
 }
 
-/** "Cộng đồng Chốt Vía" (cột phải máy tính): số thành viên và ảnh vài thành viên nổi bật. */
+/** "Cộng đồng Xin Vía" (cột phải máy tính): số thành viên và ảnh vài thành viên nổi bật. */
 export function CommunityCard() {
   const t = useTranslations('home.extras');
   const { data: home } = useGetHomeQuery();

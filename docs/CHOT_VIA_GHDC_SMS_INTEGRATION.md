@@ -1,12 +1,12 @@
-# Tích hợp GHDC SMS OTP cho Chốt Vía
+# Tích hợp GHDC SMS OTP cho Xin Vía
 
 ## Mục tiêu
 
-Tích hợp nhà cung cấp SMS GHDC vào backend Chốt Vía để luồng gửi và xác
+Tích hợp nhà cung cấp SMS GHDC vào backend Xin Vía để luồng gửi và xác
 minh OTP chạy được end-to-end.
 
 **Nguyên tắc:** giữ nguyên cơ chế tạo OTP, lưu OTP, thời hạn OTP, giới
-hạn gửi và xác minh OTP hiện tại của Chốt Vía. Chỉ bổ sung adapter gửi
+hạn gửi và xác minh OTP hiện tại của Xin Vía. Chỉ bổ sung adapter gửi
 SMS GHDC. Không thay đổi nghiệp vụ xác thực nếu không thật sự cần thiết.
 
 ## Thông tin GHDC đã có
@@ -57,7 +57,7 @@ request/response đã che thông tin bí mật. - Không tự đoán endpoint,
 method, headers, payload hoặc cơ chế auth. - Không thử các endpoint ngẫu
 nhiên trên dịch vụ thật.
 
-### 2. Khảo sát code Chốt Vía hiện tại
+### 2. Khảo sát code Xin Vía hiện tại
 
 Đọc tối thiểu các file: - `apps/backend/src/modules/auth/sms.ts` -
 `apps/backend/src/config/env.ts` -
@@ -120,7 +120,7 @@ OTP ra log ở production. - Nếu gửi SMS thất bại, xử lý theo semanti
 hiện tại; không để người dùng tưởng SMS đã gửi thành công. - Không thay
 đổi nội dung SMS của SpeedSMS/eSMS trừ khi có yêu cầu riêng. - Lưu ý nội
 dung GHDC dùng thương hiệu Aibat theo template được cung cấp. Không tự
-đổi thành Chốt Vía; ghi nhận đây là template được chủ hệ thống cung cấp.
+đổi thành Xin Vía; ghi nhận đây là template được chủ hệ thống cung cấp.
 
 ## Cấu hình `.env.production`
 
@@ -179,7 +179,7 @@ thật:
 4.  Kiểm tra nội dung SMS nhận được đúng template đã đăng ký.
 5.  Thử nhập OTP đúng và xác nhận thành công.
 6.  Thử OTP sai/hết hạn và xác nhận bị từ chối như behavior hiện tại.
-7.  Thử tình huống GHDC từ chối hoặc timeout; API Chốt Vía không được
+7.  Thử tình huống GHDC từ chối hoặc timeout; API Xin Vía không được
     báo gửi thành công giả.
 8.  Không gửi nhiều SMS lặp lại trong quá trình test.
 
@@ -208,7 +208,7 @@ cứu delivery, kiểm tra thêm theo tài liệu/code cũ.
 Chia thành các bước nhỏ và báo cáo sau mỗi bước:
 
 1.  **Khảo sát:** tìm API contract GHDC trong code cũ; đọc code auth
-    Chốt Vía. Chưa sửa file.
+    Xin Vía. Chưa sửa file.
 2.  **Đề xuất:** báo endpoint/method/auth/payload/response đã tìm thấy
     và danh sách file sẽ sửa. Chờ người dùng xác nhận.
 3.  **Triển khai:** sửa cấu hình và provider GHDC; không deploy.
@@ -227,7 +227,7 @@ Sau mỗi bước, dừng và chờ người dùng xác nhận mới chuyển b�
 ## Tiêu chí hoàn thành
 
 -   `SMS_PROVIDER=ghdc` được validate và khởi tạo provider đúng.
--   OTP được tạo/xác minh bởi logic hiện tại của Chốt Vía.
+-   OTP được tạo/xác minh bởi logic hiện tại của Xin Vía.
 -   GHDC nhận đúng request theo API contract đã xác minh.
 -   SMS tới điện thoại với đúng template.
 -   Các provider cũ vẫn hoạt động.

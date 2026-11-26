@@ -42,7 +42,7 @@ function qrRects(value: string, size: number, x0: number, y0: number): string {
   return `<rect x="${x0}" y="${y0}" width="${size}" height="${size}" rx="24" fill="#fff" stroke="#0c875c" stroke-width="4"/><path d="${d}" fill="#075c40"/>`;
 }
 
-/** SVG thẻ 1080×1350 đúng bố cục mẫu: khung trắng viền xanh, tên "Chốt Vía", tiêu đề, hai dòng nội dung, mã QR về đúng trang, khẩu hiệu. */
+/** SVG thẻ 1080×1350 đúng bố cục mẫu: khung trắng viền xanh, tên "Xin Vía", tiêu đề, hai dòng nội dung, mã QR về đúng trang, khẩu hiệu. */
 export function buildCardSvg(t: ShareCardText, link: string): string {
   const [l1 = '', l2 = ''] = t.lines;
   const host = link.replace(/^https?:\/\//, '').slice(0, 44);

@@ -47,7 +47,7 @@ function MonitorMark() {
   );
 }
 
-/** Nút "Tải ứng dụng / PWA" (hộp cài đặt của trình duyệt, hoặc hướng dẫn thêm vào màn hình chính khi trình duyệt không có hộp cài như Safari) và khối "Chia sẻ Chốt Vía" với biểu tượng mạng xã hội; dùng ở chân trang máy tính và thẻ cuối trang điện thoại. */
+/** Nút "Tải ứng dụng / PWA" (hộp cài đặt của trình duyệt, hoặc hướng dẫn thêm vào màn hình chính khi trình duyệt không có hộp cài như Safari) và khối "Chia sẻ Xin Vía" với biểu tượng mạng xã hội; dùng ở chân trang máy tính và thẻ cuối trang điện thoại. */
 function InstallAndShare({ social, stacked = false }: { social: readonly { label: string; href: string }[]; stacked?: boolean }) {
   const t = useTranslations('home');
   const shareTo = useShareTo();
@@ -72,7 +72,7 @@ function InstallAndShare({ social, stacked = false }: { social: readonly { label
         <p className="text-sm font-semibold text-ink">{t('shareApp')}</p>
         <div className="flex items-center gap-4">
           {social.map((s) => {
-            // Liên kết mẫu '#': chưa có địa chỉ thật thì bấm là chia sẻ Chốt Vía lên mạng đó (sao chép nội dung + mở cửa sổ chia sẻ).
+            // Liên kết mẫu '#': chưa có địa chỉ thật thì bấm là chia sẻ Xin Vía lên mạng đó (sao chép nội dung + mở cửa sổ chia sẻ).
             if (s.href === '#') return <button key={s.label} type="button" aria-label={s.label} title={s.label} className="transition hover:scale-110 active:scale-95" onClick={() => { const target = shareTarget(s.label); if (target) void shareTo(target, t('shareText')); }}><FooterSocialIcon label={s.label} /></button>;
             return (
               <a key={s.href + s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} title={s.label} className="transition hover:scale-110 active:scale-95">
@@ -89,7 +89,7 @@ function InstallAndShare({ social, stacked = false }: { social: readonly { label
 }
 
 /**
- * Chân trang của trang chủ theo ảnh thiết kế (iPad ngang và máy tính): logo + khẩu hiệu, hàng liên kết, nút "Tải ứng dụng / PWA", "Chia sẻ Chốt Vía" với biểu tượng mạng xã hội.
+ * Chân trang của trang chủ theo ảnh thiết kế (iPad ngang và máy tính): logo + khẩu hiệu, hàng liên kết, nút "Tải ứng dụng / PWA", "Chia sẻ Xin Vía" với biểu tượng mạng xã hội.
  * Liên kết và mạng xã hội do admin nhập (menu "Liên kết chân trang"); chưa nhập thì không hiện.
  */
 export function HomeFooter() {
@@ -102,12 +102,12 @@ export function HomeFooter() {
   }, [data]);
   return (
     <>
-    {/* Điện thoại: chân trang đầy đủ bị ẩn nên có thẻ riêng ngay cuối trang chủ để cài ứng dụng và chia sẻ Chốt Vía. */}
+    {/* Điện thoại: chân trang đầy đủ bị ẩn nên có thẻ riêng ngay cuối trang chủ để cài ứng dụng và chia sẻ Xin Vía. */}
     <section aria-label={t('installApp')} className="mx-auto w-full px-3 pb-28 md:hidden">
       <div className="flex flex-col items-center gap-3 rounded-3xl bg-linear-to-b from-surface to-primary-soft p-4 shadow-card ring-1 ring-surface">
         <Link href="/" className="flex items-center gap-2" aria-label={tn('home')}>
           <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-12 object-contain" draggable={false} />
-          <span className="font-display text-2xl font-extrabold italic text-primary-strong">Chốt Vía</span>
+          <span className="font-display text-2xl font-extrabold italic text-primary-strong">Xin Vía</span>
         </Link>
         <InstallAndShare social={social} stacked />
         {links.length > 0 ? (
@@ -122,7 +122,7 @@ export function HomeFooter() {
         <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={tn('home')}>
           <img loading="lazy" decoding="async" src="/images/logo-than-tai.webp" alt="" aria-hidden className="size-16 object-contain" draggable={false} />
           <span className="flex flex-col leading-tight">
-            <span className="font-display text-3xl font-extrabold italic text-primary-strong">Chốt Vía</span>
+            <span className="font-display text-3xl font-extrabold italic text-primary-strong">Xin Vía</span>
             <span className="text-[0.8rem] font-bold italic tracking-tight text-ink">{t('tagline')}</span>
           </span>
         </Link>

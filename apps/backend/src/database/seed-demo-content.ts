@@ -25,12 +25,12 @@ const USERS: DemoUser[] = [
   { name: 'Nhà Hàng Sông Xanh', role: 'owner', job: 'Chủ quán', province: 'Cần Thơ', avatar: '/images/av-04.webp' },
   { name: 'Đức Hoàng', role: 'sale', job: 'Sale', province: 'Hà Nội', avatar: '/images/av-07.webp' },
   { name: 'Tiến Nguyễn', role: 'owner', job: 'Chủ cửa hàng', province: 'Đà Nẵng', avatar: '/images/av-10.webp' },
-  { name: 'Chốt Vía', role: null, job: null, province: 'Hà Nội', avatar: '/images/logo-than-tai.webp' },
+  { name: 'Xin Vía', role: null, job: null, province: 'Hà Nội', avatar: '/images/logo-than-tai.webp' },
 ];
 
 const POSTS: DemoPost[] = [
   { author: 'Lan Anh', type: 'story', metric: null, body: 'Chạy KPI cuối năm mà khách cứ hỏi giá, haizzz… Xin vía chốt đơn ạ! 🙏', hashtags: ['kekho'], image: { url: '/images/bai-ke-kho.webp', w: 1000, h: 750 }, pinned: true, hoursAgo: 2.05, reactions: 326, comments: 89, shares: 0 },
-  { author: 'Tuấn Anh', type: 'achievement', metric: 'revenue', body: 'Hôm nay quán cafe đạt 15.8 triệu! Cảm ơn cộng đồng Chốt Vía 🙏', hashtags: ['doanhthu'], image: { url: '/images/bai-khoe-doanh-thu.webp', w: 1000, h: 750 }, pinned: true, hoursAgo: 3.05, reactions: 512, comments: 120, shares: 0 },
+  { author: 'Tuấn Anh', type: 'achievement', metric: 'revenue', body: 'Hôm nay quán cafe đạt 15.8 triệu! Cảm ơn cộng đồng Xin Vía 🙏', hashtags: ['doanhthu'], image: { url: '/images/bai-khoe-doanh-thu.webp', w: 1000, h: 750 }, pinned: true, hoursAgo: 3.05, reactions: 512, comments: 120, shares: 0 },
   { author: 'Đặng Văn Nam', type: 'achievement', metric: 'deal', body: 'Chốt deal 800 triệu cho chuỗi 5 cửa hàng F&B. Xin vía cho tháng sau nhé! 🔥', hashtags: ['khoedeal'], image: { url: '/images/bai-khoe-deal.webp', w: 1000, h: 750 }, pinned: true, hoursAgo: 4.05, reactions: 420, comments: 78, shares: 0 },
   { author: 'Thu Hương', type: 'story', metric: null, body: 'Hàng về nhiều mà khách chưa tới, xin vía đông khách cuối tuần! 💚', hashtags: ['kekho'], image: { url: '/images/hp-dong-cua.webp', w: 1000, h: 750 }, pinned: true, hoursAgo: 5.05, reactions: 298, comments: 65, shares: 0 },
   { author: 'Lan Sale', type: 'story', metric: null, body: 'Khách xem 3 lần, hỏi giá 5 lần, cuối cùng "để em suy nghĩ"… chắc lại mất khách rồi 😭', hashtags: ['kekho'], image: { url: '/images/kk-de-em-suy-nghi.webp', w: 1000, h: 750 }, hoursAgo: 2.4, reactions: 248, comments: 86, shares: 107 },
@@ -38,7 +38,7 @@ const POSTS: DemoPost[] = [
   { author: 'Mr. Đức', type: 'story', metric: null, body: 'Chạy 100 cuộc gọi, chốt được 1 deal…\nThôi cũng vui rồi 😅', hashtags: ['kekho'], image: { url: '/images/kk-chuyen-ban-hang.webp', w: 1000, h: 750 }, hoursAgo: 4.4, reactions: 176, comments: 45, shares: 158 },
   { author: 'Nhà Hàng Sông Xanh', type: 'story', metric: null, body: 'Cuối tuần khách đông quá, cảm ơn cộng đồng\nđã luôn gửi vía ❤️', hashtags: ['kekho'], image: { url: '/images/hp-mo-cua.webp', w: 1000, h: 750 }, hoursAgo: 5.4, reactions: 289, comments: 67, shares: 106 },
   { author: 'Lan Anh', type: 'achievement', metric: 'revenue', body: 'Cuối tuần quán đông khách hơn mọi hôm, cảm ơn mọi người đã gửi vía! 🙏', hashtags: ['doanhthu'], image: { url: '/images/bai-khoe-doanh-thu.webp', w: 900, h: 675 }, hoursAgo: 40, reactions: 188, comments: 24, shares: 0 },
-  { author: 'Lan Anh', type: 'achievement', metric: 'milestone', body: 'Quán tròn 1 năm tuổi, cảm ơn cộng đồng Chốt Vía đã đồng hành ☕', hashtags: ['cotmoc'], image: { url: '/images/bia-quan-cafe.webp', w: 1400, h: 788 }, hoursAgo: 90, reactions: 240, comments: 31, shares: 0 },
+  { author: 'Lan Anh', type: 'achievement', metric: 'milestone', body: 'Quán tròn 1 năm tuổi, cảm ơn cộng đồng Xin Vía đã đồng hành ☕', hashtags: ['cotmoc'], image: { url: '/images/bia-quan-cafe.webp', w: 1400, h: 788 }, hoursAgo: 90, reactions: 240, comments: 31, shares: 0 },
   { author: 'Lan Sale', type: 'story', metric: null, body: 'Tuần này gọi 80 khách, 3 người bắt máy, 1 người cúp ngang 😅', hashtags: ['kekho'], image: null, hoursAgo: 72, reactions: 500, comments: 30, shares: 0 },
   { author: 'Lan Sale', type: 'story', metric: null, body: 'Báo giá xong khách im re, hôm sau hỏi lại "còn hàng không em?" 😂', hashtags: ['kekho'], image: null, hoursAgo: 120, reactions: 452, comments: 22, shares: 0 },
   { author: 'Đức Hoàng', type: 'story', metric: null, body: 'Hẹn khách 3 lần, lần nào cũng "để mai anh báo lại" 😭', hashtags: ['kekho'], image: null, hoursAgo: 70, reactions: 560, comments: 18, shares: 0 },
@@ -46,7 +46,7 @@ const POSTS: DemoPost[] = [
   { author: 'Tiến Nguyễn', type: 'story', metric: null, body: 'Nhập hàng nhiều quá, kho đầy mà khách chưa thấy đâu 😮‍💨', hashtags: ['kekho'], image: { url: '/images/kk-dong-don.webp', w: 1000, h: 750 }, hoursAgo: 140, reactions: 720, comments: 25, shares: 0 },
   { author: 'Thu Hương', type: 'wish_share', metric: null, body: 'Xin vía đông khách cuối tuần cho cả nhà nhé! 🙏', hashtags: ['xinvia'], image: null, hoursAgo: 6, reactions: 210, comments: 18, shares: 4 },
   { author: 'Tiến Nguyễn', type: 'wish_share', metric: null, body: 'Sáng nay xin vía Thần Tài, mong hôm nay chốt đơn thật nhiều ✨', hashtags: ['xinvia'], image: null, hoursAgo: 9, reactions: 164, comments: 11, shares: 2 },
-  { author: 'Chốt Vía', type: 'story', metric: null, body: 'Bạn thấy tháng này bán hàng thế nào?', hashtags: ['binhchon'], image: null, hoursAgo: 30, reactions: 12, comments: 3, shares: 0, poll: ['Bán tốt, quá đỉnh! 🔥', 'Bình thường thôi 😐', 'Khó khăn quá 😟'] },
+  { author: 'Xin Vía', type: 'story', metric: null, body: 'Bạn thấy tháng này bán hàng thế nào?', hashtags: ['binhchon'], image: null, hoursAgo: 30, reactions: 12, comments: 3, shares: 0, poll: ['Bán tốt, quá đỉnh! 🔥', 'Bình thường thôi 😐', 'Khó khăn quá 😟'] },
 ];
 
 const TOPICS = [
@@ -90,7 +90,7 @@ for (const demo of POSTS) {
   }
 }
 
-// Điểm vía mẫu cho vài tài khoản có ảnh đại diện để mục "Cộng đồng Chốt Vía" và tab Cộng đồng có người nổi bật (chỉ đặt khi tài khoản đó chưa có điểm).
+// Điểm vía mẫu cho vài tài khoản có ảnh đại diện để mục "Cộng đồng Xin Vía" và tab Cộng đồng có người nổi bật (chỉ đặt khi tài khoản đó chưa có điểm).
 const SAMPLE_POINTS: [string, number][] = [['Lan Anh', 98], ['Tuấn Anh', 91], ['Thu Hương', 84], ['Đặng Văn Nam', 77], ['Lan Sale', 70], ['Đức Hoàng', 63]];
 for (const [name, points] of SAMPLE_POINTS) {
   const id = ids.get(name);

@@ -35,7 +35,7 @@ export function useShareTo(): (target: ShareTarget, text: string) => Promise<voi
 }
 
 /**
- * Chia sẻ lời chúc kèm link Chốt Vía. Bấm một mạng: sao chép "lời chúc + link" rồi mở cửa sổ chia sẻ của mạng đó (chưa đăng nhập thì mạng tự hiện màn đăng nhập),
+ * Chia sẻ lời chúc kèm link Xin Vía. Bấm một mạng: sao chép "lời chúc + link" rồi mở cửa sổ chia sẻ của mạng đó (chưa đăng nhập thì mạng tự hiện màn đăng nhập),
  * nên nếu mạng không nhận chữ thì người dùng dán được. Điện thoại có thêm nút mở menu chia sẻ của hệ điều hành. Không cộng điểm, không ghi vào cơ sở dữ liệu.
  */
 export interface ShareCardSpec {

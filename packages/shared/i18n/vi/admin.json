@@ -1,5 +1,5 @@
 {
-  "appName": "Chốt Vía – Quản trị",
+  "appName": "Xin Vía – Quản trị",
   "nav": {
     "dashboard": "Tổng quan",
     "reports": "Báo cáo & kiểm duyệt",
@@ -37,7 +37,7 @@
   },
   "login": {
     "title": "Đăng nhập quản trị",
-    "subtitle": "Dành cho quản trị viên và kiểm duyệt viên Chốt Vía.",
+    "subtitle": "Dành cho quản trị viên và kiểm duyệt viên Xin Vía.",
     "phone": "Số điện thoại",
     "sendOtp": "Gửi mã OTP",
     "otp": "Mã OTP 6 số",
