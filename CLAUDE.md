@@ -36,6 +36,8 @@ pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-vi
 
 `pnpm test` chạy Vitest theo projects (`packages/shared`, `apps/backend`, `apps/web-public`, mỗi nơi có `vitest.config.mts` riêng); Playwright có `e2e/global-setup.ts`/`global-teardown.ts`. Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck` (đã gồm kiểm giới hạn 300 dòng).
 
+**Điều kiện chạy test:** backend/E2E cần Postgres nhúng đang chạy (`pnpm db:embedded`, cổng 5432); global-setup tự tạo lại DB `chotvia_test` và bật API test ở cổng 3101 (E2E thêm web 3100, admin 5273, bản prod 3300), không đụng DB dev. Playwright mặc định trỏ tới `chrome.exe` của Windows, trên macOS/Linux phải đặt `PW_CHROMIUM` (vd. `PW_CHROMIUM="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" pnpm test:e2e`). Dòng "skipped" trong E2E là `test.skip` theo bề rộng màn hình (mỗi test vẫn chạy ở project phù hợp), không phải lỗi. `next build` (E2E prod) tự sửa `apps/web-public/next-env.d.ts`: hoàn lại bằng `git checkout` trước khi commit.
+
 Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900000000`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
 
 ## Quy tắc bắt buộc
