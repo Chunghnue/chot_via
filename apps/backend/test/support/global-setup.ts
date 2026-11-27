@@ -32,7 +32,7 @@ const isWindows = process.platform === 'win32';
 /** Tắt server test còn sót từ lần chạy trước (nếu không, bộ test sẽ dùng lại bản cũ và bỏ qua mã mới). */
 function freePort(): void {
   if (isWindows) return;
-  const pids = spawnSync(`lsof -ti :${API_PORT}`, { shell: true, encoding: 'utf8' }).stdout.split('\n').map((x) => x.trim()).filter(Boolean);
+  const pids = spawnSync(`lsof -ti tcp:${API_PORT} -sTCP:LISTEN`, { shell: true, encoding: 'utf8' }).stdout.split('\n').map((x) => x.trim()).filter(Boolean);
   for (const pid of pids) spawnSync(`kill -9 ${pid}`, { shell: true, stdio: 'ignore' });
 }
 
