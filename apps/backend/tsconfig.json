@@ -8,5 +8,5 @@
     "lib": ["ES2023"],
     "jsx": "preserve"
   },
-  "include": ["src", "scripts", "drizzle.config.ts"]
+  "include": ["src", "scripts", "test", "drizzle.config.ts"]
 }
