@@ -13,13 +13,14 @@ backend (NestJS) ─ postgres (volume postgres_data) ─ redis ─ volume upload
 1. Máy chủ Linux (khuyến nghị ≥ 2 vCPU, 2 GB RAM) có **Docker + Docker Compose**.
 2. Hai tên miền (web và admin): trỏ bản ghi **A/AAAA** về IP máy chủ **trước** khi chạy (Caddy cần xác thực tên miền để lấy chứng chỉ).
 3. Mở cổng **80, 443 (TCP và UDP)** trên tường lửa.
-4. **SpeedSMS** (bắt buộc): ở production backend không cho dùng mã OTP dev nên không có khóa SMS thì không ai đăng nhập được. Dự phòng: eSMS.
+4. **Dịch vụ SMS OTP** (bắt buộc): ở production backend không cho dùng mã OTP dev (`SMS_PROVIDER=dev` bị từ chối) nên không có khóa SMS thì không ai đăng nhập được. Chọn một trong `speedsms`, `esms`, `ghdc`.
+5. **Số điện thoại thật của quản trị viên đầu tiên** (điền vào `SEED_ADMIN_PHONE`). Không để mặc định `0900000000`: đó là số dev, SMS không tới được, bạn sẽ không đăng nhập được admin.
 
 ## Cài đặt lần đầu
 ```bash
 git clone <repo> /opt/chot-via && cd /opt/chot-via      # hoặc chép mã nguồn lên máy chủ
 cp .env.production.example .env.production
-nano .env.production            # điền WEB_DOMAIN, ADMIN_DOMAIN, mật khẩu, khóa SMS...
+nano .env.production            # điền WEB_DOMAIN, ADMIN_DOMAIN, POSTGRES_PASSWORD, JWT_ACCESS_SECRET, SEED_ADMIN_PHONE, SMS_PROVIDER và khóa SMS...
 # Tạo bí mật:  openssl rand -hex 32   (dùng cho POSTGRES_PASSWORD và JWT_ACCESS_SECRET)
 
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
@@ -29,7 +30,7 @@ Thứ tự tự động: Postgres → `migrate` (tạo bảng, nạp danh mục 
 Kiểm tra: `docker compose --env-file .env.production -f docker-compose.prod.yml ps` (tất cả `running`/`healthy`, riêng `migrate` là `exited 0`) rồi mở `https://<WEB_DOMAIN>` và `https://<ADMIN_DOMAIN>`.
 
 ## Việc làm ngay sau khi chạy
-1. Đăng nhập admin bằng OTP gửi tới `SEED_ADMIN_PHONE`.
+1. Kiểm tra admin đã được tạo: `docker compose --env-file .env.production -f docker-compose.prod.yml logs migrate | grep "Tài khoản quản trị"` phải in ra số của bạn (in `(không có)` nghĩa là `SEED_ADMIN_PHONE` trống hoặc sai định dạng, chưa có admin nào). Rồi đăng nhập admin bằng OTP gửi tới số đó. `SEED_ADMIN_PHONE` chỉ có tác dụng ở lần tạo đầu: đổi sau đó không đổi admin đã tạo.
 2. Vào **Cài đặt**: kiểm tra giới hạn, **tắt "Hiện dữ liệu mẫu"** khi chạy thật (dữ liệu mẫu không được nạp ở production vì `seed-demo-content` chỉ dùng cho dev).
 3. Nhập **Cấp độ / Huy hiệu** (xem `docs/CAN-CHU-DU-AN-CUNG-CAP.md`), cửa hàng thật, chủ đề hot.
 4. Thay ảnh/ bảng màu chính thức khi có (cần build lại ảnh `web`).
@@ -49,7 +50,7 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d --bui
   ```
 
 ## Biến môi trường
-Xem `.env.production.example` (có chú thích). Biến `NEXT_PUBLIC_*` được đưa vào mã lúc **build**, nên đổi chúng cần `up -d --build`.
+Xem `.env.production.example` (có chú thích; các biến compose tự đặt thì không khai báo). Biến `NEXT_PUBLIC_*` được đưa vào mã lúc **build**, nên đổi chúng cần `up -d --build`.
 
 ## Lưu ý bảo mật
 - Không đưa `.env.production` vào git. Database/Redis không mở cổng ra ngoài.
