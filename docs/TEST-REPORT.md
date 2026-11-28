@@ -15,7 +15,7 @@ Chạy **một lượt toàn bộ** sau khi hoàn tất chức năng, sửa lỗ
 Tổng: **278 test xanh** (149 đơn vị/API/giao diện + 127 E2E + 2 E2E production), 0 lỗi, 0 lỗi hydrate trong log lần chạy cuối (đã thêm test hydrate cho thành viên đã đăng nhập).
 
 ## Cách chạy
-- `pnpm test` — shared + backend + web-public (khoảng 15 giây). Tự tạo lại database `chotvia_test` (migration + seed), bật API thật ở cổng 3101; không đụng dữ liệu dev.
+- `pnpm test` — shared + backend + web-public (khoảng 15 giây). Tự tạo lại database `xinvia_test` (migration + seed), bật API thật ở cổng 3101; không đụng dữ liệu dev.
 - `pnpm test:e2e` — Playwright, dựng web dev (3100), admin (5273) và API test (3101); 4 dự án: mobile 390, iPad dọc 820, iPad ngang 1180, desktop 1440.
 - `pnpm test:e2e:prod` — build bản production và kiểm PWA (manifest, icon, đăng ký service worker, mở app khi mất mạng và xin vía bằng lời chúc dự phòng).
 - `pnpm test:all` — cả ba. Cần Postgres nhúng đang chạy (`pnpm db:embedded`) và Chromium của Playwright (đường dẫn đặt qua `PW_CHROMIUM` nếu khác mặc định).

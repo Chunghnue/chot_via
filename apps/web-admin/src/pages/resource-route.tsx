@@ -1,11 +1,11 @@
-import { adminApi } from '@chot-via/api-client';
+import { adminApi } from '@xin-via/api-client';
 import {
   ANIMATION_KEYS, BADGE_CONDITIONS, BadgeInputSchema, ChallengeInputSchema, CHALLENGE_SCOPES, EventInputSchema, HotTopicInputSchema, ICON_KEYS, KEYWORD_ACTIONS, KeywordInputSchema,
   LevelInputSchema, MEMBER_ROLES, MISSION_ACTIONS, MISSION_PERIODS, MissionInputSchema, PLACE_KINDS, PlaceCategoryInputSchema, SCENE_MODEL_KEYS,
   SceneTemplateInputSchema, FooterLinkInputSchema, HomeActionInputSchema, StreetSlotInputSchema, HOME_ACTION_KINDS, TIME_BUCKETS, WISH_TEMPLATE_SOURCES, WishStickerInputSchema, WishTemplateInputSchema, WishTypeInputSchema,
   type AdminResourceKey,
-} from '@chot-via/shared';
-import { AppIcon, Badge, useFormatters } from '@chot-via/ui';
+} from '@xin-via/shared';
+import { AppIcon, Badge, useFormatters } from '@xin-via/ui';
 import { Navigate, useParams } from 'react-router-dom';
 import { useTranslations } from 'use-intl';
 import { ActiveBadge, ResourcePage, type SelectOption } from '../components/resource-page';

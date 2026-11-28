@@ -1,10 +1,10 @@
 'use client';
 
-import { selectIsMember, useGetCatalogQuery, useGetHomeQuery, useGetPlacesQuery, useLazyGetRandomPlaceQuery } from '@chot-via/api-client';
-import { Button, Chip, EmptyState, Skeleton, Tabs, cn } from '@chot-via/ui';
+import { selectIsMember, useGetCatalogQuery, useGetHomeQuery, useGetPlacesQuery, useLazyGetRandomPlaceQuery } from '@xin-via/api-client';
+import { Button, Chip, EmptyState, Skeleton, Tabs, cn } from '@xin-via/ui';
 import { Dices, List, Search } from 'lucide-react';
-import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS } from '@chot-via/shared';
-import { CityView } from '@chot-via/scene-3d';
+import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS } from '@xin-via/shared';
+import { CityView } from '@xin-via/scene-3d';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { ShopLabelStrip, StreetStage } from '@/components/home/street-stage';

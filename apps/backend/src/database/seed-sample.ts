@@ -1,5 +1,5 @@
 import { count, eq } from 'drizzle-orm';
-import { vnWeekStart, type PlaceKind, type SceneModelKey } from '@chot-via/shared';
+import { vnWeekStart, type PlaceKind, type SceneModelKey } from '@xin-via/shared';
 import { createDb } from './database';
 import { challenges, missions, placeCategories, places, sceneTemplates } from './schema';
 

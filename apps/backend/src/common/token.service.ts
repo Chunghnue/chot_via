@@ -44,7 +44,7 @@ export class TokenService {
 
   /**
    * Xoay vòng refresh token: token cũ bị thu hồi, trả userId để cấp token mới.
-   * Web công khai và web admin dùng chung cookie `cv_rt`, nên hai nơi có thể làm mới gần như cùng lúc bằng cùng một token:
+   * Web công khai và web admin dùng chung cookie `xv_rt`, nên hai nơi có thể làm mới gần như cùng lúc bằng cùng một token:
    * token vừa bị thu hồi trong vòng `REFRESH_REUSE_GRACE_MS` vẫn được chấp nhận để cả hai nơi cùng giữ được phiên.
    */
   async consumeRefresh(raw: string): Promise<string | null> {

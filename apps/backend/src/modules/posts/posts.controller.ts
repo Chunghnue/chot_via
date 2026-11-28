@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '
 import {
   CreateCommentBodySchema, CreatePostBodySchema, IdParamSchema, PageQuerySchema, PostListQuerySchema, PostWishBodySchema, SearchQuerySchema,
   SetReactionBodySchema, VotePollBodySchema, type CreatePostBody, type PostListQuery,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { Auth, Ctx, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';

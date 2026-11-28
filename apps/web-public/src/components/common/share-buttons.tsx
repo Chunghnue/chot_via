@@ -1,12 +1,12 @@
 'use client';
 
-import { cn, toast } from '@chot-via/ui';
+import { cn, toast } from '@xin-via/ui';
 import { ImageDown, Share2 } from 'lucide-react';
 import { useTranslations } from 'use-intl';
 import { SocialIcon } from '@/components/home/home-footer';
 import { isDesktopPointer, shareMessage, shareUrl, siteUrl, ZALO_SHARE_EVENT, type ShareTarget } from '@/lib/share';
 import { shareCardImage, wrapLines, type ShareCardKind } from '@/lib/share-card';
-import { BrandIcon } from '@chot-via/ui';
+import { BrandIcon } from '@xin-via/ui';
 
 const TARGETS: ShareTarget[] = ['facebook', 'messenger', 'zalo', 'tiktok'];
 

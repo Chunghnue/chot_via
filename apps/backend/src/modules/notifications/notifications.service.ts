@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
-import { NotificationSchema, type NotificationDto, type NotificationType } from '@chot-via/shared';
+import { NotificationSchema, type NotificationDto, type NotificationType } from '@xin-via/shared';
 import { DB, type Db, type DbOrTx } from '../../database/database';
 import { notifications } from '../../database/schema';
 

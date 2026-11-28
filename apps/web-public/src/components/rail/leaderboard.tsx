@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetLeaderboardQuery } from '@chot-via/api-client';
-import { Badge, Button, Card, RankRow, SectionTitle, Skeleton, cn } from '@chot-via/ui';
+import { useGetLeaderboardQuery } from '@xin-via/api-client';
+import { Badge, Button, Card, RankRow, SectionTitle, Skeleton, cn } from '@xin-via/ui';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';

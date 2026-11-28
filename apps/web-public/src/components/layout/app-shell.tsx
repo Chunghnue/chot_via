@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@chot-via/ui';
+import { cn } from '@xin-via/ui';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, type ReactNode } from 'react';
 import { useTranslations } from 'use-intl';

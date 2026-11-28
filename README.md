@@ -28,8 +28,8 @@ pnpm dev:admin              # Admin http://localhost:5173
 ```
 - Web/admin gọi API qua proxy cùng nguồn gốc (`/api`, `/storage`) nên cookie phiên httpOnly hoạt động.
 - `.env` đã tạo từ `.env.example`. **Dev:** OTP không gửi SMS, in ra log backend; mã cố định **123456**.
-- Tài khoản quản trị (seed): số **0900000000** → OTP 123456 → vào admin `http://localhost:5173`.
-- Reset database dev: `pnpm --filter @chot-via/backend db:reset` rồi migrate + seed.
+- Tài khoản quản trị (seed): số **0368886999** → OTP 123456 → vào admin `http://localhost:5173`.
+- Reset database dev: `pnpm --filter @xin-via/backend db:reset` rồi migrate + seed.
 - Production build: `pnpm build` (backend dùng tsup; web `next build`). PWA/service worker chỉ đăng ký ở bản production.
 
 ## Cần cấu hình để dùng thật (xem `.env.example`)

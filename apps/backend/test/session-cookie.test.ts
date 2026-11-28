@@ -24,7 +24,7 @@ async function load(cookieDomain: string) {
 
 afterEach(() => { vi.unstubAllEnvs(); });
 
-describe('cookie phiên cv_rt', () => {
+describe('cookie phiên xv_rt', () => {
   it('không đặt COOKIE_DOMAIN: cookie chỉ thuộc host, không có Domain', async () => {
     const { setRefreshCookie, clearRefreshCookie } = await load('');
     const w = fakeReply();
@@ -36,17 +36,17 @@ describe('cookie phiên cv_rt', () => {
   });
 
   it('có COOKIE_DOMAIN: đặt cookie với Domain chung (chấp nhận dấu chấm đầu và chữ hoa)', async () => {
-    const { setRefreshCookie } = await load('.Chotvia.Example.com');
+    const { setRefreshCookie } = await load('.Xinvia.Example.com');
     const w = fakeReply();
     setRefreshCookie(w.reply, 'tok');
-    expect(w.set[0]).toMatchObject({ name: 'cv_rt', value: 'tok', options: { domain: 'chotvia.example.com', httpOnly: true, path: '/api/v1/auth' } });
+    expect(w.set[0]).toMatchObject({ name: 'xv_rt', value: 'tok', options: { domain: 'xinvia.example.com', httpOnly: true, path: '/api/v1/auth' } });
   });
 
   it('có COOKIE_DOMAIN: xóa cả cookie có Domain lẫn cookie cũ chỉ thuộc host', async () => {
-    const { clearRefreshCookie } = await load('chotvia.example.com');
+    const { clearRefreshCookie } = await load('xinvia.example.com');
     const w = fakeReply();
     clearRefreshCookie(w.reply);
-    expect(w.cleared.map((c) => c.options['domain'])).toEqual(['chotvia.example.com', undefined]);
+    expect(w.cleared.map((c) => c.options['domain'])).toEqual(['xinvia.example.com', undefined]);
     expect(w.cleared.every((c) => c.options['path'] === '/api/v1/auth')).toBe(true);
   });
 

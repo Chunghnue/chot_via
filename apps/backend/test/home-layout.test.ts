@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_HOME_CONFIG, type HomeConfig, type HomeLayout } from '@chot-via/shared';
+import { DEFAULT_HOME_CONFIG, type HomeConfig, type HomeLayout } from '@xin-via/shared';
 import { adminLogin, del, get, login, post, put } from './support/api';
 
 interface Item { id: string }
@@ -95,7 +95,7 @@ describe('trang chủ: bố cục do admin nhập', () => {
     const form = new FormData();
     form.append('file', new Blob([Buffer.from('glTF\x02\x00\x00\x00')], { type: 'model/gltf-binary' }), 'a.glb');
     const base = (await import('./support/api')).BASE;
-    const call = async (token: string, f: FormData) => fetch(`${base}/admin/assets`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'x-requested-with': 'chotvia' }, body: f });
+    const call = async (token: string, f: FormData) => fetch(`${base}/admin/assets`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'x-requested-with': 'xinvia' }, body: f });
     expect((await call(member.token, form)).status).toBe(403);
     const a = await adminLogin();
     const ok = await call(a.token, form);

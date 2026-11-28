@@ -1,8 +1,8 @@
 'use client';
 
 
-import { viMessages } from '@chot-via/shared/i18n';
-import { Card } from '@chot-via/ui';
+import { viMessages } from '@xin-via/shared/i18n';
+import { Card } from '@xin-via/ui';
 import type { ReactNode } from 'react';
 import { LegalLinks } from './legal-links';
 

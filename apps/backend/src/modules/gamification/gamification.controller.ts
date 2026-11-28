@@ -3,7 +3,7 @@ import type { PgColumn } from 'drizzle-orm/pg-core';
 import { and, asc, count, countDistinct, desc, eq, gte, lte } from 'drizzle-orm';
 import {
   vnDayStart, vnWeekStart, type ActivityItem, type ChallengeDto, type EventDto, type MissionAction, type MissionDto,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { Ctx, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { iso } from '../../common/mappers';

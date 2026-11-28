@@ -1,4 +1,4 @@
-import type { SceneModelKey, StreetSlotDto } from '@chot-via/shared';
+import type { SceneModelKey, StreetSlotDto } from '@xin-via/shared';
 
 /** Hai nghi lễ cho cửa hàng của chính người dùng: Thỉnh Thần Tài (Thần Tài chạy tới gõ cửa, vung vàng) và Đốt vía (người cầm giấy đốt vía đi lại trước cửa). */
 export type RitualKind = 'invoke' | 'burn';

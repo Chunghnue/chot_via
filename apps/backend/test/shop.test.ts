@@ -1,4 +1,4 @@
-import { DEFAULT_SHOP_CATALOG, type ShopCatalog } from '@chot-via/shared';
+import { DEFAULT_SHOP_CATALOG, type ShopCatalog } from '@xin-via/shared';
 import { describe, expect, it } from 'vitest';
 import { adminLogin, get, login, put } from './support/api';
 

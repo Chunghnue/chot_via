@@ -1,5 +1,5 @@
 import { configureStore, createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { authReducer, baseApi } from '@chot-via/api-client';
+import { authReducer, baseApi } from '@xin-via/api-client';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
 /** Trạng thái giao diện admin: menu trượt trên điện thoại/iPad dọc. */

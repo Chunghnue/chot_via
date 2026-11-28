@@ -1,7 +1,7 @@
 'use client';
 
-import type { PlaceSummary } from '@chot-via/shared';
-import { Badge, Card, PlaceIllustration, cn } from '@chot-via/ui';
+import type { PlaceSummary } from '@xin-via/shared';
+import { Badge, Card, PlaceIllustration, cn } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 
 export function PlaceListItem({ place, active, onClick }: { place: PlaceSummary; active?: boolean; onClick: () => void }) {

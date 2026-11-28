@@ -1,7 +1,7 @@
 import type { FastifyReply } from 'fastify';
 import { env } from '../../config/env';
 
-export const REFRESH_COOKIE = 'cv_rt';
+export const REFRESH_COOKIE = 'xv_rt';
 export const REFRESH_PATH = '/api/v1/auth';
 
 /** Có COOKIE_DOMAIN thì đặt `Domain` để cookie phiên dùng chung giữa web public và admin (tên miền con); đặt và xóa phải cùng Domain + Path. */

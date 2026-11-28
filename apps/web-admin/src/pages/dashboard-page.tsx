@@ -1,5 +1,5 @@
-import { useAdminStatsQuery } from '@chot-via/api-client';
-import { Card, Skeleton, formatNumber } from '@chot-via/ui';
+import { useAdminStatsQuery } from '@xin-via/api-client';
+import { Card, Skeleton, formatNumber } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 import { PageHeader } from '../components/common';
 

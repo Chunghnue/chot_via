@@ -1,7 +1,7 @@
 'use client';
 
-import { selectAuthStatus, selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation, useSessionSync } from '@chot-via/api-client';
-import { toast, useCodeMessage } from '@chot-via/ui';
+import { selectAuthStatus, selectIsMember, useGetDeityTodayQuery, useGetOfflinePackQuery, useRestoreSessionMutation, useSessionSync } from '@xin-via/api-client';
+import { toast, useCodeMessage } from '@xin-via/ui';
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'use-intl';
 import { offlinePackLoaded, wishSynced } from '@/features/wish/wishSlice';
@@ -41,7 +41,7 @@ export function Bootstrap() {
       } else {
         /* Bản dev: gỡ service worker và cache còn sót từ bản production từng chạy trên cùng địa chỉ, nếu không sẽ phục vụ file cũ và gây lỗi nạp module. */
         void navigator.serviceWorker.getRegistrations().then((list) => Promise.all(list.map((r) => r.unregister()))).catch(() => undefined);
-        if ('caches' in window) void caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith('cv-')).map((k) => caches.delete(k)))).catch(() => undefined);
+        if ('caches' in window) void caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith('xv-')).map((k) => caches.delete(k)))).catch(() => undefined);
       }
     }
   }, [dispatch, restore, t, message]);

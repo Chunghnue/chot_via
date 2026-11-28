@@ -2,7 +2,7 @@ import { Catch, HttpException, Logger, type ArgumentsHost, type ExceptionFilter 
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import * as Sentry from '@sentry/node';
 import { ZodError } from 'zod';
-import { ERROR_DEFS, type ApiErrorBody, type ErrorCode } from '@chot-via/shared';
+import { ERROR_DEFS, type ApiErrorBody, type ErrorCode } from '@xin-via/shared';
 import { DomainError } from './domain-error';
 import { ValidationFailed, toDetails } from './zod.pipe';
 

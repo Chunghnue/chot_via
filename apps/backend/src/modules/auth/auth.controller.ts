@@ -3,7 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import {
   OAuthCallbackQuerySchema, OAuthParamSchema, OAuthStartQuerySchema, OtpRequestBodySchema, OtpVerifyBodySchema, type OAuthProvider,
   type OtpRequestBody, type OtpVerifyBody,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { Ctx, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
@@ -15,7 +15,7 @@ import { OAuthService } from './oauth.service';
 import { clearRefreshCookie, REFRESH_COOKIE, setRefreshCookie } from './session-cookie';
 
 const CSRF_HEADER = 'x-requested-with';
-const CSRF_VALUE = 'chotvia';
+const CSRF_VALUE = 'xinvia';
 
 /** Refresh/logout dựa vào cookie nên bắt buộc header tùy biến (trình duyệt không cho form chéo trang gửi) để chống CSRF. */
 function assertCsrf(req: FastifyRequest): void {

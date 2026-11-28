@@ -1,4 +1,4 @@
-import type { LevelDto, UserSummary, MemberRole } from '@chot-via/shared';
+import type { LevelDto, UserSummary, MemberRole } from '@xin-via/shared';
 
 export interface UserRow { id: string; displayName: string; avatarUrl: string | null; memberRole: MemberRole | null; jobTitle: string | null; points: number }
 

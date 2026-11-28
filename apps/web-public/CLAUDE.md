@@ -1,6 +1,6 @@
 # apps/web-public — Next.js (PWA)
 
-Next.js 16 (App Router, Turbopack), React 19, Redux Toolkit + RTK Query (qua `@chot-via/api-client`), Tailwind v4, Radix UI, use-intl, React Hook Form + Zod. **Next.js ở bản này có thay đổi so với kiến thức cũ**: khi nghi ngờ API, đọc `node_modules/next/dist/docs/`. `next dev` tự sinh `AGENTS.md` ở thư mục này (đã bị bỏ qua, xóa cũng được).
+Next.js 16 (App Router, Turbopack), React 19, Redux Toolkit + RTK Query (qua `@xin-via/api-client`), Tailwind v4, Radix UI, use-intl, React Hook Form + Zod. **Next.js ở bản này có thay đổi so với kiến thức cũ**: khi nghi ngờ API, đọc `node_modules/next/dist/docs/`. `next dev` tự sinh `AGENTS.md` ở thư mục này (đã bị bỏ qua, xóa cũng được).
 
 ## Cấu trúc `src/`
 - `app/layout.tsx`, `providers.tsx` (Redux + intl + toaster + bootstrap), `manifest.ts`, `(site)/…` các trang: `/` · `bang-tin` (Cộng đồng; `?type=story` = trang **Kể khổ**) · `pho-3d` · `diem/[slug]` (+`cai-dat`) · `bai/[id]` · `tim-kiem` · `ca-nhan` · `u/[id]` · `tao-diem` · `su-kien` · `bang-xep-hang` · `thong-bao` · `da-luu` · `bao-cao-cua-toi` · `cai-dat`.

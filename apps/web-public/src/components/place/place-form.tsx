@@ -1,8 +1,8 @@
 'use client';
 
-import { useCreatePlaceMutation, useGetCatalogQuery, useUpdatePlaceMutation } from '@chot-via/api-client';
-import { PLACE_KINDS, PlaceInputSchema, type PlaceDetail, type PlaceInput } from '@chot-via/shared';
-import { Button, Chip, FieldError, Input, Label, PlaceIllustration, Select, Switch, Textarea, cn, toast, useValidationMessage } from '@chot-via/ui';
+import { useCreatePlaceMutation, useGetCatalogQuery, useUpdatePlaceMutation } from '@xin-via/api-client';
+import { PLACE_KINDS, PlaceInputSchema, type PlaceDetail, type PlaceInput } from '@xin-via/shared';
+import { Button, Chip, FieldError, Input, Label, PlaceIllustration, Select, Switch, Textarea, cn, toast, useValidationMessage } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import type { z } from 'zod';

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@chot-via/ui';
+import { cn } from '@xin-via/ui';
 import { CalendarDays, Home, Plus, Store, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

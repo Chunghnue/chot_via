@@ -7,7 +7,7 @@ import {
   useDemoUserDeleteMutation,
   useDemoUsersListQuery,
   useDemoUserUpdateMutation,
-} from '@chot-via/api-client';
+} from '@xin-via/api-client';
 import {
   ACCOUNT_STATUSES,
   DEMO_POST_TYPES,
@@ -18,8 +18,8 @@ import {
   type DemoPostItem,
   type DemoUserInput,
   type DemoUserItem,
-} from '@chot-via/shared';
-import { Avatar, Badge } from '@chot-via/ui';
+} from '@xin-via/shared';
+import { Avatar, Badge } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 import { ResourcePage } from '../components/resource-page';
 

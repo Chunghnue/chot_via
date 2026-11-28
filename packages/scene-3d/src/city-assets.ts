@@ -1,4 +1,4 @@
-import type { SceneModelKey } from '@chot-via/shared';
+import type { SceneModelKey } from '@xin-via/shared';
 
 /** Thư mục ảnh cảnh phố (tách nền từ bộ thiết kế). Thay file cùng tên là đổi hình, không sửa code. */
 const P = '/images/pho/';

@@ -2,7 +2,7 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { Color, InstancedMesh, MathUtils, Mesh, MeshStandardMaterial, Object3D, TOUCH, Vector3, type Group } from 'three';
-import type { HomeConfig, StreetSlotDto } from '@chot-via/shared';
+import type { HomeConfig, StreetSlotDto } from '@xin-via/shared';
 import { useSceneColors, type SceneColors } from './colors';
 import { Decor } from './decor';
 import { Label } from './label';

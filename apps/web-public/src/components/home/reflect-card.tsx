@@ -1,6 +1,6 @@
 'use client';
 
-import { isReflectTime } from '@chot-via/shared';
+import { isReflectTime } from '@xin-via/shared';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';
 import { useWishSettings } from '@/features/wish/use-deity-wish';

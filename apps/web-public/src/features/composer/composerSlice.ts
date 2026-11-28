@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { DISPLAY_MODES, MEMBER_ROLES, METRIC_TYPES, STORY_STICKERS, type MemberRole, type MetricType } from '@chot-via/shared';
+import { DISPLAY_MODES, MEMBER_ROLES, METRIC_TYPES, STORY_STICKERS, type MemberRole, type MetricType } from '@xin-via/shared';
 import { z } from 'zod';
 
 export const COMPOSER_KINDS = ['story', 'brag', 'wish'] as const;

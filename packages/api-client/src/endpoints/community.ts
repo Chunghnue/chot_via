@@ -1,7 +1,7 @@
 import {
   ActivityItemSchema, BlockResultSchema, ChallengeSchema, EventSchema, FollowResultSchema, LeaderboardSchema, MeSchema, MeStatsSchema,
   MissionSchema, MyReportSchema, NotificationListSchema, OkSchema, PublicProfileSchema, PageMetaSchema, envelope, type MarkNotificationsReadBody, type ReportBody, type UpdateMeBody,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { userUpdated } from '../auth-slice';
 import { baseApi, unwrap } from '../base';

@@ -4,7 +4,7 @@ import { randomBytes } from 'node:crypto';
 import {
   vnDayStart, vnWeekStart, type AdminPlaceInput, type AdminPlaceUpdate, type AutoReplies, type PlaceDetail, type PlaceInput, type PlaceListQuery,
   type PlaceKind, type PlaceLeaderboard, type PlaceSummary, type PlaceUpdate, type PlaceWishItem, type SceneModelKey,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { slugify } from '../../common/crypto';
 import { iso, userSummary } from '../../common/mappers';

@@ -1,7 +1,7 @@
 import {
   CommentSchema, HashtagCountSchema, HotTopicSchema, MediaSchema, OkSchema, PollSchema, PostSchema, ReactionResultSchema, SavedResultSchema, SearchResultSchema,
   ShareResultSchema, StoryAuthorRankSchema, type CreatePostBody, type PostListQuery,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { baseApi, unwrap, unwrapPaged, type Paged } from '../base';
 

@@ -1,4 +1,4 @@
-import { ERROR_DEFS, type ErrorCode, type ErrorParams } from '@chot-via/shared';
+import { ERROR_DEFS, type ErrorCode, type ErrorParams } from '@xin-via/shared';
 
 type ParamArgs<C extends ErrorCode> = keyof ErrorParams<C> extends never ? [] : [params: ErrorParams<C>];
 

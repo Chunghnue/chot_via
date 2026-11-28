@@ -1,5 +1,5 @@
 {
-  "name": "@chot-via/backend",
+  "name": "@xin-via/backend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1171.0",
-    "@chot-via/shared": "workspace:*",
+    "@xin-via/shared": "workspace:*",
     "@fastify/cookie": "^11.1.5",
     "@fastify/helmet": "^13.2.0",
     "@fastify/multipart": "^10.1.9",

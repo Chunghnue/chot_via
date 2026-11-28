@@ -1,7 +1,7 @@
 'use client';
 
-import { DeityAvatar, Sheet, cn } from '@chot-via/ui';
-import { RITUAL_BEATS, RITUAL_SECONDS, useSceneCapability, type RitualKind } from '@chot-via/scene-3d';
+import { DeityAvatar, Sheet, cn } from '@xin-via/ui';
+import { RITUAL_BEATS, RITUAL_SECONDS, useSceneCapability, type RitualKind } from '@xin-via/scene-3d';
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';

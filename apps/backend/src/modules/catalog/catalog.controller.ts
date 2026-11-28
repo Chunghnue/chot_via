@@ -1,6 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { and, asc, count, eq, gte, inArray } from 'drizzle-orm';
-import { vnDayStart, type CatalogDto, type HomeDto } from '@chot-via/shared';
+import { vnDayStart, type CatalogDto, type HomeDto } from '@xin-via/shared';
 import { ok } from '../../common/api';
 import { SettingsService } from '../../common/settings.service';
 import { env } from '../../config/env';

@@ -7,7 +7,7 @@ import {
   UpdateMeBodySchema,
   type MarkNotificationsReadBody,
   type UpdateMeBody,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { Auth, Ctx, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { ZodPipe } from '../../common/zod.pipe';

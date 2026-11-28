@@ -1,5 +1,5 @@
-import { installVietnameseValidation } from '@chot-via/shared';
-import { AppIntlProvider, Toaster } from '@chot-via/ui';
+import { installVietnameseValidation } from '@xin-via/shared';
+import { AppIntlProvider, Toaster } from '@xin-via/ui';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';

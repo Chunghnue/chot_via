@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { KeywordAction } from '@chot-via/shared';
+import type { KeywordAction } from '@xin-via/shared';
 import { fold } from '../../common/crypto';
 import { DB, type Db } from '../../database/database';
 import { sensitiveKeywords } from '../../database/schema';

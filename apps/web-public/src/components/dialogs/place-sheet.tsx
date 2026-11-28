@@ -1,9 +1,9 @@
 'use client';
 
-import { useGetCatalogQuery, useGetPlaceQuery, usePlaceWishMutation, useVisitPlaceMutation } from '@chot-via/api-client';
-import { Badge, Button, FieldError, SHOP_IMAGES, Sheet, Skeleton, Textarea, ToggleTile, buttonClass, cn, compactCount, AppIcon, useCodeMessage } from '@chot-via/ui';
-import { parseApiError } from '@chot-via/api-client';
-import type { PlaceDetail, PlaceWishResult } from '@chot-via/shared';
+import { useGetCatalogQuery, useGetPlaceQuery, usePlaceWishMutation, useVisitPlaceMutation } from '@xin-via/api-client';
+import { Badge, Button, FieldError, SHOP_IMAGES, Sheet, Skeleton, Textarea, ToggleTile, buttonClass, cn, compactCount, AppIcon, useCodeMessage } from '@xin-via/ui';
+import { parseApiError } from '@xin-via/api-client';
+import type { PlaceDetail, PlaceWishResult } from '@xin-via/shared';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';

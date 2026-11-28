@@ -20,7 +20,7 @@ import {
   WishTemplateItemSchema,
   WishTypeItemSchema,
   type AdminResourceKey,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { DB, type Db } from '../../database/database';
 import {

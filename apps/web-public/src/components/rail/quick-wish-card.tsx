@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, cn } from '@chot-via/ui';
+import { Button, Card, cn } from '@xin-via/ui';
 import { Check } from 'lucide-react';
 import { useTranslations } from 'use-intl';
 import { useWishTitle } from '@/features/wish/use-deity-wish';

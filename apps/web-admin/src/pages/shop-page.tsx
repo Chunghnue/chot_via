@@ -1,6 +1,6 @@
-import { useAdminShopQuery, useAdminShopSaveMutation } from '@chot-via/api-client';
-import { ShopCatalogSchema, type ShopCatalog } from '@chot-via/shared';
-import { Button, Card, Skeleton, toast } from '@chot-via/ui';
+import { useAdminShopQuery, useAdminShopSaveMutation } from '@xin-via/api-client';
+import { ShopCatalogSchema, type ShopCatalog } from '@xin-via/shared';
+import { Button, Card, Skeleton, toast } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';

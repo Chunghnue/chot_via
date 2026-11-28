@@ -1,7 +1,7 @@
 import {
   AuthSessionSchema, CatalogSchema, DeityTodaySchema, DeityWishResultSchema, HomeSchema, OfflinePackSchema, OkSchema, OtpRequestResultSchema, PlaceWishResultSchema,
   PostWishResultSchema, type DeityWishBody, type OtpRequestBody, type OtpVerifyBody, type PlaceWishBody,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { hasAuthState, pointsChanged, sessionCleared, sessionStarted } from '../auth-slice';
 import { CSRF_HEADER_VALUES, baseApi, unwrap } from '../base';

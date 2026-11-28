@@ -1,8 +1,8 @@
 'use client';
 
-import { useGetFeaturedPollQuery, useGetHotTopicsQuery, useGetTopStoryAuthorsQuery, useVotePollMutation } from '@chot-via/api-client';
-import type { PollDto } from '@chot-via/shared';
-import { Card, RankRow, SectionTitle, Skeleton, cn, compactCount } from '@chot-via/ui';
+import { useGetFeaturedPollQuery, useGetHotTopicsQuery, useGetTopStoryAuthorsQuery, useVotePollMutation } from '@xin-via/api-client';
+import type { PollDto } from '@xin-via/shared';
+import { Card, RankRow, SectionTitle, Skeleton, cn, compactCount } from '@xin-via/ui';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

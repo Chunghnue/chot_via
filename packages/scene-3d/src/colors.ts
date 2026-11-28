@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { SceneModelKey } from '@chot-via/shared';
+import type { SceneModelKey } from '@xin-via/shared';
 
 export interface SceneColors {
   sky: string; ground: string; road: string; sidewalk: string; tree: string; trunk: string; lamp: string; plaza: string;

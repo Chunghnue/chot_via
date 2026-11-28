@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { DEFAULT_SETTINGS, WISH_TITLE_CODES, WishTextSchema, type WishText, type WishTitleCode } from '@chot-via/shared';
+import { DEFAULT_SETTINGS, WISH_TITLE_CODES, WishTextSchema, type WishText, type WishTitleCode } from '@xin-via/shared';
 import { z } from 'zod';
 
 export const WishEntrySchema = z.object({ at: z.string(), titleCode: z.enum(WISH_TITLE_CODES), templateId: z.string(), offline: z.boolean() });

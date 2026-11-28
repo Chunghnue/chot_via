@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, count, desc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
 import {
   maskPhone, vnDayStart, type LeaderboardDto, type MeDto, type MeStats, type PublicProfile, type UpdateMeBody, type UserSummary,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { iso, levelFor, nextLevelFor, userSummary } from '../../common/mappers';
 import { SettingsService } from '../../common/settings.service';

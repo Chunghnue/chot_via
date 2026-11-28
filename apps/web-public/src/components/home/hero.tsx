@@ -1,8 +1,8 @@
 'use client';
 
-import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@chot-via/shared';
-import { Button, cn } from '@chot-via/ui';
-import { CityView, useSceneCapability } from '@chot-via/scene-3d';
+import { DEFAULT_HOME_CONFIG, DEFAULT_STREET_SLOTS, type HomeActionDto, type HomeDto, type StreetSlotDto } from '@xin-via/shared';
+import { Button, cn } from '@xin-via/ui';
+import { CityView, useSceneCapability } from '@xin-via/scene-3d';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { useStreetLabels } from '@/components/place/use-street-labels';

@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { AppIntlProvider, ConfirmPanel, FormField, IconButton, RankRow, SectionTitle, SwitchField, Tabs, ToggleTile, useConfirm } from '@chot-via/ui';
+import { AppIntlProvider, ConfirmPanel, FormField, IconButton, RankRow, SectionTitle, SwitchField, Tabs, ToggleTile, useConfirm } from '@xin-via/ui';
 import { useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

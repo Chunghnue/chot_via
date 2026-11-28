@@ -1,8 +1,8 @@
 'use client';
 
-import { useUpdateMeMutation, useUploadMediaMutation } from '@chot-via/api-client';
-import { MEMBER_ROLES, UpdateMeBodySchema, type MeDto, type UpdateMeBody } from '@chot-via/shared';
-import { Avatar, Button, FieldError, Input, Label, Select, Textarea, toast, useRoleLabel, useValidationMessage } from '@chot-via/ui';
+import { useUpdateMeMutation, useUploadMediaMutation } from '@xin-via/api-client';
+import { MEMBER_ROLES, UpdateMeBodySchema, type MeDto, type UpdateMeBody } from '@xin-via/shared';
+import { Avatar, Button, FieldError, Input, Label, Select, Textarea, toast, useRoleLabel, useValidationMessage } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';

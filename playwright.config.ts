@@ -18,14 +18,14 @@ export default defineConfig({
   use: { baseURL: 'http://localhost:3100', launchOptions, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   webServer: [
     {
-      command: 'pnpm --filter @chot-via/web-public exec next dev -p 3100',
+      command: 'pnpm --filter @xin-via/web-public exec next dev -p 3100',
       url: 'http://localhost:3100/',
       timeout: 240_000,
       reuseExistingServer: false,
       env: { BACKEND_URL: backend, NEXT_DIST_DIR: '.next-e2e' },
     },
     {
-      command: 'pnpm --filter @chot-via/web-admin exec vite --port 5273 --strictPort',
+      command: 'pnpm --filter @xin-via/web-admin exec vite --port 5273 --strictPort',
       url: 'http://localhost:5273/',
       timeout: 120_000,
       reuseExistingServer: false,

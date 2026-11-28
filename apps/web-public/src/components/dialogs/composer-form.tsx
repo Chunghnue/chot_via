@@ -1,10 +1,10 @@
 'use client';
 
-import { parseApiError, useCreatePostMutation, useGetCatalogQuery, useUploadMediaMutation } from '@chot-via/api-client';
+import { parseApiError, useCreatePostMutation, useGetCatalogQuery, useUploadMediaMutation } from '@xin-via/api-client';
 import {
   CreatePostBodySchema, DISPLAY_MODES, MEMBER_ROLES, MONEY_METRICS, OWNER_METRICS, RANGE_METRICS, SALE_METRICS, type MetricType,
-} from '@chot-via/shared';
-import { AppIcon, Button, Chip, FieldError, Input, Label, Notice, RadioOption, Switch, Textarea, cn, pillClass, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@chot-via/ui';
+} from '@xin-via/shared';
+import { AppIcon, Button, Chip, FieldError, Input, Label, Notice, RadioOption, Switch, Textarea, cn, pillClass, toast, useFormatters, useRoleLabel, useValidationMessage, useCodeMessage } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImagePlus, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';

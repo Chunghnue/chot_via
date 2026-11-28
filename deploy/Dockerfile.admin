@@ -8,10 +8,10 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/api-client/package.json packages/api-client/
 COPY packages/ui/package.json packages/ui/
 COPY packages/scene-3d/package.json packages/scene-3d/
-RUN pnpm install --frozen-lockfile --filter @chot-via/web-admin...
+RUN pnpm install --frozen-lockfile --filter @xin-via/web-admin...
 COPY packages packages
 COPY apps/web-admin apps/web-admin
-RUN pnpm --filter @chot-via/web-admin build
+RUN pnpm --filter @xin-via/web-admin build
 
 # Web admin là file tĩnh; /api và /storage do Caddy chuyển tới backend.
 FROM caddy:2-alpine AS run

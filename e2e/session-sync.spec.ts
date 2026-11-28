@@ -15,7 +15,7 @@ test.describe('phiên đăng nhập dùng chung với web admin', () => {
     await apiLogin(page.context().request);
     await page.goto('/', { waitUntil: 'networkidle' });
     await expect(page.getByRole('button', { name: /Đăng nhập/ })).toHaveCount(0);
-    const out = await page.context().request.post(`${API}/auth/logout`, { headers: { 'x-requested-with': 'chotvia' } });
+    const out = await page.context().request.post(`${API}/auth/logout`, { headers: { 'x-requested-with': 'xinvia' } });
     expect(out.status()).toBeLessThan(300);
     await page.evaluate(() => window.dispatchEvent(new Event('focus')));
     await expect(page.getByRole('button', { name: /Đăng nhập/ }).first()).toBeVisible({ timeout: 15_000 });
@@ -29,7 +29,7 @@ test.describe('phiên đăng nhập dùng chung với web admin', () => {
     await page.evaluate(() => window.dispatchEvent(new Event('focus')));
     await expect(page.locator('#phone')).toHaveCount(0, { timeout: 15_000 });
     await page.waitForTimeout(3200); // khoảng chờ tối thiểu giữa hai lần hỏi lại phiên
-    expect((await page.context().request.post(`${API}/auth/logout`, { headers: { 'x-requested-with': 'chotvia' } })).status()).toBeLessThan(300);
+    expect((await page.context().request.post(`${API}/auth/logout`, { headers: { 'x-requested-with': 'xinvia' } })).status()).toBeLessThan(300);
     await page.evaluate(() => window.dispatchEvent(new Event('focus')));
     await expect(page.locator('#phone')).toBeVisible({ timeout: 15_000 });
   });

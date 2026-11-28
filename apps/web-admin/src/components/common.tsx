@@ -1,4 +1,4 @@
-import { Button } from '@chot-via/ui';
+import { Button } from '@xin-via/ui';
 import type { ReactNode } from 'react';
 import { useTranslations } from 'use-intl';
 

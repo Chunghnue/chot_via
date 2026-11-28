@@ -1,8 +1,8 @@
 'use client';
 
-import { useGetCatalogQuery } from '@chot-via/api-client';
-import { MONEY_METRICS, type AchievementDto, type MemberRole, type PollDto, type PostType, type WishTypeDto } from '@chot-via/shared';
-import { AppIcon, Badge, cn, useFormatters } from '@chot-via/ui';
+import { useGetCatalogQuery } from '@xin-via/api-client';
+import { MONEY_METRICS, type AchievementDto, type MemberRole, type PollDto, type PostType, type WishTypeDto } from '@xin-via/shared';
+import { AppIcon, Badge, cn, useFormatters } from '@xin-via/ui';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 

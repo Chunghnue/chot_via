@@ -3,7 +3,7 @@ import { and, asc, desc, eq, ilike, inArray, isNotNull, notInArray, or, sql, typ
 import {
   HashtagCountSchema, HotTopicSchema, RANGE_METRICS, StoryAuthorRankSchema, STORY_STICKERS, metricAllowedForRole, type AppSettings, type CreatePostBody, type HashtagCount, type HotTopicDto, type StoryAuthorRank,
   type PollDto, type PostDto, type PostListQuery, type RangeDef, type ReactionType, type ReactionCountsDto,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import type { RequestContext } from '../../common/access';
 import { offsetOf, type ApiPaged } from '../../common/api';

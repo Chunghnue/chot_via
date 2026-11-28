@@ -1,4 +1,4 @@
-import type { PlaceSummary } from '@chot-via/shared';
+import type { PlaceSummary } from '@xin-via/shared';
 
 export const ROW_SPACING = 7;
 export const SIDE_OFFSET = 5.6;

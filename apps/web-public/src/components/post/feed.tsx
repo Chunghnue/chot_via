@@ -1,8 +1,8 @@
 'use client';
 
-import { selectIsMember, useGetPostsQuery } from '@chot-via/api-client';
-import { FEED_SORTS, FEED_TYPES, MEMBER_ROLES, type MemberRole, type PostListQuery } from '@chot-via/shared';
-import { Avatar, Button, Chip, EmptyState, Select, Skeleton, cn, useRoleLabel } from '@chot-via/ui';
+import { selectIsMember, useGetPostsQuery } from '@xin-via/api-client';
+import { FEED_SORTS, FEED_TYPES, MEMBER_ROLES, type MemberRole, type PostListQuery } from '@xin-via/shared';
+import { Avatar, Button, Chip, EmptyState, Select, Skeleton, cn, useRoleLabel } from '@xin-via/ui';
 import { ArrowDownUp, ChevronDown, ImagePlus, Smile } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'use-intl';

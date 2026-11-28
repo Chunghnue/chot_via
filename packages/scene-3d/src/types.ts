@@ -1,4 +1,4 @@
-import type { PlaceSummary } from '@chot-via/shared';
+import type { PlaceSummary } from '@xin-via/shared';
 
 export interface StreetSceneProps {
   places: PlaceSummary[];

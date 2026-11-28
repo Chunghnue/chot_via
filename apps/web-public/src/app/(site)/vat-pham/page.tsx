@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetShopQuery } from '@chot-via/api-client';
-import { Card, Skeleton } from '@chot-via/ui';
+import { useGetShopQuery } from '@xin-via/api-client';
+import { Card, Skeleton } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 import { PageTitle } from '@/components/common/require-member';
 

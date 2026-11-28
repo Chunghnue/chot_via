@@ -1,7 +1,7 @@
 import { eq, sql } from 'drizzle-orm';
-import type { MemberRole, MetricType, PostType } from '@chot-via/shared';
+import type { MemberRole, MetricType, PostType } from '@xin-via/shared';
 import { createDb } from './database';
-import { vnWeekStart } from '@chot-via/shared';
+import { vnWeekStart } from '@xin-via/shared';
 import { achievements, challenges, comments, events, hotTopics, missions, notifications, places, pollVotes, postMedia, posts, users, wishEvents } from './schema';
 
 const { db, close } = createDb();

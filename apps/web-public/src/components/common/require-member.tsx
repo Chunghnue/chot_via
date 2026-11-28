@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, Skeleton } from '@chot-via/ui';
+import { Button, Card, Skeleton } from '@xin-via/ui';
 import type { ReactNode } from 'react';
 import { useTranslations } from 'use-intl';
 import { loginRequested, type LoginReason } from '@/features/ui/uiSlice';

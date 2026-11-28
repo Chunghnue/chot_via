@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { AppSettingsSchema, DEFAULT_SETTINGS, PublicSettingsSchema, type AppSettings, type PublicSettings } from '@chot-via/shared';
+import { AppSettingsSchema, DEFAULT_SETTINGS, PublicSettingsSchema, type AppSettings, type PublicSettings } from '@xin-via/shared';
 import { DB, type Db } from '../database/database';
 import { appSettings } from '../database/schema';
 

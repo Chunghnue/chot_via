@@ -1,8 +1,8 @@
 'use client';
 
-import { useCreateReportMutation } from '@chot-via/api-client';
-import { REPORT_REASONS, type ReportReason } from '@chot-via/shared';
-import { Button, RadioOption, Sheet, Textarea } from '@chot-via/ui';
+import { useCreateReportMutation } from '@xin-via/api-client';
+import { REPORT_REASONS, type ReportReason } from '@xin-via/shared';
+import { Button, RadioOption, Sheet, Textarea } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { reportDismissed, selectReport } from '@/features/ui/uiSlice';

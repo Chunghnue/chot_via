@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetHomeQuery } from '@chot-via/api-client';
-import { BrandIcon, toast } from '@chot-via/ui';
+import { useGetHomeQuery } from '@xin-via/api-client';
+import { BrandIcon, toast } from '@xin-via/ui';
 import { Link2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';

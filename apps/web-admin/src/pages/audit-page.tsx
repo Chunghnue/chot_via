@@ -1,5 +1,5 @@
-import { useAdminAuditQuery } from '@chot-via/api-client';
-import { Skeleton, useFormatters } from '@chot-via/ui';
+import { useAdminAuditQuery } from '@xin-via/api-client';
+import { Skeleton, useFormatters } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { PageHeader, Pager, TableShell, Td, Th } from '../components/common';

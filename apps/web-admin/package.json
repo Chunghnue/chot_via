@@ -1,5 +1,5 @@
 {
-  "name": "@chot-via/web-admin",
+  "name": "@xin-via/web-admin",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chot-via/api-client": "workspace:*",
-    "@chot-via/scene-3d": "workspace:*",
-    "@chot-via/shared": "workspace:*",
-    "@chot-via/ui": "workspace:*",
+    "@xin-via/api-client": "workspace:*",
+    "@xin-via/scene-3d": "workspace:*",
+    "@xin-via/shared": "workspace:*",
+    "@xin-via/ui": "workspace:*",
     "@hookform/resolvers": "^7.0.7",
     "@reduxjs/toolkit": "^2.14.0",
     "lucide-react": "^1.74.0",

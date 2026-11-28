@@ -251,7 +251,7 @@ describe('điểm từ tương tác bài viết (quyết định 26/11/2026)', (
   it('trần 50 điểm/ngày: chạm trần thì tương tác vẫn hoạt động và đếm lượt nhưng không thêm điểm', async () => {
     const author = await login(); const x = await login(); const y = await login();
     const pid = await newPost(author.token);
-    const sql = postgres('postgres://chotvia:chotvia@localhost:5432/chotvia_test', { max: 1 });
+    const sql = postgres('postgres://xinvia:xinvia@localhost:5432/xinvia_test', { max: 1 });
     try {
       // Dựng sẵn 49 điểm tương tác hôm nay: ghép nhiều bài với nhiều người (mỗi cặp bài-người một dòng).
       const others = await sql<{ id: string }[]>`select id from users where id <> ${author.userId} and id not in (${x.userId}, ${y.userId}) limit 30`;

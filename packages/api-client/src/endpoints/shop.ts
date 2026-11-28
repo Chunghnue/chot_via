@@ -1,4 +1,4 @@
-import { ShopCatalogSchema, type ShopCatalog } from '@chot-via/shared';
+import { ShopCatalogSchema, type ShopCatalog } from '@xin-via/shared';
 import { baseApi, unwrap } from '../base';
 
 /** Bảng giá và vật phẩm: `getShop` công khai (ẩn vật phẩm đã tắt), `adminShop` và `adminShopSave` dành cho admin. */

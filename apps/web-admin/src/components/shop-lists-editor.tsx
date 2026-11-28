@@ -1,5 +1,5 @@
-import { SHOP_ITEM_IMAGES, type ShopCatalog } from '@chot-via/shared';
-import { Button, FormField, Input, Select, SwitchField } from '@chot-via/ui';
+import { SHOP_ITEM_IMAGES, type ShopCatalog } from '@xin-via/shared';
+import { Button, FormField, Input, Select, SwitchField } from '@xin-via/ui';
 import { Plus, Trash2 } from 'lucide-react';
 import { useFieldArray, type UseFormReturn } from 'react-hook-form';
 import { useTranslations } from 'use-intl';

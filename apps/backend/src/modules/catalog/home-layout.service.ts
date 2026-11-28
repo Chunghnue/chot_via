@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { asc, eq } from 'drizzle-orm';
-import { DEFAULT_HOME_CONFIG, HomeConfigSchema, type HomeConfig, type HomeLayout } from '@chot-via/shared';
+import { DEFAULT_HOME_CONFIG, HomeConfigSchema, type HomeConfig, type HomeLayout } from '@xin-via/shared';
 import { DB, type Db } from '../../database/database';
 import { appSettings, homeActions, homeFooterLinks, sceneTemplates, streetSlots } from '../../database/schema';
 

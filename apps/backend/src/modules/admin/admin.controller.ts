@@ -5,7 +5,7 @@ import {
   ADMIN_RESOURCE_KEYS, AdminCommentUpdateSchema, AdminListQuerySchema, AdminPlaceInputSchema, AdminPlaceUpdateSchema, AdminPostUpdateSchema, type AdminPostUpdate, DemoPostInputSchema, DemoUserInputSchema, type DemoPostInput, type DemoUserInput,
   AdminReportActionSchema, AdminUserUpdateSchema, AppSettingsSchema, HomeConfigSchema, type HomeConfig, IdParamSchema, PageQuerySchema, type AdminListQuery, type AdminPlaceInput,
   type AdminPlaceUpdate, type AdminReportAction, type AdminResourceKey, type AdminUserUpdate, type AppSettings,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { Ctx, Roles, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';

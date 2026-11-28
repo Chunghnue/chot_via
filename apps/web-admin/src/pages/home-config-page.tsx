@@ -1,6 +1,6 @@
-import { useAdminHomeConfigQuery, useAdminHomeConfigSaveMutation, adminApi } from '@chot-via/api-client';
-import { FEED_TYPES, HomeConfigSchema, type HomeConfig } from '@chot-via/shared';
-import { Button, Card, FormField, Input, Skeleton, SwitchField, Textarea, toast } from '@chot-via/ui';
+import { useAdminHomeConfigQuery, useAdminHomeConfigSaveMutation, adminApi } from '@xin-via/api-client';
+import { FEED_TYPES, HomeConfigSchema, type HomeConfig } from '@xin-via/shared';
+import { Button, Card, FormField, Input, Skeleton, SwitchField, Textarea, toast } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { lazy, Suspense } from 'react';

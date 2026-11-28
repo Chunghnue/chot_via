@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: chotvia
-      POSTGRES_PASSWORD: chotvia
-      POSTGRES_DB: chotvia
+      POSTGRES_USER: xinvia
+      POSTGRES_PASSWORD: xinvia
+      POSTGRES_DB: xinvia
     ports: ["5432:5432"]
     volumes: ["postgres_data:/var/lib/postgresql/data"]
   redis:

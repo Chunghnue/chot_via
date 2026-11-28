@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { asc, eq, sql, and, inArray } from 'drizzle-orm';
-import type { BadgeDto, LevelDto } from '@chot-via/shared';
+import type { BadgeDto, LevelDto } from '@xin-via/shared';
 import { DB, type Db } from '../../database/database';
 import { badges, levels, pointLedger } from '../../database/schema';
 

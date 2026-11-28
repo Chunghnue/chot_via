@@ -14,7 +14,7 @@ const config: NextConfig = {
   reactStrictMode: false,
   /** Cho phép mở bản dev từ máy ảo Android (10.0.2.2 là máy tính chủ) và từ máy khác trong mạng LAN. */
   allowedDevOrigins: ['10.0.2.2', '192.168.*.*', '10.*.*.*'],
-  transpilePackages: ['@chot-via/shared', '@chot-via/ui', '@chot-via/api-client', '@chot-via/scene-3d'],
+  transpilePackages: ['@xin-via/shared', '@xin-via/ui', '@xin-via/api-client', '@xin-via/scene-3d'],
   /** Web và API cùng nguồn gốc (same-origin) → cookie phiên httpOnly hoạt động, không cần CORS. */
   async rewrites() {
     return [

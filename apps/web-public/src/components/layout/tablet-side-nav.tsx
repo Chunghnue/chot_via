@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, buttonClass, cn } from '@chot-via/ui';
+import { Card, buttonClass, cn } from '@xin-via/ui';
 import { ArrowRight, BarChart3, Flame, Home, MessageCircle, PlusSquare, Handshake, Sparkles, Gift, Target, Store, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

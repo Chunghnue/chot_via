@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 /** Khóa lưu trong sessionStorage: tab này đã có màn chờ (hoặc đã bỏ qua nó) rồi, nên tải lại hay chuyển trang trong tab này không hiện nữa. */
-export const SPLASH_KEY = 'cv_splash_seen';
+export const SPLASH_KEY = 'xv_splash_seen';
 /** Khóa localStorage chứa nhịp "còn sống" của từng tab đang mở web (mã tab → giờ báo nhịp gần nhất), và khóa sessionStorage chứa mã của tab này. */
-const ALIVE_KEY = 'cv_tabs';
-const TAB_ID_KEY = 'cv_tab_id';
+const ALIVE_KEY = 'xv_tabs';
+const TAB_ID_KEY = 'xv_tab_id';
 /** Nhịp cũ hơn mức này coi là tab đã thoát (trình duyệt tắt đột ngột). Dài vì tab chạy nền bị trình duyệt giãn hẹn giờ (khoảng 1 phút một lần). */
 const ALIVE_TTL_MS = 150_000;
 const BEAT_MS = 20_000;

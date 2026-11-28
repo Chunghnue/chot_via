@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { DEFAULT_SHOP_CATALOG, ShopCatalogSchema, type ShopCatalog } from '@chot-via/shared';
+import { DEFAULT_SHOP_CATALOG, ShopCatalogSchema, type ShopCatalog } from '@xin-via/shared';
 import { DB, type Db } from '../../database/database';
 import { appSettings } from '../../database/schema';
 

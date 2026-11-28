@@ -1,6 +1,6 @@
 'use client';
 
-import type { RitualScene } from '@chot-via/scene-3d';
+import type { RitualScene } from '@xin-via/scene-3d';
 import { useCallback } from 'react';
 import { ritualPlaying, selectRitual } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

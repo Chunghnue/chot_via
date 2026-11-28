@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetNotificationsQuery, useLogoutMutation } from '@chot-via/api-client';
-import { Avatar, Button, Logo, Menu, buttonClass, cn, toast, type MenuItem } from '@chot-via/ui';
+import { useGetNotificationsQuery, useLogoutMutation } from '@xin-via/api-client';
+import { Avatar, Button, Logo, Menu, buttonClass, cn, toast, type MenuItem } from '@xin-via/ui';
 import { Bell, CircleUserRound, Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';

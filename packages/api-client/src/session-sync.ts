@@ -33,7 +33,7 @@ export function useSessionSync(status: AuthState['status']): void {
 
   useEffect(() => {
     if (typeof BroadcastChannel === 'undefined') return undefined;
-    const channel = new BroadcastChannel('cv-auth');
+    const channel = new BroadcastChannel('xv-auth');
     channelRef.current = channel;
     channel.onmessage = () => { void restore(); };
     return () => { channel.close(); channelRef.current = null; };

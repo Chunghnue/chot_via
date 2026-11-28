@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetChallengeQuery, useGetEventsQuery, useGetMissionsQuery } from '@chot-via/api-client';
-import { Card, EmptyState, ProgressBar, Skeleton, Tabs, buttonClass, cn, useFormatters } from '@chot-via/ui';
+import { useGetChallengeQuery, useGetEventsQuery, useGetMissionsQuery } from '@xin-via/api-client';
+import { Card, EmptyState, ProgressBar, Skeleton, Tabs, buttonClass, cn, useFormatters } from '@xin-via/ui';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

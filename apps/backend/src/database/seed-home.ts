@@ -1,5 +1,5 @@
 import { count, eq, sql } from 'drizzle-orm';
-import type { HomeActionKind, SceneModelKey } from '@chot-via/shared';
+import type { HomeActionKind, SceneModelKey } from '@xin-via/shared';
 import { createDb } from './database';
 import { appSettings, homeActions, homeFooterLinks, placeCategories, places, sceneTemplates, streetSlots } from './schema';
 

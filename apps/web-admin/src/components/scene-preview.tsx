@@ -1,6 +1,6 @@
-import { useGetHomeQuery } from '@chot-via/api-client';
-import type { HomeConfig } from '@chot-via/shared';
-import { GlbStreetView } from '@chot-via/scene-3d';
+import { useGetHomeQuery } from '@xin-via/api-client';
+import type { HomeConfig } from '@xin-via/shared';
+import { GlbStreetView } from '@xin-via/scene-3d';
 import { useTranslations } from 'use-intl';
 
 /** Xem trước cảnh Phố 3D ngay trong admin theo giá trị đang sửa (chưa cần lưu). Chỉ nạp khi mở mục này vì kéo theo three.js. */

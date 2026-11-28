@@ -1,4 +1,4 @@
-import { viMessages } from '@chot-via/shared/i18n';
+import { viMessages } from '@xin-via/shared/i18n';
 import Link from 'next/link';
 
 const L = viMessages.legal.footer;

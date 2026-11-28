@@ -3,7 +3,7 @@ import { and, count, desc, eq, gte, ilike, inArray, or, sql, type SQL } from 'dr
 import {
   maskPhone, type AdminCommentDto, type AdminListQuery, type ReportAction, type AdminReportDto, type AdminStatsDto, type AdminUserDto,
   type AdminUserUpdate, type AppSettings, type AuditLogDto, type PostDto, type ReportTarget,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import type { RequestContext } from '../../common/access';
 import { offsetOf, paged, type ApiPaged } from '../../common/api';
 import { DomainError } from '../../common/domain-error';

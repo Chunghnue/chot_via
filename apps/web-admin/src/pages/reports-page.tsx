@@ -1,6 +1,6 @@
-import { useAdminReportActMutation, useAdminReportsQuery } from '@chot-via/api-client';
-import { REPORT_ACTIONS, REPORT_STATES, type ReportAction, type ReportState } from '@chot-via/shared';
-import { Badge, Button, Card, Chip, Skeleton, toast, useConfirm, useFormatters } from '@chot-via/ui';
+import { useAdminReportActMutation, useAdminReportsQuery } from '@xin-via/api-client';
+import { REPORT_ACTIONS, REPORT_STATES, type ReportAction, type ReportState } from '@xin-via/shared';
+import { Badge, Button, Card, Chip, Skeleton, toast, useConfirm, useFormatters } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { PageHeader, Pager } from '../components/common';

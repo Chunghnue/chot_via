@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, DeityAvatar } from '@chot-via/ui';
+import { Badge, DeityAvatar } from '@xin-via/ui';
 import { Check, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';

@@ -4,8 +4,8 @@ import { resolve } from 'node:path';
 import postgres from 'postgres';
 
 export const API_PORT = 3101;
-const ADMIN_URL = 'postgres://chotvia:chotvia@localhost:5432/postgres';
-const TEST_DB = 'chotvia_test';
+const ADMIN_URL = 'postgres://xinvia:xinvia@localhost:5432/postgres';
+const TEST_DB = 'xinvia_test';
 const root = resolve(import.meta.dirname, '../..');
 
 function secret(): string {
@@ -14,8 +14,8 @@ function secret(): string {
 }
 
 const testEnv = (): NodeJS.ProcessEnv => ({
-  ...process.env, NODE_ENV: 'development', PORT: String(API_PORT), DATABASE_URL: `postgres://chotvia:chotvia@localhost:5432/${TEST_DB}`,
-  REDIS_URL: '', JWT_ACCESS_SECRET: secret(), SMS_PROVIDER: 'dev', DEV_FIXED_OTP: '123456', STORAGE_LOCAL_DIR: './storage-test', SEED_ADMIN_PHONE: '0900000000',
+  ...process.env, NODE_ENV: 'development', PORT: String(API_PORT), DATABASE_URL: `postgres://xinvia:xinvia@localhost:5432/${TEST_DB}`,
+  REDIS_URL: '', JWT_ACCESS_SECRET: secret(), SMS_PROVIDER: 'dev', DEV_FIXED_OTP: '123456', STORAGE_LOCAL_DIR: './storage-test', SEED_ADMIN_PHONE: '0368886999',
   PUBLIC_WEB_URL: 'http://localhost:3100', PUBLIC_API_URL: 'http://localhost:3100',
 });
 

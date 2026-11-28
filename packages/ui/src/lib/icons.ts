@@ -1,4 +1,4 @@
-import type { IconKey } from '@chot-via/shared';
+import type { IconKey } from '@xin-via/shared';
 
 /** Biểu tượng của các khóa icon admin chọn. Thay bằng bộ icon thiết kế chính thức tại đây (một nơi). */
 export const ICON_GLYPHS: Record<IconKey, string> = {

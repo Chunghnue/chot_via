@@ -1,4 +1,4 @@
-import { DISPLAY_MODES, MEMBER_ROLES, METRIC_TYPES, STORY_STICKERS, type AppSettings, type PublicSettings } from '@chot-via/shared';
+import { DISPLAY_MODES, MEMBER_ROLES, METRIC_TYPES, STORY_STICKERS, type AppSettings, type PublicSettings } from '@xin-via/shared';
 import { z } from 'zod';
 import { COMPOSER_KINDS, type ComposerDraft } from '@/features/composer/composerSlice';
 

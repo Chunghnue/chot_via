@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
-import type { DemoPostInput, DemoPostItem, DemoUserInput, DemoUserItem } from '@chot-via/shared';
+import type { DemoPostInput, DemoPostItem, DemoUserInput, DemoUserItem } from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { DB, type Db } from '../../database/database';
 import { achievements, postMedia, posts, users } from '../../database/schema';

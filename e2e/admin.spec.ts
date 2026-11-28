@@ -7,8 +7,8 @@ test.describe('web admin', () => {
   test('đăng nhập admin, tạo bài mẫu và bật/tắt công tắc dữ liệu mẫu hiển thị trên app', async ({ page, request, context }) => {
     await page.goto('http://localhost:5273/', { waitUntil: 'networkidle' });
     const H = headers();
-    expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/request', { headers: H, data: { phone: '0900000000' } })).status()).toBe(201);
-    expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/verify', { headers: H, data: { phone: '0900000000', code: '123456' } })).status()).toBe(201);
+    expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/request', { headers: H, data: { phone: '0368886999' } })).status()).toBe(201);
+    expect((await context.request.post('http://localhost:5273/api/v1/auth/otp/verify', { headers: H, data: { phone: '0368886999', code: '123456' } })).status()).toBe(201);
     await page.goto('http://localhost:5273/demo/posts', { waitUntil: 'networkidle' });
     await expect(page.getByRole('heading', { name: 'Bài đăng mẫu' })).toBeVisible();
     await expect(page.getByText('Lan Anh').first()).toBeVisible();

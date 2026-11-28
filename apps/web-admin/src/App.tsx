@@ -1,5 +1,5 @@
-import { selectAuthStatus, selectCurrentUser, useRestoreSessionMutation, useSessionSync } from '@chot-via/api-client';
-import { Skeleton } from '@chot-via/ui';
+import { selectAuthStatus, selectCurrentUser, useRestoreSessionMutation, useSessionSync } from '@xin-via/api-client';
+import { Skeleton } from '@xin-via/ui';
 import { useEffect, useRef } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdminLayout } from './layout/admin-layout';

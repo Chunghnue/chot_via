@@ -8,7 +8,7 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/api-client/package.json packages/api-client/
 COPY packages/ui/package.json packages/ui/
 COPY packages/scene-3d/package.json packages/scene-3d/
-RUN pnpm install --frozen-lockfile --filter @chot-via/web-public...
+RUN pnpm install --frozen-lockfile --filter @xin-via/web-public...
 COPY packages packages
 COPY apps/web-public apps/web-public
 # Các biến NEXT_PUBLIC_* được đưa vào mã lúc build.
@@ -18,7 +18,7 @@ ARG NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
 ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 ENV NEXT_OUTPUT=standalone NEXT_TELEMETRY_DISABLED=1 BACKEND_URL=$BACKEND_URL \
     NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
-RUN pnpm --filter @chot-via/web-public build
+RUN pnpm --filter @xin-via/web-public build
 
 FROM node:24-alpine AS run
 ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1

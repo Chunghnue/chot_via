@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authReducer, baseApi } from '@chot-via/api-client';
+import { authReducer, baseApi } from '@xin-via/api-client';
 import { composerSlice } from '@/features/composer/composerSlice';
 import { feedSlice } from '@/features/feed/feedSlice';
 import { streetSlice } from '@/features/street/streetSlice';

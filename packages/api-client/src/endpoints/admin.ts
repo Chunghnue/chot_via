@@ -51,7 +51,7 @@ import {
   type DemoPostInput,
   type DemoUserInput,
   type ReportAction,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { baseApi, unwrap, unwrapPaged, type ApiBuilder } from '../base';
 

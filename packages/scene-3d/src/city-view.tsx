@@ -1,4 +1,4 @@
-import { cn } from '@chot-via/ui';
+import { cn } from '@xin-via/ui';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSceneCapability } from './capability';
 import type { CityStreetProps } from './city-street';

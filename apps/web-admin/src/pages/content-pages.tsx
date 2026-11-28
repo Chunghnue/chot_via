@@ -1,5 +1,5 @@
-import { useAdminCommentStatusMutation, useAdminCommentsQuery, useAdminPostPinMutation, useAdminPostStatusMutation, useAdminPostsQuery } from '@chot-via/api-client';
-import { Badge, Button, Chip, Input, Skeleton, toast, useFormatters } from '@chot-via/ui';
+import { useAdminCommentStatusMutation, useAdminCommentsQuery, useAdminPostPinMutation, useAdminPostStatusMutation, useAdminPostsQuery } from '@xin-via/api-client';
+import { Badge, Button, Chip, Input, Skeleton, toast, useFormatters } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { PageHeader, Pager, TableShell, Td, Th } from '../components/common';

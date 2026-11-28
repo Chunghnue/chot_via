@@ -1,7 +1,7 @@
 'use client';
 
-import { useBlockUserMutation, useFollowUserMutation, useGetProfileQuery } from '@chot-via/api-client';
-import { AppIcon, Avatar, Badge, Button, Card, EmptyState, Skeleton } from '@chot-via/ui';
+import { useBlockUserMutation, useFollowUserMutation, useGetProfileQuery } from '@xin-via/api-client';
+import { AppIcon, Avatar, Badge, Button, Card, EmptyState, Skeleton } from '@xin-via/ui';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'use-intl';
 import { FeedList } from '@/components/post/feed';

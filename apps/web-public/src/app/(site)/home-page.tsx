@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetHomeQuery } from '@chot-via/api-client';
+import { useGetHomeQuery } from '@xin-via/api-client';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useTranslations } from 'use-intl';
@@ -14,7 +14,7 @@ import { ChallengeCard } from '@/components/rail/side-cards';
 import { WeeklyBoard } from '@/components/rail/weekly-board';
 import { selectFeedFilters } from '@/features/feed/feedSlice';
 import { deviceClass, track } from '@/lib/analytics';
-import { Button } from '@chot-via/ui';
+import { Button } from '@xin-via/ui';
 import { Pencil } from 'lucide-react';
 import { useRequireMember } from '@/lib/use-member';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

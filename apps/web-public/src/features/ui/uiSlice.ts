@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { ReportTarget, SceneModelKey } from '@chot-via/shared';
-import type { RitualKind } from '@chot-via/scene-3d';
+import type { ReportTarget, SceneModelKey } from '@xin-via/shared';
+import type { RitualKind } from '@xin-via/scene-3d';
 
 /** Khớp khóa i18n `auth.reason.*`. */
 export type LoginReason = 'post' | 'react' | 'comment' | 'follow' | 'save' | 'place' | 'profile' | 'generic' | 'poll' | 'like' | 'block';

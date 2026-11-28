@@ -19,7 +19,7 @@ packages/ui       theme.css (màu/font DUY NHẤT) + component Tailwind/Radix   
 packages/scene-3d Thành phố 3D từ hình tách nền (CityView, dùng ở trang chủ và /pho-3d, không có poster; hình ở public/images/pho/, bố cục ở city-assets.ts); GlbStreetView (GLB) chỉ còn cho xem trước trong admin
 docs/             DEPLOY · CAN-CHU-DU-AN-CUNG-CAP · DECISIONS · STATUS · ARCHITECTURE · DESIGN-REFERENCE · ROADMAP · DESIGN-SYSTEM · ASSET-PROMPTS · reference/
 ```
-pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-via/<tên>`.
+pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@xin-via/<tên>`.
 
 ## Lệnh thường dùng
 | Việc | Lệnh |
@@ -27,18 +27,21 @@ pnpm workspaces, TypeScript strict, Node ≥ 24, `pnpm@12`. Tên gói: `@chot-vi
 | Cài đặt | `pnpm install` |
 | Postgres nhúng (thay Docker; giữ cửa sổ mở) | `pnpm db:embedded` |
 | Migration / dữ liệu khởi tạo + mẫu | `pnpm db:migrate` · `pnpm db:seed` (chạy lần lượt `seed.ts` → `seed-demo-content.ts` → `seed-home.ts`; chỉ dữ liệu trang chủ: `pnpm db:seed:home`) |
-| Sinh migration từ schema Drizzle | `pnpm --filter @chot-via/backend db:generate` (chỉ sau khi chủ dự án duyệt thay đổi DB, xem quy tắc 7) |
+| Sinh migration từ schema Drizzle | `pnpm --filter @xin-via/backend db:generate` (chỉ sau khi chủ dự án duyệt thay đổi DB, xem quy tắc 7) |
 | Chạy | `pnpm dev:backend` · `pnpm dev:web` · `pnpm dev:admin` |
 | Kiểm kiểu toàn bộ + giới hạn 300 dòng/file | `pnpm typecheck` (kiểu từng gói: `pnpm --filter <gói> typecheck`; chỉ kiểm dòng: `pnpm check:size`) |
 | Test | `pnpm test` (Vitest) · `pnpm test:e2e` (Playwright) · `pnpm test:e2e:prod` (PWA/offline trên bản `next build`) · `pnpm test:all` |
 | Build | `pnpm build` |
-| Reset DB dev | `pnpm --filter @chot-via/backend db:reset` rồi migrate + seed |
+| Reset DB dev | `pnpm --filter @xin-via/backend db:reset` rồi migrate + seed |
+| Bản trắng như mới deploy (chỉ cấu hình hệ thống, bỏ cửa hàng/nhiệm vụ/thử thách mẫu; áp dụng một lần, đánh dấu `baseline_applied`) | `pnpm db:reset:baseline` |
+| Bộ dữ liệu mẫu đầy đủ theo thiết kế (chạy tay, lặp được, không nhân đôi) | `pnpm --filter @xin-via/backend db:seed:sample` |
+| Postgres + Redis bằng Docker (thay cho `db:embedded`) | `docker compose up -d` |
 
 `pnpm test` chạy Vitest theo projects (`packages/shared`, `apps/backend`, `apps/web-public`, mỗi nơi có `vitest.config.mts` riêng); Playwright có `e2e/global-setup.ts`/`global-teardown.ts`. Chạy một test: `pnpm vitest run <đường-dẫn-file>` (thêm `-t "<tên test>"` để lọc theo tên) · `pnpm playwright test e2e/<file>.spec.ts` (cấu hình ở `playwright.config.ts`; bản prod ở `playwright.prod.config.ts`, thư mục `e2e-prod/`). Không có lệnh lint riêng; kiểm tra bằng `typecheck` (đã gồm kiểm giới hạn 300 dòng).
 
-**Điều kiện chạy test:** backend/E2E cần Postgres nhúng đang chạy (`pnpm db:embedded`, cổng 5432); global-setup tự tạo lại DB `chotvia_test` và bật API test ở cổng 3101 (E2E thêm web 3100, admin 5273, bản prod 3300), không đụng DB dev. Playwright mặc định trỏ tới `chrome.exe` của Windows, trên macOS/Linux phải đặt `PW_CHROMIUM` (vd. `PW_CHROMIUM="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" pnpm test:e2e`). Dòng "skipped" trong E2E là `test.skip` theo bề rộng màn hình (mỗi test vẫn chạy ở project phù hợp), không phải lỗi. `next build` (E2E prod) tự sửa `apps/web-public/next-env.d.ts`: hoàn lại bằng `git checkout` trước khi commit.
+**Điều kiện chạy test:** backend/E2E cần Postgres nhúng đang chạy (`pnpm db:embedded`, cổng 5432); global-setup tự tạo lại DB `xinvia_test` và bật API test ở cổng 3101 (E2E thêm web 3100, admin 5273, bản prod 3300), không đụng DB dev. Playwright mặc định trỏ tới `chrome.exe` của Windows, trên macOS/Linux phải đặt `PW_CHROMIUM` (vd. `PW_CHROMIUM="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" pnpm test:e2e`). Dòng "skipped" trong E2E là `test.skip` theo bề rộng màn hình (mỗi test vẫn chạy ở project phù hợp), không phải lỗi. `next build` (E2E prod) tự sửa `apps/web-public/next-env.d.ts`: hoàn lại bằng `git checkout` trước khi commit.
 
-Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0900000000`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
+Dev: OTP **không gửi SMS**, mã cố định `123456`. Admin seed: số `0368886999`. OTP bị giới hạn 3 lần/15 phút/số (gặp `AUTH_OTP_RESEND_WAIT` thì đợi hoặc dùng số khác). Web/admin gọi API qua proxy cùng nguồn (`/api`, `/storage`).
 
 ## Quy tắc bắt buộc
 1. Mọi request/response có Zod DTO trong `packages/shared`; cấm `any`, `as X` (trừ `as const`), kiểu chung chung.

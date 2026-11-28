@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { asc, eq, and, sql } from 'drizzle-orm';
-import type { CommentDto, LevelDto } from '@chot-via/shared';
+import type { CommentDto, LevelDto } from '@xin-via/shared';
 import type { RequestContext } from '../../common/access';
 import { offsetOf, paged, type ApiPaged } from '../../common/api';
 import { DomainError } from '../../common/domain-error';

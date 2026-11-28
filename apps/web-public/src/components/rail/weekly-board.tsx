@@ -1,8 +1,8 @@
 'use client';
 
-import { useGetPlaceLeaderboardQuery } from '@chot-via/api-client';
-import type { PlaceKind } from '@chot-via/shared';
-import { Card, RankRow, SectionTitle, Skeleton, Tabs, cn, compactCount } from '@chot-via/ui';
+import { useGetPlaceLeaderboardQuery } from '@xin-via/api-client';
+import type { PlaceKind } from '@xin-via/shared';
+import { Card, RankRow, SectionTitle, Skeleton, Tabs, cn, compactCount } from '@xin-via/ui';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

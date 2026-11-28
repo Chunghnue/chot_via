@@ -1,4 +1,4 @@
-import { viMessages } from '@chot-via/shared/i18n';
+import { viMessages } from '@xin-via/shared/i18n';
 import type { Metadata } from 'next';
 import { LegalDocument } from '@/components/legal/legal-document';
 

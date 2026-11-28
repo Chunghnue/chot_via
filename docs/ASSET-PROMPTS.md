@@ -2,7 +2,7 @@
 
 > **Đã dùng xong:** bộ ảnh chính thức đã được bàn giao và tích hợp ngày 19/11/2026 (xem `docs/STATUS.md`). File này chỉ để tham khảo khi cần xuất thêm hoặc thay ảnh.
 
-Dán vào cuộc trò chuyện thiết kế gốc để giữ đúng phong cách. Mỗi ảnh lưu theo đúng tên file bên dưới vào `D:\Projects\chot-via\design-assets\`.
+Dán vào cuộc trò chuyện thiết kế gốc để giữ đúng phong cách. Mỗi ảnh lưu theo đúng tên file bên dưới vào `D:\Projects\xin-via\design-assets\`.
 
 ## Tin nhắn 0 — quy tắc chung (dán trước tiên)
 
@@ -52,6 +52,6 @@ Hàng 4: huy chương số 3, đồng xu vàng, hai bàn tay chắp (cầu vía)
 Ba ảnh nhỏ 4:3 dùng làm hình trong bài đăng mẫu: một người ôm đầu mệt mỏi bên laptop (Kể khổ); hai người bắt tay chốt hợp đồng (Khoe deal); biểu đồ cột tăng với chữ trống (Khoe doanh thu). Tên: `bai-ke-kho.png`, `bai-khoe-deal.png`, `bai-khoe-doanh-thu.png`.
 
 ## Sau khi xuất xong
-1. Lưu các file theo đúng tên vào `D:\Projects\chot-via\design-assets\`.
+1. Lưu các file theo đúng tên vào `D:\Projects\xin-via\design-assets\`.
 2. Nếu ảnh nào ChatGPT không xuất được nền trong suốt thì vẫn gửi bản nền xanh #00FF00, tôi sẽ tách nền.
 3. Báo tôi đường dẫn thư mục để tôi kiểm tra từng file và ghép vào ứng dụng.

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'use-intl';
-import type { GlbStreetLabels, StreetSceneProps } from '@chot-via/scene-3d';
+import type { GlbStreetLabels, StreetSceneProps } from '@xin-via/scene-3d';
 
 /** Nhãn chữ cho cảnh Phố (lấy từ i18n để scene-3d không chứa chữ cứng). */
 export function useStreetLabels(): StreetSceneProps['labels'] {

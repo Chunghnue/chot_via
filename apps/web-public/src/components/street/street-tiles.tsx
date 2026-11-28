@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@chot-via/ui';
+import { cn } from '@xin-via/ui';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';

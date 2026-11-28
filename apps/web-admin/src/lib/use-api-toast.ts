@@ -1,5 +1,5 @@
-import { parseApiError } from '@chot-via/api-client';
-import { toast, useCodeMessage } from '@chot-via/ui';
+import { parseApiError } from '@xin-via/api-client';
+import { toast, useCodeMessage } from '@xin-via/ui';
 import { useCallback } from 'react';
 
 /** Hiển thị lỗi từ backend: backend chỉ trả mã, câu chữ lấy từ i18n (`codes.<MÃ>`). */

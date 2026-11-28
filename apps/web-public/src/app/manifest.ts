@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { viMessages } from '@chot-via/shared/i18n';
+import { viMessages } from '@xin-via/shared/i18n';
 import { themeToken } from '@/lib/theme-token';
 
 export default function manifest(): MetadataRoute.Manifest {

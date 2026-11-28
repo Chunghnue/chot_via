@@ -2,7 +2,7 @@ import { Inject, Injectable, SetMetadata, createParamDecorator, type CanActivate
 import { Reflector } from '@nestjs/core';
 import { eq } from 'drizzle-orm';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { AccountRole, AccountStatus, MemberRole } from '@chot-via/shared';
+import type { AccountRole, AccountStatus, MemberRole } from '@xin-via/shared';
 import { env } from '../config/env';
 import { DB, type Db } from '../database/database';
 import { guestSessions, users } from '../database/schema';
@@ -24,9 +24,9 @@ declare module 'fastify' {
   interface FastifyRequest { ctx: RequestContext }
 }
 
-const AUTH_KEY = 'cv:auth';
-const ROLES_KEY = 'cv:roles';
-export const GUEST_COOKIE = 'cv_gid';
+const AUTH_KEY = 'xv:auth';
+const ROLES_KEY = 'xv:roles';
+export const GUEST_COOKIE = 'xv_gid';
 const GUEST_TTL_DAYS = 30;
 
 /** Mặc định endpoint là công khai (khách dùng được); gắn @Auth() khi cần đăng nhập. */

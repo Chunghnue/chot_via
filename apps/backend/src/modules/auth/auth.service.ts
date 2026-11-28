@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, count, desc, eq, gt, isNull, sql } from 'drizzle-orm';
 import { randomInt } from 'node:crypto';
-import { normalizeVnPhone, type AuthSession, type OAuthProvider, type OtpRequestBody, type OtpRequestResult, type OtpVerifyBody } from '@chot-via/shared';
+import { normalizeVnPhone, type AuthSession, type OAuthProvider, type OtpRequestBody, type OtpRequestResult, type OtpVerifyBody } from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { safeEqual, sha256 } from '../../common/crypto';
 import { RateLimitService } from '../../common/rate-limit.service';

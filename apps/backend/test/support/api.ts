@@ -11,7 +11,7 @@ type Json = Record<string, unknown> | unknown[] | null;
 /** Gọi API thật (kèm header CSRF). `token` = access token Bearer; `ip` giả lập khách khác nhau để tránh dùng chung giới hạn tốc độ. */
 export async function call<T = unknown>(method: string, path: string, opts: { token?: string; body?: Json; ip?: string; cookie?: string; csrf?: boolean } = {}): Promise<ApiResult<T>> {
   const headers: Record<string, string> = opts.body !== undefined ? { 'content-type': 'application/json' } : {};
-  if (opts.csrf !== false) headers['x-requested-with'] = 'chotvia';
+  if (opts.csrf !== false) headers['x-requested-with'] = 'xinvia';
   if (opts.token) headers['authorization'] = `Bearer ${opts.token}`;
   if (opts.ip) headers['x-forwarded-for'] = opts.ip;
   if (opts.cookie) headers['cookie'] = opts.cookie;
@@ -47,7 +47,7 @@ export async function login(phone: string = freshPhone()): Promise<Session> {
 let adminCache: Session | null = null;
 export async function adminLogin(): Promise<Session> {
   if (adminCache) return adminCache;
-  const sql = postgres('postgres://chotvia:chotvia@localhost:5432/chotvia_test', { max: 1 });
+  const sql = postgres('postgres://xinvia:xinvia@localhost:5432/xinvia_test', { max: 1 });
   const rows = await sql<{ id: string }[]>`select id from users where account_role = 'admin' limit 1`;
   await sql.end();
   const id = rows[0]?.id;
@@ -55,7 +55,7 @@ export async function adminLogin(): Promise<Session> {
   const env = readFileSync(resolve(import.meta.dirname, '../../../../.env'), 'utf8');
   const secret = /^JWT_ACCESS_SECRET=(.+)$/m.exec(env)?.[1]?.trim() ?? '';
   const token = await new SignJWT({}).setProtectedHeader({ alg: 'HS256' }).setSubject(id).setIssuedAt().setExpirationTime('30m').sign(new TextEncoder().encode(secret));
-  adminCache = { token, phone: '0900000000', userId: id, cookie: '' };
+  adminCache = { token, phone: '0368886999', userId: id, cookie: '' };
   return adminCache;
 }
 

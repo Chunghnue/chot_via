@@ -1,8 +1,8 @@
-import { SwitchField, Button, FormField, Input } from '@chot-via/ui';
+import { SwitchField, Button, FormField, Input } from '@xin-via/ui';
 import { Plus, Trash2 } from 'lucide-react';
 import { useFieldArray, type UseFormReturn } from 'react-hook-form';
 import { useTranslations } from 'use-intl';
-import type { ShopCatalog } from '@chot-via/shared';
+import type { ShopCatalog } from '@xin-via/shared';
 
 /** Mã gói/dòng mới: duy nhất trong biểu mẫu, đủ ngắn để hiển thị trong dữ liệu. */
 export const newId = (prefix: string): string => `${prefix}${Date.now().toString(36)}${Math.floor(Math.random() * 36 ** 2).toString(36)}`;

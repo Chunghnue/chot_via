@@ -1,7 +1,7 @@
 'use client';
 
-import { FEED_TYPES } from '@chot-via/shared';
-import { Chip } from '@chot-via/ui';
+import { FEED_TYPES } from '@xin-via/shared';
+import { Chip } from '@xin-via/ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { useTranslations } from 'use-intl';

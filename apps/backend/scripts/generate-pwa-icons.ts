@@ -3,7 +3,7 @@ import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import sharp from 'sharp';
 
-/** Sinh icon PWA từ token màu duy nhất trong packages/ui theme.css. Chạy: pnpm --filter @chot-via/backend exec tsx scripts/generate-pwa-icons.ts */
+/** Sinh icon PWA từ token màu duy nhất trong packages/ui theme.css. Chạy: pnpm --filter @xin-via/backend exec tsx scripts/generate-pwa-icons.ts */
 const root = resolve(process.cwd(), '../..');
 const css = readFileSync(resolve(root, 'packages/ui/src/styles/theme.css'), 'utf8');
 const token = (name: string): string => new RegExp(`--color-${name}:\s*([^;]+);`).exec(css)?.[1]?.trim() ?? '#16a34a';

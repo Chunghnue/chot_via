@@ -38,4 +38,4 @@ export function removeKey(kind: Kind, key: string): void {
   }
 }
 
-export const STORAGE_KEYS = { wish: 'cv_wish_today', offlinePack: 'cv_offline_pack', draft: 'cv_composer_draft' } as const;
+export const STORAGE_KEYS = { wish: 'xv_wish_today', offlinePack: 'xv_offline_pack', draft: 'xv_composer_draft' } as const;

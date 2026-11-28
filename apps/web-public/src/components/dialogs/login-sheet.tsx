@@ -1,8 +1,8 @@
 'use client';
 
-import { parseApiError, useGetCatalogQuery, useRequestOtpMutation, useVerifyOtpMutation } from '@chot-via/api-client';
-import { Button, FieldError, Input, Label, Notice, OAuthButtons, Sheet, toast, useCodeMessage } from '@chot-via/ui';
-import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@chot-via/shared';
+import { parseApiError, useGetCatalogQuery, useRequestOtpMutation, useVerifyOtpMutation } from '@xin-via/api-client';
+import { Button, FieldError, Input, Label, Notice, OAuthButtons, Sheet, toast, useCodeMessage } from '@xin-via/ui';
+import { OtpRequestBodySchema, OtpVerifyBodySchema, type OtpRequestBody, type OtpVerifyBody } from '@xin-via/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';

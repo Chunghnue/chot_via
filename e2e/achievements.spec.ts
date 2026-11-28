@@ -6,7 +6,7 @@ test.describe('Khoe doanh thu / Deal theo vai trò', () => {
   async function openBrag(page: import('@playwright/test').Page, request: import('@playwright/test').APIRequestContext) {
     await apiLogin(request);
     await page.goto('/', { waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: /^Khoe doanh thu/ }).first().click();
+    await page.getByRole('button', { name: 'Khoe doanh thu / Deal', exact: true }).first().click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByText('Bạn là ai?')).toBeVisible();
     return dialog;

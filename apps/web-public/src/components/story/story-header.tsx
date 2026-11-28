@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetHotHashtagsQuery } from '@chot-via/api-client';
-import { Chip, cn } from '@chot-via/ui';
+import { useGetHotHashtagsQuery } from '@xin-via/api-client';
+import { Chip, cn } from '@xin-via/ui';
 import { ChevronDown, Flame } from 'lucide-react';
 import { useTranslations } from 'use-intl';
 import { composerOpened } from '@/features/composer/composerSlice';

@@ -1,6 +1,6 @@
 'use client';
 
-import { selectAuthStatus, selectCurrentUser, selectIsMember, type AuthState } from '@chot-via/api-client';
+import { selectAuthStatus, selectCurrentUser, selectIsMember, type AuthState } from '@xin-via/api-client';
 import { useCallback } from 'react';
 import { loginRequested, type LoginReason } from '@/features/ui/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Put } from '@nestjs/common';
-import { ShopCatalogSchema, type ShopCatalog } from '@chot-via/shared';
+import { ShopCatalogSchema, type ShopCatalog } from '@xin-via/shared';
 import { Ctx, Roles, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { DomainError } from '../../common/domain-error';

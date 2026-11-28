@@ -1,4 +1,4 @@
-import type { IconKey, SceneModelKey } from '@chot-via/shared';
+import type { IconKey, SceneModelKey } from '@xin-via/shared';
 import { cn } from '../lib/cn';
 import { ICON_GLYPHS } from '../lib/icons';
 

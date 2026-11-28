@@ -1,4 +1,4 @@
-import { Skeleton } from '@chot-via/ui';
+import { Skeleton } from '@xin-via/ui';
 import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from 'react';
 import { useSceneCapability } from './capability';
 import { Street2D } from './street-2d';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Sheet, buttonClass, toast } from '@chot-via/ui';
+import { Button, Sheet, buttonClass, toast } from '@xin-via/ui';
 import qrcode from 'qrcode-generator';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'use-intl';

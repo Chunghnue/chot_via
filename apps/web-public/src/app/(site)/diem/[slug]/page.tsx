@@ -1,8 +1,8 @@
 'use client';
 
-import { useFollowPlaceMutation, useGetPlaceQuery, useGetPostsQuery, useGetProfileQuery, useLikePlaceMutation, useVisitPlaceMutation } from '@chot-via/api-client';
+import { useFollowPlaceMutation, useGetPlaceQuery, useGetPostsQuery, useGetProfileQuery, useLikePlaceMutation, useVisitPlaceMutation } from '@xin-via/api-client';
 import { ShareButtons } from '@/components/common/share-buttons';
-import { Avatar, Badge, Button, Card, EmptyState, IconButton, Skeleton, Tabs, cn, compactCount, toast } from '@chot-via/ui';
+import { Avatar, Badge, Button, Card, EmptyState, IconButton, Skeleton, Tabs, cn, compactCount, toast } from '@xin-via/ui';
 import { ArrowLeft, Crown, Heart, Settings, Share2, UserPlus, UserCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ import { track } from '@/lib/analytics';
 import { useApiToast } from '@/lib/use-api-toast';
 import { useRequireMember } from '@/lib/use-member';
 import { useAppDispatch } from '@/store/hooks';
-import { SHOP_IMAGES } from '@chot-via/ui';
+import { SHOP_IMAGES } from '@xin-via/ui';
 
 type Tab = 'feed' | 'about' | 'photos' | 'achievements';
 const TABS: readonly Tab[] = ['feed', 'about', 'photos', 'achievements'];

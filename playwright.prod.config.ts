@@ -15,7 +15,7 @@ export default defineConfig({
   reporter: [['list']],
   use: { baseURL: 'http://localhost:3300', launchOptions: { executablePath: process.env['PW_CHROMIUM'] ?? chromium }, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   webServer: {
-    command: 'pnpm --filter @chot-via/web-public exec next build && pnpm --filter @chot-via/web-public exec next start -p 3300',
+    command: 'pnpm --filter @xin-via/web-public exec next build && pnpm --filter @xin-via/web-public exec next start -p 3300',
     url: 'http://localhost:3300/', timeout: 600_000, reuseExistingServer: false,
     env: { BACKEND_URL: 'http://localhost:3101', NEXT_DIST_DIR: '.next-prod', NEXT_TELEMETRY_DISABLED: '1' },
   },

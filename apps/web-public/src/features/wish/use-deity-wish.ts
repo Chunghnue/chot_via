@@ -1,7 +1,7 @@
 'use client';
 
-import { DEFAULT_SETTINGS, getTimeBucket, resolveWishTitleCode, type TimeBucket, type WishTitleCode } from '@chot-via/shared';
-import { parseApiError, useDeityWishMutation, useGetCatalogQuery } from '@chot-via/api-client';
+import { DEFAULT_SETTINGS, getTimeBucket, resolveWishTitleCode, type TimeBucket, type WishTitleCode } from '@xin-via/shared';
+import { parseApiError, useDeityWishMutation, useGetCatalogQuery } from '@xin-via/api-client';
 import { useTranslations } from 'use-intl';
 import { useApiToast } from '@/lib/use-api-toast';
 import { track } from '@/lib/analytics';

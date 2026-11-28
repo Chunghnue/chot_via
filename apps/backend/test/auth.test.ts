@@ -36,7 +36,7 @@ describe('đăng nhập OTP', () => {
     expect(r.data.user.points).toBe(0);
     expect(r.data.user.phoneMasked).toContain('****');
     const cookies = r.headers.getSetCookie().join('\n');
-    expect(cookies).toMatch(/cv_rt=/);
+    expect(cookies).toMatch(/xv_rt=/);
     expect(cookies).toMatch(/HttpOnly/i);
   });
 

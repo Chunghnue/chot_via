@@ -1,4 +1,4 @@
-import type { PostType } from '@chot-via/shared';
+import type { PostType } from '@xin-via/shared';
 
 /** Ảnh xem trước (1200×630, bộ XinVia_Social_Sharing) theo hành động được chia sẻ. */
 export const SHARE_IMAGES = {

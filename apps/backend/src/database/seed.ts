@@ -1,5 +1,5 @@
 import { and, count, eq } from 'drizzle-orm';
-import { DEFAULT_SETTINGS, normalizeVnPhone, vnWeekStart, type AnimationKey, type IconKey, type MemberRole, type PlaceKind, type SceneModelKey, type TimeBucket } from '@chot-via/shared';
+import { DEFAULT_SETTINGS, normalizeVnPhone, vnWeekStart, type AnimationKey, type IconKey, type MemberRole, type PlaceKind, type SceneModelKey, type TimeBucket } from '@xin-via/shared';
 import { env } from '../config/env';
 import { createDb } from './database';
 import {

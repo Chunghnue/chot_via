@@ -1,4 +1,4 @@
-import { ApiErrorBodySchema, isErrorCode, type ErrorCode } from '@chot-via/shared';
+import { ApiErrorBodySchema, isErrorCode, type ErrorCode } from '@xin-via/shared';
 
 export interface ApiErrorInfo {
   /** NETWORK = mất mạng/không kết nối được máy chủ; UNKNOWN = phản hồi không đúng khuôn. */

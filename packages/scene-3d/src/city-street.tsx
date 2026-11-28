@@ -5,8 +5,8 @@ import {
   AdditiveBlending, BackSide, CanvasTexture, Color, DoubleSide, MathUtils, MirroredRepeatWrapping, SRGBColorSpace, TOUCH,
   type Group, type Points,
 } from 'three';
-import type { HomeConfig, StreetSlotDto } from '@chot-via/shared';
-import { SHOP_IMAGES } from '@chot-via/ui';
+import type { HomeConfig, StreetSlotDto } from '@xin-via/shared';
+import { SHOP_IMAGES } from '@xin-via/ui';
 import { aspectOf, glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
 import { RitualStage, ritualSpot } from './city-ritual';
 import { CITY_DECOR, CITY_GLB_OVERRIDES, CITY_IMAGES, CITY_LAMPS, SHOP_WIDTH, spreadShopX, type DecorItem } from './city-assets';

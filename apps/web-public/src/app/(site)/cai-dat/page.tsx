@@ -1,7 +1,7 @@
 'use client';
 
-import { useLogoutMutation } from '@chot-via/api-client';
-import { Button, Card } from '@chot-via/ui';
+import { useLogoutMutation } from '@xin-via/api-client';
+import { Button, Card } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 import { ProfileForm } from '@/components/common/profile-form';
 import { PageTitle, RequireMember } from '@/components/common/require-member';

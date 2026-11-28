@@ -1,5 +1,5 @@
-import { viMessages } from '@chot-via/shared/i18n';
-import type { PostDto } from '@chot-via/shared';
+import { viMessages } from '@xin-via/shared/i18n';
+import type { PostDto } from '@xin-via/shared';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { postShareImage, postSnippet } from '@/lib/post-share';
@@ -11,7 +11,7 @@ const fill = (text: string, params: Record<string, string>): string => text.repl
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await fetch(`${BACKEND}/api/v1/posts/${encodeURIComponent(id)}`, { cache: 'no-store', headers: { 'x-requested-with': 'chotvia' } });
+    const res = await fetch(`${BACKEND}/api/v1/posts/${encodeURIComponent(id)}`, { cache: 'no-store', headers: { 'x-requested-with': 'xinvia' } });
     if (!res.ok) return {};
     const json: unknown = await res.json();
     const post = (json as { data?: PostDto }).data;

@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { AuthSession, MeDto } from '@chot-via/shared';
+import type { AuthSession, MeDto } from '@xin-via/shared';
 
 /** unknown = chưa thử khôi phục phiên (khi tải trang); guest = khách; member = đã đăng nhập. */
 export interface AuthState {

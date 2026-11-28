@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery, type BaseQueryFn, type FetchArgs, type FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { AuthSessionSchema, envelope, type PageMeta, pagedEnvelope } from '@chot-via/shared';
+import { AuthSessionSchema, envelope, type PageMeta, pagedEnvelope } from '@xin-via/shared';
 import type { z } from 'zod';
 import { hasAuthState, sessionCleared, sessionStarted } from './auth-slice';
 import { parseApiError } from './errors';
 
 const API_BASE = '/api/v1';
-const CSRF_HEADERS = { 'x-requested-with': 'chotvia' };
+const CSRF_HEADERS = { 'x-requested-with': 'xinvia' };
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE,

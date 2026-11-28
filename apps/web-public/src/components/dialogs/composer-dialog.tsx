@@ -1,10 +1,10 @@
 'use client';
 
-import { ConfirmPanel, Sheet, cn } from '@chot-via/ui';
+import { ConfirmPanel, Sheet, cn } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { composerClosed, kindChosen, selectComposer, type ComposerKind } from '@/features/composer/composerSlice';
-import type { MemberRole } from '@chot-via/shared';
+import type { MemberRole } from '@xin-via/shared';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ComposerForm } from './composer-form';
 

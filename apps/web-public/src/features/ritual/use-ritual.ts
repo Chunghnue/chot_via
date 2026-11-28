@@ -1,8 +1,8 @@
 'use client';
 
-import { placesApi } from '@chot-via/api-client';
-import type { RitualKind } from '@chot-via/scene-3d';
-import { toast } from '@chot-via/ui';
+import { placesApi } from '@xin-via/api-client';
+import type { RitualKind } from '@xin-via/scene-3d';
+import { toast } from '@xin-via/ui';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useTranslations } from 'use-intl';

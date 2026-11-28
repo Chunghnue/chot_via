@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { DeityWishBodySchema, IdParamSchema, PlaceWishBodySchema, type DeityWishBody, type PlaceWishBody } from '@chot-via/shared';
+import { DeityWishBodySchema, IdParamSchema, PlaceWishBodySchema, type DeityWishBody, type PlaceWishBody } from '@xin-via/shared';
 import { Auth, Ctx, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { ZodPipe } from '../../common/zod.pipe';

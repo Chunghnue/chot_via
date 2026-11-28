@@ -1,6 +1,6 @@
-import { useAdminSettingsQuery, useAdminSettingsSaveMutation } from '@chot-via/api-client';
-import { AppSettingsSchema, type AppSettings } from '@chot-via/shared';
-import { Button, Card, FormField, Input, Label, Skeleton, Switch, SwitchField, toast } from '@chot-via/ui';
+import { useAdminSettingsQuery, useAdminSettingsSaveMutation } from '@xin-via/api-client';
+import { AppSettingsSchema, type AppSettings } from '@xin-via/shared';
+import { Button, Card, FormField, Input, Label, Skeleton, Switch, SwitchField, toast } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';

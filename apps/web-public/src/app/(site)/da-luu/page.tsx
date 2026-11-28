@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetSavedPostsQuery } from '@chot-via/api-client';
-import { Button, EmptyState, Skeleton } from '@chot-via/ui';
+import { useGetSavedPostsQuery } from '@xin-via/api-client';
+import { Button, EmptyState, Skeleton } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { PageTitle, RequireMember } from '@/components/common/require-member';

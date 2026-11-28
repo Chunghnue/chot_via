@@ -1,4 +1,4 @@
-import type { DisplayMode, MemberRole, PostType, TimeBucket } from '@chot-via/shared';
+import type { DisplayMode, MemberRole, PostType, TimeBucket } from '@xin-via/shared';
 
 /** Sự kiện đo lường (SRS mục 16). Chỉ gửi thuộc tính đã khai báo: không có số điện thoại, nội dung Kể khổ hay số tiền. */
 export interface AnalyticsEvents {

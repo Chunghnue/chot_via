@@ -1,7 +1,7 @@
 'use client';
 
-import { useDeletePlaceMutation, useGetAutoRepliesQuery, useGetCatalogQuery, useGetPlaceQuery, useSetAutoRepliesMutation } from '@chot-via/api-client';
-import { Button, Card, EmptyState, Skeleton, Textarea, toast, useConfirm, AppIcon } from '@chot-via/ui';
+import { useDeletePlaceMutation, useGetAutoRepliesQuery, useGetCatalogQuery, useGetPlaceQuery, useSetAutoRepliesMutation } from '@xin-via/api-client';
+import { Button, Card, EmptyState, Skeleton, Textarea, toast, useConfirm, AppIcon } from '@xin-via/ui';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';

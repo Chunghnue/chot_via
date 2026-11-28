@@ -1,4 +1,4 @@
-import { DeityAvatar, PlaceIllustration, cn } from '@chot-via/ui';
+import { DeityAvatar, PlaceIllustration, cn } from '@xin-via/ui';
 import type { ReactNode } from 'react';
 import type { StreetSceneProps } from './types';
 

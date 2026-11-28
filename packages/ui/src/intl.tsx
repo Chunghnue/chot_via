@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { IntlProvider } from 'use-intl';
 import { ConfirmProvider } from './components/composite';
-import { APP_TIME_ZONE, DEFAULT_LOCALE, viMessages, type AppMessages } from '@chot-via/shared/i18n';
+import { APP_TIME_ZONE, DEFAULT_LOCALE, viMessages, type AppMessages } from '@xin-via/shared/i18n';
 
 declare module 'use-intl' {
   interface AppConfig { Messages: AppMessages }

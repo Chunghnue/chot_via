@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetMeStatsQuery, useLogoutMutation } from '@chot-via/api-client';
-import { AppIcon, Avatar, Badge, Button, Card, ProgressBar, Sheet, Skeleton } from '@chot-via/ui';
+import { useGetMeStatsQuery, useLogoutMutation } from '@xin-via/api-client';
+import { AppIcon, Avatar, Badge, Button, Card, ProgressBar, Sheet, Skeleton } from '@xin-via/ui';
 import { Bell, CalendarDays, ChevronRight, Flag, LogOut, Settings, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

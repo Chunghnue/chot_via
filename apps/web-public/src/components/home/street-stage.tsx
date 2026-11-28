@@ -1,10 +1,10 @@
 'use client';
 
-import type { PlaceSummary, SceneModelKey } from '@chot-via/shared';
-import { SHOP_IMAGES, cn, compactCount } from '@chot-via/ui';
+import type { PlaceSummary, SceneModelKey } from '@xin-via/shared';
+import { SHOP_IMAGES, cn, compactCount } from '@xin-via/ui';
 import type { CSSProperties, ReactNode } from 'react';
 import { useTranslations } from 'use-intl';
-import type { StreetSceneProps } from '@chot-via/scene-3d';
+import type { StreetSceneProps } from '@xin-via/scene-3d';
 
 /** Khung cảnh Phố Xin Vía 3D theo tỷ lệ của thiết kế (rộng : cao = 2,5 : 1). */
 export const STAGE_RATIO = 2.5;

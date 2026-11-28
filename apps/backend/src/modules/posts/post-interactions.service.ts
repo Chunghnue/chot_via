@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import type { PollDto, ReactionCountsDto, ReactionType, WishCountDto } from '@chot-via/shared';
+import type { PollDto, ReactionCountsDto, ReactionType, WishCountDto } from '@xin-via/shared';
 import type { RequestContext } from '../../common/access';
 import { DomainError } from '../../common/domain-error';
 import { RateLimitService } from '../../common/rate-limit.service';

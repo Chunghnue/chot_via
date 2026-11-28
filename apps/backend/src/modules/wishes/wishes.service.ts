@@ -3,7 +3,7 @@ import { and, asc, eq, gte, isNull, or, sql } from 'drizzle-orm';
 import {
   getTimeBucket, resolveWishTitleCode, vnDayStart, type AnimationKey, type DeityToday, type DeityWishBody, type DeityWishResult, type OfflinePack, type PlaceWishBody,
   type PlaceWishResult, type WishText,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import type { RequestContext } from '../../common/access';
 import { RateLimitService } from '../../common/rate-limit.service';

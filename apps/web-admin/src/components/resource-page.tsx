@@ -1,5 +1,5 @@
-import { useAdminAssetUploadMutation, useUploadMediaMutation } from '@chot-via/api-client';
-import { Badge, Button, FormField, Input, Select, Sheet, Skeleton, SwitchField, Textarea, toast, useConfirm } from '@chot-via/ui';
+import { useAdminAssetUploadMutation, useUploadMediaMutation } from '@xin-via/api-client';
+import { Badge, Button, FormField, Input, Select, Sheet, Skeleton, SwitchField, Textarea, toast, useConfirm } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';

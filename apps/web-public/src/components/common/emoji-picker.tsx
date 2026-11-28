@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@chot-via/ui';
+import { cn } from '@xin-via/ui';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { EMOJI_GROUPS, EMOJI_GROUP_ICONS, pushRecentEmoji, readRecentEmoji, type EmojiGroup } from '@/lib/emoji-data';

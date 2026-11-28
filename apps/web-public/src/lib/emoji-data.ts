@@ -94,7 +94,7 @@ export const EMOJI_GROUPS = {
 export type EmojiGroup = keyof typeof EMOJI_GROUPS;
 export const EMOJI_GROUP_ICONS: Record<EmojiGroup, string> = { smile: '😀', hand: '👍', work: '💰', heart: '❤️', food: '☕', nature: '🌸', symbol: '✨' };
 
-const RECENT_KEY = 'cv_recent_emoji';
+const RECENT_KEY = 'xv_recent_emoji';
 export function readRecentEmoji(): string[] {
   try { const v: unknown = JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]'); return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string').slice(0, 16) : []; } catch { return []; }
 }

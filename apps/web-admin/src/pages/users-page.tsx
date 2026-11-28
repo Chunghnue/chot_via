@@ -1,6 +1,6 @@
-import { useAdminUserUpdateMutation, useAdminUsersQuery } from '@chot-via/api-client';
-import { ACCOUNT_ROLES } from '@chot-via/shared';
-import { Badge, Button, Chip, Input, Select, Skeleton, toast, useFormatters } from '@chot-via/ui';
+import { useAdminUserUpdateMutation, useAdminUsersQuery } from '@xin-via/api-client';
+import { ACCOUNT_ROLES } from '@xin-via/shared';
+import { Badge, Button, Chip, Input, Select, Skeleton, toast, useFormatters } from '@xin-via/ui';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { PageHeader, Pager, TableShell, Td, Th } from '../components/common';

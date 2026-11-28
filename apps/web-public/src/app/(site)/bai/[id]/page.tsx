@@ -1,7 +1,7 @@
 'use client';
 
-import { useAddCommentMutation, useGetCommentsQuery, useGetPostQuery } from '@chot-via/api-client';
-import { Avatar, Button, Card, EmptyState, Skeleton, Textarea, useFormatters } from '@chot-via/ui';
+import { useAddCommentMutation, useGetCommentsQuery, useGetPostQuery } from '@xin-via/api-client';
+import { Avatar, Button, Card, EmptyState, Skeleton, Textarea, useFormatters } from '@xin-via/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';

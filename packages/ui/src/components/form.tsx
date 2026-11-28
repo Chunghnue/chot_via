@@ -1,7 +1,7 @@
 import * as SwitchPrimitive from '@radix-ui/react-switch';
 import type { InputHTMLAttributes, LabelHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
-import { localizeValidationMessage } from '@chot-via/shared';
+import { localizeValidationMessage } from '@xin-via/shared';
 import { cn } from '../lib/cn';
 
 const fieldBase =

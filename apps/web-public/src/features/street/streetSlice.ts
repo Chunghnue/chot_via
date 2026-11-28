@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { PlaceKind } from '@chot-via/shared';
+import type { PlaceKind } from '@xin-via/shared';
 
 export type StreetTab = 'walk' | 'friends' | 'top';
 

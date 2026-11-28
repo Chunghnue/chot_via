@@ -1,8 +1,8 @@
 'use client';
 
-import { useGetNotificationsQuery, useMarkNotificationsReadMutation } from '@chot-via/api-client';
-import type { NotificationDto } from '@chot-via/shared';
-import { Button, Card, EmptyState, Skeleton, cn, useFormatters } from '@chot-via/ui';
+import { useGetNotificationsQuery, useMarkNotificationsReadMutation } from '@xin-via/api-client';
+import type { NotificationDto } from '@xin-via/shared';
+import { Button, Card, EmptyState, Skeleton, cn, useFormatters } from '@xin-via/ui';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { PageTitle, RequireMember } from '@/components/common/require-member';

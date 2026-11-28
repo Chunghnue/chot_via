@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { viMessages } from '@chot-via/shared/i18n';
+import { viMessages } from '@xin-via/shared/i18n';
 import { themeToken } from '@/lib/theme-token';
 import { SPLASH_BOOT_SCRIPT, SplashScreen } from '@/components/splash-screen';
 import { Providers } from './providers';
 import './globals.css';
 
 /** Tên miền công khai để ghép link tuyệt đối cho thẻ xem trước (Facebook/Zalo cần địa chỉ đầy đủ): đặt NEXT_PUBLIC_SITE_URL khi build cho từng server. */
-const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://chotvia.divusoft.com';
+const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://xinvia.co';
 const META = viMessages.common.meta;
 const OG_IMAGE = '/images/og/xin-via-home.jpg';
 

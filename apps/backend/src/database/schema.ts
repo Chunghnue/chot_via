@@ -6,7 +6,7 @@ import type {
   AccountRole, AccountStatus, AnimationKey, BadgeCondition, ChallengeScope, CommentStatus, DisplayMode, HomeActionKind, IconKey, KeywordAction,
   MemberRole, MetricType, MissionAction, MissionPeriod, NotificationType, OAuthProvider, PlaceKind, PlaceStatus, PointAction,
   PostStatus, PostType, ReactionType, ReportReason, ReportState, ReportTarget, SceneModelKey, TimeBucket, WishSource, WishTemplateSource,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 
 const id = () => uuid('id').primaryKey().defaultRandom();
 const createdAt = () => timestamp('created_at', { withTimezone: true }).notNull().defaultNow();

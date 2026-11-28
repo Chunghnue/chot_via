@@ -3,9 +3,9 @@
 import {
   useBlockUserMutation, useDeletePostMutation, usePostWishMutation, useSetReactionMutation, useSetSavedMutation,
   useSharePostMutation, useVotePollMutation,
-} from '@chot-via/api-client';
-import { REACTION_TYPES, type PollDto, type PostDto, type ReactionType, type WishCountDto } from '@chot-via/shared';
-import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, pillClass, toast, useConfirm, useFormatters, useRoleLabel, type MenuItem } from '@chot-via/ui';
+} from '@xin-via/api-client';
+import { REACTION_TYPES, type PollDto, type PostDto, type ReactionType, type WishCountDto } from '@xin-via/shared';
+import { AppIcon, Avatar, Badge, Card, Menu, Popover, PopoverClose, cn, pillClass, toast, useConfirm, useFormatters, useRoleLabel, type MenuItem } from '@xin-via/ui';
 import { CornerUpRight, Crown, Flag, MessageCircle, MoreHorizontal, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

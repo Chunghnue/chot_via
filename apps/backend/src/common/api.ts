@@ -1,4 +1,4 @@
-import type { PageMeta, SuccessCode } from '@chot-via/shared';
+import type { PageMeta, SuccessCode } from '@xin-via/shared';
 
 export interface ApiOk<T> { code: SuccessCode; data: T }
 export interface ApiPaged<T> { code: SuccessCode; data: T[]; meta: PageMeta }

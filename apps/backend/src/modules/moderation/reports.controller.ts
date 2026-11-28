@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
-import { ReportBodySchema, type ReportBody } from '@chot-via/shared';
+import { ReportBodySchema, type ReportBody } from '@xin-via/shared';
 import { Auth, Ctx, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { ZodPipe } from '../../common/zod.pipe';

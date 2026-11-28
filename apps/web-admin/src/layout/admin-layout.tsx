@@ -1,5 +1,5 @@
-import { selectCurrentUser, useLogoutMutation } from '@chot-via/api-client';
-import { Avatar, Button, cn } from '@chot-via/ui';
+import { selectCurrentUser, useLogoutMutation } from '@xin-via/api-client';
+import { Avatar, Button, cn } from '@xin-via/ui';
 import {
   Award, BarChart3, CalendarDays, Flag, LayoutDashboard, ListChecks, LogOut, Menu, MessageSquare, MessagesSquare, ScrollText, Settings, Shapes,
   Shield, Sparkles, Store, Tags, Trophy, Users, X, FileText, Layers, KeyRound, Target, Flame,

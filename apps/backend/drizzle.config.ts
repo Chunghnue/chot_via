@@ -4,5 +4,5 @@ export default defineConfig({
   dialect: 'postgresql',
   schema: './src/database/schema.ts',
   out: './drizzle',
-  dbCredentials: { url: process.env['DATABASE_URL'] ?? 'postgres://chotvia:chotvia@localhost:5432/chotvia' },
+  dbCredentials: { url: process.env['DATABASE_URL'] ?? 'postgres://xinvia:xinvia@localhost:5432/xinvia' },
 });

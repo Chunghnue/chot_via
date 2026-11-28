@@ -1,7 +1,7 @@
 'use client';
 
-import { selectIsMember, useGetMyPlacesQuery } from '@chot-via/api-client';
-import { Badge, Button, Card, PlaceIllustration, Skeleton } from '@chot-via/ui';
+import { selectIsMember, useGetMyPlacesQuery } from '@xin-via/api-client';
+import { Badge, Button, Card, PlaceIllustration, Skeleton } from '@xin-via/ui';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';

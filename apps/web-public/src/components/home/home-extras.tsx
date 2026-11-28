@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetEventsQuery, useGetHomeQuery, useGetLeaderboardQuery, useGetMissionsQuery } from '@chot-via/api-client';
-import { Avatar, Card, Skeleton, buttonClass, cn, compactCount } from '@chot-via/ui';
+import { useGetEventsQuery, useGetHomeQuery, useGetLeaderboardQuery, useGetMissionsQuery } from '@xin-via/api-client';
+import { Avatar, Card, Skeleton, buttonClass, cn, compactCount } from '@xin-via/ui';
 import { ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 # apps/web-admin — Quản trị & kiểm duyệt
 
-React 19 + Vite + React Router 7, RTK Query (`@chot-via/api-client`), Tailwind v4 (dùng chung `packages/ui`). Vai trò: `admin` (toàn quyền) và `moderator` (kiểm duyệt). Đăng nhập OTP như app.
+React 19 + Vite + React Router 7, RTK Query (`@xin-via/api-client`), Tailwind v4 (dùng chung `packages/ui`). Vai trò: `admin` (toàn quyền) và `moderator` (kiểm duyệt). Đăng nhập OTP như app.
 
 ## Cấu trúc `src/`
 - `App.tsx` (định tuyến theo vai trò), `layout/admin-layout.tsx` (menu nhóm: Kiểm duyệt · Nội dung & cấu hình · Điểm vía & cộng đồng · Hệ thống).

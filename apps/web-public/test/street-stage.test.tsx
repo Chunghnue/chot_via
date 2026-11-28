@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import type { PlaceSummary } from '@chot-via/shared';
-import { viMessages } from '@chot-via/shared/i18n';
+import type { PlaceSummary } from '@xin-via/shared';
+import { viMessages } from '@xin-via/shared/i18n';
 import { IntlProvider } from 'use-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StreetStage } from '../src/components/home/street-stage';

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SignJWT, createRemoteJWKSet, importPKCS8, jwtVerify } from 'jose';
 import { z } from 'zod';
-import type { OAuthProvider } from '@chot-via/shared';
+import type { OAuthProvider } from '@xin-via/shared';
 import { DomainError } from '../../common/domain-error';
 import { env } from '../../config/env';
 

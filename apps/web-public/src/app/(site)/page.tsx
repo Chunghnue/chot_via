@@ -1,4 +1,4 @@
-import { viMessages } from '@chot-via/shared/i18n';
+import { viMessages } from '@xin-via/shared/i18n';
 import type { Metadata } from 'next';
 import { HomePage } from './home-page';
 import { HOME_SHARE_VIA, SHARE_IMAGES } from '@/lib/post-share';

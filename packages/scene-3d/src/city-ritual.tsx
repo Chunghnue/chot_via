@@ -1,8 +1,8 @@
 import { useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react';
 import { AdditiveBlending, CanvasTexture, DoubleSide, MathUtils, SRGBColorSpace, type Group, type Sprite as SpriteObject } from 'three';
-import type { SceneModelKey, StreetSlotDto } from '@chot-via/shared';
-import { SHOP_IMAGES } from '@chot-via/ui';
+import type { SceneModelKey, StreetSlotDto } from '@xin-via/shared';
+import { SHOP_IMAGES } from '@xin-via/ui';
 import { CITY_IMAGES, doorOf, RITUAL_DEITY_GLB, SHOP_DOOR, SHOP_WIDTH, spreadShopX } from './city-assets';
 import { glowTexture, Shadow, Sprite, useFaceCamera, useSprite } from './city-kit';
 import type { SceneColors } from './colors';

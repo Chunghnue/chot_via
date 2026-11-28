@@ -1,5 +1,5 @@
 {
-  "name": "@chot-via/scene-3d",
+  "name": "@xin-via/scene-3d",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -12,8 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chot-via/shared": "workspace:*",
-    "@chot-via/ui": "workspace:*",
+    "@xin-via/shared": "workspace:*",
+    "@xin-via/ui": "workspace:*",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.2",
     "react": "^19.3.1",

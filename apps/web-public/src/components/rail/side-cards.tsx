@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetActivityQuery, useGetChallengeQuery, useGetHotHashtagsQuery } from '@chot-via/api-client';
-import { Card, ProgressBar, Skeleton, useFormatters } from '@chot-via/ui';
+import { useGetActivityQuery, useGetChallengeQuery, useGetHotHashtagsQuery } from '@xin-via/api-client';
+import { Card, ProgressBar, Skeleton, useFormatters } from '@xin-via/ui';
 import { Flame, Target } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';

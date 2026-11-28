@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, buttonClass, cn } from '@chot-via/ui';
+import { Card, buttonClass, cn } from '@xin-via/ui';
 import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';

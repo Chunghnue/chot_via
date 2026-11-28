@@ -1,5 +1,5 @@
 /* Service worker PWA (đăng ký ở production): offline cho vỏ ứng dụng + lời chúc dự phòng. Không cache request ghi dữ liệu. */
-const VERSION = 'cv-v2';
+const VERSION = 'xv-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const API_CACHE = `${VERSION}-api`;
 const SHELL = ['/'];

@@ -1,7 +1,7 @@
 'use client';
 
-import { useSearchQuery } from '@chot-via/api-client';
-import { Avatar, Card, EmptyState, Input, Skeleton } from '@chot-via/ui';
+import { useSearchQuery } from '@xin-via/api-client';
+import { Avatar, Card, EmptyState, Input, Skeleton } from '@xin-via/ui';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';

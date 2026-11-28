@@ -85,14 +85,14 @@ export async function renderCardPng(t: ShareCardText, link: string): Promise<Blo
 /** Chia sẻ ảnh thẻ bằng menu chia sẻ của thiết bị (Facebook, Zalo, Messenger… nếu có); không hỗ trợ thì tải ảnh về. Trả về 'shared' | 'saved'. */
 export async function shareCardImage(t: ShareCardText, link: string, caption: string): Promise<'shared' | 'saved'> {
   const blob = await renderCardPng(t, link);
-  const file = new File([blob], 'chot-via.png', { type: 'image/png' });
+  const file = new File([blob], 'xin-via.png', { type: 'image/png' });
   if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
     await navigator.share({ files: [file], text: caption, url: link });
     return 'shared';
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'chot-via.png'; document.body.appendChild(a); a.click(); a.remove();
+  a.href = url; a.download = 'xin-via.png'; document.body.appendChild(a); a.click(); a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 4000);
   return 'saved';
 }

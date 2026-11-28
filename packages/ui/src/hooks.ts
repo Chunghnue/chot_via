@@ -1,6 +1,6 @@
 import { useTranslations } from 'use-intl';
-import { viMessages } from '@chot-via/shared/i18n';
-import type { MemberRole, RangeDef } from '@chot-via/shared';
+import { viMessages } from '@xin-via/shared/i18n';
+import type { MemberRole, RangeDef } from '@xin-via/shared';
 import { formatClock, formatDateTime, formatMoneyShort, formatNumber } from './lib/format';
 
 /** Gom hàm định dạng + chữ đơn vị theo i18n để mọi màn hình hiển thị số tiền/thời gian nhất quán. */

@@ -15,7 +15,7 @@ packages/shared = hợp đồng chung (DTO, mã, i18n, quy tắc thời gian) d�
 ## Luồng dữ liệu & mã
 - Request/response đều có Zod schema trong `packages/shared/src/schemas`.
 - Backend trả `{code, data, meta?}` hoặc lỗi `{error:{code, params, details, requestId}}`. **Không có chữ hiển thị**; frontend ánh xạ mã → chữ bằng `useCodeMessage()` từ `i18n/vi/codes.json`.
-- Phiên: access JWT 15 phút (bộ nhớ) + refresh xoay vòng trong cookie httpOnly `cv_rt` (path `/api/v1/auth`). Khách: cookie `cv_gid` (băm). CSRF: header `x-requested-with: chotvia`.
+- Phiên: access JWT 15 phút (bộ nhớ) + refresh xoay vòng trong cookie httpOnly `xv_rt` (path `/api/v1/auth`). Khách: cookie `xv_gid` (băm). CSRF: header `x-requested-with: xinvia`.
 
 ## Cơ sở dữ liệu (PostgreSQL, Drizzle)
 | Nhóm | Bảng |

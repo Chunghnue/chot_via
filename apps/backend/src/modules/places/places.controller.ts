@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Put, Query }
 import {
   AutoRepliesSchema, IdParamSchema, PageQuerySchema, PlaceInputSchema, PlaceListQuerySchema, PlaceRankQuerySchema, PlaceSlugParamSchema, PlaceUpdateSchema,
   type AutoReplies, type PlaceInput, type PlaceListQuery, type PlaceRankQuery, type PlaceUpdate,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { Auth, Ctx, requireUser, type RequestContext } from '../../common/access';
 import { ok } from '../../common/api';
 import { ZodPipe } from '../../common/zod.pipe';

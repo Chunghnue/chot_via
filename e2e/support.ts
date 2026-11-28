@@ -34,7 +34,7 @@ export async function loginViaUi(page: Page, phone: string = newPhone()): Promis
 export const API = 'http://localhost:3101/api/v1';
 let ipSeq = Math.floor(Math.random() * 200) + 20;
 export const headers = (): Record<string, string> => ({
-  'x-requested-with': 'chotvia',
+  'x-requested-with': 'xinvia',
   'content-type': 'application/json',
   'x-forwarded-for': `10.77.${ipSeq++ % 250}.${Math.floor(Math.random() * 250) + 1}`,
 });

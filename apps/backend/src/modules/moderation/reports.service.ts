@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, desc, eq } from 'drizzle-orm';
-import type { MyReportDto, ReportBody } from '@chot-via/shared';
+import type { MyReportDto, ReportBody } from '@xin-via/shared';
 import type { RequestContext } from '../../common/access';
 import { DomainError } from '../../common/domain-error';
 import { iso } from '../../common/mappers';

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, gte, sql } from 'drizzle-orm';
-import { vnDayStart, type PointAction } from '@chot-via/shared';
+import { vnDayStart, type PointAction } from '@xin-via/shared';
 import { SettingsService } from '../../common/settings.service';
 import type { DbOrTx } from '../../database/database';
 import { pointLedger, users } from '../../database/schema';

@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { FeedSort, FeedType, MemberRole } from '@chot-via/shared';
+import type { FeedSort, FeedType, MemberRole } from '@xin-via/shared';
 
 export interface FeedState { type: FeedType; sort: FeedSort; role: MemberRole | null }
 const initialState: FeedState = { type: 'all', sort: 'new', role: null };

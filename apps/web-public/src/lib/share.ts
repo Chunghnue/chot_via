@@ -1,5 +1,5 @@
 /** Tên miền công khai của Xin Vía dùng trong link chia sẻ: biến NEXT_PUBLIC_SITE_URL (lúc build) nếu có, không thì chính tên miền đang mở (nên deploy sang server nào cũng đúng). */
-const FALLBACK_SITE_URL = 'https://chotvia.divusoft.com';
+const FALLBACK_SITE_URL = 'https://xinvia.co';
 export function siteUrl(): string {
   const env = process.env['NEXT_PUBLIC_SITE_URL'];
   const base = env && env !== '' ? env : typeof window !== 'undefined' ? window.location.origin : FALLBACK_SITE_URL;
@@ -38,4 +38,4 @@ export function isDesktopPointer(): boolean {
 }
 
 /** Sự kiện mở hộp chia sẻ Zalo trên máy tính (`ZaloShareHost` lắng nghe). */
-export const ZALO_SHARE_EVENT = 'chotvia:zalo-share';
+export const ZALO_SHARE_EVENT = 'xinvia:zalo-share';

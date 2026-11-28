@@ -1,7 +1,7 @@
 import {
   AutoRepliesSchema, LikeResultSchema, PlaceLeaderboardSchema, FollowResultSchema, OkSchema, PlaceDetailSchema, PlaceSummarySchema, PlaceWishItemSchema,
   type AutoReplies, type PlaceInput, type PlaceListQuery, type PlaceUpdate, type PlaceRankQuery,
-} from '@chot-via/shared';
+} from '@xin-via/shared';
 import { z } from 'zod';
 import { baseApi, unwrap, unwrapPaged, type Paged } from '../base';
 

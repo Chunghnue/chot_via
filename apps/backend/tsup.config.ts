@@ -16,6 +16,6 @@ export default defineConfig({
   platform: 'node',
   clean: true,
   sourcemap: true,
-  noExternal: [/^@chot-via\//],
+  noExternal: [/^@xin-via\//],
   tsconfig: 'tsconfig.json',
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { SceneModelKey, StreetSlotDto } from '@chot-via/shared';
+import type { SceneModelKey, StreetSlotDto } from '@xin-via/shared';
 import { pickRitualSlot } from '../../../packages/scene-3d/src/ritual';
 
 const slot = (id: string, modelKey: SceneModelKey, placeId: string | null, x: number, z: number): StreetSlotDto => ({

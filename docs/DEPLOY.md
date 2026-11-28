@@ -4,8 +4,8 @@ Một máy chủ Linux chạy Docker. Caddy tự cấp HTTPS; chỉ cổng 80/44
 
 ```
 Internet ─ Caddy (80/443, HTTPS tự động)
-            ├─ chotvia.example.com        → web (Next.js)   ; /api, /storage → backend
-            └─ admin.chotvia.example.com  → admin (tĩnh)    ; /api, /storage → backend
+            ├─ xinvia.example.com        → web (Next.js)   ; /api, /storage → backend
+            └─ admin.xinvia.example.com  → admin (tĩnh)    ; /api, /storage → backend
 backend (NestJS) ─ postgres (volume postgres_data) ─ redis ─ volume uploads (ảnh tải lên)
 ```
 
@@ -14,11 +14,11 @@ backend (NestJS) ─ postgres (volume postgres_data) ─ redis ─ volume upload
 2. Hai tên miền (web và admin): trỏ bản ghi **A/AAAA** về IP máy chủ **trước** khi chạy (Caddy cần xác thực tên miền để lấy chứng chỉ).
 3. Mở cổng **80, 443 (TCP và UDP)** trên tường lửa.
 4. **Dịch vụ SMS OTP** (bắt buộc): ở production backend không cho dùng mã OTP dev (`SMS_PROVIDER=dev` bị từ chối) nên không có khóa SMS thì không ai đăng nhập được. Chọn một trong `speedsms`, `esms`, `ghdc`.
-5. **Số điện thoại thật của quản trị viên đầu tiên** (điền vào `SEED_ADMIN_PHONE`). Không để mặc định `0900000000`: đó là số dev, SMS không tới được, bạn sẽ không đăng nhập được admin.
+5. **Số điện thoại của quản trị viên đầu tiên** (điền vào `SEED_ADMIN_PHONE`, mặc định của mã nguồn là `0368886999`). Trên bản thật, mã OTP gửi bằng SMS tới đúng số này: số sai hoặc không nhận được SMS thì không đăng nhập được admin.
 
 ## Cài đặt lần đầu
 ```bash
-git clone <repo> /opt/chot-via && cd /opt/chot-via      # hoặc chép mã nguồn lên máy chủ
+git clone <repo> /opt/xin-via && cd /opt/xin-via      # hoặc chép mã nguồn lên máy chủ
 cp .env.production.example .env.production
 nano .env.production            # điền WEB_DOMAIN, ADMIN_DOMAIN, POSTGRES_PASSWORD, JWT_ACCESS_SECRET, SEED_ADMIN_PHONE, SMS_PROVIDER và khóa SMS...
 # Tạo bí mật:  openssl rand -hex 32   (dùng cho POSTGRES_PASSWORD và JWT_ACCESS_SECRET)
@@ -43,10 +43,10 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d --bui
 `migrate` chạy lại tự động và chỉ áp dụng migration mới. **Sao lưu trước khi cập nhật.**
 
 ## Sao lưu / khôi phục
-- Sao lưu (database + ảnh), giữ 14 bản gần nhất: `./scripts/backup-db.sh`. Đặt cron hằng ngày: `0 3 * * * cd /opt/chot-via && ./scripts/backup-db.sh`. **Nên chép thư mục `backups/` ra nơi khác** (máy chủ hỏng thì mất cả bản sao lưu).
+- Sao lưu (database + ảnh), giữ 14 bản gần nhất: `./scripts/backup-db.sh`. Đặt cron hằng ngày: `0 3 * * * cd /opt/xin-via && ./scripts/backup-db.sh`. **Nên chép thư mục `backups/` ra nơi khác** (máy chủ hỏng thì mất cả bản sao lưu).
 - Khôi phục database:
   ```bash
-  gunzip -c backups/db-YYYYMMDD-HHMMSS.sql.gz | docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres psql -U chotvia chotvia
+  gunzip -c backups/db-YYYYMMDD-HHMMSS.sql.gz | docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres psql -U xinvia xinvia
   ```
 
 ## Biến môi trường

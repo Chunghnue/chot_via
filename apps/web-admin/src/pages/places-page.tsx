@@ -1,6 +1,6 @@
-import { useAdminPlaceCreateMutation, useAdminPlaceDeleteMutation, useAdminPlaceUpdateMutation, useAdminPlacesQuery, useDemoUsersListQuery, useGetCatalogQuery } from '@chot-via/api-client';
-import { AdminPlaceInputSchema, PLACE_KINDS, PLACE_STATUSES, type AdminPlaceInput, type PlaceDetail } from '@chot-via/shared';
-import { Badge, Button, FormField, Input, Select, Sheet, Skeleton, SwitchField, Textarea, toast, useConfirm } from '@chot-via/ui';
+import { useAdminPlaceCreateMutation, useAdminPlaceDeleteMutation, useAdminPlaceUpdateMutation, useAdminPlacesQuery, useDemoUsersListQuery, useGetCatalogQuery } from '@xin-via/api-client';
+import { AdminPlaceInputSchema, PLACE_KINDS, PLACE_STATUSES, type AdminPlaceInput, type PlaceDetail } from '@xin-via/shared';
+import { Badge, Button, FormField, Input, Select, Sheet, Skeleton, SwitchField, Textarea, toast, useConfirm } from '@xin-via/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';

@@ -1,7 +1,7 @@
 'use client';
 
-import { useGetMyReportsQuery } from '@chot-via/api-client';
-import { Badge, Card, EmptyState, Skeleton, useFormatters } from '@chot-via/ui';
+import { useGetMyReportsQuery } from '@xin-via/api-client';
+import { Badge, Card, EmptyState, Skeleton, useFormatters } from '@xin-via/ui';
 import { useTranslations } from 'use-intl';
 import { PageTitle, RequireMember } from '@/components/common/require-member';
 

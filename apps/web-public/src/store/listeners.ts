@@ -1,5 +1,5 @@
 import { createAction, createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
-import { sessionStarted } from '@chot-via/api-client';
+import { sessionStarted } from '@xin-via/api-client';
 import { composerClosed, composerHydrated, composerOpened, draftChanged, kindChosen, PersistedComposerSchema, stepChanged } from '@/features/composer/composerSlice';
 import { loginDismissed } from '@/features/ui/uiSlice';
 import { offlinePackLoaded, PersistedPackSchema, PersistedWishSchema, wishHydrated, wishRecorded } from '@/features/wish/wishSlice';

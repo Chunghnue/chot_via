@@ -1,8 +1,8 @@
 'use client';
 
-import { selectIsMember, useFollowPlaceMutation, useGetMeStatsQuery, useGetMissionsQuery, useGetPostsQuery } from '@chot-via/api-client';
-import type { PlaceSummary } from '@chot-via/shared';
-import { Avatar, Button, Card, Skeleton, buttonClass, cn, compactCount, toast } from '@chot-via/ui';
+import { selectIsMember, useFollowPlaceMutation, useGetMeStatsQuery, useGetMissionsQuery, useGetPostsQuery } from '@xin-via/api-client';
+import type { PlaceSummary } from '@xin-via/shared';
+import { Avatar, Button, Card, Skeleton, buttonClass, cn, compactCount, toast } from '@xin-via/ui';
 import { ArrowRight, Check, Maximize2, Minimize2 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
